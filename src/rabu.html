@@ -2,11 +2,18 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title></title>
+    <title>Hello, World</title>
 </head>
 <body>
 
-<h1>Hello, World!</h1>
+<script type="text/javascript">
+    window.onload = function() {
+        title = document.getElementById("title");
+        title.innerHTML = "foo";
+    }
+</script>
+
+<h1 id="title">Hello, World!</h1>
 
 </body>
 </html>
