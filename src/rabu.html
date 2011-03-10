@@ -3,17 +3,11 @@
 <html>
 <head>
     <title>Hello, World</title>
+    <script type="text/javascript" src="rabu.js"></script>
 </head>
-<body>
+<body onload="new Rabu().populateDom()">
 
-<script type="text/javascript">
-    window.onload = function() {
-        title = document.getElementById("title");
-        title.innerHTML = "foo";
-    }
-</script>
-
-<h1 id="title">Hello, World!</h1>
+<h1 id="title"></h1>
 
 </body>
 </html>
