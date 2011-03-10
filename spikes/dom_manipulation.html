@@ -8,7 +8,17 @@
         "use strict";
 
         var body = document.getElementsByTagName("body")[0];
-        body.innerHTML = "foo!";
+        body.innerHTML =
+            "Stuff" +
+            "<h1>A Title</h1>" +
+            "<p>A paragraph</p>" +
+            "<iframe id='bob' src='http://localhost:4224' >My name is Bob.</iframe>"
+        ;
+        var bob = document.getElementById("bob");
+        console.log(bob.innerHTML);
+        bob.onload = function() {
+            alert("loaded!");
+        };
     </script>
 </body>
 </html>
