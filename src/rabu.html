@@ -3,9 +3,15 @@
 <html>
 <head>
     <title>Hello, World</title>
+    <script type="text/javascript" src="../lib/jquery-1.5.1.js"></script>
     <script type="text/javascript" src="rabu.js"></script>
 </head>
-<body onload="new Rabu().populateDom()">
+<body>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            new Rabu().populateDom();
+        })
+    </script>
 
 <h1 id="title"></h1>
 
