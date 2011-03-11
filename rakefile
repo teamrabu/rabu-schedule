@@ -12,6 +12,8 @@ JSTESTDRIVER_SERVER_TIMEOUT_IN_SEC = 10
 JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC = 5
 
 
+task :default => :test
+
 directory BUILD_DIR
 
 desc "Erase all generated files"
@@ -21,10 +23,14 @@ task :clean => [:shutdown] do       # must shut down because the pid file is in 
     end
 end
 
+desc "Test everything"
+task :test => [:js_test, :html_test]
+
 desc "Run Javascript unit tests"
 task :js_test => [:jstestdriver] do
     explain "Running Javascript unit tests" do
-        JsTestDriver::run_tests
+        pass, fail, error = JsTestDriver::run_tests
+        raise "Tests failed" if fail + error > 0
     end
 end
 
@@ -74,11 +80,12 @@ class JsTestDriver
         begin
             Timeout::timeout(JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC) do
                 result = attempt_tests
-                while not result =~ /Total \d+ tests/ do
+                while not result =~ /Passed: (\d+); Fails: (\d+); Errors: (\d+)/ do
                     puts "Did not find JsTestDriver browser; trying again"
                     sleep 2
                     result = attempt_tests
                 end
+                return Integer($1), Integer($2), Integer($3)
             end
         rescue Timeout::Error
             puts "JsTestDriver browser has been lost"
