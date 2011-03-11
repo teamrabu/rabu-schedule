@@ -15,12 +15,19 @@ files = {}
 loop do
     changed = false
     Find.find(File.dirname(__FILE__)) do |file|
-#        next unless file =~ /\.rb$/
+        next if file.start_with? "./build/"
+        next if file.start_with? "./.idea"
+        next if file.start_with? "./.git"
+
         ctime = File.ctime(file).to_i
 
         if ctime != files[file]
             files[file] = ctime
-            changed = true
+            if not changed
+                changed = true
+                puts "Changed files:"
+            end
+            puts file
         end
     end
 
