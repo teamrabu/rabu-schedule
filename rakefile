@@ -7,7 +7,8 @@ BUILD_DIR = "build"
 JSTESTDRIVER_JAR = "#{BIN_DIR}/JsTestDriver-1.3.1.jar"
 JSTESTDRIVER_PORT = 4224
 JSTESTDRIVER_PID_FILE = "#{BUILD_DIR}/jstestdriver.pid"
-JSTESTDRIVER_TIMEOUT_IN_SEC = 10
+JSTESTDRIVER_SERVER_TIMEOUT_IN_SEC = 10
+JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC = 5
 
 
 directory BUILD_DIR
@@ -24,15 +25,6 @@ task :jstestdriver => [BUILD_DIR] do
     next if JsTestDriver::is_running?
     explain "Starting JsTestDriver (use 'rake shutdown' to stop)" do
         JsTestDriver::launch
-    end
-end
-
-desc "Capture a browser for testing"
-task :capture => [:jstestdriver] do
-    explain "Opening a captured browser window" do
-        command = "open http://localhost:#{JSTESTDRIVER_PORT}/capture?strict"
-        puts command
-        system command
     end
 end
 
@@ -61,18 +53,37 @@ def bright(text)
     return "\033[1m#{text}\033[0m";
 end
 
+def run(command)
+    puts command
+    system command
+end
 
 class JsTestDriver
     COMMAND = "java -jar #{JSTESTDRIVER_JAR}"
 
     def self.run_tests
-        command = "#{COMMAND} --tests all"
-        puts command
-        system command
+        begin
+            Timeout::timeout(JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC) do
+                result = attempt_tests
+                while not result =~ /Total \d+ tests/ do
+                    puts "Did not find captured browser; trying again"
+                    sleep 2
+                    result = attempt_tests
+                end
+            end
+        rescue Timeout::Error
+            puts "Captured browser has been lost; starting a new one"
+            capture_browser
+            retry
+        end
+    end
+
+    def self.capture_browser
+        run "open http://localhost:#{JSTESTDRIVER_PORT}/capture?strict -g"
     end
 
     def self.launch
-        pid = run_in_background("java -jar #{JSTESTDRIVER_JAR} --port #{JSTESTDRIVER_PORT}")
+        pid = run_in_background("#{COMMAND} --port #{JSTESTDRIVER_PORT}")
         File.open(JSTESTDRIVER_PID_FILE, 'w') do |file|
             puts "echo '#{pid}' > #{JSTESTDRIVER_PID_FILE}"
             file.write(pid)
@@ -93,11 +104,26 @@ class JsTestDriver
 
 private
 
+    def self.attempt_tests
+        command = "#{COMMAND} --tests all 2>&1"
+        result = ""
+        puts command
+        IO.popen(command) do |pipe|
+            pipe.sync = true
+            while c = pipe.getc
+                c = c.chr
+                print c
+                result += c
+            end
+        end
+        return result
+    end
+
     def self.wait_for_start
         begin
             print "Waiting for JsTestDriver to finish starting... "
             STDOUT.flush
-            Timeout::timeout(JSTESTDRIVER_TIMEOUT_IN_SEC) do
+            Timeout::timeout(JSTESTDRIVER_SERVER_TIMEOUT_IN_SEC) do
                 until is_running? do
                     sleep 0.2
                 end
@@ -106,7 +132,7 @@ private
         rescue Timeout::Error
             puts "timed out"
             terminate_jstestdriver
-            raise "JsTestDriver did not start within #{JSTESTDRIVER_TIMEOUT_IN_SEC} seconds"
+            raise "JsTestDriver did not start within #{JSTESTDRIVER_SERVER_TIMEOUT_IN_SEC} seconds"
         end
     end
 

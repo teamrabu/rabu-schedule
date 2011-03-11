@@ -1,1 +1,1 @@
-java -jar tools/JsTestDriver-1.3.1.jar --reset
+java -jar bin/JsTestDriver-1.3.1.jar --reset
