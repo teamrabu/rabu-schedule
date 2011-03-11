@@ -11,6 +11,7 @@ JSTESTDRIVER_PORT = 4224
 JSTESTDRIVER_PID_FILE = "#{BUILD_DIR}/jstestdriver.pid"
 JSTESTDRIVER_TIMEOUT_IN_SEC = 10
 
+
 directory BUILD_DIR
 
 desc "Erase all generated files"
@@ -22,81 +23,18 @@ end
 
 # desc "Start the JsTestDriver server"
 task :jstestdriver_server => [BUILD_DIR] do
-    next if is_jstestdriver_running?
+    next if JsTestDriver::is_running?
     explain "Starting JsTestDriver (use 'rake shutdown' to stop)" do
-        launch_jstestdriver
-        wait_for_jstestrunner_to_start
+        JsTestDriver::launch
     end
 end
 
 desc "Shut down the JsTestDriver server"
 task :shutdown do
-    next unless is_jstestdriver_running?
+    next unless JsTestDriver::is_running?
     explain "Shutting down JsTestDriver" do
-        terminate_jstestdriver
+        JsTestDriver::terminate
     end
-end
-
-def wait_for_jstestrunner_to_start
-    begin
-        print "Waiting for JsTestDriver server... "
-        STDOUT.flush
-        Timeout::timeout(JSTESTDRIVER_TIMEOUT_IN_SEC) do
-            until is_jstestdriver_running? do
-                sleep 0.2
-            end
-        end
-        puts "done"
-    rescue Timeout::Error
-        puts "timed out"
-        terminate_jstestdriver
-        raise "JsTestDriver did not start within #{JSTESTDRIVER_TIMEOUT_IN_SEC} seconds"
-    end
-end
-
-def launch_jstestdriver
-    pid = run_in_background("java -jar #{JSTESTDRIVER_JAR} --port #{JSTESTDRIVER_PORT}")
-    File.open(JSTESTDRIVER_PID_FILE, 'w') do |file|
-        puts "echo '#{pid}' > #{JSTESTDRIVER_PID_FILE}"
-        file.write(pid)
-    end
-end
-
-def terminate_jstestdriver
-    pid = IO.read(JSTESTDRIVER_PID_FILE);
-    puts "Terminating process #{pid}"
-    Process.kill('TERM', Integer(pid))
-    rm JSTESTDRIVER_PID_FILE
-end
-
-def is_jstestdriver_running?
-    is_port_open?("localhost", JSTESTDRIVER_PORT)
-end
-
-# This function courtesy of 'joast'
-# http://stackoverflow.com/questions/517219/ruby-see-if-a-port-is-open
-def is_port_open?(ip, port)
-  begin
-    Timeout::timeout(1) do
-      begin
-        s = TCPSocket.new(ip, port)
-        s.close
-        return true
-      rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
-        return false
-      end
-    end
-  rescue Timeout::Error
-  end
-
-  return false
-end
-
-def run_in_background(command)
-    puts "#{command} &"
-    pipe = IO.popen(command)
-    puts "Process ID: #{pipe.pid}"
-    return pipe.pid
 end
 
 def explain(headline, &block)
@@ -107,4 +45,73 @@ end
 
 def bright(text)
     return "\033[1m#{text}\033[0m";
+end
+
+
+class JsTestDriver
+    def self.launch
+        pid = run_in_background("java -jar #{JSTESTDRIVER_JAR} --port #{JSTESTDRIVER_PORT}")
+        File.open(JSTESTDRIVER_PID_FILE, 'w') do |file|
+            puts "echo '#{pid}' > #{JSTESTDRIVER_PID_FILE}"
+            file.write(pid)
+        end
+        wait_for_start
+    end
+
+    def self.terminate
+        pid = IO.read(JSTESTDRIVER_PID_FILE);
+        puts "Terminating process #{pid}"
+        Process.kill('TERM', Integer(pid))
+        rm JSTESTDRIVER_PID_FILE
+    end
+
+    def self.is_running?
+        is_port_open?("localhost", JSTESTDRIVER_PORT)
+    end
+
+private
+
+    def self.wait_for_start
+        begin
+            print "Waiting for JsTestDriver to finish starting... "
+            STDOUT.flush
+            Timeout::timeout(JSTESTDRIVER_TIMEOUT_IN_SEC) do
+                until is_running? do
+                    sleep 0.2
+                end
+            end
+            puts "done"
+        rescue Timeout::Error
+            puts "timed out"
+            terminate_jstestdriver
+            raise "JsTestDriver did not start within #{JSTESTDRIVER_TIMEOUT_IN_SEC} seconds"
+        end
+    end
+
+    def self.run_in_background(command)
+        puts "#{command} &"
+        pipe = IO.popen(command)
+        puts "Process ID: #{pipe.pid}"
+        return pipe.pid
+    end
+
+    # This function courtesy of 'joast'
+    # http://stackoverflow.com/questions/517219/ruby-see-if-a-port-is-open
+    def self.is_port_open?(ip, port)
+      begin
+        Timeout::timeout(1) do
+          begin
+            s = TCPSocket.new(ip, port)
+            s.close
+            return true
+          rescue Errno::ECONNREFUSED, Errno::EHOSTUNREACH
+            return false
+          end
+        end
+      rescue Timeout::Error
+      end
+
+      return false
+    end
+
 end
