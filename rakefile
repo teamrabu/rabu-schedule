@@ -1,8 +1,6 @@
 require 'socket'
 require 'timeout'
 
-task :default => :jstestdriver_server
-
 BIN_DIR = "bin"
 BUILD_DIR = "build"
 
@@ -22,10 +20,26 @@ task :clean => [:shutdown] do       # must shut down because the pid file is in 
 end
 
 # desc "Start the JsTestDriver server"
-task :jstestdriver_server => [BUILD_DIR] do
+task :jstestdriver => [BUILD_DIR] do
     next if JsTestDriver::is_running?
     explain "Starting JsTestDriver (use 'rake shutdown' to stop)" do
         JsTestDriver::launch
+    end
+end
+
+desc "Capture a browser for testing"
+task :capture => [:jstestdriver] do
+    explain "Opening a captured browser window" do
+        command = "open http://localhost:#{JSTESTDRIVER_PORT}/capture?strict"
+        puts command
+        system command
+    end
+end
+
+desc "Run Javascript unit tests"
+task :js_test => [:jstestdriver] do
+    explain "Running Javascript unit tests" do
+        JsTestDriver::run_tests
     end
 end
 
@@ -49,6 +63,14 @@ end
 
 
 class JsTestDriver
+    COMMAND = "java -jar #{JSTESTDRIVER_JAR}"
+
+    def self.run_tests
+        command = "#{COMMAND} --tests all"
+        puts command
+        system command
+    end
+
     def self.launch
         pid = run_in_background("java -jar #{JSTESTDRIVER_JAR} --port #{JSTESTDRIVER_PORT}")
         File.open(JSTESTDRIVER_PID_FILE, 'w') do |file|
