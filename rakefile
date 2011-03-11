@@ -84,9 +84,7 @@ class JsTestDriver
                     sleep 2
                     result = attempt_tests
                 end
-                pass, fail, error = Integer($1), Integer($2), Integer($3)
-                raise "Tests failed" if fail + error > 0
-                raise "Compile error" if result =~ /error loading file/
+                raise "Tests failed" if $? != 0
             end
         rescue Timeout::Error
             puts "JsTestDriver browser has been lost"
