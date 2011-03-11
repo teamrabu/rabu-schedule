@@ -1,11 +1,15 @@
-/*global load, readFile, print, JSLINT */
+/*global load, readFile, print, JSLINT, java */
 
 (function JsLintRunner() {
 "use strict";
 
-// Summary of options at http://www.jslint.com/#JSLINT_OPTIONS
+load("bin/fulljslint.js");
+
+var DIRS_TO_CHECK = ["src"];
+
+// Summary of JsLint options at http://www.jslint.com/#JSLINT_OPTIONS
 // Details at http://www.jslint.com/lint.html
-var options = {
+var OPTIONS = {
 	undef: true,        // Disallow undefined variables
 	newcap: true,       // Require Initial Caps for constructors
 	nomen: true,        // Disallow dangling _ in identifiers
@@ -17,7 +21,7 @@ var options = {
 	maxerr: 10          // Max number of errors
 };
 
-// This trim function by Steven Levithan
+// This function by Steven Levithan
 // http://blog.stevenlevithan.com/archives/faster-trim-javascript
 function trim(str) {
 	str = str.replace(/^\s\s*/, '');
@@ -33,14 +37,15 @@ function trim(str) {
 
 function checkFile(filename) {
 	var source = readFile(filename);
-	var pass = JSLINT(source, options);
+	var pass = JSLINT(source, OPTIONS);
 	var i;
 
 	if (pass) {
 		print(filename + " ok");
+		return true;
 	}
 	else {
-		print(filename + " fail!");
+		print(filename + " failed lint");
 		for (i = 0; i < JSLINT.errors.length; i++) {
 			var error = JSLINT.errors[i];
 			if (!error) { continue; }
@@ -48,10 +53,53 @@ function checkFile(filename) {
 			if (error.evidence) { print(error.line + ": " + trim(error.evidence)); }
 			print("   " + error.reason);
 		}
+		return false;
 	}
 }
 
-load("fulljslint.js");
-checkFile("jslintrunner.js");
+function getFiles(javaFile, javaList, filter) {
+	var files = javaFile.listFiles();
+	var i;
+	for (i = 0; i < files.length; i++) {
+		if (files[i].isDirectory()) {
+			getFiles(files[i], javaList);
+		}
+		else {
+			var file = files[i].toString();
+			if (filter(file)) { javaList.add(file); }
+		}
+	}
+}
+
+function recursivelyListFilesIn(path, filter) {
+//	var f = new java.io.File(path);
+//	var jlist = f.list(); // a java String[]
+//	return jlist;
+
+	var file = new java.io.File(path);
+	if (!file.exists() || !file.isDirectory()) {
+		print("Directory not found: " + file);
+		java.lang.System.exit(1);
+	}
+
+	var list = new java.util.ArrayList();
+	getFiles(file, list, filter);
+	return list.toArray();
+}
+
+function checkDir(dir) {
+	var okay = true;
+	var files = recursivelyListFilesIn(dir, function(file) {
+		return (/\.js$/).test(file);
+	});
+	files.map(function(file) {
+		okay = checkFile(file) && okay;
+	});
+	return okay;
+}
+
+var okay = true;
+DIRS_TO_CHECK.map(function(dir) { okay = checkDir(dir) && okay});
+java.lang.System.exit(okay ? 0 : 1);
 
 }());
