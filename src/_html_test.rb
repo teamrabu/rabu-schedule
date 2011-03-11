@@ -1,7 +1,7 @@
 require 'rubygems';
 require 'watir-webdriver';
 
-def check_html
+def test_html
     url = "file://#{Dir.pwd}/src/rabu.html"
 
     browser = Watir::Browser.new :firefox
@@ -17,5 +17,3 @@ def check_html
         browser.close
     end
 end
-
-check_html

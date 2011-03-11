@@ -1,6 +1,6 @@
 require 'socket'
 require 'timeout'
-require "selenium-webdriver"
+require 'selenium-webdriver'
 
 BIN_DIR = "bin"
 BUILD_DIR = "build"
@@ -25,6 +25,14 @@ desc "Run Javascript unit tests"
 task :js_test => [:jstestdriver] do
     explain "Running Javascript unit tests" do
         JsTestDriver::run_tests
+    end
+end
+
+desc "Run HTML unit tests"
+task :html_test do
+    require 'src/_html_test'
+    explain "Running HTML unit tests" do
+        test_html
     end
 end
 
