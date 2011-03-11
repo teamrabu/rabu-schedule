@@ -1,5 +1,6 @@
 require 'socket'
 require 'timeout'
+require "selenium-webdriver"
 
 BIN_DIR = "bin"
 BUILD_DIR = "build"
@@ -20,14 +21,6 @@ task :clean => [:shutdown] do       # must shut down because the pid file is in 
     end
 end
 
-# desc "Start the JsTestDriver server"
-task :jstestdriver => [BUILD_DIR] do
-    next if JsTestDriver::is_running?
-    explain "Starting JsTestDriver (use 'rake shutdown' to stop)" do
-        JsTestDriver::launch
-    end
-end
-
 desc "Run Javascript unit tests"
 task :js_test => [:jstestdriver] do
     explain "Running Javascript unit tests" do
@@ -35,10 +28,18 @@ task :js_test => [:jstestdriver] do
     end
 end
 
-desc "Shut down the JsTestDriver server"
+# desc "Start JsTestDriver"
+task :jstestdriver => [BUILD_DIR] do
+    next if JsTestDriver::is_running?
+    explain "Starting JsTestDriver (use 'rake shutdown' to stop)" do
+        JsTestDriver::launch
+    end
+end
+
+desc "Shut down JsTestDriver"
 task :shutdown do
     next unless JsTestDriver::is_running?
-    explain "Shutting down JsTestDriver" do
+    explain "Shutting down JsTestDriver server (close the JsTestDriver browser manually)" do
         JsTestDriver::terminate
     end
 end
@@ -66,20 +67,23 @@ class JsTestDriver
             Timeout::timeout(JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC) do
                 result = attempt_tests
                 while not result =~ /Total \d+ tests/ do
-                    puts "Did not find captured browser; trying again"
+                    puts "Did not find JsTestDriver browser; trying again"
                     sleep 2
                     result = attempt_tests
                 end
             end
         rescue Timeout::Error
-            puts "Captured browser has been lost; starting a new one"
+            puts "JsTestDriver browser has been lost"
             capture_browser
             retry
         end
     end
 
     def self.capture_browser
-        run "open http://localhost:#{JSTESTDRIVER_PORT}/capture?strict -g"
+        puts "Launching JsTestDriver browser"
+        url = "http://localhost:#{JSTESTDRIVER_PORT}/capture?strict"
+        driver = Selenium::WebDriver.for :firefox
+        driver.navigate.to url
     end
 
     def self.launch
@@ -89,6 +93,7 @@ class JsTestDriver
             file.write(pid)
         end
         wait_for_start
+        capture_browser
     end
 
     def self.terminate
@@ -121,16 +126,14 @@ private
 
     def self.wait_for_start
         begin
-            print "Waiting for JsTestDriver to finish starting... "
-            STDOUT.flush
+            puts "Waiting for JsTestDriver server to start"
             Timeout::timeout(JSTESTDRIVER_SERVER_TIMEOUT_IN_SEC) do
                 until is_running? do
                     sleep 0.2
                 end
             end
-            puts "done"
         rescue Timeout::Error
-            puts "timed out"
+            puts "JsTestDriver server timed out"
             terminate_jstestdriver
             raise "JsTestDriver did not start within #{JSTESTDRIVER_SERVER_TIMEOUT_IN_SEC} seconds"
         end
