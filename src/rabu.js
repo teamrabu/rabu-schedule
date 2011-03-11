@@ -1,7 +1,12 @@
 "use strict";
 
-var Rabu = function() {};
+var Rabu = function(config) {
+	if (!config) {
+		throw "Expected config";
+	}
+	this.config = config;
+};
 
 Rabu.prototype.populateDom = function() {
-    $("#title").text("Hello World");
+    $("#title").text(this.config.title);
 };

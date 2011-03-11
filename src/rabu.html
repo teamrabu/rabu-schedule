@@ -9,7 +9,11 @@
 <body>
     <script type="text/javascript">
         $(document).ready(function() {
-            new Rabu().populateDom();
+	        var config = {
+		        title: "Hello World"
+	        };
+
+            new Rabu(config).populateDom();
         })
     </script>
 
