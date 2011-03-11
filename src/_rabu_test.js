@@ -5,7 +5,7 @@ var RabuTest = TestCase("Rabu");
 RabuTest.prototype.setUp = function() {
 	this.config = {
 		title: "My title"
-	}
+	};
 };
 
 RabuTest.prototype.testTitle = function() {
