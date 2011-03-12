@@ -18,7 +18,7 @@
 	}
 
 	function calcProjection(multiplier) {
-		return Math.ceil(iterations() * multiplier);
+		return iterations() * multiplier;
 	}
 
 	function convertToDate(iterationsRemaining) {

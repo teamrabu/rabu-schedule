@@ -28,14 +28,14 @@
 		assertSame("90%", 40, this.rabu.ninetyPercentIterationsRemaining());
 	};
 
-	RabuTest.prototype.test_projectionsShouldRoundUp = function() {
+	RabuTest.prototype.test_projectionsShouldNotRound = function() {
 		this.config.riskMultipliers = [0.6, 1.4, 1.6];
 		this.config.velocity = 9.5;
 		this.config.effortRemaining = 73;
 
-		assertSame("10%", 5 /*9.610526315789474*/, this.rabu.tenPercentIterationsRemaining());
-		assertSame("50%", 11 /*15.757894736842104*/, this.rabu.fiftyPercentIterationsRemaining());
-		assertSame("90%", 13 /*17.294736842105266*/, this.rabu.ninetyPercentIterationsRemaining());
+		assertSame("10%", 4.610526315789474, this.rabu.tenPercentIterationsRemaining());
+		assertSame("50%", 10.757894736842104, this.rabu.fiftyPercentIterationsRemaining());
+		assertSame("90%", 12.294736842105264, this.rabu.ninetyPercentIterationsRemaining());
 	};
 
 	RabuTest.prototype.test_dateProjections = function() {
