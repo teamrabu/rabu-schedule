@@ -2,7 +2,8 @@ require 'rubygems';
 require 'watir-webdriver';
 
 def test_html
-    url = "file://#{Dir.pwd}/src/rabu.html"
+	file = "src/rabu.html";
+    url = "file://#{Dir.pwd}/#{file}"
 
     browser = Watir::Browser.new :firefox
     browser.goto url
@@ -12,8 +13,10 @@ def test_html
     browser.close
 
     if (expectedTitle != actualTitle) then
-        raise "DOM not populated properly: expected [#{expectedTitle}], was [#{actualTitle}]"
+        puts "#{file} failed"
+        puts "DOM not populated properly: expected [#{expectedTitle}], was [#{actualTitle}]"
+        raise "HTML failed"
     else
-        puts "OK"
+        puts "#{file} ok"
     end
 end

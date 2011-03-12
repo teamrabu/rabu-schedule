@@ -1,6 +1,6 @@
-"use strict";
+/*global Rabu, TestCase, assertEquals */
 
-var RabuTest = TestCase("Rabu");
+var RabuTest = new TestCase("Rabu");
 
 RabuTest.prototype.setUp = function() {
 	this.config = {

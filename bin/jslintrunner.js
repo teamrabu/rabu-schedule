@@ -15,10 +15,12 @@ var OPTIONS = {
 	nomen: true,        // Disallow dangling _ in identifiers
 	regexp: true,       // Disallow . and [^...] in /RegExp/
 	bitwise: true,      // Disallow bitwise operators
-	strict: true,       // Require 'use strict'
-	"continue": true,     // Tolerate 'continue'
+	"continue": true,   // Tolerate 'continue'
 	browser: true,      // Assume a browser
-	maxerr: 10          // Max number of errors
+	maxerr: 10,         // Max number of errors
+	predef: [           // Global variables
+		"$"
+	]
 };
 
 // This function by Steven Levithan
@@ -45,7 +47,7 @@ function checkFile(filename) {
 		return true;
 	}
 	else {
-		print(filename + " failed lint");
+		print(filename + " failed");
 		for (i = 0; i < JSLINT.errors.length; i++) {
 			var error = JSLINT.errors[i];
 			if (!error) { continue; }
@@ -90,7 +92,7 @@ function recursivelyListFilesIn(path, filter) {
 function checkDir(dir) {
 	var okay = true;
 	var files = recursivelyListFilesIn(dir, function(file) {
-		return (/\.js$/).test(file);
+		return (/\.(js|html|css)$/).test(file);
 	});
 	files.map(function(file) {
 		okay = checkFile(file) && okay;

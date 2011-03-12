@@ -5,6 +5,9 @@ require 'selenium-webdriver'
 BIN_DIR = "bin"
 BUILD_DIR = "build"
 
+RHINO_JAR = "#{BIN_DIR}/rhino.jar"
+JSLINTRUNNER = "#{BIN_DIR}/jslintrunner.js"
+
 JSTESTDRIVER_JAR = "#{BIN_DIR}/JsTestDriver-1.3.1.jar"
 JSTESTDRIVER_PORT = 4224
 JSTESTDRIVER_PID_FILE = "#{BUILD_DIR}/jstestdriver.pid"
@@ -24,16 +27,16 @@ task :clean => [:shutdown] do       # must shut down because the pid file is in 
 end
 
 desc "Test everything"
-task :test => [:js_test, :html_test]
+task :test => [:js_test, :html_test, :lint]
 
-desc "Run Javascript unit tests"
-task :js_test => [:jstestdriver] do
+desc "Javascript unit tests"
+task :js_test => [:startup] do
     explain "Running Javascript unit tests" do
         JsTestDriver::run_tests
     end
 end
 
-desc "Run HTML unit tests"
+desc "HTML unit tests"
 task :html_test do
     require 'src/_html_test'
     explain "Running HTML unit tests" do
@@ -41,8 +44,17 @@ task :html_test do
     end
 end
 
-# desc "Start JsTestDriver"
-task :jstestdriver => [BUILD_DIR] do
+desc "Javascript lint"
+task :lint do
+	explain "Running JSLint" do
+		# NOTE: Due to limitations of Rhino, jslintrunner must be configured by editing source file.
+		run "java -jar #{RHINO_JAR} #{JSLINTRUNNER}"
+		raise "Lint failed" if $? != 0
+	end
+end
+
+desc "Start JsTestDriver"
+task :startup => [BUILD_DIR] do
     next if JsTestDriver::is_running?
     explain "Starting JsTestDriver (use 'rake shutdown' to stop)" do
         JsTestDriver::launch
@@ -84,7 +96,7 @@ class JsTestDriver
                     sleep 2
                     result = attempt_tests
                 end
-                raise "Tests failed" if $? != 0
+                raise "Javascript failed" if $? != 0
             end
         rescue Timeout::Error
             puts "JsTestDriver browser has been lost"
