@@ -17,6 +17,17 @@
 		return config.effortRemaining / config.velocity;
 	}
 
+	function calcProjection(multiplier) {
+		return Math.ceil(iterations() * multiplier);
+	}
+
+	function convertToDate(iterationsRemaining) {
+		var days = iterationsRemaining * config.iterationLength;
+		var date = new Date(config.currentIterationStarted);
+		date.setDate(date.getDate() + days);
+		return date;
+	}
+
 	function Rabu(config_in) {
 		if (!config_in) {
 			throw "Expected config";
@@ -29,16 +40,28 @@
 		$("#title").text(config.title);
 	};
 
+	Rabu.prototype.tenPercentDate = function() {
+		return convertToDate(this.tenPercentIterationsRemaining());
+	};
+
+	Rabu.prototype.fiftyPercentDate = function() {
+		return convertToDate(this.fiftyPercentIterationsRemaining());
+	};
+
+	Rabu.prototype.ninetyPercentDate = function() {
+		return convertToDate(this.ninetyPercentIterationsRemaining());
+	};
+
 	Rabu.prototype.tenPercentIterationsRemaining = function() {
-		return iterations() * config.tenPercentMultiplier();
+		return calcProjection(config.tenPercentMultiplier());
 	};
 
 	Rabu.prototype.fiftyPercentIterationsRemaining = function() {
-		return iterations() * config.fiftyPercentMultiplier();
+		return calcProjection(config.fiftyPercentMultiplier());
 	};
 
 	Rabu.prototype.ninetyPercentIterationsRemaining = function() {
-		return iterations() * config.ninetyPercentMultiplier();
+		return calcProjection(config.ninetyPercentMultiplier());
 	};
 
 	this.Rabu = Rabu;
