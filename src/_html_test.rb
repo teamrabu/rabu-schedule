@@ -15,7 +15,7 @@ def test_html
     if (expectedTitle != actualTitle) then
         puts "#{file} failed"
         puts "DOM not populated properly: expected [#{expectedTitle}], was [#{actualTitle}]"
-        raise "HTML failed"
+        raise "HTML unit tests failed"
     else
         puts "#{file} ok"
     end

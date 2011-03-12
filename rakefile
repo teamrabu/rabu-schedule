@@ -100,7 +100,7 @@ class JsTestDriver
                     sleep 2
                     result = attempt_tests
                 end
-                raise "Javascript failed" if $? != 0
+                raise "Javascript unit tests failed" if $? != 0
             end
         rescue Timeout::Error
             puts "JsTestDriver browser has been lost"
