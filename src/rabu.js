@@ -22,7 +22,7 @@
 	}
 
 	function convertToDate(iterationsRemaining) {
-		var days = iterationsRemaining * config.iterationLength;
+		var days = Math.ceil(iterationsRemaining * config.iterationLength);
 		var date = new Date(config.currentIterationStarted);
 		date.setDate(date.getDate() + days);
 		return date;

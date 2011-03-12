@@ -28,7 +28,13 @@
 		assertSame("90%", 40, this.rabu.ninetyPercentIterationsRemaining());
 	};
 
-	RabuTest.prototype.test_projectionsShouldNotRound = function() {
+	RabuTest.prototype.test_dateProjections = function() {
+		assertEquals("10%", new Date("12 Mar 2011"), this.rabu.tenPercentDate());
+		assertEquals("50%", new Date("21 May 2011"), this.rabu.fiftyPercentDate());
+		assertEquals("90%", new Date("8 Oct 2011"), this.rabu.ninetyPercentDate());
+	};
+
+	RabuTest.prototype.test_iterationProjectionsShouldNotRound = function() {
 		this.config.riskMultipliers = [0.6, 1.4, 1.6];
 		this.config.velocity = 9.5;
 		this.config.effortRemaining = 73;
@@ -38,9 +44,15 @@
 		assertSame("90%", 12.294736842105264, this.rabu.ninetyPercentIterationsRemaining());
 	};
 
-	RabuTest.prototype.test_dateProjections = function() {
-		assertEquals("10%", new Date("12 Mar 2011"), this.rabu.tenPercentDate());
-		assertEquals("50%", new Date("21 May 2011"), this.rabu.fiftyPercentDate());
-		assertEquals("90%", new Date("8 Oct 2011"), this.rabu.ninetyPercentDate());
+	RabuTest.prototype.test_dateProjectionsShouldRoundUpToNextDay = function() {
+		this.config.effortRemaining = 14;
+		this.config.iterationLength = 1;
+
+		assertSame("10%", 1.4, this.rabu.tenPercentIterationsRemaining());
+		assertSame("50%", 2.8, this.rabu.fiftyPercentIterationsRemaining());
+		assertSame("90%", 5.6, this.rabu.ninetyPercentIterationsRemaining());
+		assertEquals("10%", new Date("3 Jan 2011"), this.rabu.tenPercentDate());
+		assertEquals("50%", new Date("4 Jan 2011"), this.rabu.fiftyPercentDate());
+		assertEquals("90%", new Date("7 Jan 2011"), this.rabu.ninetyPercentDate());
 	};
 }());
