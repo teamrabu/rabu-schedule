@@ -14,9 +14,6 @@ JSTESTDRIVER_PID_FILE = "#{BUILD_DIR}/jstestdriver.pid"
 JSTESTDRIVER_SERVER_TIMEOUT_IN_SEC = 10
 JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC = 10
 
-
-task :default => :test
-
 directory BUILD_DIR
 
 desc "Erase all generated files"
@@ -26,31 +23,38 @@ task :clean => [:shutdown] do       # must shut down because the pid file is in 
     end
 end
 
-desc "Test everything"
-task :test => [:js_test, :html_test, :lint]
+desc "Check everything"
+task :default => [:javascript, :html]
 
-desc "Javascript unit tests"
+desc "Check Javascript"
+task :javascript => [:js_test, :js_lint]
+
+desc "Check HTML"
+task :html => [:html_test]
+
+# desc "Javascript unit tests"
 task :js_test => [:startup] do
     explain "Running Javascript unit tests" do
         JsTestDriver::run_tests
     end
 end
 
-desc "HTML unit tests"
+# desc "Javascript lint"
+task :js_lint do
+	explain "Running Javascript lint" do
+		# NOTE: Because I haven't figured out how to pass command-line arguments
+		# to Rhino scripts, jslintrunner must be configured by editing source file.
+		run "java -jar #{RHINO_JAR} #{JSLINTRUNNER}"
+		raise "Lint failed" if $? != 0
+	end
+end
+
+# desc "HTML unit tests"
 task :html_test do
     require 'src/_html_test'
     explain "Running HTML unit tests" do
         test_html
     end
-end
-
-desc "Javascript lint"
-task :lint do
-	explain "Running JSLint" do
-		# NOTE: Due to limitations of Rhino, jslintrunner must be configured by editing source file.
-		run "java -jar #{RHINO_JAR} #{JSLINTRUNNER}"
-		raise "Lint failed" if $? != 0
-	end
 end
 
 desc "Start JsTestDriver"
