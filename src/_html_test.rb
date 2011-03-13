@@ -9,7 +9,7 @@ def test_html
     browser.goto url
 
 	begin
-		actualProjectName = browser.span(:class, "projectName").text
+		actualProjectName = browser.span(:class, "name").text
 		expectedProjectName = "Hello World";
 	ensure
         browser.close

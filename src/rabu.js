@@ -37,7 +37,7 @@
 	}
 
 	Rabu.prototype.populateDom = function() {
-		$(".projectName").text(config.title);
+		$(".name").text(config.name);
 		$(".tenPercentDate").text(this.tenPercentDate().toString('MMM dS, yyyy'));
 		$(".fiftyPercentDate").text(this.fiftyPercentDate().toString('MMM dS, yyyy'));
 		$(".ninetyPercentDate").text(this.ninetyPercentDate().toString('MMM dS, yyyy'));

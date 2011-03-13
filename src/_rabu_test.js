@@ -7,7 +7,7 @@
 
 	RabuTest.prototype.setUp = function() {
 		config = {
-			title: "My title",
+			name: "My name",
 			riskMultipliers: [1, 2, 4],
 			currentIterationStarted: "1 Jan 2011",
 			iterationLength: 7,
@@ -18,12 +18,12 @@
 	};
 
 	RabuTest.prototype.test_domTitle = function() {
-		/*:DOC += <span class="projectName"></span> */
-		/*:DOC += <span class="projectName"></span> */
+		/*:DOC += <span class="name"></span> */
+		/*:DOC += <span class="name"></span> */
 
 		rabu.populateDom();
-		assertSame("should set projectName", "My title", $(".projectName:eq(0)").text());
-		assertSame("should work with multiple elements", "My title", $(".projectName:eq(1)").text());
+		assertSame("should set name", "My name", $(".name:eq(0)").text());
+		assertSame("should work with multiple elements", "My name", $(".name:eq(1)").text());
 	};
 
 	RabuTest.prototype.test_domProjections = function() {
