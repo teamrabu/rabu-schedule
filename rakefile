@@ -27,10 +27,10 @@ desc "Check everything"
 task :default => [:javascript, :html]
 
 desc "Check Javascript"
-task :javascript => [:js_test, :js_lint]
+task :javascript => [:js_test, :lint]
 
 desc "Check HTML"
-task :html => [:html_test]
+task :html => [:html_test, :lint]
 
 # desc "Javascript unit tests"
 task :js_test => [:startup] do
@@ -40,8 +40,8 @@ task :js_test => [:startup] do
 end
 
 # desc "Javascript lint"
-task :js_lint do
-	explain "Running Javascript lint" do
+task :lint do
+	explain "Running lint" do
 		# NOTE: Because I haven't figured out how to pass command-line arguments
 		# to Rhino scripts, jslintrunner must be configured by editing source file.
 		run "java -jar #{RHINO_JAR} #{JSLINTRUNNER}"

@@ -17,11 +17,24 @@
 		rabu = new Rabu(config);
 	};
 
-	RabuTest.prototype.test_title = function() {
-		/*:DOC += <h1 id="title"></h1> */
+	RabuTest.prototype.test_domTitle = function() {
+		/*:DOC += <span class="projectName"></span> */
+		/*:DOC += <span class="projectName"></span> */
 
 		rabu.populateDom();
-		assertSame("My title", $("#title").text());
+		assertSame("should set projectName", "My title", $(".projectName:eq(0)").text());
+		assertSame("should work with multiple elements", "My title", $(".projectName:eq(1)").text());
+	};
+
+	RabuTest.prototype.test_domProjections = function() {
+		/*:DOC += <span class="tenPercentDate"></span> */
+		/*:DOC += <span class="fiftyPercentDate"></span> */
+		/*:DOC += <span class="ninetyPercentDate"></span> */
+
+		rabu.populateDom();
+		assertSame("10%", "Mar 12th, 2011", $(".tenPercentDate").text());
+		assertSame("50%", "May 21st, 2011", $(".fiftyPercentDate").text());
+		assertSame("90%", "Oct 8th, 2011", $(".ninetyPercentDate").text());
 	};
 
 	RabuTest.prototype.test_iterationProjections = function() {

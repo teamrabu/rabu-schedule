@@ -8,13 +8,16 @@ def test_html
     browser = Watir::Browser.new :firefox
     browser.goto url
 
-    actualTitle = browser.h1(:id, "title").text
-    expectedTitle = "Hello World";
-    browser.close
+	begin
+		actualProjectName = browser.span(:class, "projectName").text
+		expectedProjectName = "Hello World";
+	ensure
+        browser.close
+    end
 
-    if (expectedTitle != actualTitle) then
+    if (expectedProjectName != actualProjectName) then
         puts "#{file} failed"
-        puts "DOM not populated properly: expected [#{expectedTitle}], was [#{actualTitle}]"
+        puts "DOM not populated properly: expected [#{expectedProjectName}], was [#{actualProjectName}]"
         raise "HTML unit tests failed"
     else
         puts "#{file} ok"
