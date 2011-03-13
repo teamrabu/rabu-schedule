@@ -4,15 +4,19 @@
 <head>
     <title>Hello, World</title>
     <script src="../lib/jquery.v1.5.1.js"></script>
+	<script src="../lib/datejs-en-US.r197.js"></script>
     <script src="rabu.js"></script>
 </head>
 <body>
     <script>
-	    /*global Rabu */
-
         $(document).ready(function() {
 	        var config = {
-		        name: "Hello World"
+		        name: "Hello World",
+		        riskMultipliers: [1, 2, 4],
+		        currentIterationStarted: "1 Jan 2011",
+		        iterationLength: 7,
+		        velocity: 10,
+		        effortRemaining: 100
 	        };
 
             new Rabu(config).populateDom();

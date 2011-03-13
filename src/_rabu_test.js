@@ -1,4 +1,4 @@
-/*global Rabu, TestCase, assertSame, assertEquals, objectifyConfig */
+/*global TestCase, assertSame, assertEquals, objectifyConfig */
 
 (function() {
 	var RabuTest = new TestCase("Rabu");

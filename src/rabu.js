@@ -28,6 +28,10 @@
 		return date;
 	}
 
+	function dateToString(date) {
+		return date.toString('MMM dS, yyyy');
+	}
+
 	function Rabu(config_in) {
 		if (!config_in) {
 			throw "Expected config";
@@ -38,9 +42,9 @@
 
 	Rabu.prototype.populateDom = function() {
 		$(".name").text(config.name);
-		$(".tenPercentDate").text(this.tenPercentDate().toString('MMM dS, yyyy'));
-		$(".fiftyPercentDate").text(this.fiftyPercentDate().toString('MMM dS, yyyy'));
-		$(".ninetyPercentDate").text(this.ninetyPercentDate().toString('MMM dS, yyyy'));
+		$(".tenPercentDate").text(dateToString(this.tenPercentDate()));
+		$(".fiftyPercentDate").text(dateToString(this.fiftyPercentDate()));
+		$(".ninetyPercentDate").text(dateToString(this.ninetyPercentDate()));
 	};
 
 	Rabu.prototype.tenPercentDate = function() {
