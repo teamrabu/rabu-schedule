@@ -7,6 +7,7 @@ LIB_DIR = "lib"
 BUILD_DIR = "build"
 OUTPUT_DIR = "generated"
 BIN_DIR = "#{BUILD_DIR}/vendor"
+MERGED_DIR = "#{OUTPUT_DIR}/merged"
 
 RHINO_JAR = "#{BIN_DIR}/rhino.jar"
 JSLINTRUNNER_JS = "#{BUILD_DIR}/jslintrunner.js"
@@ -19,17 +20,22 @@ JSTESTDRIVER_SERVER_TIMEOUT_IN_SEC = 10
 JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC = 10
 
 HTML_SRC_DIR = "#{SRC_DIR}/html"
-MERGED_DIR = "#{OUTPUT_DIR}/merged"
-RABU_JS_SOURCE = "#{HTML_SRC_DIR}/rabu.js"
 RABU_HTML_SOURCE = "#{HTML_SRC_DIR}/rabu.html"
-MERGED_JS = "#{MERGED_DIR}/rabu.js"
 MERGED_HTML = "#{MERGED_DIR}/rabu.html"
+RABU_JS_SOURCE = "#{HTML_SRC_DIR}/rabu.js"
+MERGED_JS = "#{MERGED_DIR}/rabu.js"
 MERGE_REGEX = /__include:rabu_library/
 
 RUBY_SRC_DIR = "#{SRC_DIR}/ruby"
+MERGED_RUBY = "#{MERGED_DIR}/rabu.rb"
+RABU_RUBY_SOURCE = "#{RUBY_SRC_DIR}/rabu.rb"
+
+SMOKE_TEST_DIR = "#{OUTPUT_DIR}/smoketest"
+SMOKE_TEST_OUT = "#{SMOKE_TEST_DIR}/smoketest.out"
 
 directory PID_DIR
 directory MERGED_DIR
+directory SMOKE_TEST_DIR
 
 desc "Erase all generated files"
 task :clean => [:shutdown] do       # must shut down because the pid file is in output directory
@@ -40,7 +46,7 @@ end
 
 desc "Check everything"
 task :default => [:check_all]
-task :check_all => [:javascript, :html]
+task :check_all => [:javascript, :html, :ruby, :smoke_test]
 
 desc "Check Javascript"
 task :javascript => [:js_test, :lint]
@@ -49,7 +55,7 @@ desc "Check HTML"
 task :html => [:html_test, :lint]
 
 desc "Check Ruby"
-task :ruby => [:ruby_test]
+task :ruby => [:ruby_test, :smoke_test]
 
 # desc "Javascript unit tests"
 task :js_test => [:startup] do
@@ -86,8 +92,28 @@ Rake::TestTask.new(:ruby_test) do |test|
 end
 
 def append(src_filename, dest_file)
+	puts "  #{src_filename}"
 	dest_file.write(IO.read(src_filename))
 	dest_file.write "\n"
+end
+
+# desc "Smoke test"
+task :smoke_test => [MERGED_RUBY, MERGED_HTML, SMOKE_TEST_DIR] do
+	explain "Running smoke test" do
+		run "ruby #{MERGED_RUBY} > #{SMOKE_TEST_OUT}"
+		raise "Smoke test failed" if $? != 0
+
+		expected = IO.readlines(MERGED_HTML)
+		actual = IO.readlines(SMOKE_TEST_OUT)
+		if (expected.count != actual.count) then
+			raise "smoke test # of output lines expected #{expected.count} but was #{actual.count}"
+		end
+		expected.each_index do |i|
+			if (expected[i] != actual[i]) then
+				raise "smoke test line #{i} expected '#{expected[i]}' but was '#{actual[i]}'"
+			end
+		end
+	end
 end
 
 task MERGED_JS => [RABU_JS_SOURCE, MERGED_DIR] do
@@ -97,7 +123,6 @@ task MERGED_JS => [RABU_JS_SOURCE, MERGED_DIR] do
 		File.open(MERGED_JS, "w") do |dest_file|
 			files = FileList.new("#{LIB_DIR}/*.js", RABU_JS_SOURCE)
 			files.each do |src_file|
-				puts "  #{src_file}"
 				append(src_file, dest_file)
 			end
 		end
@@ -113,7 +138,6 @@ task MERGED_HTML => [RABU_HTML_SOURCE, MERGED_JS, MERGED_DIR] do
 			puts "  #{RABU_HTML_SOURCE}"
 			IO.readlines(RABU_HTML_SOURCE).each do |line|
 				if MERGE_REGEX.match line then
-					puts "  #{MERGED_JS}"
 					append(MERGED_JS, dest_file)
 					merged_library = true
 				else
@@ -122,6 +146,17 @@ task MERGED_HTML => [RABU_HTML_SOURCE, MERGED_JS, MERGED_DIR] do
 			end
 		end
 		raise "Merge regex (#{MERGE_REGEX.inspect}) not found in #{RABU_HTML_SOURCE}" unless merged_library
+	end
+end
+
+task MERGED_RUBY => [RABU_RUBY_SOURCE, MERGED_HTML, MERGED_DIR] do
+	explain "Merging Ruby script" do
+	rm_f MERGED_RUBY
+	puts "Concatenating #{MERGED_RUBY}"
+		File.open(MERGED_RUBY, "w") do |dest_file|
+			append(RABU_RUBY_SOURCE, dest_file)
+			append(MERGED_HTML, dest_file)
+		end
 	end
 end
 
@@ -138,7 +173,7 @@ task :startup => [PID_DIR] do
 end
 
 desc "Shut down JsTestDriver"
-task :shutdown do 
+task :shutdown do
     next unless JsTestDriver::is_running?
     explain "Shutting down JsTestDriver server (close the JsTestDriver browser manually)" do
         JsTestDriver::terminate

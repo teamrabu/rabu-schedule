@@ -1,12 +1,11 @@
 require 'test/unit'
-require 'rabu'
 
 class RabuTest < Test::Unit::TestCase
 	def setup
-		@rabu = Rabu.new
+#		@rabu = Rabu.new
 	end
 
-	def test_nothing
-		assert_equal(42, @rabu.nothing)
+	def test_rabu_outputs_its_data_block
+#		assert_equal(42, @rabu.nothing)
 	end
 end

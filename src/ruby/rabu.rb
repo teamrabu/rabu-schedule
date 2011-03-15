@@ -1,5 +1,3 @@
-class Rabu
-	def nothing
-		42
-	end
-end
+print DATA.read.chomp
+
+__END__
