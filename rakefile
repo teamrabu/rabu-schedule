@@ -1,5 +1,6 @@
 require 'socket'
 require 'timeout'
+require "rake/testtask"
 
 SRC_DIR = "src"
 LIB_DIR = "lib"
@@ -25,6 +26,8 @@ MERGED_JS = "#{MERGED_DIR}/rabu.js"
 MERGED_HTML = "#{MERGED_DIR}/rabu.html"
 MERGE_REGEX = /__include:rabu_library/
 
+RUBY_SRC_DIR = "#{SRC_DIR}/ruby"
+
 directory PID_DIR
 directory MERGED_DIR
 
@@ -44,6 +47,9 @@ task :javascript => [:js_test, :lint]
 
 desc "Check HTML"
 task :html => [:html_test, :lint]
+
+desc "Check Ruby"
+task :ruby => [:ruby_test]
 
 # desc "Javascript unit tests"
 task :js_test => [:startup] do
@@ -68,6 +74,15 @@ task :html_test => [MERGED_HTML] do
     explain "Running HTML unit tests" do
         test_html(MERGED_HTML)
     end
+end
+
+# desc "Ruby unit tests"
+task :ruby_test do
+	explain("Running Ruby unit tests"){}
+end
+Rake::TestTask.new(:ruby_test) do |test|
+	test.libs << RUBY_SRC_DIR
+	test.pattern = "#{RUBY_SRC_DIR}/_*test.rb"
 end
 
 def append(src_filename, dest_file)
