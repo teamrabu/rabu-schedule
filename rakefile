@@ -1,30 +1,31 @@
 require 'socket'
 require 'timeout'
-require 'selenium-webdriver'
 
 SRC_DIR = "src"
 LIB_DIR = "lib"
 BUILD_DIR = "build"
 OUTPUT_DIR = "generated"
-
 BIN_DIR = "#{BUILD_DIR}/vendor"
-PID_DIR = "#{OUTPUT_DIR}/pid"
-MERGED_JS_DIR = "#{OUTPUT_DIR}/merged-js"
 
 RHINO_JAR = "#{BIN_DIR}/rhino.jar"
 JSLINTRUNNER_JS = "#{BUILD_DIR}/jslintrunner.js"
 
+PID_DIR = "#{OUTPUT_DIR}/pid"
 JSTESTDRIVER_JAR = "#{BIN_DIR}/JsTestDriver-1.3.1.jar"
 JSTESTDRIVER_PORT = 4224
 JSTESTDRIVER_PID_FILE = "#{PID_DIR}/jstestdriver.pid"
 JSTESTDRIVER_SERVER_TIMEOUT_IN_SEC = 10
 JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC = 10
 
+MERGED_DIR = "#{OUTPUT_DIR}/merged"
 RABU_JS_SOURCE = "#{SRC_DIR}/rabu.js"
-MERGED_JS = "#{MERGED_JS_DIR}/rabu.js"
+RABU_HTML_SOURCE = "#{SRC_DIR}/rabu.html"
+MERGED_JS = "#{MERGED_DIR}/rabu.js"
+MERGED_HTML = "#{MERGED_DIR}/rabu.html"
+MERGE_REGEX = /__include:rabu_library/
 
 directory PID_DIR
-directory MERGED_JS_DIR
+directory MERGED_DIR
 
 desc "Erase all generated files"
 task :clean => [:shutdown] do       # must shut down because the pid file is in output directory
@@ -61,22 +62,22 @@ task :lint do
 end
 
 # desc "HTML unit tests"
-task :html_test do
+task :html_test => [MERGED_HTML] do
     require 'src/_html_test'
     explain "Running HTML unit tests" do
-        test_html
+        test_html(MERGED_HTML)
     end
 end
 
-def append(src_filename, dest_handle)
+def append(src_filename, dest_file)
 	IO.readlines(src_filename).each do |line|
-		dest_handle.write "#{line}"
+		dest_file.write line
 	end
-	dest_handle.write "\n"
+	dest_file.write "\n"
 end
 
-task MERGED_JS => [MERGED_JS_DIR] do
-	explain "Concatenating Javascript" do
+task MERGED_JS => [MERGED_DIR] do
+	explain "Merging Javascript" do
 		rm_f MERGED_JS
 		puts "Concatenating #{MERGED_JS}"
 		File.open(MERGED_JS, "w") do |dest_file|
@@ -89,8 +90,29 @@ task MERGED_JS => [MERGED_JS_DIR] do
 	end
 end
 
+task MERGED_HTML => [MERGED_DIR, MERGED_JS] do
+	explain "Merging HTML" do
+		rm_f MERGED_HTML
+		puts "Concatenating #{MERGED_HTML}"
+		merged_library = false;
+		File.open(MERGED_HTML, "w") do |dest_file|
+			puts "  #{RABU_HTML_SOURCE}"
+			IO.readlines(RABU_HTML_SOURCE).each do |line|
+				if MERGE_REGEX.match line then
+					puts "  #{MERGED_JS}"
+					append(MERGED_JS, dest_file)
+					merged_library = true
+				else
+					dest_file.write line
+				end
+			end
+		end
+		raise "Merge regex (#{MERGE_REGEX.inspect}) not found in #{RABU_HTML_SOURCE}" unless merged_library
+	end
+end
+
 desc "Create tested release package"
-task :release => [MERGED_JS] do # => [:check_all] do
+task :release => [:check_all, MERGED_HTML] do
 end
 
 desc "Start JsTestDriver"
@@ -125,6 +147,8 @@ def run(command)
 end
 
 class JsTestDriver
+	require 'selenium-webdriver'
+
     COMMAND = "java -jar #{JSTESTDRIVER_JAR}"
 
     def self.run_tests

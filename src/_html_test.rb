@@ -1,10 +1,8 @@
 require 'rubygems';
 require 'watir-webdriver';
 
-FILE = "src/rabu.html";
-
-def test_html
-    url = "file://#{Dir.pwd}/#{FILE}"
+def test_html(filename)
+    url = "file://#{Dir.pwd}/#{filename}"
 
     browser = Watir::Browser.new :firefox
     browser.goto url
@@ -15,7 +13,7 @@ def test_html
 		assertEquals("May 21st, 2011", browser.span(:class, "fiftyPercentDate").text, "50%");
 		assertEquals("Oct 8th, 2011", browser.span(:class, "ninetyPercentDate").text, "90%");
 
-	    puts "#{FILE} ok"
+	    puts "#{filename} ok"
 	ensure
         browser.close
     end
@@ -23,7 +21,7 @@ end
 
 def assertEquals(expected, actual, message="DOM")
 	if (expected != actual) then
-		puts "#{FILE} failed"
+		puts "#{filename} failed"
 		puts "#{message} expected <#{expected}>, was <#{actual}>"
 		raise "HTML unit tests failed"
 	end
