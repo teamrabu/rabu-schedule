@@ -70,13 +70,11 @@ task :html_test => [MERGED_HTML] do
 end
 
 def append(src_filename, dest_file)
-	IO.readlines(src_filename).each do |line|
-		dest_file.write line
-	end
+	dest_file.write(IO.read(src_filename))
 	dest_file.write "\n"
 end
 
-task MERGED_JS => [MERGED_DIR] do
+task MERGED_JS => [RABU_JS_SOURCE, MERGED_DIR] do
 	explain "Merging Javascript" do
 		rm_f MERGED_JS
 		puts "Concatenating #{MERGED_JS}"
@@ -90,7 +88,7 @@ task MERGED_JS => [MERGED_DIR] do
 	end
 end
 
-task MERGED_HTML => [MERGED_DIR, MERGED_JS] do
+task MERGED_HTML => [RABU_HTML_SOURCE, MERGED_JS, MERGED_DIR] do
 	explain "Merging HTML" do
 		rm_f MERGED_HTML
 		puts "Concatenating #{MERGED_HTML}"
