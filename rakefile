@@ -2,20 +2,29 @@ require 'socket'
 require 'timeout'
 require 'selenium-webdriver'
 
+SRC_DIR = "src"
+LIB_DIR = "lib"
 BUILD_DIR = "build"
-BIN_DIR = "#{BUILD_DIR}/vendor"
 OUTPUT_DIR = "generated"
 
+BIN_DIR = "#{BUILD_DIR}/vendor"
+PID_DIR = "#{OUTPUT_DIR}/pid"
+MERGED_JS_DIR = "#{OUTPUT_DIR}/merged-js"
+
 RHINO_JAR = "#{BIN_DIR}/rhino.jar"
-JSLINTRUNNER = "#{BUILD_DIR}/jslintrunner.js"
+JSLINTRUNNER_JS = "#{BUILD_DIR}/jslintrunner.js"
 
 JSTESTDRIVER_JAR = "#{BIN_DIR}/JsTestDriver-1.3.1.jar"
 JSTESTDRIVER_PORT = 4224
-JSTESTDRIVER_PID_FILE = "#{OUTPUT_DIR}/jstestdriver.pid"
+JSTESTDRIVER_PID_FILE = "#{PID_DIR}/jstestdriver.pid"
 JSTESTDRIVER_SERVER_TIMEOUT_IN_SEC = 10
 JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC = 10
 
-directory OUTPUT_DIR
+RABU_JS_SOURCE = "#{SRC_DIR}/rabu.js"
+MERGED_JS = "#{MERGED_JS_DIR}/rabu.js"
+
+directory PID_DIR
+directory MERGED_JS_DIR
 
 desc "Erase all generated files"
 task :clean => [:shutdown] do       # must shut down because the pid file is in output directory
@@ -46,7 +55,7 @@ task :lint do
 	explain "Running lint" do
 		# NOTE: Because I haven't figured out how to pass command-line arguments
 		# to Rhino scripts, jslintrunner must be configured by editing source file.
-		run "java -jar #{RHINO_JAR} #{JSLINTRUNNER}"
+		run "java -jar #{RHINO_JAR} #{JSLINTRUNNER_JS}"
 		raise "Lint failed" if $? != 0
 	end
 end
@@ -59,14 +68,33 @@ task :html_test do
     end
 end
 
-desc "Create tested release package"
-task :release => [:check_all] do
-	explain "Creating release" do
+def append(src_filename, dest_handle)
+	IO.readlines(src_filename).each do |line|
+		dest_handle.write "#{line}"
+	end
+	dest_handle.write "\n"
+end
+
+task MERGED_JS => [MERGED_JS_DIR] do
+	explain "Concatenating Javascript" do
+		rm_f MERGED_JS
+		puts "Concatenating #{MERGED_JS}"
+		File.open(MERGED_JS, "w") do |dest_file|
+			files = FileList.new("#{LIB_DIR}/*.js", RABU_JS_SOURCE)
+			files.each do |src_file|
+				puts "  #{src_file}"
+				append(src_file, dest_file)
+			end
+		end
 	end
 end
 
+desc "Create tested release package"
+task :release => [MERGED_JS] do # => [:check_all] do
+end
+
 desc "Start JsTestDriver"
-task :startup => [OUTPUT_DIR] do
+task :startup => [PID_DIR] do
     next if JsTestDriver::is_running?
     explain "Starting JsTestDriver (use 'rake shutdown' to stop)" do
         JsTestDriver::launch
@@ -74,7 +102,7 @@ task :startup => [OUTPUT_DIR] do
 end
 
 desc "Shut down JsTestDriver"
-task :shutdown do
+task :shutdown do 
     next unless JsTestDriver::is_running?
     explain "Shutting down JsTestDriver server (close the JsTestDriver browser manually)" do
         JsTestDriver::terminate
