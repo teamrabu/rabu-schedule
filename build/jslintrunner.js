@@ -3,7 +3,7 @@
 (function JsLintRunner() {
 "use strict";
 
-load("bin/fulljslint.js");
+load("build/vendor/fulljslint.js");
 
 var DIRS_TO_CHECK = ["src"];
 

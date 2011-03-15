@@ -5,7 +5,6 @@ A tool for displaying risk-adjusted burn-up charts.
 
 Top-level directory structure:
  - src: Source code
- - bin: Files used by automated build scripts
- - lib: Files referenced by source code
+ - lib: Files used at runtime by source code
+ - build: Files used by automated build scripts
  - spikes: Non-production experiments
- - tools: Tools used in development, but not used by any automated scripts.
