@@ -5,7 +5,7 @@
 
 load("build/vendor/fulljslint.js");
 
-var DIRS_TO_CHECK = ["src"];
+var DIRS_TO_CHECK = ["src/html"];
 
 // Summary of JsLint options at http://www.jslint.com/#JSLINT_OPTIONS
 // Details at http://www.jslint.com/lint.html

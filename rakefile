@@ -17,9 +17,10 @@ JSTESTDRIVER_PID_FILE = "#{PID_DIR}/jstestdriver.pid"
 JSTESTDRIVER_SERVER_TIMEOUT_IN_SEC = 10
 JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC = 10
 
+HTML_SRC_DIR = "#{SRC_DIR}/html"
 MERGED_DIR = "#{OUTPUT_DIR}/merged"
-RABU_JS_SOURCE = "#{SRC_DIR}/rabu.js"
-RABU_HTML_SOURCE = "#{SRC_DIR}/rabu.html"
+RABU_JS_SOURCE = "#{HTML_SRC_DIR}/rabu.js"
+RABU_HTML_SOURCE = "#{HTML_SRC_DIR}/rabu.html"
 MERGED_JS = "#{MERGED_DIR}/rabu.js"
 MERGED_HTML = "#{MERGED_DIR}/rabu.html"
 MERGE_REGEX = /__include:rabu_library/
@@ -63,7 +64,7 @@ end
 
 # desc "HTML unit tests"
 task :html_test => [MERGED_HTML] do
-    require 'src/_html_test'
+    require "#{HTML_SRC_DIR}/_html_test"
     explain "Running HTML unit tests" do
         test_html(MERGED_HTML)
     end
