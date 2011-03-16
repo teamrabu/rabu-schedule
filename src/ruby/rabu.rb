@@ -1,3 +1,9 @@
-print DATA.read.chomp
+class Rabu
+	def initialize(html_template)
+		@template = html_template
+	end
 
-__END__
+	def generate_html
+		return @template.chomp
+	end
+end

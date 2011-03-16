@@ -28,7 +28,7 @@ MERGE_REGEX = /__include:rabu_library/
 
 RUBY_SRC_DIR = "#{SRC_DIR}/ruby"
 MERGED_RUBY = "#{MERGED_DIR}/rabu.rb"
-RABU_RUBY_SOURCE = "#{RUBY_SRC_DIR}/rabu.rb"
+RABU_RUBY_SOURCE = "#{RUBY_SRC_DIR}/rabu_launcher.rb"
 
 SMOKE_TEST_DIR = "#{OUTPUT_DIR}/smoketest"
 SMOKE_TEST_OUT = "#{SMOKE_TEST_DIR}/smoketest.out"
@@ -97,7 +97,6 @@ end
 def append(src_filename, dest_file)
 	puts "  #{src_filename}"
 	dest_file.write(IO.read(src_filename))
-	dest_file.write "\n"
 end
 
 # desc "Smoke test"
@@ -116,6 +115,7 @@ task :smoke_test => [MERGED_RUBY, MERGED_HTML, SMOKE_TEST_DIR] do
 				raise "smoke test line #{i+1} expected '#{expected[i]}' but was '#{actual[i]}'"
 			end
 		end
+		puts "#{MERGED_RUBY} ok"
 	end
 end
 
@@ -157,7 +157,14 @@ task MERGED_RUBY => [RABU_RUBY_SOURCE, MERGED_HTML, MERGED_DIR] do
 		rm_f MERGED_RUBY
 		puts "Concatenating #{MERGED_RUBY}"
 		File.open(MERGED_RUBY, "w") do |dest_file|
-			append(RABU_RUBY_SOURCE, dest_file)
+			IO.readlines(RABU_RUBY_SOURCE).each do |line|
+				if line =~ /^require \"(.+)\"/ then
+					append("#{RUBY_SRC_DIR}/#{$1}.rb", dest_file)
+				else
+					dest_file.write line
+				end
+			end
+			puts "  #{RABU_RUBY_SOURCE}"
 			append(MERGED_HTML, dest_file)
 		end
 	end

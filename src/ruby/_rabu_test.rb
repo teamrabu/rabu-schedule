@@ -1,11 +1,8 @@
 require 'test/unit'
+require 'rabu'
 
 class RabuTest < Test::Unit::TestCase
-	def setup
-#		@rabu = Rabu.new
-	end
-
-	def test_rabu_outputs_its_data_block
-#		assert_equal(42, @rabu.nothing)
+	def test_html_generation
+		assert_equal("foo", Rabu.new("foo\n").generate_html, "should strip ending linefeed")
 	end
 end
