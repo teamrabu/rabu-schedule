@@ -33,9 +33,12 @@ RABU_RUBY_SOURCE = "#{RUBY_SRC_DIR}/rabu.rb"
 SMOKE_TEST_DIR = "#{OUTPUT_DIR}/smoketest"
 SMOKE_TEST_OUT = "#{SMOKE_TEST_DIR}/smoketest.out"
 
+RELEASE_DIR = "#{OUTPUT_DIR}/release"
+
 directory PID_DIR
 directory MERGED_DIR
 directory SMOKE_TEST_DIR
+directory RELEASE_DIR
 
 desc "Erase all generated files"
 task :clean => [:shutdown] do       # must shut down because the pid file is in output directory
@@ -110,7 +113,7 @@ task :smoke_test => [MERGED_RUBY, MERGED_HTML, SMOKE_TEST_DIR] do
 		end
 		expected.each_index do |i|
 			if (expected[i] != actual[i]) then
-				raise "smoke test line #{i} expected '#{expected[i]}' but was '#{actual[i]}'"
+				raise "smoke test line #{i+1} expected '#{expected[i]}' but was '#{actual[i]}'"
 			end
 		end
 	end
@@ -151,8 +154,8 @@ end
 
 task MERGED_RUBY => [RABU_RUBY_SOURCE, MERGED_HTML, MERGED_DIR] do
 	explain "Merging Ruby script" do
-	rm_f MERGED_RUBY
-	puts "Concatenating #{MERGED_RUBY}"
+		rm_f MERGED_RUBY
+		puts "Concatenating #{MERGED_RUBY}"
 		File.open(MERGED_RUBY, "w") do |dest_file|
 			append(RABU_RUBY_SOURCE, dest_file)
 			append(MERGED_HTML, dest_file)
@@ -161,7 +164,10 @@ task MERGED_RUBY => [RABU_RUBY_SOURCE, MERGED_HTML, MERGED_DIR] do
 end
 
 desc "Create tested release package"
-task :release => [:check_all, MERGED_HTML] do
+task :release => [:check_all, MERGED_RUBY, RELEASE_DIR] do
+	explain "Building release" do
+		cp MERGED_RUBY, RELEASE_DIR
+	end
 end
 
 desc "Start JsTestDriver"
