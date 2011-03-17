@@ -8,10 +8,10 @@ def test_html(filename)
     browser.goto url
 
 	begin
-		assertEquals("Hello World", browser.span(:class, "name").text, "name");
-		assertEquals("Mar 12th, 2011", browser.span(:class, "tenPercentDate").text, "10%");
-		assertEquals("May 21st, 2011", browser.span(:class, "fiftyPercentDate").text, "50%");
-		assertEquals("Oct 8th, 2011", browser.span(:class, "ninetyPercentDate").text, "90%");
+		assertEquals("Hello World", browser.span(:class, "name").text, filename, "name");
+		assertEquals("Mar 12th, 2011", browser.span(:class, "tenPercentDate").text, filename, "10%");
+		assertEquals("May 21st, 2011", browser.span(:class, "fiftyPercentDate").text, filename, "50%");
+		assertEquals("Oct 8th, 2011", browser.span(:class, "ninetyPercentDate").text, filename, "90%");
 
 	    puts "#{filename} ok"
 	ensure
@@ -19,7 +19,7 @@ def test_html(filename)
     end
 end
 
-def assertEquals(expected, actual, message="DOM")
+def assertEquals(expected, actual, filename, message="DOM")
 	if (expected != actual) then
 		puts "#{filename} failed"
 		puts "#{message} expected <#{expected}>, was <#{actual}>"

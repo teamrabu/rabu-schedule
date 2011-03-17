@@ -2,7 +2,25 @@ require 'test/unit'
 require 'rabu'
 
 class RabuTest < Test::Unit::TestCase
-	def test_html_generation
-		assert_equal("foo", Rabu.new("foo\n").generate_html, "should strip ending linefeed")
+
+	def test_interpolation
+		rabu = Rabu.new("a\n<%= config %>\nb", "interpolated config")
+		assert_equal("a\ninterpolated config\nb", rabu.html)
 	end
+
+	def test_interpolation_when_varying_whitespace
+		assert_equal("a", Rabu.new("<%=config%>", "a").html)
+		assert_equal("b", Rabu.new("<%=   config   %>", "b").html)
+	end
+
+	def test_interpolation_when_multiple_instances
+		assert_equal("abcabc", Rabu.new("<%=config%><%=config%>", "abc").html)
+	end
+
+	def test_interpolation_when_no_config_tag
+		assert_raise(NoConfigTagError) do
+			Rabu.new("a", "").html
+		end
+	end
+
 end

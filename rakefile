@@ -7,7 +7,8 @@ LIB_DIR = "lib"
 BUILD_DIR = "build"
 OUTPUT_DIR = "generated"
 BIN_DIR = "#{BUILD_DIR}/vendor"
-MERGED_DIR = "#{OUTPUT_DIR}/merged"
+MERGED_DIR = "#{OUTPUT_DIR}/built"
+RESULTS_DIR = "#{OUTPUT_DIR}/run_results" 
 
 RHINO_JAR = "#{BIN_DIR}/rhino.jar"
 JSLINTRUNNER_JS = "#{BUILD_DIR}/jslintrunner.js"
@@ -24,20 +25,28 @@ RABU_HTML_SOURCE = "#{HTML_SRC_DIR}/rabu.html"
 MERGED_HTML = "#{MERGED_DIR}/rabu.html"
 RABU_JS_SOURCE = "#{HTML_SRC_DIR}/rabu.js"
 MERGED_JS = "#{MERGED_DIR}/rabu.js"
-MERGE_REGEX = /__include:rabu_library/
+MERGE_REGEX = /<%=\s*rabu_library\s*%>/
 
 RUBY_SRC_DIR = "#{SRC_DIR}/ruby"
 MERGED_RUBY = "#{MERGED_DIR}/rabu.rb"
 RABU_RUBY_SOURCE = "#{RUBY_SRC_DIR}/rabu_launcher.rb"
 
-SMOKE_TEST_DIR = "#{OUTPUT_DIR}/smoketest"
-SMOKE_TEST_OUT = "#{SMOKE_TEST_DIR}/smoketest.out"
+RABU_OUTPUT = "#{RESULTS_DIR}/rabu.html"
+
+SMOKETEST_SRC_DIR = "#{SRC_DIR}/smoketest"
+SMOKETEST_CONFIG = "#{SMOKETEST_SRC_DIR}/test.rabu"
+SMOKETEST_EXPECTED = "#{SMOKETEST_SRC_DIR}/expected.html"
+
+PROJECTION_DIR = "#{OUTPUT_DIR}/projection"
+PROJECTION_CONFIG = "schedule.rabu"
+PROJECTION_HTML = "#{PROJECTION_DIR}/projection.html"
 
 RELEASE_DIR = "#{OUTPUT_DIR}/release"
 
 directory PID_DIR
 directory MERGED_DIR
-directory SMOKE_TEST_DIR
+directory RESULTS_DIR
+directory PROJECTION_DIR
 directory RELEASE_DIR
 
 desc "Erase all generated files"
@@ -47,18 +56,21 @@ task :clean => [:shutdown] do       # must shut down because the pid file is in 
     end
 end
 
+##### Tests
+
+task :default => [:check_all, PROJECTION_HTML]
+
 desc "Check everything"
-task :default => [:check_all]
-task :check_all => [:javascript, :html, :ruby, :smoke_test]
+task :check_all => [:ruby, :javascript, :html, :smoketest]
 
 desc "Check Javascript"
-task :javascript => [:js_test, :lint]
+task :javascript => [:js_test, :js_lint]
 
 desc "Check HTML"
-task :html => [:html_test, :lint]
+task :html => [:html_test]
 
 desc "Check Ruby"
-task :ruby => [:ruby_test, :smoke_test]
+task :ruby => [:ruby_test, :smoketest]
 
 # desc "Javascript unit tests"
 task :js_test => [:startup] do
@@ -68,7 +80,7 @@ task :js_test => [:startup] do
 end
 
 # desc "Javascript lint"
-task :lint do
+task :js_lint do
 	explain "Running lint" do
 		# NOTE: Because I haven't figured out how to pass command-line arguments
 		# to Rhino scripts, jslintrunner must be configured by editing source file.
@@ -78,10 +90,10 @@ task :lint do
 end
 
 # desc "HTML unit tests"
-task :html_test => [MERGED_HTML] do
+task :html_test => [RABU_OUTPUT] do
     require "#{HTML_SRC_DIR}/_html_test"
     explain "Running HTML unit tests" do
-        test_html(MERGED_HTML)
+        test_html(RABU_OUTPUT)
     end
 end
 
@@ -94,19 +106,11 @@ Rake::TestTask.new(:ruby_test) do |test|
 	test.pattern = "#{RUBY_SRC_DIR}/_*test.rb"
 end
 
-def append(src_filename, dest_file)
-	puts "  #{src_filename}"
-	dest_file.write(IO.read(src_filename))
-end
-
 # desc "Smoke test"
-task :smoke_test => [MERGED_RUBY, MERGED_HTML, SMOKE_TEST_DIR] do
+task :smoketest => [RABU_OUTPUT] do
 	explain "Running smoke test" do
-		run "ruby #{MERGED_RUBY} > #{SMOKE_TEST_OUT}"
-		raise "Smoke test failed" if $? != 0
-
-		expected = IO.readlines(MERGED_HTML)
-		actual = IO.readlines(SMOKE_TEST_OUT)
+		expected = IO.readlines(SMOKETEST_EXPECTED)
+		actual = IO.readlines(RABU_OUTPUT)
 		if (expected.count != actual.count) then
 			raise "smoke test # of output lines expected #{expected.count} but was #{actual.count}"
 		end
@@ -115,9 +119,11 @@ task :smoke_test => [MERGED_RUBY, MERGED_HTML, SMOKE_TEST_DIR] do
 				raise "smoke test line #{i+1} expected '#{expected[i]}' but was '#{actual[i]}'"
 			end
 		end
-		puts "#{MERGED_RUBY} ok"
+		puts "smoke test ok"
 	end
 end
+
+##### Builds
 
 task MERGED_JS => [RABU_JS_SOURCE, MERGED_DIR] do
 	explain "Merging Javascript" do
@@ -170,12 +176,28 @@ task MERGED_RUBY => [RABU_RUBY_SOURCE, MERGED_HTML, MERGED_DIR] do
 	end
 end
 
+task RABU_OUTPUT => [MERGED_RUBY, RESULTS_DIR] do
+	explain "Creating Rabu output file" do
+		run "ruby #{MERGED_RUBY} < #{SMOKETEST_CONFIG} > #{RABU_OUTPUT}"
+		raise "Run failed" if $? != 0
+	end
+end
+
+task PROJECTION_HTML => [MERGED_RUBY] do
+	explain "Updating release projection" do
+		run "ruby #{MERGED_RUBY} < #{PROJECTION_CONFIG} > #{PROJECTION_HTML}"
+		raise "Run failed" if $? != 0
+	end
+end
+
 desc "Create tested release package"
 task :release => [:check_all, MERGED_RUBY, RELEASE_DIR] do
 	explain "Building release" do
 		cp MERGED_RUBY, RELEASE_DIR
 	end
 end
+
+##### JsTestDriver
 
 desc "Start JsTestDriver"
 task :startup => [PID_DIR] do
@@ -191,6 +213,13 @@ task :shutdown do
     explain "Shutting down JsTestDriver server (close the JsTestDriver browser manually)" do
         JsTestDriver::terminate
     end
+end
+
+##### Helpers
+
+def append(src_filename, dest_file)
+	puts "  #{src_filename}"
+	dest_file.write(IO.read(src_filename))
 end
 
 def explain(headline, &block)

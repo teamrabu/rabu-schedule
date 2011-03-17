@@ -1,0 +1,8 @@
+{
+	"name": "Hello World",
+	"riskMultipliers": [1, 2, 4],
+	"currentIterationStarted": "1 Jan 2011",
+	"iterationLength": 7,
+	"velocity": 10,
+	"effortRemaining": 100
+}

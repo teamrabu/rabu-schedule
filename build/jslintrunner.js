@@ -75,10 +75,6 @@ function getFiles(javaFile, javaList, filter) {
 }
 
 function recursivelyListFilesIn(path, filter) {
-//	var f = new java.io.File(path);
-//	var jlist = f.list(); // a java String[]
-//	return jlist;
-
 	var file = new java.io.File(path);
 	if (!file.exists() || !file.isDirectory()) {
 		print("Directory not found: " + file);
@@ -93,16 +89,16 @@ function recursivelyListFilesIn(path, filter) {
 function checkDir(dir) {
 	var okay = true;
 	var files = recursivelyListFilesIn(dir, function(file) {
-		return (/\.(js|html|css)$/).test(file);
+		return (/\.(js|css)$/).test(file);
 	});
-	files.map(function(file) {
+	files.forEach(function(file) {
 		okay = checkFile(file) && okay;
 	});
 	return okay;
 }
 
 var okay = true;
-DIRS_TO_CHECK.map(function(dir) { okay = checkDir(dir) && okay});
+DIRS_TO_CHECK.forEach(function(dir) { okay = checkDir(dir) && okay});
 java.lang.System.exit(okay ? 0 : 1);
 
 }());
