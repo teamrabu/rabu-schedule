@@ -29,7 +29,7 @@
 	}
 
 	function dateToString(date) {
-		return date.toString('MMM dS, yyyy');
+		return date.toString('MMMM dS');
 	}
 
 	function Rabu(config_in) {

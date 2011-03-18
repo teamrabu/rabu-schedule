@@ -24,3 +24,4 @@ class RabuTest < Test::Unit::TestCase
 	end
 
 end
+

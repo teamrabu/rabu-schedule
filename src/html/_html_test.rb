@@ -9,9 +9,9 @@ def test_html(filename)
 
 	begin
 		assertEquals("Hello World", browser.span(:class, "name").text, filename, "name");
-		assertEquals("Mar 12th, 2011", browser.span(:class, "tenPercentDate").text, filename, "10%");
-		assertEquals("May 21st, 2011", browser.span(:class, "fiftyPercentDate").text, filename, "50%");
-		assertEquals("Oct 8th, 2011", browser.span(:class, "ninetyPercentDate").text, filename, "90%");
+		assertEquals("March 12th", browser.span(:class, "date tenPercentDate").text, filename, "10%");
+		assertEquals("May 21st", browser.span(:class, "date fiftyPercentDate").text, filename, "50%");
+		assertEquals("October 8th", browser.span(:class, "date ninetyPercentDate").text, filename, "90%");
 
 	    puts "#{filename} ok"
 	ensure

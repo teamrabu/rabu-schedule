@@ -58,9 +58,8 @@ end
 
 ##### Tests
 
-task :default => [:check_all, PROJECTION_HTML]
-
 desc "Check everything"
+task :default => [:check_all]
 task :check_all => [:ruby, :javascript, :html, :smoketest]
 
 desc "Check Javascript"
@@ -71,6 +70,14 @@ task :html => [:html_test]
 
 desc "Check Ruby"
 task :ruby => [:ruby_test, :smoketest]
+
+desc "Update projection"
+task :projection => [PROJECTION_HTML]
+
+desc "Approve failing smoke test"
+task :approve do
+	cp RABU_OUTPUT, SMOKETEST_EXPECTED
+end
 
 # desc "Javascript unit tests"
 task :js_test => [:startup] do

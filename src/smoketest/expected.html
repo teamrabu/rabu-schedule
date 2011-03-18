@@ -1,11 +1,91 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>Hello, World</title>
+    <title>Schedule Projection</title>
+
+	<style type="text/css">
+		* { margin: 0; }
+ 		html, body { height: 100%; }
+
+		body {
+			background-color: #006666;
+		}
+		.wrapper {
+			font-family: helvetica, arial, sans-serif;
+			font-size: 14pt;
+			font-weight: 100;
+
+			background-color: white;
+			border-left: solid 1px; border-right: solid 1px;
+			padding: 20px 150px 10px 50px;
+			margin-left: auto; margin-right: auto;
+			width: 450px;
+			height: 100%;
+
+			-moz-box-shadow: 0px 0px 15px 5px black;
+			-webkit-box-shadow: 0px 0px 15px 5px black;
+			box-shadow: 0px 0px 15px 5px black;
+		}
+
+		.header {
+			border-bottom: solid 1px gray;
+		}
+		.header h1 {
+			font-weight: normal;
+			font-size: 200%;
+		}
+		.header h2 {
+			font-weight: 100;
+			font-size: 150%;
+		}
+		.header p {
+			margin: 0;
+			margin-top: 1em;
+		}
+		.updated {
+			color: gray;
+			font-size: 75%;
+		}
+
+		.body {
+			margin-bottom: 4ex;
+		}
+		.body h3 {
+			font-size: 100%;
+			font-weight: 100;
+			color: #cc0000;
+			margin-top: 2ex;
+		}
+		.body ol {
+			list-style-type: none;
+			padding-left: 0;
+			margin-top: 1ex;
+		}
+		.body .date {
+			font-weight: normal;
+		}
+		.body .qualifier {
+			font-style: italic;
+			font-weight: 100;
+		}
+
+		.footer {
+			border-top: solid 1px lightgray;
+			font-size: 50%;
+			color: gray;
+			margin-left: auto; margin-right: auto;
+			width: 450px;
+		}
+		.footer p {
+			margin: 0;
+		}
+		.rabuLogo {
+			color: #cc00cc;
+		}
+	</style>
 </head>
 <body>
-    <script>
+<script>
 /**
  * @version: 1.0 Alpha-1
  * @author: Coolite Inc. http://www.coolite.com/
@@ -8498,7 +8578,7 @@ window.jQuery = window.$ = jQuery;
 	}
 
 	function dateToString(date) {
-		return date.toString('MMM dS, yyyy');
+		return date.toString('MMMM dS');
 	}
 
 	function Rabu(config_in) {
@@ -8543,8 +8623,8 @@ window.jQuery = window.$ = jQuery;
 	this.Rabu = Rabu;
 }());
 
-        $(document).ready(function() {
-	        var config = {
+	$(document).ready(function() {
+		var config = {
 	"name": "Hello World",
 	"riskMultipliers": [1, 2, 4],
 	"currentIterationStarted": "1 Jan 2011",
@@ -8553,20 +8633,32 @@ window.jQuery = window.$ = jQuery;
 	"effortRemaining": 100
 };
 
-            new Rabu(config).populateDom();
-        });
-    </script>
+		new Rabu(config).populateDom();
+	});
+</script>
+<div class="wrapper">
 
-<h1><span class="name"></span></h1>
+	<div class="header">
+		<h1>Schedule Projection</h1>
+		<h2><span class="name"></span></h2>
 
-<h2>Schedule Projection for "<span class="name"></span>"</h2>
+		<p class="updated">Updated <span class="rabuUpdated"></span></p>
+	</div>
 
-<dl>
-	<dt>No</dt><dd>Before <span class="tenPercentDate"></span></dd>
-	<dt>Unlikely</dt><dd><span class="tenPercentDate"></span> - <span class="fiftyPercentDate"></span></dd>
-	<dt>Possible</dt><dd><span class="fiftyPercentDate"></span> - <span class="ninetyPercentDate"></span></dd>
-	<dt>Yes</dt><dd>By <span class="ninetyPercentDate"></span></dd>
-</dl>
+    <div class="body">
+	    <h3>When will <span class="name"></span> be ready?</h3>
+	    <ol class="projection">
+		    <li>Before <span class="date tenPercentDate"></span>: <span class="qualifier">No</span></li>
+		    <li><span class="date tenPercentDate"></span> &ndash; <span class="date fiftyPercentDate"></span>: <span class="qualifier">Unlikely</span></li>
+		    <li><span class="date fiftyPercentDate"></span> &ndash; <span class="date ninetyPercentDate"></span>: <span class="qualifier">Possible</span></li>
+		    <li>By <span class="date ninetyPercentDate"></span>: <span class="qualifier">Yes</span></li>
+	    </ol>
+	</div>
 
+	<div class="footer">
+		<p>Projected with <span class="rabuLogo">&#10084;rabu</span></p>
+	</div>
+
+</div>
 </body>
 </html>

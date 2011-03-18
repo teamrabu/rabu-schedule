@@ -1,3 +1,4 @@
+
 /*global TestCase, assertSame, assertEquals, objectifyConfig */
 
 (function() {
@@ -32,9 +33,9 @@
 		/*:DOC += <span class="ninetyPercentDate"></span> */
 
 		rabu.populateDom();
-		assertSame("10%", "Mar 12th, 2011", $(".tenPercentDate").text());
-		assertSame("50%", "May 21st, 2011", $(".fiftyPercentDate").text());
-		assertSame("90%", "Oct 8th, 2011", $(".ninetyPercentDate").text());
+		assertSame("10%", "March 12th", $(".tenPercentDate").text());
+		assertSame("50%", "May 21st", $(".fiftyPercentDate").text());
+		assertSame("90%", "October 8th", $(".ninetyPercentDate").text());
 	};
 
 	RabuTest.prototype.test_iterationProjections = function() {
