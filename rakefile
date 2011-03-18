@@ -31,11 +31,9 @@ RUBY_SRC_DIR = "#{SRC_DIR}/ruby"
 MERGED_RUBY = "#{MERGED_DIR}/rabu.rb"
 RABU_RUBY_SOURCE = "#{RUBY_SRC_DIR}/rabu_launcher.rb"
 
+RABU_CONFIG = "#{HTML_SRC_DIR}/_html_test.rabu"
 RABU_OUTPUT = "#{RESULTS_DIR}/rabu.html"
 
-SMOKETEST_SRC_DIR = "#{SRC_DIR}/smoketest"
-SMOKETEST_CONFIG = "#{SMOKETEST_SRC_DIR}/test.rabu"
-SMOKETEST_EXPECTED = "#{SMOKETEST_SRC_DIR}/expected.html"
 
 PROJECTION_DIR = "#{OUTPUT_DIR}/projection"
 PROJECTION_CONFIG = "schedule.rabu"
@@ -60,7 +58,7 @@ end
 
 desc "Check everything"
 task :default => [:check_all]
-task :check_all => [:ruby, :javascript, :html, :smoketest]
+task :check_all => [:ruby, :javascript, :html]
 
 desc "Check Javascript"
 task :javascript => [:js_test, :js_lint]
@@ -69,15 +67,10 @@ desc "Check HTML"
 task :html => [:html_test]
 
 desc "Check Ruby"
-task :ruby => [:ruby_test, :smoketest]
+task :ruby => [:ruby_test]
 
 desc "Update projection"
 task :projection => [PROJECTION_HTML]
-
-desc "Approve failing smoke test"
-task :approve do
-	cp RABU_OUTPUT, SMOKETEST_EXPECTED
-end
 
 # desc "Javascript unit tests"
 task :js_test => [:startup] do
@@ -111,23 +104,6 @@ end
 Rake::TestTask.new(:ruby_test) do |test|
 	test.libs << RUBY_SRC_DIR
 	test.pattern = "#{RUBY_SRC_DIR}/_*test.rb"
-end
-
-# desc "Smoke test"
-task :smoketest => [RABU_OUTPUT, :javascript] do
-	explain "Running smoke test" do
-		expected = IO.readlines(SMOKETEST_EXPECTED)
-		actual = IO.readlines(RABU_OUTPUT)
-		if (expected.count != actual.count) then
-			raise "smoke test # of output lines expected #{expected.count} but was #{actual.count}"
-		end
-		expected.each_index do |i|
-			if (expected[i] != actual[i]) then
-				raise "smoke test line #{i+1} expected '#{expected[i]}' but was '#{actual[i]}'"
-			end
-		end
-		puts "smoke test ok"
-	end
 end
 
 ##### Builds
@@ -185,7 +161,7 @@ end
 
 task RABU_OUTPUT => [MERGED_RUBY, RESULTS_DIR] do
 	explain "Creating Rabu output file" do
-		run "ruby #{MERGED_RUBY} < #{SMOKETEST_CONFIG} > #{RABU_OUTPUT}"
+		run "ruby #{MERGED_RUBY} < #{RABU_CONFIG} > #{RABU_OUTPUT}"
 		raise "Run failed" if $? != 0
 	end
 end
