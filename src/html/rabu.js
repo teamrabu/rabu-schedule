@@ -41,10 +41,11 @@
 	}
 
 	Rabu.prototype.populateDom = function() {
-		$(".name").text(config.name);
-		$(".tenPercentDate").text(dateToString(this.tenPercentDate()));
-		$(".fiftyPercentDate").text(dateToString(this.fiftyPercentDate()));
-		$(".ninetyPercentDate").text(dateToString(this.ninetyPercentDate()));
+		$(".rabu-name").text(config.name);
+		$(".rabu-updated").text(new Date(config.updated).toString("MMMM dS, yyyy"));
+		$(".rabu-tenPercentDate").text(dateToString(this.tenPercentDate()));
+		$(".rabu-fiftyPercentDate").text(dateToString(this.fiftyPercentDate()));
+		$(".rabu-ninetyPercentDate").text(dateToString(this.ninetyPercentDate()));
 	};
 
 	Rabu.prototype.tenPercentDate = function() {

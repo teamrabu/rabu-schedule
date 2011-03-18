@@ -114,7 +114,7 @@ Rake::TestTask.new(:ruby_test) do |test|
 end
 
 # desc "Smoke test"
-task :smoketest => [RABU_OUTPUT] do
+task :smoketest => [RABU_OUTPUT, :javascript] do
 	explain "Running smoke test" do
 		expected = IO.readlines(SMOKETEST_EXPECTED)
 		actual = IO.readlines(RABU_OUTPUT)

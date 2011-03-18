@@ -9,6 +9,7 @@
 	RabuTest.prototype.setUp = function() {
 		config = {
 			name: "My name",
+			updated: "5 Jan 2011",
 			riskMultipliers: [1, 2, 4],
 			currentIterationStarted: "1 Jan 2011",
 			iterationLength: 7,
@@ -19,23 +20,30 @@
 	};
 
 	RabuTest.prototype.test_domTitle = function() {
-		/*:DOC += <span class="name"></span> */
-		/*:DOC += <span class="name"></span> */
+		/*:DOC += <span class="rabu-name"></span> */
+		/*:DOC += <span class="rabu-name"></span> */
 
 		rabu.populateDom();
-		assertSame("should set name", "My name", $(".name:eq(0)").text());
-		assertSame("should work with multiple elements", "My name", $(".name:eq(1)").text());
+		assertSame("should set name", "My name", $(".rabu-name:eq(0)").text());
+		assertSame("should work with multiple elements", "My name", $(".rabu-name:eq(1)").text());
+	};
+
+	RabuTest.prototype.test_domUpdatedDate = function() {
+		/*:DOC += <span class="rabu-updated"></span> */
+
+		rabu.populateDom();
+		assertSame("January 5th, 2011", $(".rabu-updated").text());
 	};
 
 	RabuTest.prototype.test_domProjections = function() {
-		/*:DOC += <span class="tenPercentDate"></span> */
-		/*:DOC += <span class="fiftyPercentDate"></span> */
-		/*:DOC += <span class="ninetyPercentDate"></span> */
+		/*:DOC += <span class="rabu-tenPercentDate"></span> */
+		/*:DOC += <span class="rabu-fiftyPercentDate"></span> */
+		/*:DOC += <span class="rabu-ninetyPercentDate"></span> */
 
 		rabu.populateDom();
-		assertSame("10%", "March 12th", $(".tenPercentDate").text());
-		assertSame("50%", "May 21st", $(".fiftyPercentDate").text());
-		assertSame("90%", "October 8th", $(".ninetyPercentDate").text());
+		assertSame("10%", "March 12th", $(".rabu-tenPercentDate").text());
+		assertSame("50%", "May 21st", $(".rabu-fiftyPercentDate").text());
+		assertSame("90%", "October 8th", $(".rabu-ninetyPercentDate").text());
 	};
 
 	RabuTest.prototype.test_iterationProjections = function() {

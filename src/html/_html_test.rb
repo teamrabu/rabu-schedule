@@ -8,10 +8,11 @@ def test_html(filename)
     browser.goto url
 
 	begin
-		assertEquals("Hello World", browser.span(:class, "name").text, filename, "name");
-		assertEquals("March 12th", browser.span(:class, "date tenPercentDate").text, filename, "10%");
-		assertEquals("May 21st", browser.span(:class, "date fiftyPercentDate").text, filename, "50%");
-		assertEquals("October 8th", browser.span(:class, "date ninetyPercentDate").text, filename, "90%");
+		assertEquals("Hello World", browser.span(:class, "rabu-name").text, filename, "name");
+		assertEquals("January 5th, 2011", browser.span(:class, "rabu-updated").text, filename, "updated");
+		assertEquals("March 12th", browser.span(:class, "date rabu-tenPercentDate").text, filename, "10%");
+		assertEquals("May 21st", browser.span(:class, "date rabu-fiftyPercentDate").text, filename, "50%");
+		assertEquals("October 8th", browser.span(:class, "date rabu-ninetyPercentDate").text, filename, "90%");
 
 	    puts "#{filename} ok"
 	ensure
