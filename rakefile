@@ -166,7 +166,7 @@ task RABU_OUTPUT => [MERGED_RUBY, RESULTS_DIR] do
 	end
 end
 
-task PROJECTION_HTML => [MERGED_RUBY] do
+task PROJECTION_HTML => [MERGED_RUBY, PROJECTION_DIR] do
 	explain "Updating release projection" do
 		run "ruby #{MERGED_RUBY} < #{PROJECTION_CONFIG} > #{PROJECTION_HTML}"
 		raise "Run failed" if $? != 0
