@@ -1,9 +1,9 @@
 {
 	"name": "Rabu 0.1",
-	"updated": "18 Mar 2011",
+	"updated": "21 Mar 2011",
 	"riskMultipliers": [1, 2, 4],
-	"currentIterationStarted": "14 Mar 2011",
+	"currentIterationStarted": "21 Mar 2011",
 	"iterationLength": 7,
 	"velocity": 4,
-	"effortRemaining": 8.5
+	"effortRemaining": 6.5
 }

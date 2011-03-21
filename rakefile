@@ -34,9 +34,8 @@ RABU_RUBY_SOURCE = "#{RUBY_SRC_DIR}/rabu_launcher.rb"
 RABU_CONFIG = "#{HTML_SRC_DIR}/_html_test.rabu"
 RABU_OUTPUT = "#{RESULTS_DIR}/rabu.html"
 
-
 PROJECTION_DIR = "#{OUTPUT_DIR}/projection"
-PROJECTION_CONFIG = "schedule.rabu"
+PROJECTION_CONFIG = "estimates.rabu"
 PROJECTION_HTML = "#{PROJECTION_DIR}/projection.html"
 
 RELEASE_DIR = "#{OUTPUT_DIR}/release"
