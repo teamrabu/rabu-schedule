@@ -11,7 +11,15 @@ end
 system "rake #{$*}"
 
 if $?==0 then
-    puts green("----- BUILD SUCCEEDED -----")
+    puts green("                                      ")
+    puts green("                                      ")
+    puts green("     ----- BUILD SUCCEEDED -----      ")
+    puts green("                                      ")
+    puts green("                                      ")
 else
-    puts red("----- BUILD FAILED -----")
+    puts red("                                      ")
+    puts red("                                      ")
+    puts red("      ----- BUILD FAILED -----        ")
+    puts red("                                      ")
+    puts red("                                      ")
 end

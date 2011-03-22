@@ -197,6 +197,13 @@ task :shutdown do
     end
 end
 
+desc "Reset JsTestDriver"
+task :reset => [:startup] do
+	explain "Resetting JsTestDriver" do
+		JsTestDriver::reset
+	end
+end
+
 ##### Helpers
 
 def append(src_filename, dest_file)
@@ -264,6 +271,11 @@ class JsTestDriver
         puts "Terminating process #{pid}"
         Process.kill('TERM', Integer(pid))
         rm JSTESTDRIVER_PID_FILE
+    end
+
+    def self.reset
+        run "#{COMMAND} --config #{BUILD_DIR}/JsTestDriver.conf --basePath . --reset 2>&1"
+        raise "JsTestDriver failed" if $? != 0
     end
 
     def self.is_running?

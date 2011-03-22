@@ -1,4 +1,6 @@
-(function() {
+var rabu_ns = {};
+
+rabu_ns.Rabu = function(config_in) {
 	var config;
 
 	function decorateConfig() {
@@ -11,10 +13,13 @@
 		config.ninetyPercentMultiplier = function() {
 			return config.riskMultipliers[2];
 		};
+		config.effortRemaining2 = function() {
+			return config.effortRemaining;
+		};
 	}
 
 	function iterations() {
-		return config.effortRemaining / config.velocity;
+		return config.effortRemaining2() / config.velocity;
 	}
 
 	function calcProjection(multiplier) {
@@ -32,7 +37,7 @@
 		return date.toString('MMMM dS');
 	}
 
-	function Rabu(config_in) {
+	function init(config_in) {
 		if (!config_in) {
 			throw "Expected config";
 		}
@@ -40,7 +45,7 @@
 		decorateConfig();
 	}
 
-	Rabu.prototype.populateDom = function() {
+	this.populateDom = function() {
 		$(".rabu-name").text(config.name);
 		$(".rabu-updated").text(new Date(config.updated).toString("MMMM dS, yyyy"));
 		$(".rabu-tenPercentDate").text(dateToString(this.tenPercentDate()));
@@ -48,29 +53,29 @@
 		$(".rabu-ninetyPercentDate").text(dateToString(this.ninetyPercentDate()));
 	};
 
-	Rabu.prototype.tenPercentDate = function() {
+	this.tenPercentDate = function() {
 		return convertToDate(this.tenPercentIterationsRemaining());
 	};
 
-	Rabu.prototype.fiftyPercentDate = function() {
+	this.fiftyPercentDate = function() {
 		return convertToDate(this.fiftyPercentIterationsRemaining());
 	};
 
-	Rabu.prototype.ninetyPercentDate = function() {
+	this.ninetyPercentDate = function() {
 		return convertToDate(this.ninetyPercentIterationsRemaining());
 	};
 
-	Rabu.prototype.tenPercentIterationsRemaining = function() {
+	this.tenPercentIterationsRemaining = function() {
 		return calcProjection(config.tenPercentMultiplier());
 	};
 
-	Rabu.prototype.fiftyPercentIterationsRemaining = function() {
+	this.fiftyPercentIterationsRemaining = function() {
 		return calcProjection(config.fiftyPercentMultiplier());
 	};
 
-	Rabu.prototype.ninetyPercentIterationsRemaining = function() {
+	this.ninetyPercentIterationsRemaining = function() {
 		return calcProjection(config.ninetyPercentMultiplier());
 	};
 
-	this.Rabu = Rabu;
-}());
+	init(config_in);
+};

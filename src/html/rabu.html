@@ -73,8 +73,7 @@
 			border-top: solid 1px lightgray;
 			font-size: 50%;
 			color: gray;
-			margin-left: auto; margin-right: auto;
-			width: 450px;
+			width: 33%;
 		}
 		.footer p {
 			margin: 0;
@@ -91,7 +90,7 @@
 	$(document).ready(function() {
 		var config = <%= config %>;
 
-		new Rabu(config).populateDom();
+		new rabu_ns.Rabu(config).populateDom();
 	});
 </script>
 <div class="wrapper">

@@ -1,8 +1,7 @@
-
-/*global TestCase, assertSame, assertEquals, objectifyConfig */
+/*global TestCase, assertSame, assertEquals */
 
 (function() {
-	var RabuTest = new TestCase("Rabu");
+	var RabuTest = new TestCase("RabuTest");
 	var rabu;
 	var config;
 
@@ -16,7 +15,7 @@
 			velocity: 10,
 			effortRemaining: 100
 		};
-		rabu = new Rabu(config);
+		rabu = new rabu_ns.Rabu(config);
 	};
 
 	RabuTest.prototype.test_domTitle = function() {

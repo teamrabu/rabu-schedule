@@ -20,7 +20,7 @@ var OPTIONS = {
 	maxerr: 10,         // Max number of errors
 	predef: [           // Global variables
 		"$",
-		"Rabu"
+		"rabu_ns"
 	]
 };
 
