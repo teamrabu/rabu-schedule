@@ -112,8 +112,9 @@ task MERGED_JS => [RABU_JS_SOURCE, MERGED_DIR] do
 		rm_f MERGED_JS
 		puts "Concatenating #{MERGED_JS}"
 		File.open(MERGED_JS, "w") do |dest_file|
-			files = FileList.new("#{LIB_DIR}/*.js", RABU_JS_SOURCE)
-			files.each do |src_file|
+			files = FileList.new("#{LIB_DIR}/*.js", RABU_JS_SOURCE, "#{HTML_SRC_DIR}/*.js")
+			files.exclude "#{HTML_SRC_DIR}/_*test.js"
+			files.uniq.each do |src_file|
 				append(src_file, dest_file)
 			end
 		end

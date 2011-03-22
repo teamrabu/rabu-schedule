@@ -1,25 +1,10 @@
 var rabu_ns = {};
 
 rabu_ns.Rabu = function(config_in) {
-	var config;
-
-	function decorateConfig() {
-		config.tenPercentMultiplier = function() {
-			return config.riskMultipliers[0];
-		};
-		config.fiftyPercentMultiplier = function() {
-			return config.riskMultipliers[1];
-		};
-		config.ninetyPercentMultiplier = function() {
-			return config.riskMultipliers[2];
-		};
-		config.effortRemaining2 = function() {
-			return config.effortRemaining;
-		};
-	}
+	var estimates;
 
 	function iterations() {
-		return config.effortRemaining2() / config.velocity;
+		return estimates.effortRemaining() / estimates.velocity();
 	}
 
 	function calcProjection(multiplier) {
@@ -27,8 +12,8 @@ rabu_ns.Rabu = function(config_in) {
 	}
 
 	function convertToDate(iterationsRemaining) {
-		var days = Math.ceil(iterationsRemaining * config.iterationLength);
-		var date = new Date(config.currentIterationStarted);
+		var days = Math.ceil(iterationsRemaining * estimates.iterationLength());
+		var date = estimates.currentIterationStarted();
 		date.setDate(date.getDate() + days);
 		return date;
 	}
@@ -37,17 +22,16 @@ rabu_ns.Rabu = function(config_in) {
 		return date.toString('MMMM dS');
 	}
 
-	function init(config_in) {
-		if (!config_in) {
+	function init(config) {
+		if (!config) {
 			throw "Expected config";
 		}
-		config = config_in;
-		decorateConfig();
+		estimates = new rabu_ns.Estimates(config);
 	}
 
 	this.populateDom = function() {
-		$(".rabu-name").text(config.name);
-		$(".rabu-updated").text(new Date(config.updated).toString("MMMM dS, yyyy"));
+		$(".rabu-name").text(estimates.name());
+		$(".rabu-updated").text(estimates.updated().toString("MMMM dS, yyyy"));
 		$(".rabu-tenPercentDate").text(dateToString(this.tenPercentDate()));
 		$(".rabu-fiftyPercentDate").text(dateToString(this.fiftyPercentDate()));
 		$(".rabu-ninetyPercentDate").text(dateToString(this.ninetyPercentDate()));
@@ -66,15 +50,15 @@ rabu_ns.Rabu = function(config_in) {
 	};
 
 	this.tenPercentIterationsRemaining = function() {
-		return calcProjection(config.tenPercentMultiplier());
+		return calcProjection(estimates.tenPercentMultiplier());
 	};
 
 	this.fiftyPercentIterationsRemaining = function() {
-		return calcProjection(config.fiftyPercentMultiplier());
+		return calcProjection(estimates.fiftyPercentMultiplier());
 	};
 
 	this.ninetyPercentIterationsRemaining = function() {
-		return calcProjection(config.ninetyPercentMultiplier());
+		return calcProjection(estimates.ninetyPercentMultiplier());
 	};
 
 	init(config_in);
