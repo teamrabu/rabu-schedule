@@ -27,10 +27,6 @@ rabu_ns.Estimates = function(config_in) {
 		return config.velocity;
 	};
 
-	this.effortRemaining = function() {
-		return config.effortRemaining;
-	};
-
 	this.tenPercentMultiplier = function() {
 		return config.riskMultipliers[0];
 	};
@@ -41,5 +37,12 @@ rabu_ns.Estimates = function(config_in) {
 
 	this.ninetyPercentMultiplier = function() {
 		return config.riskMultipliers[2];
+	};
+
+	this.effortRemaining = function() {
+		var adder = function(sum, element) {
+			return sum + element[1];
+		};
+		return config.features.reduce(adder, 0);
 	};
 };

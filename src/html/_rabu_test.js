@@ -13,7 +13,9 @@
 			currentIterationStarted: "1 Jan 2011",
 			iterationLength: 7,
 			velocity: 10,
-			effortRemaining: 100
+			features: [
+				["feature A", 100]
+			]
 		};
 		rabu = new rabu_ns.Rabu(config);
 	};
@@ -60,7 +62,7 @@
 	RabuTest.prototype.test_iterationProjectionsShouldNotRound = function() {
 		config.riskMultipliers = [0.6, 1.4, 1.6];
 		config.velocity = 9.5;
-		config.effortRemaining = 73;
+		config.features = [["A", 73]];
 
 		assertSame("10%", 4.610526315789474, rabu.tenPercentIterationsRemaining());
 		assertSame("50%", 10.757894736842104, rabu.fiftyPercentIterationsRemaining());
@@ -68,7 +70,7 @@
 	};
 
 	RabuTest.prototype.test_dateProjectionsShouldRoundUpToNextDay = function() {
-		config.effortRemaining = 14;
+		config.features = [["A", 14]];
 		config.iterationLength = 1;
 
 		assertSame("10%", 1.4, rabu.tenPercentIterationsRemaining());

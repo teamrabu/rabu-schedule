@@ -3,6 +3,14 @@ var rabu_ns = {};
 rabu_ns.Rabu = function(config_in) {
 	var estimates;
 
+	function init(config) {
+		if (!config) {
+			throw "Expected config";
+		}
+		estimates = new rabu_ns.Estimates(config);
+	}
+	init(config_in);
+	
 	function iterations() {
 		return estimates.effortRemaining() / estimates.velocity();
 	}
@@ -20,13 +28,6 @@ rabu_ns.Rabu = function(config_in) {
 
 	function dateToString(date) {
 		return date.toString('MMMM dS');
-	}
-
-	function init(config) {
-		if (!config) {
-			throw "Expected config";
-		}
-		estimates = new rabu_ns.Estimates(config);
 	}
 
 	this.populateDom = function() {
@@ -60,6 +61,4 @@ rabu_ns.Rabu = function(config_in) {
 	this.ninetyPercentIterationsRemaining = function() {
 		return calcProjection(estimates.ninetyPercentMultiplier());
 	};
-
-	init(config_in);
 };

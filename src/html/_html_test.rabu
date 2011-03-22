@@ -5,5 +5,9 @@
 	"currentIterationStarted": "1 Jan 2011",
 	"iterationLength": 7,
 	"velocity": 10,
-	"effortRemaining": 100
+	"features": [
+		["feature A", 60],
+		["feature B", 30],
+		["feature C", 10]
+	]
 }
