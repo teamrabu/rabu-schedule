@@ -1,11 +1,5 @@
-rabu_ns.Estimates = function(config_in) {
-
-	var config;
-
-	function init(config_in) {
-		config = config_in;
-	}
-	init(config_in);
+rabu_ns.Estimates = function(configJson) {
+	var config = configJson;
 
 	this.name = function() {
 		return config.name;
@@ -39,16 +33,32 @@ rabu_ns.Estimates = function(config_in) {
 		return config.riskMultipliers[2];
 	};
 
-	this.effortRemaining = function() {
-		var adder = function(sum, element) {
-			return sum + element[1];
+	this.totalEstimate = function() {
+		var adder = function(sum, feature) {
+			return sum + feature.estimate();
 		};
-		return config.features.reduce(adder, 0);
+		return this.features().reduce(adder, 0);
 	};
 
-	this.featureNames = function() {
+	this.features = function() {
 		return config.features.map(function(element) {
-			return element[0];
+			return new rabu_ns.Feature(element);
 		});
+	};
+};
+
+rabu_ns.Feature = function(featureJson) {
+	var feature = featureJson;
+
+	this.name = function() {
+		return feature[0];
+	};
+
+	this.estimate = function() {
+		return feature[1];
+	};
+
+	this.isDone = function() {
+		return this.estimate() === 0;
 	};
 };

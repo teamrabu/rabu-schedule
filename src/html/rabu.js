@@ -12,7 +12,7 @@ rabu_ns.Rabu = function(config_in) {
 	init(config_in);
 	
 	function iterations() {
-		return estimates.effortRemaining() / estimates.velocity();
+		return estimates.totalEstimate() / estimates.velocity();
 	}
 
 	function calcProjection(multiplier) {
@@ -30,9 +30,9 @@ rabu_ns.Rabu = function(config_in) {
 		return date.toString('MMMM dS');
 	}
 
-	function arrayToList(stringArray) {
-		var reducer = function(sum, element) {
-			return sum + "<li>" + element + "</li>";
+	function featuresToHtml(stringArray) {
+		var reducer = function(sum, feature) {
+			return sum + "<li>" + feature.name() + "</li>";
 		};
 		return stringArray.reduce(reducer, "");
 	}
@@ -43,7 +43,7 @@ rabu_ns.Rabu = function(config_in) {
 		$(".rabu-tenPercentDate").text(dateToString(this.tenPercentDate()));
 		$(".rabu-fiftyPercentDate").text(dateToString(this.fiftyPercentDate()));
 		$(".rabu-ninetyPercentDate").text(dateToString(this.ninetyPercentDate()));
-		$(".rabu-features").html(arrayToList(estimates.featureNames()));
+		$(".rabu-features").html(featuresToHtml(estimates.features()));
 	};
 
 	this.tenPercentDate = function() {
