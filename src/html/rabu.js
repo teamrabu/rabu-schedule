@@ -32,7 +32,9 @@ rabu_ns.Rabu = function(config_in) {
 
 	function featuresToHtml(stringArray) {
 		var reducer = function(sum, feature) {
-			return sum + "<li>" + feature.name() + "</li>";
+			var openTag = "<li>";
+			if (feature.isDone()) { openTag = "<li class='rabu-done'>"; }
+			return sum + openTag + feature.name() + "</li>";
 		};
 		return stringArray.reduce(reducer, "");
 	}

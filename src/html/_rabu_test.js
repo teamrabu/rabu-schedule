@@ -14,6 +14,7 @@
 			iterationLength: 7,
 			velocity: 10,
 			features: [
+				["completed", 0],
 				["feature A", 70],
 				["feature B", 30]
 			]
@@ -52,7 +53,8 @@
 		/*:DOC += <ul class="rabu-features"></ul> */
 
 		rabu.populateDom();
-		assertEquals("feature list", "<li>feature A</li><li>feature B</li>", $(".rabu-features").html());
+		var expected = "<li class=\"rabu-done\">completed</li><li>feature A</li><li>feature B</li>";
+		assertEquals("feature list", expected, $(".rabu-features").html());
 	};
 
 	RabuTest.prototype.test_iterationProjections = function() {
