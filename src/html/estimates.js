@@ -45,4 +45,10 @@ rabu_ns.Estimates = function(config_in) {
 		};
 		return config.features.reduce(adder, 0);
 	};
+
+	this.featureNames = function() {
+		return config.features.map(function(element) {
+			return element[0];
+		});
+	};
 };

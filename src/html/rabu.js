@@ -30,12 +30,20 @@ rabu_ns.Rabu = function(config_in) {
 		return date.toString('MMMM dS');
 	}
 
+	function arrayToList(stringArray) {
+		var reducer = function(sum, element) {
+			return sum + "<li>" + element + "</li>";
+		};
+		return stringArray.reduce(reducer, "");
+	}
+
 	this.populateDom = function() {
 		$(".rabu-name").text(estimates.name());
 		$(".rabu-updated").text(estimates.updated().toString("MMMM dS, yyyy"));
 		$(".rabu-tenPercentDate").text(dateToString(this.tenPercentDate()));
 		$(".rabu-fiftyPercentDate").text(dateToString(this.fiftyPercentDate()));
 		$(".rabu-ninetyPercentDate").text(dateToString(this.ninetyPercentDate()));
+		$(".rabu-features").html(arrayToList(estimates.featureNames()));
 	};
 
 	this.tenPercentDate = function() {

@@ -37,12 +37,16 @@
 	};
 
 	Test.prototype.test_effortRemaining_isSumOfFeatureEstimates = function() {
-//		assertEquals(100, estimates.effortRemaining());
+		assertEquals(100, estimates.effortRemaining());
 
 		config.features = [["feature A", 10]];
 		assertEquals("one feature", 10, estimates.effortRemaining());
 
 		config.features = [];
 		assertEquals("no feature", 0, estimates.effortRemaining());
+	};
+
+	Test.prototype.test_featureNames = function() {
+		assertEquals(["feature A", "feature B", "feature C"], estimates.featureNames());
 	};
 }());

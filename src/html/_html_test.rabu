@@ -6,8 +6,8 @@
 	"iterationLength": 7,
 	"velocity": 10,
 	"features": [
-		["feature A", 60],
-		["feature B", 30],
-		["feature C", 10]
+		["Feature A", 60],
+		["Another feature", 30],
+		["A third feature whose sole purpose in life is to cause word wrapping, so you can visually inspect the results", 10]
 	]
 }

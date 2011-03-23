@@ -8,11 +8,12 @@ def test_html(filename)
     browser.goto url
 
 	begin
-		assertEquals("Hello World", browser.span(:class, "rabu-name").text, filename, "name");
-		assertEquals("January 5th, 2011", browser.span(:class, "rabu-updated").text, filename, "updated");
-		assertEquals("March 12th", browser.span(:class, "date rabu-tenPercentDate").text, filename, "10%");
-		assertEquals("May 21st", browser.span(:class, "date rabu-fiftyPercentDate").text, filename, "50%");
-		assertEquals("October 8th", browser.span(:class, "date rabu-ninetyPercentDate").text, filename, "90%");
+		assertPopulated("name", browser.span(:class, "rabu-name"), filename);
+		assertPopulated("updated", browser.span(:class, "rabu-updated"), filename);
+		assertPopulated("10% projection", browser.span(:class, "date rabu-tenPercentDate"), filename);
+		assertPopulated("50% projection", browser.span(:class, "date rabu-fiftyPercentDate"), filename);
+		assertPopulated("90% projection", browser.span(:class, "date rabu-ninetyPercentDate"), filename);
+		assertPopulated("feature list", browser.ol(:class, "rabu-features"), filename);
 
 	    puts "#{filename} ok"
 	ensure
@@ -20,10 +21,10 @@ def test_html(filename)
     end
 end
 
-def assertEquals(expected, actual, filename, message="DOM")
-	if (expected != actual) then
+def assertPopulated(message, element, filename)
+	if (element.text == "") then
 		puts "#{filename} failed"
-		puts "#{message} expected <#{expected}>, was <#{actual}>"
+		puts "#{message} not populated"
 		raise "HTML unit tests failed"
 	end
 end

@@ -60,7 +60,7 @@ task :default => [:check_all]
 task :check_all => [:ruby, :javascript, :html]
 
 desc "Check Javascript"
-task :javascript => [:js_test, :js_lint]
+task :javascript => [:js_lint, :js_test]
 
 desc "Check HTML"
 task :html => [:html_test]

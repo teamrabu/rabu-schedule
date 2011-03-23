@@ -5,5 +5,8 @@
 	"currentIterationStarted": "21 Mar 2011",
 	"iterationLength": 7,
 	"velocity": 4,
-	"effortRemaining": 6.5
+	"features": [
+		["Text-only date projections", 0],
+		["Interactive feature list", 6.5]
+	]
 }
