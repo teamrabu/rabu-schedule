@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+		"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Spike: CSS-Based drawing</title>
+
+	<script type="text/javascript" src="jquery.v1.5.1.js"></script>
+
+	<style type="text/css">
+		.li-divider {
+			list-style-type: none;
+			border-top: solid 1px;
+			margin-left: -2em;
+			width: 10%;
+		}
+
+		.div-divider {
+			position: relative;
+			left: -5px;
+			font-style: italic;
+		}
+		.div-divider .out {
+			border-top: solid 1px;
+			width: 15%;
+		}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+		var li;
+		var div;
+		var height;
+		distance = -1;
+
+		function liAnim() {
+			li.animate({marginTop: height * distance}, 1000);
+			li.next().animate({marginTop: height * distance * -1}, 1000);
+		}
+
+		function positionDiv() {
+			newOffset = {};
+			newOffset.top = item.offset().top;
+			newOffset.left = div.offset().left;
+			div.offset(newOffset);
+		}
+
+		function divAnim() {
+			div.animate({top: "+=" + (height * distance)}, 1000);
+		}
+
+		$(document).ready(function() {
+			li = $(".li-divider");
+			div = $(".div-divider");
+			item = $("#currentItem");
+			height = item.outerHeight();
+			liAnim();
+			positionDiv();
+			divAnim();
+		});
+	</script>
+
+	<p>This divider is a &lt;div&gt; tag positioned over the list.</p>
+	<div class="div-divider">
+		<div class="in">in</div>
+		<div class="out">out</div>
+	</div>
+	<ol>
+		<li>Item 1</li>
+		<li id="currentItem">Item 2</li>
+		<li>Item 3</li>
+		<li>Item 4</li>
+	</ol>
+
+	<p>This divider is a styled &lt;li&gt; tag. It's embedded into the list.</p>
+	<ol>
+		<li>Item 1</li>
+		<li>Item 2</li>
+		<li class="li-divider"></li>
+		<li>Item 3</li>
+		<li>Item 4</li>
+	</ol>
+
+</body>
+</html>
