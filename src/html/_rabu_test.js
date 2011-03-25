@@ -74,16 +74,34 @@
 		assertEquals("left side of divider should be aligned with list", featuresList.offset().left, divider.offset().left);
 	};
 
+	Test.prototype.test_dom_featureDivider_positioningAccountsForMargins = function() {
+		/*:DOC += <ul class="rabu-features"></ul> */
+		/*:DOC += <div style="margin-top: 10px; margin-bottom: 20px; padding-top: 50px" class="rabu-divider"></div> */
+
+		rabu.populateDom();
+		var firstExcluded = $("li:contains('excluded 1')");
+		var divider = $(".rabu-divider");
+
+		assertEquals("gap should include top and bottom margins", "80px", firstExcluded.css("margin-top"));
+		assertEquals("divider, including margins, should be centered in gap", firstExcluded.offset().top - 80 + 10, divider.offset().top);
+	};
+
 	Test.prototype.test_dom_featureDivider_isIgnoredWhenItIsNotPresentInHtml = function() {
 		rabu.populateDom();
-		// no exception thrown
+		// should not throw exception
 	};
 
 	Test.prototype.test_dom_featureDivider_isHiddenWhenThereAreNoExcludedFeatures = function() {
-		//TODO
+		/*:DOC += <ul class="rabu-features"></ul> */
+		/*:DOC += <div class="rabu-divider"></div> */
+
+		config.excludedFeatures = undefined;
+		rabu.populateDom();
+		// should not throw exception
+		assertEquals("divider should be hidden", "none", $(".rabu-divider").css("display"));
 	};
 
-	Test.prototype.test_dom_featureDivider_worksWhenThereAreMultipleDividers = function() {
+	Test.prototype.test_dom_featureDivider_worksWhenThereAreMultipleFeatureLists = function() {
 		//TODO
 	};
 

@@ -1,15 +1,15 @@
 {
 	"name": "Rabu 0.1",
-	"updated": "23 Mar 2011",
+	"updated": "25 Mar 2011",
 	"riskMultipliers": [1, 2, 4],
-	"currentIterationStarted": "23 Mar 2011",
+	"currentIterationStarted": "25 Mar 2011",
 	"iterationLength": 7,
 	"velocity": 4,
 	"includedFeatures": [
 		["Text-only date projections", 0],
 		["Single, email-able file", 0],
 		["List of features, with completed ones marked 'done'", 0],
-		["A divider showing which features are 'in' and 'out'", 1],
+		["A divider showing which features are 'in' and 'out'", 0],
 		["Movable divider (with corresponding changes to projections)", 2.5],
 		["Movable features", 1]
 	]

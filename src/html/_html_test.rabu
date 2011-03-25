@@ -9,10 +9,12 @@
 		["Completed feature", 0],
 		["Feature A", 60],
 		["Another feature", 30],
-		["A third feature whose sole purpose in life is to cause word wrapping, so you can visually inspect the results", 10]
+		["A third feature whose sole purpose in life is to cause word wrapping, so you can visually inspect the results", 10],
+		["This feature's checkmark might collide with the divider", 0]
 	],
 	"excludedFeatures": [
 		["An excluded feature", 3],
-		["Another excluded feature", 15]
+		["Another excluded feature", 15],
+		["This excluded feature is done (how did that happen?)", 0]
 	]
 }

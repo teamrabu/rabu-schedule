@@ -47,13 +47,16 @@ rabu_ns.Rabu = function(config_in) {
 	}
 
 	function positionDivider(divider, features) {
-		if (divider.length === 0) { return; }
-
 		var firstExcluded = $(".rabu-excluded", features).first();
-		firstExcluded.css("margin-top", divider.outerHeight());
+		if (divider.length === 0 || firstExcluded.length === 0) {
+			divider.hide();
+			return;
+		}
+
+		firstExcluded.css("margin-top", divider.outerHeight(true));
 
 		divider.css("position", "absolute");
-		divider.css("top", firstExcluded.offset().top - divider.outerHeight());
+		divider.css("top", firstExcluded.offset().top - divider.outerHeight(true));
 		divider.css("left", features.offset().left + "px");
 	}
 

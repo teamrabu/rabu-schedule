@@ -17,7 +17,7 @@
 
 			background-color: white;
 			border-left: solid 1px; border-right: solid 1px;
-			padding: 20px 25px 10px 50px;
+			padding: 2em 2em 1em 3em;
 			margin-left: auto; margin-right: auto;
 			width: 525px;
 			height: 100%;
@@ -87,6 +87,21 @@
 		.body .rabu-features .rabu-excluded {
 			color: darkgray;
 		}
+		.body .rabu-divider {
+			position: absolute;
+			font-size: 75%;
+			font-variant: small-caps;
+			font-style: italic;
+			width: 575px;
+			margin-left: -3.5em;
+			margin-top: -1.75ex; margin-bottom: -1.75ex;
+		}
+		.body .rabu-divider .in {
+			border-bottom: dashed 1px;
+		}
+		.body .rabu-divider .out {
+			margin-top: -0.25ex;
+		}
 
 		.footer {
 			border-top: solid 1px lightgray;
@@ -122,7 +137,6 @@
 	</div>
 
     <div class="body">
-	    <div class="rabu-divider">XXX</div>
 	    <h3>When will <span class="rabu-name"></span> be ready?</h3>
 	    <ol class="projection">
 		    <li>Before <span class="date rabu-tenPercentDate"></span>: <span class="qualifier">No</span></li>
@@ -133,6 +147,7 @@
 
 	    <h3>Which features will <span class="rabu-name"></span> include?</h3>
 	    <ol class="rabu-features"></ol>
+	    <div class="rabu-divider"><div class="in">yes</div><div class="out">no</div></div>
 	</div>
 
 	<div class="footer">
