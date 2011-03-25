@@ -1,11 +1,11 @@
 /*global TestCase, assertEquals, assertEquals */
 
 (function() {
-	var RabuTest = new TestCase("RabuTest");
+	var Test = new TestCase("RabuTest");
 	var rabu;
 	var config;
 
-	RabuTest.prototype.setUp = function() {
+	Test.prototype.setUp = function() {
 		config = {
 			name: "My name",
 			updated: "5 Jan 2011",
@@ -17,12 +17,15 @@
 				["completed", 0],
 				["feature A", 70],
 				["feature B", 30]
+			],
+			excludedFeatures: [
+				["excluded 1", 20]
 			]
 		};
 		rabu = new rabu_ns.Rabu(config);
 	};
 
-	RabuTest.prototype.test_dom_title = function() {
+	Test.prototype.test_dom_title = function() {
 		/*:DOC += <span class="rabu-name"></span> */
 		/*:DOC += <span class="rabu-name"></span> */
 
@@ -31,14 +34,14 @@
 		assertEquals("should work with multiple elements", "My name", $(".rabu-name:eq(1)").text());
 	};
 
-	RabuTest.prototype.test_dom_updatedDate = function() {
+	Test.prototype.test_dom_updatedDate = function() {
 		/*:DOC += <span class="rabu-updated"></span> */
 
 		rabu.populateDom();
 		assertEquals("January 5th, 2011", $(".rabu-updated").text());
 	};
 
-	RabuTest.prototype.test_dom_projections = function() {
+	Test.prototype.test_dom_projections = function() {
 		/*:DOC += <span class="rabu-tenPercentDate"></span> */
 		/*:DOC += <span class="rabu-fiftyPercentDate"></span> */
 		/*:DOC += <span class="rabu-ninetyPercentDate"></span> */
@@ -49,27 +52,54 @@
 		assertEquals("90%", "October 8th", $(".rabu-ninetyPercentDate").text());
 	};
 
-	RabuTest.prototype.test_dom_features = function() {
+	Test.prototype.test_dom_features = function() {
 		/*:DOC += <ul class="rabu-features"></ul> */
 
 		rabu.populateDom();
-		var expected = "<li class=\"rabu-done\">completed</li><li>feature A</li><li>feature B</li>";
+		var expected = "<li class=\"rabu-included rabu-done\">completed</li><li class=\"rabu-included\">feature A</li><li class=\"rabu-included\">feature B</li><li class=\"rabu-excluded\">excluded 1</li>";
 		assertEquals("feature list", expected, $(".rabu-features").html());
 	};
 
-	RabuTest.prototype.test_iterationProjections = function() {
+	Test.prototype.test_dom_featureDivider_isPositionedBetweenIncludedAndExcludedFeatures = function() {
+		/*:DOC += <ul class="rabu-features"></ul> */
+		/*:DOC += <div style="padding-top: 50px" class="rabu-divider"></div> */
+
+		rabu.populateDom();
+		var featuresList = $(".rabu-features");
+		var firstExcluded = $("li:contains('excluded 1')");
+		var divider = $(".rabu-divider");
+
+		assertEquals("gap should equal divider size", "50px", firstExcluded.css("margin-top"));
+		assertEquals("divider should be centered in gap", firstExcluded.offset().top - 50, divider.offset().top);
+		assertEquals("left side of divider should be aligned with list", featuresList.offset().left, divider.offset().left);
+	};
+
+	Test.prototype.test_dom_featureDivider_isIgnoredWhenItIsNotPresentInHtml = function() {
+		rabu.populateDom();
+		// no exception thrown
+	};
+
+	Test.prototype.test_dom_featureDivider_isHiddenWhenThereAreNoExcludedFeatures = function() {
+		//TODO
+	};
+
+	Test.prototype.test_dom_featureDivider_worksWhenThereAreMultipleDividers = function() {
+		//TODO
+	};
+
+	Test.prototype.test_iterationProjections = function() {
 		assertEquals("10%", 10, rabu.tenPercentIterationsRemaining());
 		assertEquals("50%", 20, rabu.fiftyPercentIterationsRemaining());
 		assertEquals("90%", 40, rabu.ninetyPercentIterationsRemaining());
 	};
 
-	RabuTest.prototype.test_dateProjections = function() {
+	Test.prototype.test_dateProjections = function() {
 		assertEquals("10%", new Date("12 Mar 2011"), rabu.tenPercentDate());
 		assertEquals("50%", new Date("21 May 2011"), rabu.fiftyPercentDate());
 		assertEquals("90%", new Date("8 Oct 2011"), rabu.ninetyPercentDate());
 	};
 
-	RabuTest.prototype.test_iterationProjectionsShouldNotRound = function() {
+	Test.prototype.test_iterationProjectionsShouldNotRound = function() {
 		config.riskMultipliers = [0.6, 1.4, 1.6];
 		config.velocity = 9.5;
 		config.includedFeatures = [["A", 73]];
@@ -79,7 +109,7 @@
 		assertEquals("90%", 12.294736842105264, rabu.ninetyPercentIterationsRemaining());
 	};
 
-	RabuTest.prototype.test_dateProjectionsShouldRoundUpToNextDay = function() {
+	Test.prototype.test_dateProjectionsShouldRoundUpToNextDay = function() {
 		config.includedFeatures = [["A", 14]];
 		config.iterationLength = 1;
 

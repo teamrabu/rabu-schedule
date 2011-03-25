@@ -30,13 +30,31 @@ rabu_ns.Rabu = function(config_in) {
 		return date.toString('MMMM dS');
 	}
 
-	function featuresToHtml(stringArray) {
-		var reducer = function(sum, feature) {
-			var openTag = "<li>";
-			if (feature.isDone()) { openTag = "<li class='rabu-done'>"; }
+	function featuresToHtml() {
+		var reducer = function(sum, feature, cssClass) {
+			var openTag = "<li class='" + cssClass + "'>";
+			if (feature.isDone()) { openTag = "<li class='" + cssClass + " rabu-done'>"; }
 			return sum + openTag + feature.name() + "</li>";
 		};
-		return stringArray.reduce(reducer, "");
+		var includedReducer = function(sum, feature) {
+			return reducer(sum, feature, "rabu-included");
+		};
+		var excludedReducer = function(sum, feature) {
+			return reducer(sum, feature, "rabu-excluded");
+		};
+		return estimates.includedFeatures().reduce(includedReducer, "") +
+			estimates.excludedFeatures().reduce(excludedReducer, "");
+	}
+
+	function positionDivider(divider, features) {
+		if (divider.length === 0) { return; }
+
+		var firstExcluded = $(".rabu-excluded", features).first();
+		firstExcluded.css("margin-top", divider.outerHeight());
+
+		divider.css("position", "absolute");
+		divider.css("top", firstExcluded.offset().top - divider.outerHeight());
+		divider.css("left", features.offset().left + "px");
 	}
 
 	this.populateDom = function() {
@@ -45,7 +63,8 @@ rabu_ns.Rabu = function(config_in) {
 		$(".rabu-tenPercentDate").text(dateToString(this.tenPercentDate()));
 		$(".rabu-fiftyPercentDate").text(dateToString(this.fiftyPercentDate()));
 		$(".rabu-ninetyPercentDate").text(dateToString(this.ninetyPercentDate()));
-		$(".rabu-features").html(featuresToHtml(estimates.includedFeatures()));
+		$(".rabu-features").html(featuresToHtml());
+		positionDivider($(".rabu-divider"), $(".rabu-features"));
 	};
 
 	this.tenPercentDate = function() {

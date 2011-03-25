@@ -64,6 +64,11 @@
 		assertFeatureEquals("feature 3", new rabu_ns.Feature(["feature C", 70]), actual[2]);
 	};
 
+	Test.prototype.test_includedFeatures_whenUndefined = function() {
+		config.includedFeatures = undefined;
+		assertEquals(0, estimates.includedFeatures().length);
+	};
+
 	Test.prototype.test_excludedFeatures = function() {
 		config.excludedFeatures = [
 			["excluded 1", 5],
@@ -73,6 +78,10 @@
 		assertEquals("length", 2, actual.length);
 		assertFeatureEquals("excluded 1", new rabu_ns.Feature(["excluded 1", 5]), actual[0]);
 		assertFeatureEquals("excluded 2", new rabu_ns.Feature(["excluded 2", 10]), actual[1]);
+	};
+
+	Test.prototype.test_excludedFeatures_whenUndefined = function() {
+		assertEquals(0, estimates.excludedFeatures().length);
 	};
 }());
 

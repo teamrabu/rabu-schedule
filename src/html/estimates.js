@@ -41,6 +41,7 @@ rabu_ns.Estimates = function(configJson) {
 	};
 
 	function featuresFromList(featureList) {
+		if (!featureList) { return []; }
 		return featureList.map(function(element) {
 			return new rabu_ns.Feature(element);
 		});
