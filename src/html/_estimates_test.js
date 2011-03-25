@@ -5,6 +5,11 @@
 	var estimates;
 	var config;
 
+	function assertFeatureEquals(name, expected, actual) {
+		var message = name + " expected <" + expected + "> but was <" + actual + ">";
+		assertTrue(message, expected.equals(actual));
+	}
+
 	Test.prototype.setUp = function() {
 		config = {
 			name: "My name",
@@ -13,7 +18,7 @@
 			currentIterationStarted: "1 Jan 2011",
 			iterationLength: 7,
 			velocity: 10,
-			features: [
+			includedFeatures: [
 				["feature A", 10],
 				["feature B", 20],
 				["feature C", 70]
@@ -39,29 +44,55 @@
 	Test.prototype.test_effortRemaining_isSumOfFeatureEstimates = function() {
 		assertEquals(100, estimates.totalEstimate());
 
-		config.features = [["feature A", 10]];
+		config.includedFeatures = [["feature A", 10]];
 		assertEquals("one feature", 10, estimates.totalEstimate());
 
-		config.features = [];
+		config.includedFeatures = [];
 		assertEquals("no feature", 0, estimates.totalEstimate());
 	};
 
-	Test.prototype.test_features = function() {
-		function assertFeatureEquals(name, expected, actual) {
-			assertEquals(name + " name", expected.name(), actual.name());
-			assertEquals(name + " estimate", expected.estimate(), actual.estimate());
-		}
+	Test.prototype.test_effortRemaining_doesNotIncludeExcludedFeatures = function() {
+		config.excludedFeatures = [["excluded feature", 42]];
+		assertEquals(100, estimates.totalEstimate());
+	};
 
-		var actual = estimates.features();
+	Test.prototype.test_includedFeatures = function() {
+		var actual = estimates.includedFeatures();
 		assertEquals("length", 3, actual.length);
 		assertFeatureEquals("feature 1", new rabu_ns.Feature(["feature A", 10]), actual[0]);
 		assertFeatureEquals("feature 2", new rabu_ns.Feature(["feature B", 20]), actual[1]);
 		assertFeatureEquals("feature 3", new rabu_ns.Feature(["feature C", 70]), actual[2]);
 	};
+
+	Test.prototype.test_excludedFeatures = function() {
+		config.excludedFeatures = [
+			["excluded 1", 5],
+			["excluded 2", 10]
+		];
+		var actual = estimates.excludedFeatures();
+		assertEquals("length", 2, actual.length);
+		assertFeatureEquals("excluded 1", new rabu_ns.Feature(["excluded 1", 5]), actual[0]);
+		assertFeatureEquals("excluded 2", new rabu_ns.Feature(["excluded 2", 10]), actual[1]);
+	};
 }());
 
 (function() {
 	var Test = new TestCase("FeatureTest");
+
+	Test.prototype.test_equals = function() {
+		var a1 = new rabu_ns.Feature(["feature A", 10]);
+		var a2 = new rabu_ns.Feature(["feature A", 10]);
+		var b = new rabu_ns.Feature(["feature B", 10]);
+		var b2 = new rabu_ns.Feature(["feature B", 20]);
+
+		assertTrue(a1.equals(a2));
+		assertFalse(a1.equals(b));
+		assertFalse(b.equals(b2));
+	};
+
+	Test.prototype.test_toString = function() {
+		assertEquals("['feature', 10]", new rabu_ns.Feature(["feature", 10]).toString());
+	};
 
 	Test.prototype.test_bareData = function() {
 		var feature = new rabu_ns.Feature(["feature name", 33]);

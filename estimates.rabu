@@ -5,7 +5,7 @@
 	"currentIterationStarted": "23 Mar 2011",
 	"iterationLength": 7,
 	"velocity": 4,
-	"features": [
+	"includedFeatures": [
 		["Text-only date projections", 0],
 		["Single, email-able file", 0],
 		["List of features, with completed ones marked 'done'", 0],

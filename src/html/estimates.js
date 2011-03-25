@@ -37,13 +37,21 @@ rabu_ns.Estimates = function(configJson) {
 		var adder = function(sum, feature) {
 			return sum + feature.estimate();
 		};
-		return this.features().reduce(adder, 0);
+		return this.includedFeatures().reduce(adder, 0);
 	};
 
-	this.features = function() {
-		return config.features.map(function(element) {
+	function featuresFromList(featureList) {
+		return featureList.map(function(element) {
 			return new rabu_ns.Feature(element);
 		});
+	}
+
+	this.includedFeatures = function() {
+		return featuresFromList(config.includedFeatures);
+	};
+
+	this.excludedFeatures = function() {
+		return featuresFromList(config.excludedFeatures);
 	};
 };
 
@@ -60,5 +68,13 @@ rabu_ns.Feature = function(featureJson) {
 
 	this.isDone = function() {
 		return this.estimate() === 0;
+	};
+
+	this.equals = function(that) {
+		return (this.name() === that.name()) && (this.estimate() === that.estimate());
+	};
+
+	this.toString = function() {
+		return "['" + this.name() + "', " + this.estimate() + "]";
 	};
 };

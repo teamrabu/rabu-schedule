@@ -5,7 +5,7 @@
 	"currentIterationStarted": "1 Jan 2011",
 	"iterationLength": 7,
 	"velocity": 10,
-	"features": [
+	"includedFeatures": [
 		["Completed feature", 0],
 		["Feature A", 60],
 		["Another feature", 30],

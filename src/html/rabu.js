@@ -45,7 +45,7 @@ rabu_ns.Rabu = function(config_in) {
 		$(".rabu-tenPercentDate").text(dateToString(this.tenPercentDate()));
 		$(".rabu-fiftyPercentDate").text(dateToString(this.fiftyPercentDate()));
 		$(".rabu-ninetyPercentDate").text(dateToString(this.ninetyPercentDate()));
-		$(".rabu-features").html(featuresToHtml(estimates.features()));
+		$(".rabu-features").html(featuresToHtml(estimates.includedFeatures()));
 	};
 
 	this.tenPercentDate = function() {
