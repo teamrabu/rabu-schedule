@@ -125,6 +125,10 @@
 		var config = <%= config %>;
 
 		new rabu_ns.Rabu(config).populateDom();
+
+		$(window).resize(function() {
+			new rabu_ns.Rabu(config).populateDom();
+		});
 	});
 </script>
 <div class="wrapper">
