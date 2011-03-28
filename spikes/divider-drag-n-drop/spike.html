@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+		"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Spike: Divider drag-and-drop with animations</title>
+
+	<script type="text/javascript" src="jquery.v1.5.1.js"></script>
+	<script type="text/javascript" src="jquery.ui.core.js"></script>
+	<script type="text/javascript" src="jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="jquery.ui.mouse.js"></script>
+	<script type="text/javascript" src="jquery.ui.draggable.js"></script>
+
+	<style type="text/css">
+		ol {
+			list-style-type: disc;
+		}
+		.divider {
+			position: absolute;
+			left: 5px;
+			width: 800px;
+			font-style: italic;
+
+			/*text-shadow: gray 2px 2px 0px;*/
+		}
+		.divider .out {
+			border-top: solid 1px;
+			/*-webkit-box-shadow: 3px 3px 6px 0px black inset;*/
+			width: 15%;
+		}
+		.divider:hover {
+			cursor: move
+		}
+
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+		var info;
+		var items;
+		var divider;
+		var spacing = 10;
+		var speed = 50;
+
+		var firstExcluded = 2;
+		var lastTouched = null;
+		var lastTouchedTime = new Date().getTime();
+
+		function setAllPositions() {
+			exclude(firstExcluded);
+			items.stop(true, true);
+			var item = $(items[firstExcluded]);
+			var newOffset = {};
+			newOffset.top = item.offset().top - (divider.outerHeight(true) / 2) - (spacing / 2);
+			newOffset.left = divider.offset().left;
+			divider.offset(newOffset);
+		}
+
+		function draggable() {
+			var list = divider.parent();
+			var dragmeCenter = divider.height() / 2;
+			var item = $(items[firstExcluded]);
+			var itemHeight = item.outerHeight();
+
+			divider.draggable({
+				axis: 'y',
+				cursorAt: {top: dragmeCenter },
+				scrollSpeed: 10,
+				containment: [
+					0,
+					list.offset().top - itemHeight,
+					0,
+					list.offset().top + spacing + list.height() - dragmeCenter
+				],
+				start: startDrag,
+				stop: stopDrag
+			});
+		}
+
+		function dividerTouching() {
+			var result = null;
+			var dividerCenter = divider.offset().top + (divider.height() / 2);
+			for (var i = 0; i < items.length; i++) {
+				var item = $(items[i]);
+				var itemTop = item.offset().top;
+				var itemBottom = item.offset().top + item.outerHeight();
+				if (dividerCenter >= itemTop && dividerCenter <= itemBottom) {
+					return i;
+				}
+			}
+			return null;
+		}
+
+		var monitorTimer;
+
+		function startDrag() {
+			info.text("monitoring...");
+			monitorTimer = window.setInterval(evaluateDivider, 50);
+		}
+
+		function stopDrag() {
+			info.text("dropped at #" + firstExcluded);
+			window.clearInterval(monitorTimer);
+			setAllPositions();
+		}
+
+		var loop = 0;
+		function evaluateDivider() {
+			var elapsedTime = new Date().getTime() - lastTouchedTime;
+			var touching = dividerTouching();
+			if ((touching === lastTouched) && (elapsedTime < speed * 2)) { return; }
+
+			lastTouched = touching;
+			lastTouchedTime = new Date().getTime();
+			if (touching === null) { return; }
+			if (touching === firstExcluded) {
+				exclude(touching + 1);
+				firstExcluded = touching + 1;
+			}
+			else {
+				exclude(touching);
+				firstExcluded = touching;
+			}
+		}
+
+		function exclude(itemIndex) {
+			firstExcluded = itemIndex;
+			thisItem = $(items[itemIndex]);
+			allOtherItems = items.not(thisItem);
+
+			items.stop(true);                                          // stop all animations in progress
+			thisItem.animate({marginTop: spacing}, speed, "linear");   // add space above thisItem
+			allOtherItems.animate({marginTop: 0}, speed, "linear");    // remove any leftover space on all other items
+		}
+
+		function displayInfo() {
+			items.each(function(index, item) {
+				item = $(item);
+				item.text("Item #" + index);
+			});
+		}
+		
+		$(function() {
+			info = $("#info");
+			divider = $(".divider");
+			items = $("li", divider.parent());
+
+			var minSpacing = items.first().height();                   // when spacing is too small, oscillations occur
+			if (spacing < minSpacing) spacing = minSpacing;
+
+//			window.setInterval(displayInfo, 50);
+//			window.setInterval(evaluateDivider, 10);
+
+			setAllPositions();
+			draggable();
+			evaluateDivider();
+		});
+	</script>
+
+	<p>This spike demonstrates dragging and dropping.</p>
+
+	<p>Information: [<span id="info"></span>]</p>
+
+	<ol style="padding-left: 60px">
+		<div class="divider">
+			<div class="in">in</div>
+			<div class="out">out</div>
+		</div>
+		<li>Item 0</li>
+		<li>Item 1</li>
+		<li>Item 2</li>
+		<li>Item 3</li>
+		<li>Item 4</li>
+		<li>Item 5</li>
+		<li>Item 6</li>
+		<li>Item 7</li>
+		<li>Item 8</li>
+		<li>Item 9</li>
+		<li>Item 10</li>
+		<li>Item 11</li>
+		<li>Item 12</li>
+		<li>Item 13</li>
+		<li>Item 14</li>
+		<li>Item 15</li>
+		<li>Item 16</li>
+		<li>Item 17</li>
+		<li>Item 18</li>
+		<li>Item 19</li>
+	</ol>
+
+</body>
+</html>
