@@ -1,16 +1,13 @@
 {
 	"name": "Rabu 0.1",
-	"updated": "25 Mar 2011",
+	"updated": "28 Mar 2011",
 	"riskMultipliers": [1, 2, 4],
-	"currentIterationStarted": "25 Mar 2011",
+	"currentIterationStarted": "28 Mar 2011",
 	"iterationLength": 7,
 	"velocity": 3,
 	"includedFeatures": [
 		["Text-only date projections", 0],
-		["Single, email-able file", 0],
-		["Feature list", 0],
-		["Move divider", 2.5],
-		["Reorder features", 1]
+		["Interactive feature list", 4.5]
 	],
 	"excludedFeatures": [
 		["Releasable product", 10]
