@@ -8,12 +8,6 @@
 
 	Test.prototype.setUp = function() {
 		config = {
-			name: "My name",
-			updated: "5 Jan 2011",
-			riskMultipliers: [1, 2, 4],
-			currentIterationStarted: "1 Jan 2011",
-			iterationLength: 7,
-			velocity: 10,
 			includedFeatures: [
 				["completed", 0],
 				["feature A", 70],

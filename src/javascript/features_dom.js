@@ -1,19 +1,16 @@
 rabu_ns.FeaturesDom = function(element, estimates) {
 
-	function featuresToHtml() {
-		var reducer = function(sum, feature, cssClass) {
-			var openTag = "<li class='" + cssClass + "'>";
-			if (feature.isDone()) { openTag = "<li class='" + cssClass + " rabu-done'>"; }
-			return sum + openTag + feature.name() + "</li>";
-		};
-		var includedReducer = function(sum, feature) {
-			return reducer(sum, feature, "rabu-included");
-		};
-		var excludedReducer = function(sum, feature) {
-			return reducer(sum, feature, "rabu-excluded");
-		};
-		return estimates.includedFeatures().reduce(includedReducer, "") +
-			estimates.excludedFeatures().reduce(excludedReducer, "");
+	function toHtml(features, cssClass) {
+		return features.reduce(function(sum, feature) {
+			var css = cssClass;
+			if (feature.isDone()) { css += " rabu-done"; }
+			return sum + "<li class='" + css + "'>" + feature.name() + "</li>";
+		}, "");
+	}
+
+	function populateFeatureList() {
+		element.append(toHtml(estimates.includedFeatures(), "rabu-included"));
+		element.append(toHtml(estimates.excludedFeatures(), "rabu-excluded"));
 	}
 
 	function positionDivider(divider, features) {
@@ -31,7 +28,7 @@ rabu_ns.FeaturesDom = function(element, estimates) {
 	}
 
 	this.populate = function() {
-		element.html(featuresToHtml());
+		populateFeatureList();
 		positionDivider($(".rabu-divider"), $(".rabu-features"));
 	};
 };

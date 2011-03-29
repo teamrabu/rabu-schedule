@@ -234,22 +234,9 @@ class JsTestDriver
     COMMAND = "java -jar #{JSTESTDRIVER_JAR}"
 
     def self.run_tests
-        begin
-            Timeout::timeout(JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC) do
-                result = attempt_tests
-                while not result =~ /Passed: (\d+); Fails: (\d+); Errors: (\d+)/ do
-                    puts "Did not find JsTestDriver browser; trying again"
-                    sleep 2
-                    result = attempt_tests
-                end
-                raise "Javascript unit tests failed" if $? != 0
-            end
-        rescue Timeout::Error
-            puts "JsTestDriver browser has been lost"
-            capture_browser
-            retry
-        end
-    end
+		result = attempt_tests
+		raise "Javascript unit tests failed" if $? != 0
+	end
 
     def self.capture_browser
         puts "Launching JsTestDriver browser"
