@@ -21,9 +21,10 @@ JSTESTDRIVER_SERVER_TIMEOUT_IN_SEC = 10
 JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC = 10
 
 HTML_SRC_DIR = "#{SRC_DIR}/html"
+JS_SRC_DIR = "#{SRC_DIR}/javascript"
 RABU_HTML_SOURCE = "#{HTML_SRC_DIR}/rabu.html"
 MERGED_HTML = "#{MERGED_DIR}/rabu.html"
-RABU_JS_SOURCE = "#{HTML_SRC_DIR}/rabu.js"
+RABU_JS_SOURCE = "#{JS_SRC_DIR}/rabu.js"
 MERGED_JS = "#{MERGED_DIR}/rabu.js"
 MERGE_REGEX = /<%=\s*rabu_library\s*%>/
 
@@ -112,8 +113,8 @@ task MERGED_JS => [RABU_JS_SOURCE, MERGED_DIR] do
 		rm_f MERGED_JS
 		puts "Concatenating #{MERGED_JS}"
 		File.open(MERGED_JS, "w") do |dest_file|
-			files = FileList.new("#{LIB_DIR}/*.js", RABU_JS_SOURCE, "#{HTML_SRC_DIR}/*.js")
-			files.exclude "#{HTML_SRC_DIR}/_*test.js"
+			files = FileList.new("#{LIB_DIR}/*.js", RABU_JS_SOURCE, "#{JS_SRC_DIR}/*.js")
+			files.exclude "#{JS_SRC_DIR}/_*test.js"
 			files.uniq.each do |src_file|
 				append(src_file, dest_file)
 			end
