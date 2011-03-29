@@ -1,5 +1,3 @@
-/*global TestCase, assertEquals, assertEquals */
-
 (function() {
 	var Test = new TestCase("Rabu");
 	var rabu;

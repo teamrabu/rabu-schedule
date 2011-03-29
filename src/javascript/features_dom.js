@@ -1,5 +1,4 @@
 rabu_ns.FeaturesDom = function(element, estimates) {
-
 	var featureList = $(".rabu-features");
 	var divider = $(".rabu-divider");
 
@@ -18,7 +17,7 @@ rabu_ns.FeaturesDom = function(element, estimates) {
 
 	function positionDivider() {
 		var firstExcluded = $(".rabu-excluded", featureList).first();
-		if (divider.length === 0 || firstExcluded.length === 0) {
+		if (firstExcluded.length === 0) {
 			divider.hide();
 			return;
 		}
@@ -31,11 +30,19 @@ rabu_ns.FeaturesDom = function(element, estimates) {
 	}
 
 	function makeDraggable() {
-		divider.draggable();
+		featureList = $(".rabu-features");
+		divider.draggable({
+			axis: 'y',
+			containment: [0, featureList.offset().top, 0, featureList.offset().top + featureList.height()],
+			scrollSpeed: 10,
+			cursorAt: { top: (divider.outerHeight() / 2) }
+		});
 	}
 
 	this.populate = function() {
 		populateFeatureList();
+		if (divider.length === 0) { return; }
+
 		positionDivider();
 		makeDraggable();
 	};

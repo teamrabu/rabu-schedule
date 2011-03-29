@@ -1,5 +1,3 @@
-/*global TestCase, assertEquals, assertEquals */
-
 (function() {
 	var Test = new TestCase("FeaturesDom");
 	var config;
@@ -25,7 +23,7 @@
 		featuresDom.populate();
 	}
 
-	Test.prototype.test_featureList_isPopulated = function() {
+	Test.prototype.test_populate_createsFeatureListHtml = function() {
 		/*:DOC += <ul class="rabu-features"></ul> */
 		populate();
 
@@ -36,7 +34,22 @@
 		assertEquals("list should be idempotent", expected, $(".rabu-features").html());
 	};
 
-	Test.prototype.test_featureDivider_isPositionedBetweenIncludedAndExcludedFeatures = function() {
+	Test.prototype.test_populate_ignoresDivider_whenItDoesNotExist = function() {
+		populate();
+		// should not throw exception
+	};
+
+	Test.prototype.test_populate_ignoresDivider_whenNoExcludedFeatures = function() {
+		/*:DOC += <ul class="rabu-features"></ul> */
+		/*:DOC += <div class="rabu-divider"></div> */
+		config.excludedFeatures = undefined;
+		populate();
+
+		// should not throw exception
+		assertEquals("divider should be hidden", "none", $(".rabu-divider").css("display"));
+	};
+
+	Test.prototype.test_positionDivider = function() {
 		/*:DOC += <ul class="rabu-features"></ul> */
 		/*:DOC += <div style="padding-top: 50px" class="rabu-divider"></div> */
 		populate();
@@ -50,7 +63,7 @@
 		assertEquals("left side of divider should be aligned with list", featuresList.offset().left, divider.offset().left);
 	};
 
-	Test.prototype.test_featureDivider_positioningAccountsForDividerMargins = function() {
+	Test.prototype.test_positionDivider_accountsForDividerMargins = function() {
 		/*:DOC += <ul class="rabu-features"></ul> */
 		/*:DOC += <div style="margin-top: 10px; margin-bottom: 20px; padding-top: 50px" class="rabu-divider"></div> */
 		populate();
@@ -62,19 +75,20 @@
 		assertEquals("divider, including margins, should be centered in gap", firstExcluded.offset().top - 80 + 10, divider.offset().top);
 	};
 
-	Test.prototype.test_featureDivider_isIgnoredWhenItIsNotPresentInHtml = function() {
-		populate();
-		// should not throw exception
-	};
-
-	Test.prototype.test_featureDivider_isHiddenWhenThereAreNoExcludedFeatures = function() {
+	Test.prototype.test_makeDraggable = function() {
 		/*:DOC += <ul class="rabu-features"></ul> */
-		/*:DOC += <div class="rabu-divider"></div> */
-		config.excludedFeatures = undefined;
+		/*:DOC += <div class="rabu-divider" style="margin-top: 50px; padding-top: 10px"></div> */
 		populate();
+		var list = $(".rabu-features");
+		var divider = $(".rabu-divider");
 
-		// should not throw exception
-		assertEquals("divider should be hidden", "none", $(".rabu-divider").css("display"));
+		function option(key) { return divider.draggable("option", key); }
+
+		assertTrue("should be draggable", divider.hasClass("ui-draggable"));
+		assertEquals("constrained vertically", "y", option("axis"));
+		assertEquals("top", list.offset().top, option("containment")[1]);
+		assertEquals("bottom", list.offset().top + 137, option("containment")[3]);
+		assertEquals("scroll speed", 10, option("scrollSpeed"));
+		assertEquals("cursor should be centered on divider", 5, option("cursorAt").top);
 	};
-
 }());
