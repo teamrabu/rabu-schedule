@@ -1,7 +1,7 @@
 /*global TestCase, assertEquals, assertEquals */
 
 (function() {
-	var Test = new TestCase("RabuTest");
+	var Test = new TestCase("Rabu");
 	var rabu;
 	var config;
 
@@ -101,41 +101,4 @@
 		assertEquals("divider should be hidden", "none", $(".rabu-divider").css("display"));
 	};
 
-	Test.prototype.test_dom_featureDivider_worksWhenThereAreMultipleFeatureLists = function() {
-		//TODO
-	};
-
-	Test.prototype.test_iterationProjections = function() {
-		assertEquals("10%", 10, rabu.tenPercentIterationsRemaining());
-		assertEquals("50%", 20, rabu.fiftyPercentIterationsRemaining());
-		assertEquals("90%", 40, rabu.ninetyPercentIterationsRemaining());
-	};
-
-	Test.prototype.test_dateProjections = function() {
-		assertEquals("10%", new Date("12 Mar 2011"), rabu.tenPercentDate());
-		assertEquals("50%", new Date("21 May 2011"), rabu.fiftyPercentDate());
-		assertEquals("90%", new Date("8 Oct 2011"), rabu.ninetyPercentDate());
-	};
-
-	Test.prototype.test_iterationProjectionsShouldNotRound = function() {
-		config.riskMultipliers = [0.6, 1.4, 1.6];
-		config.velocity = 9.5;
-		config.includedFeatures = [["A", 73]];
-
-		assertEquals("10%", 4.610526315789474, rabu.tenPercentIterationsRemaining());
-		assertEquals("50%", 10.757894736842104, rabu.fiftyPercentIterationsRemaining());
-		assertEquals("90%", 12.294736842105264, rabu.ninetyPercentIterationsRemaining());
-	};
-
-	Test.prototype.test_dateProjectionsShouldRoundUpToNextDay = function() {
-		config.includedFeatures = [["A", 14]];
-		config.iterationLength = 1;
-
-		assertEquals("10%", 1.4, rabu.tenPercentIterationsRemaining());
-		assertEquals("50%", 2.8, rabu.fiftyPercentIterationsRemaining());
-		assertEquals("90%", 5.6, rabu.ninetyPercentIterationsRemaining());
-		assertEquals("10%", new Date("3 Jan 2011"), rabu.tenPercentDate());
-		assertEquals("50%", new Date("4 Jan 2011"), rabu.fiftyPercentDate());
-		assertEquals("90%", new Date("7 Jan 2011"), rabu.ninetyPercentDate());
-	};
 }());

@@ -2,30 +2,17 @@ var rabu_ns = {};
 
 rabu_ns.Rabu = function(config_in) {
 	var estimates;
+	var projections;
 
 	function init(config) {
 		if (!config) {
 			throw "Expected config";
 		}
 		estimates = new rabu_ns.Estimates(config);
+		projections = new rabu_ns.Projections(estimates);
 	}
 	init(config_in);
 	
-	function iterations() {
-		return estimates.totalEstimate() / estimates.velocity();
-	}
-
-	function calcProjection(multiplier) {
-		return iterations() * multiplier;
-	}
-
-	function convertToDate(iterationsRemaining) {
-		var days = Math.ceil(iterationsRemaining * estimates.iterationLength());
-		var date = estimates.currentIterationStarted();
-		date.setDate(date.getDate() + days);
-		return date;
-	}
-
 	function dateToString(date) {
 		return date.toString('MMMM dS');
 	}
@@ -63,34 +50,10 @@ rabu_ns.Rabu = function(config_in) {
 	this.populateDom = function() {
 		$(".rabu-name").text(estimates.name());
 		$(".rabu-updated").text(estimates.updated().toString("MMMM dS, yyyy"));
-		$(".rabu-tenPercentDate").text(dateToString(this.tenPercentDate()));
-		$(".rabu-fiftyPercentDate").text(dateToString(this.fiftyPercentDate()));
-		$(".rabu-ninetyPercentDate").text(dateToString(this.ninetyPercentDate()));
+		$(".rabu-tenPercentDate").text(dateToString(projections.tenPercentDate()));
+		$(".rabu-fiftyPercentDate").text(dateToString(projections.fiftyPercentDate()));
+		$(".rabu-ninetyPercentDate").text(dateToString(projections.ninetyPercentDate()));
 		$(".rabu-features").html(featuresToHtml());
 		positionDivider($(".rabu-divider"), $(".rabu-features"));
-	};
-
-	this.tenPercentDate = function() {
-		return convertToDate(this.tenPercentIterationsRemaining());
-	};
-
-	this.fiftyPercentDate = function() {
-		return convertToDate(this.fiftyPercentIterationsRemaining());
-	};
-
-	this.ninetyPercentDate = function() {
-		return convertToDate(this.ninetyPercentIterationsRemaining());
-	};
-
-	this.tenPercentIterationsRemaining = function() {
-		return calcProjection(estimates.tenPercentMultiplier());
-	};
-
-	this.fiftyPercentIterationsRemaining = function() {
-		return calcProjection(estimates.fiftyPercentMultiplier());
-	};
-
-	this.ninetyPercentIterationsRemaining = function() {
-		return calcProjection(estimates.ninetyPercentMultiplier());
 	};
 };

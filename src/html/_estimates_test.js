@@ -1,7 +1,7 @@
 /*global TestCase, assertSame, assertEquals, assertTrue, assertFalse */
 
 (function() {
-	var Test = new TestCase("EstimateTest");
+	var Test = new TestCase("Estimates");
 	var estimates;
 	var config;
 
