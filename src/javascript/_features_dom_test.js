@@ -25,15 +25,18 @@
 		featuresDom.populate();
 	}
 
-	Test.prototype.test_dom_features = function() {
+	Test.prototype.test_featureList_isPopulated = function() {
 		/*:DOC += <ul class="rabu-features"></ul> */
 		populate();
 
 		var expected = "<li class=\"rabu-included rabu-done\">completed</li><li class=\"rabu-included\">feature A</li><li class=\"rabu-included\">feature B</li><li class=\"rabu-excluded\">excluded 1</li>";
 		assertEquals("feature list", expected, $(".rabu-features").html());
+
+		populate();
+		assertEquals("list should be idempotent", expected, $(".rabu-features").html());
 	};
 
-	Test.prototype.test_dom_featureDivider_isPositionedBetweenIncludedAndExcludedFeatures = function() {
+	Test.prototype.test_featureDivider_isPositionedBetweenIncludedAndExcludedFeatures = function() {
 		/*:DOC += <ul class="rabu-features"></ul> */
 		/*:DOC += <div style="padding-top: 50px" class="rabu-divider"></div> */
 		populate();
@@ -47,7 +50,7 @@
 		assertEquals("left side of divider should be aligned with list", featuresList.offset().left, divider.offset().left);
 	};
 
-	Test.prototype.test_dom_featureDivider_positioningAccountsForMargins = function() {
+	Test.prototype.test_featureDivider_positioningAccountsForDividerMargins = function() {
 		/*:DOC += <ul class="rabu-features"></ul> */
 		/*:DOC += <div style="margin-top: 10px; margin-bottom: 20px; padding-top: 50px" class="rabu-divider"></div> */
 		populate();
@@ -59,12 +62,12 @@
 		assertEquals("divider, including margins, should be centered in gap", firstExcluded.offset().top - 80 + 10, divider.offset().top);
 	};
 
-	Test.prototype.test_dom_featureDivider_isIgnoredWhenItIsNotPresentInHtml = function() {
+	Test.prototype.test_featureDivider_isIgnoredWhenItIsNotPresentInHtml = function() {
 		populate();
 		// should not throw exception
 	};
 
-	Test.prototype.test_dom_featureDivider_isHiddenWhenThereAreNoExcludedFeatures = function() {
+	Test.prototype.test_featureDivider_isHiddenWhenThereAreNoExcludedFeatures = function() {
 		/*:DOC += <ul class="rabu-features"></ul> */
 		/*:DOC += <div class="rabu-divider"></div> */
 		config.excludedFeatures = undefined;
