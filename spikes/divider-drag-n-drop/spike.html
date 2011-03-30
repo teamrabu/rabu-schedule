@@ -107,7 +107,7 @@
 		function evaluateDivider() {
 			var elapsedTime = new Date().getTime() - lastTouchedTime;
 			var touching = dividerTouching();
-			if ((touching === lastTouched) && (elapsedTime < speed * 2)) { return; }
+			if ((touching === lastTouched) && (elapsedTime <= speed + 1)) { return; }
 
 			lastTouched = touching;
 			lastTouchedTime = new Date().getTime();
@@ -144,7 +144,7 @@
 			divider = $(".divider");
 			items = $("li", divider.parent());
 
-			var minSpacing = items.first().height();                   // when spacing is too small, oscillations occur
+			var minSpacing = items.first().height() + 1;               // when spacing is too small, oscillations occur
 			if (spacing < minSpacing) spacing = minSpacing;
 
 //			window.setInterval(displayInfo, 50);
