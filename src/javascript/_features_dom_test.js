@@ -16,10 +16,40 @@
 	}
 
 	function assertLiPositions(message, positions) {
-		assertEquals(message + ": li count", positions.length, li.length);
-		positions.forEach(function(position, index) {
-			assertEquals(message + ": li #" + index + " top", position, $(li[index]).offset().top);
+		var joiner = "";
+		var actualPositions = "[";
+		li.each(function(index, element) {
+			actualPositions += joiner + $(element).offset().top;
+			joiner = ", ";
 		});
+		actualPositions += "]";
+
+		joiner = "";
+		var expectedPositions = "[";
+		positions.forEach(function(element, index) {
+			expectedPositions += joiner + element;
+			joiner = ", ";
+		});
+		expectedPositions += "]";
+
+		assertEquals(message, expectedPositions, actualPositions);
+	}
+
+	function dragDividerTo(position, cursorOffset) {
+		cursorOffset = cursorOffset || 8;
+
+		var downEvent = new jQuery.Event();
+		downEvent.pageX = 0;
+		downEvent.pageY = 0;
+		downEvent.which = 1;
+		downEvent.type = "mousedown";
+		divider.trigger(downEvent);
+
+		var moveEvent = new jQuery.Event();
+		moveEvent.pageX = 0;
+		moveEvent.pageY = position + cursorOffset;
+		moveEvent.type = "mousemove";
+		divider.trigger(moveEvent);
 	}
 
 	Test.prototype.setUp = function() {
@@ -27,11 +57,10 @@
 						li { font-size: 19px }
 						ul { margin: 0; }
 						body { margin: 0; }
-						.rabu-divider { margin-top: 20px; padding-top: 30px; }
-					</style>
-		*/
-		/*:DOC += <ul class="rabu-features"></ul> */
-		/*:DOC += <div class="rabu-divider"></div> */
+						.rabu-divider { margin-top: 34px; padding-top: 16px; }
+					</style>  */
+		/*:DOC +=   <ul class="rabu-features"></ul> */
+		/*:DOC +=   <div class="rabu-divider"></div> */
 		config = {
 			includedFeatures: [
 				["completed", 0],
@@ -90,7 +119,7 @@
 
 		assertLiPositions("excluded features should be positioned below divider", [0, 20, 40, 110, 130]);
 		assertEquals("divider should use absolute positioning", "absolute", divider.css("position"));
-		assertEquals("divider should be centered in gap", 80, divider.offset().top);
+		assertEquals("divider should be centered in gap", 94, divider.offset().top);
 	};
 
 	Test.prototype.test_populate_positionsDividerAtBottomOfListWhenNoExcludedFeatures = function() {
@@ -98,7 +127,7 @@
 		populate();
 
 		assertLiPositions("li positions", [0, 20, 40]);
-		assertEquals("divider position", 80, divider.offset().top);
+		assertEquals("divider position", 94, divider.offset().top);
 	};
 
 	Test.prototype.test_populate_positionsDividerAtTopOfListWhenNoIncludedFeatures = function() {
@@ -107,24 +136,31 @@
 		populate();
 
 		assertLiPositions("li positions", [50, 70]);
-		assertEquals("divider position", 20, divider.offset().top);
-	};
-
-	Test.prototype.test_makeDraggable = function() {
-		function option(key) { return divider.draggable("option", key); }
-
-		assertTrue("should be draggable", divider.hasClass("ui-draggable"));
-		assertEquals("constrained vertically", "y", option("axis"));
-		assertEquals("top", 0, option("containment")[1]);
-		assertEquals("bottom", 80, option("containment")[3]);
-		assertEquals("scroll speed", 10, option("scrollSpeed"));
-		assertEquals("cursor should be centered on divider", 15, option("cursorAt").top);
+		assertEquals("divider position", 34, divider.offset().top);
 	};
 //
-//	Test.prototype.test_dragging_repositionsFeatures = function() {
-//		/*:DOC += <div class="rabu-divider"></div> */
-//		populate();
+//	Test.prototype.test_makeDraggable = function() {
+//		function option(key) { return divider.draggable("option", key); }
 //
-//		// TODO
+//		assertTrue("should be draggable", divider.hasClass("ui-draggable"));
+//		assertEquals("constrained vertically", "y", option("axis"));
+//		assertEquals("top", 0, option("containment")[1]);
+//		assertEquals("bottom", 80, option("containment")[3]);
+//		assertEquals("scroll speed", 10, option("scrollSpeed"));
+//		assertEquals("cursor should be centered on divider", 8, option("cursorAt").top);
+//	};
+//
+//	Test.prototype.test_dragging_repositionsDivider = function() {
+//		assertEquals("assumption: divider starting position", 94, divider.offset().top);
+//		dragDividerTo(50);
+//		assertEquals("divider ending position", 50, divider.offset().top);
+//	};
+//
+//	Test.prototype.test_dragging_shouldRepositionGapAsSoonAsElementTouched = function() {
+//		assertLiPositions("assumption: starting positions", [0, 20, 40, 110]);
+//		dragDividerTo(60);
+//		assertLiPositions("element not yet touched", [0, 20, 40, 110]);
+//		dragDividerTo(59);
+//		assertLiPositions("gap should have moved", [0, 20, 90, 110]);
 //	};
 }());

@@ -1,15 +1,18 @@
 {
-	"name": "Rabu 0.1",
-	"updated": "28 Mar 2011",
+	"name": "Rabu's next release",
+	"updated": "7 Apr 2011",
 	"riskMultipliers": [1, 2, 4],
-	"currentIterationStarted": "28 Mar 2011",
+	"currentIterationStarted": "4 Apr 2011",
 	"iterationLength": 7,
-	"velocity": 3,
+	"velocity": 1,
 	"includedFeatures": [
-		["Text-only date projections", 0],
-		["Interactive feature list", 4.5]
+		["Restored codebase", 0.5],
+		["Product announcement", 1]
 	],
 	"excludedFeatures": [
-		["Releasable product", 10]
+		["Product home page", "?"],
+		["Public source code repository", "?"],
+		["Text-only date projections", 0],
+		["Product download", "?"]
 	]
 }
