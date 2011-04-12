@@ -68,9 +68,6 @@ task :javascript => [:js_test, :js_lint]
 desc "Check HTML"
 task :html => [:html_test]
 
-desc "Check Ruby"
-task :ruby => [:ruby_test]
-
 desc "Update projection"
 task :projection => [PROJECTION_HTML]
 
@@ -99,11 +96,11 @@ task :html_test => [RABU_OUTPUT] do
     end
 end
 
-# desc "Ruby unit tests"
-task :ruby_test do
+desc "Check Ruby"
+task :ruby do
 	explain("Running Ruby unit tests"){}
 end
-Rake::TestTask.new(:ruby_test) do |test|
+Rake::TestTask.new(:ruby) do |test|
 	test.libs << RUBY_SRC_DIR
 	test.pattern = "#{RUBY_SRC_DIR}/_*test.rb"
 end
