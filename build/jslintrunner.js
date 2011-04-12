@@ -1,5 +1,7 @@
 /*global load, readFile, print, JSLINT, java */
 
+// Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+
 (function JsLintRunner() {
 "use strict";
 

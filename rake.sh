@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 
+# Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+
 def red(text)
     return "\033[1;30;41m#{text}\033[0m";
 end

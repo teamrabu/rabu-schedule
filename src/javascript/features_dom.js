@@ -1,3 +1,5 @@
+// Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+
 rabu_ns.FeaturesDom = function(element, estimates) {
 	var list;
 	var li;

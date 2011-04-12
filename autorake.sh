@@ -1,8 +1,9 @@
 #!/usr/bin/ruby
 
+# Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+
 # This code based on work placed into the public domain by Peter Cooper
 # https://gist.github.com/113226
-
 
 require 'find'
 
