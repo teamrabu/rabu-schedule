@@ -1,4 +1,4 @@
-Rabu: A tool for collaborative product scheduling.
+Rabu Schedule: A tool for collaborative product scheduling.
 Copyright (C) 2011 Titanium I.T. LLC. All rights reserved.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
