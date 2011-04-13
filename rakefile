@@ -26,7 +26,7 @@ HTML_SRC_DIR = "#{SRC_DIR}/html"
 JS_SRC_DIR = "#{SRC_DIR}/javascript"
 RABU_HTML_SOURCE = "#{HTML_SRC_DIR}/rabu.html"
 MERGED_HTML = "#{MERGED_DIR}/rabu.html"
-RABU_JS_SOURCE = "#{JS_SRC_DIR}/rabu.js"
+RABU_JS_SOURCE = "#{JS_SRC_DIR}/main.js"
 MERGED_JS = "#{MERGED_DIR}/rabu.js"
 MERGE_REGEX = /<%=\s*rabu_library\s*%>/
 

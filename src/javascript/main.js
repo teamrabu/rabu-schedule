@@ -3,7 +3,7 @@
 var rabu = rabu || {};
 rabu.schedule = {};
 
-rabu.schedule.Rabu = function(config) {
+rabu.schedule.Main = function(config) {
 	var estimates;
 	var projections;
 	var features;

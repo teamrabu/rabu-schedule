@@ -22,7 +22,7 @@
 				["excluded 1", 20]
 			]
 		};
-		r = new rabu.schedule.Rabu(config);
+		r = new rabu.schedule.Main(config);
 	};
 
 	Test.prototype.test_dom_title = function() {
