@@ -40,9 +40,11 @@ The build has only been tested on Mac OS 10.6, so you may run into problems on o
 Running Rabu Schedule
 ---------------------
 
-After you build Rabu Schedule (using `rake release` as described above), run it from the command line. It takes a JSON file containing estimates on STDIN and outputs a self-contained HTML file containing projections on STDOUT. Load the HTML file in Firefox to see the projections.
+After you build Rabu Schedule (using `rake release` as described above), run it from the command line, as follows:
 
-There is no documentation of the input file at this time, but you can find an up-to-date example in `/src/html/_html_test.rabu`.
+	ruby rabu-sched.rb < estimates.rabu > projection.html
+
+It takes a JSON file containing estimates on STDIN and outputs a self-contained HTML file containing projections on STDOUT. Load the HTML file in Firefox to see the projections. There is no documentation of the input file at this time, but you can find an up-to-date example in `/src/html/_html_test.rabu`.
 
 
 Submitting Patches

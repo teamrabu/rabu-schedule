@@ -24,18 +24,18 @@ JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC = 10
 
 HTML_SRC_DIR = "#{SRC_DIR}/html"
 JS_SRC_DIR = "#{SRC_DIR}/javascript"
-RABU_HTML_SOURCE = "#{HTML_SRC_DIR}/rabu.html"
-MERGED_HTML = "#{MERGED_DIR}/rabu.html"
-RABU_JS_SOURCE = "#{JS_SRC_DIR}/main.js"
-MERGED_JS = "#{MERGED_DIR}/rabu.js"
+MAIN_HTML_SOURCE = "#{HTML_SRC_DIR}/projection.html"
+MERGED_HTML = "#{MERGED_DIR}/projection.html"
+MAIN_JS_SOURCE = "#{JS_SRC_DIR}/main.js"
+MERGED_JS = "#{MERGED_DIR}/schedule.js"
 MERGE_REGEX = /<%=\s*rabu_library\s*%>/
 
 RUBY_SRC_DIR = "#{SRC_DIR}/ruby"
-MERGED_RUBY = "#{MERGED_DIR}/rabu.rb"
-RABU_RUBY_SOURCE = "#{RUBY_SRC_DIR}/cli.rb"
+MERGED_RUBY = "#{MERGED_DIR}/rabu-sched.rb"
+MAIN_RUBY_SOURCE = "#{RUBY_SRC_DIR}/cli.rb"
 
-RABU_CONFIG = "#{HTML_SRC_DIR}/_html_test.rabu"
-RABU_OUTPUT = "#{RESULTS_DIR}/rabu.html"
+TEST_CONFIG = "#{HTML_SRC_DIR}/_html_test.rabu"
+TEST_OUTPUT = "#{RESULTS_DIR}/projection.html"
 
 PROJECTION_DIR = "#{OUTPUT_DIR}/projection"
 PROJECTION_CONFIG = "estimates.rabu"
@@ -89,10 +89,10 @@ task :js_lint do
 end
 
 # desc "HTML unit tests"
-task :html_test => [RABU_OUTPUT] do
+task :html_test => [TEST_OUTPUT] do
     require "#{HTML_SRC_DIR}/_html_test"
     explain "Running HTML unit tests" do
-        test_html(RABU_OUTPUT)
+        test_html(TEST_OUTPUT)
     end
 end
 
@@ -107,7 +107,7 @@ end
 
 ##### Builds
 
-task MERGED_JS => [RABU_JS_SOURCE, MERGED_DIR] do
+task MERGED_JS => [MAIN_JS_SOURCE, MERGED_DIR] do
 	explain "Merging Javascript" do
 		rm_f MERGED_JS
 		puts "Concatenating #{MERGED_JS}"
@@ -119,7 +119,7 @@ task MERGED_JS => [RABU_JS_SOURCE, MERGED_DIR] do
 				"#{LIB_DIR}/jqueryui-1.8.11/jquery.ui.mouse.js",
 				"#{LIB_DIR}/jqueryui-1.8.11/jquery.ui.draggable.js",
 				"#{LIB_DIR}/*.js",
-				RABU_JS_SOURCE,
+				MAIN_JS_SOURCE,
 				"#{JS_SRC_DIR}/*.js"
 			)
 			files.exclude "#{JS_SRC_DIR}/_*test.js"
@@ -130,14 +130,14 @@ task MERGED_JS => [RABU_JS_SOURCE, MERGED_DIR] do
 	end
 end
 
-task MERGED_HTML => [RABU_HTML_SOURCE, MERGED_JS, MERGED_DIR] do
+task MERGED_HTML => [MAIN_HTML_SOURCE, MERGED_JS, MERGED_DIR] do
 	explain "Merging HTML" do
 		rm_f MERGED_HTML
 		puts "Concatenating #{MERGED_HTML}"
 		merged_library = false;
 		File.open(MERGED_HTML, "w") do |dest_file|
-			puts "  #{RABU_HTML_SOURCE}"
-			IO.readlines(RABU_HTML_SOURCE).each do |line|
+			puts "  #{MAIN_HTML_SOURCE}"
+			IO.readlines(MAIN_HTML_SOURCE).each do |line|
 				if MERGE_REGEX.match line then
 					append(MERGED_JS, dest_file)
 					merged_library = true
@@ -146,31 +146,31 @@ task MERGED_HTML => [RABU_HTML_SOURCE, MERGED_JS, MERGED_DIR] do
 				end
 			end
 		end
-		raise "Merge regex (#{MERGE_REGEX.inspect}) not found in #{RABU_HTML_SOURCE}" unless merged_library
+		raise "Merge regex (#{MERGE_REGEX.inspect}) not found in #{MAIN_HTML_SOURCE}" unless merged_library
 	end
 end
 
-task MERGED_RUBY => [RABU_RUBY_SOURCE, MERGED_HTML, MERGED_DIR] do
+task MERGED_RUBY => [MAIN_RUBY_SOURCE, MERGED_HTML, MERGED_DIR] do
 	explain "Merging Ruby script" do
 		rm_f MERGED_RUBY
 		puts "Concatenating #{MERGED_RUBY}"
 		File.open(MERGED_RUBY, "w") do |dest_file|
-			IO.readlines(RABU_RUBY_SOURCE).each do |line|
+			IO.readlines(MAIN_RUBY_SOURCE).each do |line|
 				if line =~ /^require \"(.+)\"/ then
 					append("#{RUBY_SRC_DIR}/#{$1}.rb", dest_file)
 				else
 					dest_file.write line
 				end
 			end
-			puts "  #{RABU_RUBY_SOURCE}"
+			puts "  #{MAIN_RUBY_SOURCE}"
 			append(MERGED_HTML, dest_file)
 		end
 	end
 end
 
-task RABU_OUTPUT => [MERGED_RUBY, RESULTS_DIR] do
+task TEST_OUTPUT => [MERGED_RUBY, RESULTS_DIR] do
 	explain "Creating Rabu output file" do
-		run "ruby #{MERGED_RUBY} < #{RABU_CONFIG} > #{RABU_OUTPUT}"
+		run "ruby #{MERGED_RUBY} < #{TEST_CONFIG} > #{TEST_OUTPUT}"
 		raise "Run failed" if $? != 0
 	end
 end
