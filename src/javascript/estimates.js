@@ -1,6 +1,6 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
-rabu_ns.Estimates = function(configJson) {
+rabu.schedule.Estimates = function(configJson) {
 	var config = configJson;
 
 	this.name = function() {
@@ -45,7 +45,7 @@ rabu_ns.Estimates = function(configJson) {
 	function featuresFromList(featureList) {
 		if (!featureList) { return []; }
 		return featureList.map(function(element) {
-			return new rabu_ns.Feature(element);
+			return new rabu.schedule.Feature(element);
 		});
 	}
 
@@ -58,7 +58,7 @@ rabu_ns.Estimates = function(configJson) {
 	};
 };
 
-rabu_ns.Feature = function(featureJson) {
+rabu.schedule.Feature = function(featureJson) {
 	var feature = featureJson;
 
 	this.name = function() {

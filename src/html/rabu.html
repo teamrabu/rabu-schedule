@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!-- 
 
-Rabu: A tool for collaborative product scheduling.
+Rabu Schedule: A tool for collaborative product scheduling.
 Copyright (C) 2011 Titanium I.T. LLC. All rights reserved.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
@@ -138,7 +138,7 @@ You should have received a copy of the GNU General Public License along with thi
 	$(document).ready(function() {
 		var config = <%= config %>;
 
-		new rabu_ns.Rabu(config).populateDom();
+		new rabu.schedule.Rabu(config).populateDom();
 
 		$(window).resize(function() {
 			new rabu_ns.Rabu(config).populateDom();

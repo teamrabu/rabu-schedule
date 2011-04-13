@@ -10,7 +10,7 @@
 	var divider;
 
 	function populate() {
-		featuresDom = new rabu_ns.FeaturesDom($(".rabu-features"), estimates);
+		featuresDom = new rabu.schedule.FeaturesDom($(".rabu-features"), estimates);
 		featuresDom.populate();
 		ul = $("ul");
 		li = $("li");
@@ -73,7 +73,7 @@
 				["excluded 1", 20]
 			]
 		};
-		estimates = new rabu_ns.Estimates(config);
+		estimates = new rabu.schedule.Estimates(config);
 		populate();
 
 		assertEquals("assumption: li height", 20, li.first().outerHeight(true));

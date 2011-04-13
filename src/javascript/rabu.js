@@ -1,8 +1,9 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
-var rabu_ns = {};
+var rabu = rabu || {};
+rabu.schedule = {};
 
-rabu_ns.Rabu = function(config) {
+rabu.schedule.Rabu = function(config) {
 	var estimates;
 	var projections;
 	var features;
@@ -10,9 +11,9 @@ rabu_ns.Rabu = function(config) {
 	if (!config) {
 		throw "Expected config";
 	}
-	estimates = new rabu_ns.Estimates(config);
-	projections = new rabu_ns.Projections(estimates);
-	features = new rabu_ns.FeaturesDom($(".rabu-features"), estimates);
+	estimates = new rabu.schedule.Estimates(config);
+	projections = new rabu.schedule.Projections(estimates);
+	features = new rabu.schedule.FeaturesDom($(".rabu-features"), estimates);
 
 	function dateToString(date) {
 		return date.toString('MMMM dS');

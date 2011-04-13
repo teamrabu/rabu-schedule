@@ -22,7 +22,7 @@ var OPTIONS = {
 	maxerr: 10,         // Max number of errors
 	predef: [           // Global variables
 		"$", "jQuery",
-		"rabu_ns",
+		"rabu",
 		"TestCase", "assertTrue", "assertFalse", "assertSame", "assertEquals"
 	]
 };

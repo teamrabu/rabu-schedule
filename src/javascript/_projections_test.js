@@ -22,7 +22,7 @@
 				["excluded 1", 20]
 			]
 		};
-		projections = new rabu_ns.Projections(new rabu_ns.Estimates(config));
+		projections = new rabu.schedule.Projections(new rabu.schedule.Estimates(config));
 	};
 
 	Test.prototype.test_iterationProjections = function() {

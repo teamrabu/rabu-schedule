@@ -1,6 +1,6 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
-rabu_ns.Projections = function(estimates) {
+rabu.schedule.Projections = function(estimates) {
 
 	function iterations() {
 		return estimates.totalEstimate() / estimates.velocity();

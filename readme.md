@@ -7,7 +7,7 @@ Rabu Schedule is a tool for collaborative product scheduling with the goal of cr
 * [Rabu Workflow: How Do We Get Customers To Participate?](http://jamesshore.com/Blog/Rabu/Rabu-Workflow.html)
 * [How Rabu's Schedule Projections Work](http://jamesshore.com/Blog/Rabu/How-Rabus-Schedule-Projections-Work.html)
 
-This is an early release of Rabu Schedule for people interested in getting their hands dirty. As such, it has many limitations and very little documentation.
+This is an early release of Rabu Schedule for people interested in getting their hands dirty. It has many limitations and very little documentation.
 
 
 Finding your way around

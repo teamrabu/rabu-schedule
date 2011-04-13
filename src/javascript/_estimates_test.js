@@ -24,7 +24,7 @@
 				["feature C", 70]
 			]
 		};
-		estimates = new rabu_ns.Estimates(config);
+		estimates = new rabu.schedule.Estimates(config);
 	};
 
 	Test.prototype.test_bareData = function() {
@@ -59,9 +59,9 @@
 	Test.prototype.test_includedFeatures = function() {
 		var actual = estimates.includedFeatures();
 		assertEquals("length", 3, actual.length);
-		assertFeatureEquals("feature 1", new rabu_ns.Feature(["feature A", 10]), actual[0]);
-		assertFeatureEquals("feature 2", new rabu_ns.Feature(["feature B", 20]), actual[1]);
-		assertFeatureEquals("feature 3", new rabu_ns.Feature(["feature C", 70]), actual[2]);
+		assertFeatureEquals("feature 1", new rabu.schedule.Feature(["feature A", 10]), actual[0]);
+		assertFeatureEquals("feature 2", new rabu.schedule.Feature(["feature B", 20]), actual[1]);
+		assertFeatureEquals("feature 3", new rabu.schedule.Feature(["feature C", 70]), actual[2]);
 	};
 
 	Test.prototype.test_includedFeatures_whenUndefined = function() {
@@ -76,8 +76,8 @@
 		];
 		var actual = estimates.excludedFeatures();
 		assertEquals("length", 2, actual.length);
-		assertFeatureEquals("excluded 1", new rabu_ns.Feature(["excluded 1", 5]), actual[0]);
-		assertFeatureEquals("excluded 2", new rabu_ns.Feature(["excluded 2", 10]), actual[1]);
+		assertFeatureEquals("excluded 1", new rabu.schedule.Feature(["excluded 1", 5]), actual[0]);
+		assertFeatureEquals("excluded 2", new rabu.schedule.Feature(["excluded 2", 10]), actual[1]);
 	};
 
 	Test.prototype.test_excludedFeatures_whenUndefined = function() {
@@ -89,10 +89,10 @@
 	var Test = new TestCase("FeatureTest");
 
 	Test.prototype.test_equals = function() {
-		var a1 = new rabu_ns.Feature(["feature A", 10]);
-		var a2 = new rabu_ns.Feature(["feature A", 10]);
-		var b = new rabu_ns.Feature(["feature B", 10]);
-		var b2 = new rabu_ns.Feature(["feature B", 20]);
+		var a1 = new rabu.schedule.Feature(["feature A", 10]);
+		var a2 = new rabu.schedule.Feature(["feature A", 10]);
+		var b = new rabu.schedule.Feature(["feature B", 10]);
+		var b2 = new rabu.schedule.Feature(["feature B", 20]);
 
 		assertTrue(a1.equals(a2));
 		assertFalse(a1.equals(b));
@@ -100,17 +100,17 @@
 	};
 
 	Test.prototype.test_toString = function() {
-		assertEquals("['feature', 10]", new rabu_ns.Feature(["feature", 10]).toString());
+		assertEquals("['feature', 10]", new rabu.schedule.Feature(["feature", 10]).toString());
 	};
 
 	Test.prototype.test_bareData = function() {
-		var feature = new rabu_ns.Feature(["feature name", 33]);
+		var feature = new rabu.schedule.Feature(["feature name", 33]);
 		assertEquals("name", "feature name", feature.name());
 		assertEquals("estimate", 33, feature.estimate());
 	};
 
 	Test.prototype.test_done = function() {
-		assertTrue("done", new rabu_ns.Feature(["done", 0]).isDone());
-		assertFalse("not done", new rabu_ns.Feature(["not done", 10]).isDone());
+		assertTrue("done", new rabu.schedule.Feature(["done", 0]).isDone());
+		assertFalse("not done", new rabu.schedule.Feature(["not done", 10]).isDone());
 	};
 }());

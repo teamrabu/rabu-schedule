@@ -2,7 +2,7 @@
 
 (function() {
 	var Test = new TestCase("Rabu");
-	var rabu;
+	var r;
 	var config;
 
 	Test.prototype.setUp = function() {
@@ -22,14 +22,14 @@
 				["excluded 1", 20]
 			]
 		};
-		rabu = new rabu_ns.Rabu(config);
+		r = new rabu.schedule.Rabu(config);
 	};
 
 	Test.prototype.test_dom_title = function() {
 		/*:DOC += <span class="rabu-name"></span> */
 		/*:DOC += <span class="rabu-name"></span> */
 
-		rabu.populateDom();
+		r.populateDom();
 		assertEquals("should set name", "My name", $(".rabu-name:eq(0)").text());
 		assertEquals("should work with multiple elements", "My name", $(".rabu-name:eq(1)").text());
 	};
@@ -37,7 +37,7 @@
 	Test.prototype.test_dom_updatedDate = function() {
 		/*:DOC += <span class="rabu-updated"></span> */
 
-		rabu.populateDom();
+		r.populateDom();
 		assertEquals("January 5th, 2011", $(".rabu-updated").text());
 	};
 
@@ -46,7 +46,7 @@
 		/*:DOC += <span class="rabu-fiftyPercentDate"></span> */
 		/*:DOC += <span class="rabu-ninetyPercentDate"></span> */
 
-		rabu.populateDom();
+		r.populateDom();
 		assertEquals("10%", "March 12th", $(".rabu-tenPercentDate").text());
 		assertEquals("50%", "May 21st", $(".rabu-fiftyPercentDate").text());
 		assertEquals("90%", "October 8th", $(".rabu-ninetyPercentDate").text());

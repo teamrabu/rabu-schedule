@@ -32,7 +32,7 @@ MERGE_REGEX = /<%=\s*rabu_library\s*%>/
 
 RUBY_SRC_DIR = "#{SRC_DIR}/ruby"
 MERGED_RUBY = "#{MERGED_DIR}/rabu.rb"
-RABU_RUBY_SOURCE = "#{RUBY_SRC_DIR}/rabu_launcher.rb"
+RABU_RUBY_SOURCE = "#{RUBY_SRC_DIR}/cli.rb"
 
 RABU_CONFIG = "#{HTML_SRC_DIR}/_html_test.rabu"
 RABU_OUTPUT = "#{RESULTS_DIR}/rabu.html"
