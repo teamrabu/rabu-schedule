@@ -50,7 +50,9 @@ It takes a JSON file containing estimates on STDIN and outputs a self-contained 
 Submitting Patches
 ------------------
 
-Patches are welcome. It's probably best to avoid working on the command-line Ruby tool (found in `src/ruby`) because we're strongly considering switching to Java instead. (We're considering switching because of the possibility of sharing Javascript libraries using Rhino, the deployment convenience of .JAR files, and its large installed base.)
+Patches are welcome. We ask that you assign the copyright for any contributions to us.
+
+It's probably best to avoid working on the command-line Ruby tool (found in `src/ruby`) because we're strongly considering switching to Java instead. (We're considering switching because of the possibility of sharing Javascript libraries using Rhino, the deployment convenience of .JAR files, and its large installed base.)
 
 Two apparent limitations are intentional:
 
