@@ -56,7 +56,7 @@ It's probably best to avoid working on the command-line Ruby tool (found in `src
 
 Two apparent limitations are intentional:
 
-- Command-line interface. Rabu tools are meant to be a seamless part of a development team's workflow, so Rabu Schedule designed to work with developers' tools. In particular, it runs from the command line so it can be easily automated, and it uses a text-based configuration file so that it plays nicely with version control.
+- Command-line interface. Rabu tools are meant to be a seamless part of a development team's workflow, so Rabu Schedule is designed to work with developers' tools. In particular, it runs from the command line so it can be easily automated, and it uses a text-based configuration file so that it plays nicely with version control.
 
 - Self-contained output. Rabu Schedule's HTML output is completely self-contained, which allows it to be easily hosted on a webserver, emailed to stakeholders, or just opened from the file system.
 
