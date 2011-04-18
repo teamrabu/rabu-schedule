@@ -1,7 +1,5 @@
 # Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
-require "erb"
-
 class Rabu
 	def initialize(html_template, config_json)
 		@template = html_template

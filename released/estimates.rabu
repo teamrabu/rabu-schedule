@@ -1,0 +1,15 @@
+
+{
+	"name": "Team Rabu's next release",
+	"updated": "17 Apr 2011",
+	"riskMultipliers": [1, 1.4, 1.8],
+	"currentIterationStarted": "15 Apr 2011",
+	"iterationLength": 7,
+	"velocity": 5,
+	"includedFeatures": [
+		["Team Rabu website (placeholder only)", 2.5]
+	],
+	"excludedFeatures": [
+	]
+}
+

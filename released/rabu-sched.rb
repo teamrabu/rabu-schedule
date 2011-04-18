@@ -2,9 +2,9 @@
 # Copyright (C) 2011 Titanium I.T. LLC. All rights reserved.
 #
 # This program is free software: you can redistribute it and/or modify it 
-# under the terms of the GNU General Public License as published by the
-# Free Software Foundation, either version 3 of the License, or (at your
-# option) any later version.
+# under the terms of the GNU Affero General Public License as published 
+# by the Free Software Foundation, either version 3 of the License, or 
+# (at your option) any later version.
 # 
 # This program is distributed in the hopes that it will be useful, but
 # WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,8 +17,6 @@
 
 
 # Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-
-require "erb"
 
 class Rabu
 	def initialize(html_template, config_json)
