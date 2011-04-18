@@ -43,11 +43,15 @@ PROJECTION_HTML = "#{PROJECTION_DIR}/projection.html"
 
 RELEASE_DIR = "released"
 
+##### Directories
+
 directory PID_DIR
 directory MERGED_DIR
 directory RESULTS_DIR
 directory PROJECTION_DIR
 directory RELEASE_DIR
+
+##### Clean
 
 desc "Erase all generated files"
 task :clean => [:shutdown] do       # must shut down because the pid file is in output directory
@@ -83,8 +87,7 @@ task :js_lint do
 	explain "Running lint" do
 		# NOTE: Because I haven't figured out how to pass command-line arguments
 		# to Rhino scripts, jslintrunner must be configured by editing source file.
-		run "java -jar #{RHINO_JAR} #{JSLINTRUNNER_JS}"
-		raise "Lint failed" if $? != 0
+		run "Lint", "java -jar #{RHINO_JAR} #{JSLINTRUNNER_JS}"
 	end
 end
 
@@ -170,15 +173,13 @@ end
 
 task TEST_OUTPUT => [MERGED_RUBY, RESULTS_DIR] do
 	explain "Creating Rabu output file" do
-		run "ruby #{MERGED_RUBY} < #{TEST_CONFIG} > #{TEST_OUTPUT}"
-		raise "Run failed" if $? != 0
+		run "Rabu", "ruby #{MERGED_RUBY} < #{TEST_CONFIG} > #{TEST_OUTPUT}"
 	end
 end
 
 task PROJECTION_HTML => [MERGED_RUBY, PROJECTION_DIR] do
 	explain "Updating release projection" do
-		run "ruby #{MERGED_RUBY} < #{PROJECTION_CONFIG} > #{PROJECTION_HTML}"
-		raise "Run failed" if $? != 0
+		run "Rabu", "ruby #{MERGED_RUBY} < #{PROJECTION_CONFIG} > #{PROJECTION_HTML}"
 	end
 end
 
@@ -232,9 +233,10 @@ def bright(text)
     return "\033[1m#{text}\033[0m";
 end
 
-def run(command)
+def run(name, command)
     puts command
     system command
+	raise "#{name} failed" if $? != 0
 end
 
 class JsTestDriver
@@ -272,8 +274,7 @@ class JsTestDriver
     end
 
     def self.reset
-        run "#{COMMAND} --config #{BUILD_DIR}/JsTestDriver.conf --basePath . --reset 2>&1"
-        raise "JsTestDriver failed" if $? != 0
+        run "JsTestDriver", "#{COMMAND} --config #{BUILD_DIR}/JsTestDriver.conf --basePath . --reset 2>&1"
     end
 
     def self.is_running?

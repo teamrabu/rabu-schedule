@@ -21,6 +21,7 @@ The files in this repository are arranged in the following structure:
 - `build`: Files used at buildtime
 - `generated`: Files created by the automated build
 - `spikes`: Non-production experiments
+- `copyrights`: Legal stuff
 
 
 Running Rabu Schedule
@@ -61,15 +62,9 @@ The build has only been tested on Mac OS 10.6, so you may run into problems on o
 Submitting Patches
 ------------------
 
-Patches are welcome. We ask that you assign the copyright for any contributions to us.
+Patches are welcome. Before we can accept your code, we need a signed copyright assignment form. You can find the form in the `copyrights` directory.
 
 It's probably best to avoid working on the command-line Ruby tool (found in `src/ruby`) because we're strongly considering switching to Java instead. (We're considering switching because of the possibility of sharing Javascript libraries using Rhino, the deployment convenience of .JAR files, and its large installed base.)
-
-Two apparent limitations are intentional:
-
-- Command-line interface. Rabu tools are meant to be a seamless part of a development team's workflow, so Rabu Schedule is designed to work with developers' tools. In particular, it runs from the command line so it can be easily automated, and it uses a text-based configuration file so that it plays nicely with version control.
-
-- Self-contained output. Rabu Schedule's HTML output is completely self-contained, which allows it to be easily hosted on a webserver, emailed to stakeholders, or just opened from the file system.
 
 
 Limitations
@@ -90,6 +85,12 @@ This early version of Rabu Schedule has many limitations. Here are a few:
 - No interactivity. The [Rabu Workflow](http://jamesshore.com/Blog/Rabu/Rabu-Workflow.html) describes creating a proposal that facilitates discussion. We're not there yet, either.
 
 - No command-line parameters. The command-line interface is primitive, even for a CLI.
+
+Two apparent limitations are intentional:
+
+- Command-line interface. Rabu tools are meant to be a seamless part of a development team's workflow, so Rabu Schedule is designed to work with developers' tools. In particular, it runs from the command line so it can be easily automated, and it uses a text-based configuration file so that it plays nicely with version control.
+
+- Self-contained output. Rabu Schedule's HTML output is completely self-contained, which allows it to be easily hosted on a webserver, emailed to stakeholders, or just opened from the file system.
 
 
 Enjoy!
