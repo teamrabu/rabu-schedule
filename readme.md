@@ -1,5 +1,5 @@
-Rabu Schedule
-=============
+Rabu Schedule 0.1.2
+===================
 
 Rabu Schedule is a tool for collaborative product scheduling with the goal of creating exemplary customer relationships. For more information, see the following essays:
 
@@ -39,6 +39,8 @@ Building Rabu Schedule
 ----------------------
 
 Rabu Schedule uses [Rake](http://rake.rubyforge.org/) as its build tool. To build a release version of Rabu Schedule, use `rake release` from the command line. The results will be placed in `generated\release`. Use `rake` on its own to run the tests. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets.
+
+**Important:** After you're done building, be sure to run `rake shutdown` to stop the JsTestDriver server. If you use `./autorake.sh` (described below), breaking out of the script should automatically kill the server.
 
 Two scripts make building more convenient:
 

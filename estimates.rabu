@@ -7,9 +7,17 @@
 	"iterationLength": 7,
 	"velocity": 5,
 	"includedFeatures": [
-		["Team Rabu website (placeholder only)", 2.5]
+		["Team Rabu website (placeholder only)", 3],
 	],
 	"excludedFeatures": [
+		["RABU chart", "?"]
+		["Unknown feature durations", "?"],
+		["Drag-n-drop inclusion slider", "?"],
+		["Mini timelines", "?"],
+		["Java CLI", "?"],
+		["Drag-n-drop feature reordering", "?"],
+		["Runtime error handling", "?"],
+		["CLI error handling", "?"]
 	]
 }
 
