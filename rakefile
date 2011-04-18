@@ -41,7 +41,7 @@ PROJECTION_DIR = "#{OUTPUT_DIR}/projection"
 PROJECTION_CONFIG = "estimates.rabu"
 PROJECTION_HTML = "#{PROJECTION_DIR}/projection.html"
 
-RELEASE_DIR = "#{OUTPUT_DIR}/release"
+RELEASE_DIR = "released"
 
 directory PID_DIR
 directory MERGED_DIR
