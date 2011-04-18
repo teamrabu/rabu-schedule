@@ -7,7 +7,7 @@
 	"iterationLength": 7,
 	"velocity": 5,
 	"includedFeatures": [
-		["Team Rabu website (placeholder only)", 3],
+		["Team Rabu website (placeholder only)", 5.5],
 	],
 	"excludedFeatures": [
 		["RABU chart", "?"]
