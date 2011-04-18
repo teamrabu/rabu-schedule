@@ -20,6 +20,7 @@ loop do
         next if file.start_with? "./generated"
         next if file.start_with? "./.idea"
         next if file.start_with? "./.git"
+        next if file.start_with? "./released"
 
         ctime = File.ctime(file).to_i
 
