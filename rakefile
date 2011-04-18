@@ -186,6 +186,7 @@ desc "Create tested release package"
 task :release => [:check_all, MERGED_RUBY, RELEASE_DIR] do
 	explain "Building release" do
 		cp MERGED_RUBY, RELEASE_DIR
+		cp PROJECTION_CONFIG, RELEASE_DIR
 	end
 end
 

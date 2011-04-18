@@ -15,11 +15,24 @@ Finding your way around
 
 The files in this repository are arranged in the following structure:
 
+- `released`: The most recent release files
 - `src`: Production source code
 - `lib`: Files used at runtime
 - `build`: Files used at buildtime
 - `generated`: Files created by the automated build
 - `spikes`: Non-production experiments
+
+
+Running Rabu Schedule
+---------------------
+
+Switch to the `released` directory and run Rabu Schedule from the command line, as follows:
+
+	ruby rabu-sched.rb < estimates.rabu > projection.html
+
+You'll need Ruby installed.
+
+Rabu Schedule takes a JSON file containing estimates on STDIN and outputs a self-contained HTML file containing projections on STDOUT. Load the HTML file in Firefox to see the projections. There is no documentation of the input file at this time, but you can find another example in `/src/html/_html_test.rabu`.
 
 
 Building Rabu Schedule
@@ -35,16 +48,6 @@ Two scripts make building more convenient:
 Both tools pass their command-line parameters through to rake.
 
 The build has only been tested on Mac OS 10.6, so you may run into problems on other machines. There are also dependencies on various Ruby gems that aren't yet documented or automated.
-
-
-Running Rabu Schedule
----------------------
-
-After you build Rabu Schedule (using `rake release` as described above), run it from the command line, as follows:
-
-	ruby rabu-sched.rb < estimates.rabu > projection.html
-
-It takes a JSON file containing estimates on STDIN and outputs a self-contained HTML file containing projections on STDOUT. Load the HTML file in Firefox to see the projections. There is no documentation of the input file at this time, but you can find an up-to-date example in `/src/html/_html_test.rabu`.
 
 
 Submitting Patches
@@ -84,4 +87,4 @@ This early version of Rabu Schedule has many limitations. Here are a few:
 Enjoy!
 ------
 
-Rabu's limitations are your opportunity to contribute! Get your feet wet, poke around, and let us know what you think. Patches welcome!
+Rabu's limitations are your opportunity to contribute! Get your feet wet, poke around, and let us know what you think.
