@@ -47,7 +47,9 @@ Two scripts make building more convenient:
 
 Both tools pass their command-line parameters through to rake.
 
-The build has only been tested on Mac OS 10.6, so you may run into problems on other machines. There are also dependencies on various Ruby gems that aren't yet documented or automated.
+The build has only been tested on Mac OS 10.6, so you may run into problems on other machines. There are also dependencies on various Ruby gems that aren't yet documented or automated. At a minimum you will need to install selenium-webdriver:
+
+- sudo gem install selenium-webdriver
 
 
 Submitting Patches
