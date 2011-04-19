@@ -39,11 +39,7 @@ Rabu Schedule takes a JSON file containing estimates on STDIN and outputs a self
 Building Rabu Schedule
 ----------------------
 
-Rabu Schedule's build depends on the following Ruby gems. On Mac OS X, install these gems with `sudo gem install [name]`:
-
-	rake
-	selenium-webdriver
-	watir-webdriver
+Rabu Schedule's build depends on [Rake](http://rake.rubyforge.org/). Assuming you have Ruby installed, you should be able to install it with `gem install rake` (`sudo gem install rake` on Mac OS X). The build automatically takes care of other dependencies, but it does require an internet connection the first time you build.
 	
 To build a release version of Rabu Schedule, use `rake release` from the command line. The results will be placed in `generated\release`. Use `rake` on its own to run the tests. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets.
 

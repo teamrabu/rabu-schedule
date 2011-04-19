@@ -12,6 +12,7 @@ BIN_DIR = "#{BUILD_DIR}/vendor"
 MERGED_DIR = "#{OUTPUT_DIR}/built"
 RESULTS_DIR = "#{OUTPUT_DIR}/run_results" 
 
+GEMS_DIR = "#{OUTPUT_DIR}/gems"
 RHINO_JAR = "#{BIN_DIR}/rhino.jar"
 JSLINTRUNNER_JS = "#{BUILD_DIR}/jslintrunner.js"
 
@@ -42,6 +43,23 @@ PROJECTION_CONFIG = "estimates.rabu"
 PROJECTION_HTML = "#{PROJECTION_DIR}/projection.html"
 
 RELEASE_DIR = "released"
+
+def isolate_gems
+	$:.unshift "#{BIN_DIR}/isolate-3.0.0/lib"
+	require 'isolate'
+	Isolate.now! :system => false, :path => GEMS_DIR do
+		gem "selenium-webdriver", "0.1.4"
+		gem "watir-webdriver", "0.2.2"
+	end
+end
+isolate_gems
+		
+desc "Don't forget to delete me!"
+task :deleteme do
+	require "watir-webdriver"
+	puts "Success!"
+end
+
 
 ##### Directories
 
@@ -240,8 +258,8 @@ def run(name, command)
 end
 
 class JsTestDriver
-	require 'selenium-webdriver'
-
+	require "selenium-webdriver"
+	
     COMMAND = "java -jar #{JSTESTDRIVER_JAR}"
 
     def self.run_tests
