@@ -20,7 +20,7 @@ The files in this repository are arranged in the following structure:
 - `lib`: Files used at runtime
 - `build`: Files used at buildtime
 - `generated`: Files created by the automated build
-- `gems`: Locally-installed gems (automatically created)
+- `gems`: Locally-installed gems
 - `spikes`: Non-production experiments
 - `copyrights`: Legal stuff
 
@@ -40,7 +40,7 @@ Rabu Schedule takes a JSON file containing estimates on STDIN and outputs a self
 Building Rabu Schedule
 ----------------------
 
-Rabu Schedule's build depends on [Rake](http://rake.rubyforge.org/). Assuming you have Ruby installed, you should be able to install it with `gem install rake` (`sudo gem install rake` on Mac OS X). The build automatically takes care of other dependencies, but it does require an internet connection the first time you build.
+Rabu Schedule's build depends on [Rake](http://rake.rubyforge.org/). Assuming you have Ruby installed, you should be able to install it with `gem install rake` (`sudo gem install rake` on Mac OS X). The build automatically downloads and installs its other dependencies into the `gems` directory the first time you build.
 	
 To build a release version of Rabu Schedule, use `rake release` from the command line. The results will be placed in `generated\release`. Use `rake` on its own to run the tests. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets.
 

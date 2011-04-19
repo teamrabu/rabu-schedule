@@ -45,7 +45,7 @@ PROJECTION_HTML = "#{PROJECTION_DIR}/projection.html"
 RELEASE_DIR = "released"
 
 def isolate_gems
-	$:.unshift "#{BIN_DIR}/isolate-3.0.0/lib"
+	$:.unshift "#{BIN_DIR}/isolate-3.1.0.pre.3/lib"
 	require 'isolate'
 	Isolate.now! :system => false, :path => GEMS_DIR, :install => true do
 		gem "selenium-webdriver", "0.1.4"
