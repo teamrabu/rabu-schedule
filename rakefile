@@ -44,6 +44,9 @@ PROJECTION_HTML = "#{PROJECTION_DIR}/projection.html"
 
 RELEASE_DIR = "released"
 
+
+##### Isolate
+
 def isolate_gems
 	$:.unshift "#{BIN_DIR}/isolate-3.1.0.pre.3/lib"
 	require 'isolate'
@@ -54,13 +57,7 @@ def isolate_gems
 end
 isolate_gems
 		
-desc "Don't forget to delete me!"
-task :deleteme do
-	require "watir-webdriver"
-	puts "Success!"
-end
-
-
+		
 ##### Directories
 
 directory PID_DIR
@@ -68,6 +65,7 @@ directory MERGED_DIR
 directory RESULTS_DIR
 directory PROJECTION_DIR
 directory RELEASE_DIR
+
 
 ##### Clean
 
@@ -77,6 +75,7 @@ task :clean => [:shutdown] do       # must shut down because the pid file is in 
         rm_rf OUTPUT_DIR
     end
 end
+
 
 ##### Tests
 
@@ -125,6 +124,7 @@ Rake::TestTask.new(:ruby) do |test|
 	test.libs << RUBY_SRC_DIR
 	test.pattern = "#{RUBY_SRC_DIR}/_*test.rb"
 end
+
 
 ##### Builds
 
@@ -209,6 +209,7 @@ task :release => [:check_all, MERGED_RUBY, RELEASE_DIR] do
 	end
 end
 
+
 ##### JsTestDriver
 
 desc "Start JsTestDriver"
@@ -233,6 +234,7 @@ task :reset => [:startup] do
 		JsTestDriver::reset
 	end
 end
+
 
 ##### Helpers
 
@@ -264,6 +266,10 @@ class JsTestDriver
 
     def self.run_tests
 		result = attempt_tests
+		if (result =~ /No browsers available/) then
+			capture_browser
+			result = attempt_tests
+		end
 		raise "Javascript unit tests failed" if $? != 0
 	end
 
