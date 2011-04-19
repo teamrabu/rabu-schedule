@@ -20,6 +20,7 @@ The files in this repository are arranged in the following structure:
 - `lib`: Files used at runtime
 - `build`: Files used at buildtime
 - `generated`: Files created by the automated build
+- `gems`: Locally-installed gems (automatically created)
 - `spikes`: Non-production experiments
 - `copyrights`: Legal stuff
 

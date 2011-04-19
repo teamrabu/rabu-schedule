@@ -8,11 +8,11 @@ SRC_DIR = "src"
 LIB_DIR = "lib"
 BUILD_DIR = "build"
 OUTPUT_DIR = "generated"
+GEMS_DIR = "gems"
 BIN_DIR = "#{BUILD_DIR}/vendor"
 MERGED_DIR = "#{OUTPUT_DIR}/built"
 RESULTS_DIR = "#{OUTPUT_DIR}/run_results" 
 
-GEMS_DIR = "#{OUTPUT_DIR}/gems"
 RHINO_JAR = "#{BIN_DIR}/rhino.jar"
 JSLINTRUNNER_JS = "#{BUILD_DIR}/jslintrunner.js"
 
@@ -47,7 +47,7 @@ RELEASE_DIR = "released"
 def isolate_gems
 	$:.unshift "#{BIN_DIR}/isolate-3.0.0/lib"
 	require 'isolate'
-	Isolate.now! :system => false, :path => GEMS_DIR do
+	Isolate.now! :system => false, :path => GEMS_DIR, :install => true do
 		gem "selenium-webdriver", "0.1.4"
 		gem "watir-webdriver", "0.2.2"
 	end
@@ -71,7 +71,7 @@ directory RELEASE_DIR
 
 ##### Clean
 
-desc "Erase all generated files"
+desc "Erase all generated files (except gems)"
 task :clean => [:shutdown] do       # must shut down because the pid file is in output directory
     explain "Cleaning build" do
         rm_rf OUTPUT_DIR
