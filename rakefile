@@ -44,6 +44,8 @@ PROJECTION_HTML = "#{PROJECTION_DIR}/projection.html"
 
 RELEASE_DIR = "released"
 
+MARKDOWN_DIR = "#{OUTPUT_DIR}/markdown"
+
 
 ##### Isolate
 
@@ -53,6 +55,7 @@ def isolate_gems
 	Isolate.now! :system => false, :path => GEMS_DIR, :install => true do
 		gem "selenium-webdriver", "0.1.4"
 		gem "watir-webdriver", "0.2.2"
+		gem "redcarpet", "1.9.0"
 	end
 end
 isolate_gems
@@ -65,6 +68,7 @@ directory MERGED_DIR
 directory RESULTS_DIR
 directory PROJECTION_DIR
 directory RELEASE_DIR
+directory MARKDOWN_DIR
 
 
 ##### Clean
@@ -88,9 +92,6 @@ task :javascript => [:js_test, :js_lint]
 
 desc "Check HTML"
 task :html => [:html_test]
-
-desc "Update projection"
-task :projection => [PROJECTION_HTML]
 
 # desc "Javascript unit tests"
 task :js_test => [:startup] do
@@ -123,6 +124,28 @@ end
 Rake::TestTask.new(:ruby) do |test|
 	test.libs << RUBY_SRC_DIR
 	test.pattern = "#{RUBY_SRC_DIR}/_*test.rb"
+end
+
+
+##### Tools
+
+desc "Update projection"
+task :projection => [PROJECTION_HTML]
+
+desc "Build markdown"
+task :markdown => [MARKDOWN_DIR] do
+	explain "Rendering Markdown" do
+		require 'redcarpet'
+		FileList.new('*.md').each do |in_name|
+			root_name = /^(.*)\.md$/.match(in_name)[1]
+			out_name = "#{MARKDOWN_DIR}/#{root_name}.html"
+			puts "#{in_name} => #{out_name}"
+			markdown = Redcarpet.new(IO.read(in_name))
+			File.open(out_name, "w") do |out_file|
+				out_file.write markdown.to_html
+			end
+		end
+	end
 end
 
 
