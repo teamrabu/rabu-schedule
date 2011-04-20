@@ -1,4 +1,4 @@
-Rabu Schedule 0.1.4.dev
+Rabu Schedule 0.1.4
 ===================
 
 Rabu Schedule is a tool for collaborative product scheduling with the goal of creating exemplary customer relationships. For more information, see the [Team Rabu website](http://www.teamrabu.com).
