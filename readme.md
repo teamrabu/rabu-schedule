@@ -28,9 +28,11 @@ Switch to the `released` directory and run Rabu Schedule from the command line, 
 
 	ruby rabu-sched.rb < estimates.rabu > projection.html
 
-You'll need Ruby installed.
+You'll need Ruby installed. Windows users may find an installer at [RubyInstaller](http://rubyinstaller.org/downloads/). 
 
 Rabu Schedule takes a JSON file containing estimates on STDIN and outputs a self-contained HTML file containing projections on STDOUT. Load the HTML file in Firefox to see the projections. There is no documentation of the input file at this time, but you can find another example in `/src/html/_html_test.rabu`.
+
+**Important:** Rabu Schedule *does not* work in Internet Explorer yet. Firefox 3.6 is the only browser we've tested thoroughly, although Safari and Chrome appear to work fine.
 
 
 Limitations
@@ -62,7 +64,16 @@ Two apparent limitations are intentional:
 Building Rabu Schedule
 ----------------------
 
-Rabu Schedule's build depends on [Rake](http://rake.rubyforge.org/). Assuming you have Ruby installed, you should be able to install Rake with `gem install rake` (`sudo gem install rake` on Mac OS X). The build automatically downloads and installs its other dependencies into the `gems` directory the first time you build.
+*Note:* Although Rabu Schedule runs on Windows, the build doesn't work on Windows yet. (The "RedCarpet" gem won't install.)
+
+To build Rabu Schedule, you need the following tools installed:
+
+* Ruby
+* Rake
+* Java
+* Firefox
+
+The build automatically downloads and installs its Ruby gem dependencies as needed. (They're installed into the `gems` directory and won't affect your Ruby installation.)
 	
 To build a release version of Rabu Schedule, use `rake release` from the command line. The results will be placed in the `released/` directory. Use `rake` on its own to run the tests. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets.
 

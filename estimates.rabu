@@ -1,15 +1,14 @@
 {
-	"name": "Team Rabu's next release",
-	"updated": "19 Apr 2011",
+	"name": "Rabu Schedule 0.2",
+	"updated": "20 Apr 2011",
 	"riskMultipliers": [1, 1.4, 1.8],
 	"currentIterationStarted": "15 Apr 2011",
 	"iterationLength": 7,
-	"velocity": 5,
+	"velocity": 6,
 	"includedFeatures": [
-		["Team Rabu website (placeholder only)", 5.5]
+		["RABU chart", 13.5]
 	],
 	"excludedFeatures": [
-		["RABU chart", "?"],
 		["Drag-n-drop inclusion slider", "?"],
 		["Mini timelines", "?"],
 		["Friendly CLI (Java)", "?"],
