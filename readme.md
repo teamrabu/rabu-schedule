@@ -3,7 +3,7 @@ Rabu Schedule 0.1.4.dev
 
 Rabu Schedule is a tool for collaborative product scheduling with the goal of creating exemplary customer relationships. For more information, see the [Team Rabu website](http://www.teamrabu.com).
 
-This early release of Rabu Schedule is for people interested in getting their hands dirty. It has many limitations (details below) and insufficient documentation.
+This early release of Rabu Schedule is for people interested in getting their hands dirty. It has many limitations (details below) and very little documentation.
 
 
 Finding your way around
@@ -11,7 +11,7 @@ Finding your way around
 
 The files in this repository are arranged in the following structure:
 
-- `released`: The most recent release files
+- `released`: Production release files
 - `src`: Production source code
 - `lib`: Files used at runtime
 - `build`: Files used at buildtime
@@ -64,7 +64,7 @@ Building Rabu Schedule
 
 Rabu Schedule's build depends on [Rake](http://rake.rubyforge.org/). Assuming you have Ruby installed, you should be able to install Rake with `gem install rake` (`sudo gem install rake` on Mac OS X). The build automatically downloads and installs its other dependencies into the `gems` directory the first time you build.
 	
-To build a release version of Rabu Schedule, use `rake release` from the command line. The results will be placed in `generated\release`. Use `rake` on its own to run the tests. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets.
+To build a release version of Rabu Schedule, use `rake release` from the command line. The results will be placed in the `released` directory. Use `rake` on its own to run the tests. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets.
 
 **Important:** After you're done building, be sure to run `rake shutdown` to stop the JsTestDriver server. If you use `./autorake.sh` (described below), breaking out of the script should automatically kill the server.
 
