@@ -1,23 +1,23 @@
-
 {
 	"name": "Team Rabu's next release",
-	"updated": "17 Apr 2011",
+	"updated": "19 Apr 2011",
 	"riskMultipliers": [1, 1.4, 1.8],
 	"currentIterationStarted": "15 Apr 2011",
 	"iterationLength": 7,
 	"velocity": 5,
 	"includedFeatures": [
-		["Team Rabu website (placeholder only)", 5.5],
+		["Team Rabu website (placeholder only)", 5.5]
 	],
 	"excludedFeatures": [
-		["RABU chart", "?"]
-		["Unknown feature durations", "?"],
+		["RABU chart", "?"],
 		["Drag-n-drop inclusion slider", "?"],
 		["Mini timelines", "?"],
-		["Java CLI", "?"],
+		["Friendly CLI (Java)", "?"],
 		["Drag-n-drop feature reordering", "?"],
 		["Runtime error handling", "?"],
-		["CLI error handling", "?"]
+		["CLI error handling", "?"],
+		["'?' estimates", "?"],
+		["Broad browser support", "?"],
+		["Smaller page size", "?"]
 	]
 }
-
