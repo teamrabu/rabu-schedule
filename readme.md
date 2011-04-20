@@ -11,14 +11,14 @@ Finding your way around
 
 The files in this repository are arranged in the following structure:
 
-- `released`: Production release files
-- `src`: Production source code
-- `lib`: Files used at runtime
-- `build`: Files used at buildtime
-- `generated`: Files created by the automated build
-- `gems`: Locally-installed gems
-- `spikes`: Non-production experiments
-- `copyrights`: Legal stuff
+- `released/`: Production release files
+- `src/`: Production source code
+- `lib/`: Files used at runtime
+- `build/`: Files used at buildtime
+- `generated/`: Files created by the automated build
+- `gems/`: Locally-installed gems
+- `spikes/`: Non-production experiments
+- `copyrights/`: Legal stuff
 
 
 Running Rabu Schedule
@@ -64,7 +64,7 @@ Building Rabu Schedule
 
 Rabu Schedule's build depends on [Rake](http://rake.rubyforge.org/). Assuming you have Ruby installed, you should be able to install Rake with `gem install rake` (`sudo gem install rake` on Mac OS X). The build automatically downloads and installs its other dependencies into the `gems` directory the first time you build.
 	
-To build a release version of Rabu Schedule, use `rake release` from the command line. The results will be placed in the `released` directory. Use `rake` on its own to run the tests. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets.
+To build a release version of Rabu Schedule, use `rake release` from the command line. The results will be placed in the `released/` directory. Use `rake` on its own to run the tests. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets.
 
 **Important:** After you're done building, be sure to run `rake shutdown` to stop the JsTestDriver server. If you use `./autorake.sh` (described below), breaking out of the script should automatically kill the server.
 
@@ -81,9 +81,9 @@ The build has only been tested on Mac OS 10.6, so you may run into problems on o
 Submitting Patches
 ------------------
 
-Patches are welcome. Before we can accept your code, we need a signed copyright assignment form. You can find the form in the `copyrights` directory.
+Patches are welcome. Before we can accept your code, we need a signed copyright assignment form. You can find the form in the `copyrights/` directory.
 
-It's probably best to avoid working on the command-line Ruby tool (found in `src/ruby`) because we're strongly considering switching to Java instead. (We're considering switching because of the possibility of sharing Javascript libraries using Rhino, the deployment convenience of .JAR files, and its large installed base.)
+It's probably best to avoid working on the command-line Ruby tool (found in `src/ruby/`) because we're strongly considering switching to Java instead. (We're considering switching because of the possibility of sharing Javascript libraries using Rhino, the deployment convenience of .JAR files, and its large installed base.)
 
 
 Enjoy!

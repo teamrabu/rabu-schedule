@@ -25,4 +25,4 @@ Release 0.1.3 (18 Apr 2011)
 Release 0.1.4 (20 Apr 2011)
 ---
 * Updated README to link to new Rabu website (http://www.teamrabu.com)
-* Added this change log
+* Added change log
