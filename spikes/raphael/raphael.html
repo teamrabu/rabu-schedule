@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>Raphael spike</title>
+	<script src="raphael-1.5.2.js"></script>
+	<style>
+		#container {
+			border: red dashed 1px;
+		}
+	</style>
+	<script>
+		function drawGrid(paper) {
+			var coordinate;
+			grid = paper.set();
+			grid.push(
+	            coordinate = paper.path("M10 180L300 180M20 190L20 20"),
+				paper.path("M0,0 L100,100")			
+			);
+			grid.attr({stroke: "#0000f0"});
+//            paper.text
+		}
+		
+		function testGrid(paper) {
+			var path = paper.bottom;
+			var diagonal = path.next;
+			
+			var expected = "M0,0L100,100";
+			var actual = diagonal.node.attributes.d.value;
+			if (expected === actual) {
+				alert("test passed");
+			}
+			else {
+				alert("test failed: expected [" + expected + "]; was [" + actual + "]");
+			}
+		}
+
+		window.onload = function() {
+			var paper = Raphael(document.getElementById("container"), 400, 200);
+//			var c = paper.circle(50, 50, 40).attr({fill: "#f00"});
+
+			drawGrid(paper);
+			testGrid(paper);
+		};
+	</script>
+</head>
+<body>
+	<p>This spike demonstrates how Raphael works.</p>
+	
+	<div id="container">
+		
+	</div>
+</body>
+</html>
