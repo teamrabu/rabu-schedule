@@ -12,7 +12,7 @@
 			riskMultipliers: [1, 2, 4],
 			iterations: [{
 				started: "1 Jan 2011",
-				iterationLength: 7,
+				length: 7,
 				velocity: 10,
 				includedFeatures: [
 					["completed", 0],

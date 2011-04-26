@@ -57,7 +57,7 @@
 	Test.prototype.setUp = function() {
 		config = {
 			started: "1 Jan 2011",
-			iterationLength: 7,
+			length: 7,
 			velocity: 10,
 			includedFeatures: [
 				["feature A", 10],

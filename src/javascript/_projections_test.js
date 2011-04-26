@@ -12,7 +12,7 @@
 			riskMultipliers: [1, 2, 4],
 			iterations: [{
 				started: "1 Jan 2011",
-				iterationLength: 7,
+				length: 7,
 				velocity: 10,
 				includedFeatures: [
 					["completed", 0],
@@ -51,7 +51,7 @@
 
 	Test.prototype.test_dateProjectionsShouldRoundUpToNextDay = function() {
 		config.iterations[0].includedFeatures = [["A", 14]];
-		config.iterations[0].iterationLength = 1;
+		config.iterations[0].length = 1;
 
 		assertEquals("10%", 1.4, projections.tenPercentIterationsRemaining());
 		assertEquals("50%", 2.8, projections.fiftyPercentIterationsRemaining());

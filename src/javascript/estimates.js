@@ -66,7 +66,7 @@ rabu.schedule.Iteration = function(iterationJson) {
 	};
 	
 	this.length = function() {
-		return iteration.iterationLength;
+		return iteration.length;
 	};
 	
 	this.velocity = function() {
