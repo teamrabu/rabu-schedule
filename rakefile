@@ -31,7 +31,7 @@ MAIN_JS_SOURCE = "#{JS_SRC_DIR}/main.js"
 MERGED_JS = "#{MERGED_DIR}/schedule.js"
 MERGE_REGEX = /<%=\s*rabu_library\s*%>/
 
-RUBY_SRC_DIR = "#{SRC_DIR}/ruby"
+RUBY_SRC_DIR = "#{SRC_DIR}/cli"
 MERGED_RUBY = "#{MERGED_DIR}/rabu-sched.rb"
 MAIN_RUBY_SOURCE = "#{RUBY_SRC_DIR}/cli.rb"
 
