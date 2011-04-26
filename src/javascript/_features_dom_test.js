@@ -64,12 +64,12 @@
 		/*:DOC +=   <ul class="rabu-features"></ul> */
 		/*:DOC +=   <div class="rabu-divider"></div> */
 		config = {
-			includedFeatures: [
+			included: [
 				["completed", 0],
 				["feature A", 70],
 				["feature B", 30]
 			],
-			excludedFeatures: [
+			excluded: [
 				["excluded 1", 20]
 			]
 		};
@@ -116,7 +116,7 @@
 	};
 
 	Test.prototype.test_populate_positionsDivider = function() {
-		config.excludedFeatures[1] = ["excluded 2", 30];
+		config.excluded[1] = ["excluded 2", 30];
 		populate();
 
 		assertLiPositions("excluded features should be positioned below divider", [0, 20, 40, 110, 130]);
@@ -125,7 +125,7 @@
 	};
 
 	Test.prototype.test_populate_positionsDividerAtBottomOfListWhenNoExcludedFeatures = function() {
-		config.excludedFeatures = undefined;
+		config.excluded = undefined;
 		populate();
 
 		assertLiPositions("li positions", [0, 20, 40]);
@@ -133,8 +133,8 @@
 	};
 
 	Test.prototype.test_populate_positionsDividerAtTopOfListWhenNoIncludedFeatures = function() {
-		config.includedFeatures = undefined;
-		config.excludedFeatures[1] = ["excluded 2", 30];
+		config.included = undefined;
+		config.excluded[1] = ["excluded 2", 30];
 		populate();
 
 		assertLiPositions("li positions", [50, 70]);

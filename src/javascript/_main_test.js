@@ -14,12 +14,12 @@
 				started: "1 Jan 2011",
 				length: 7,
 				velocity: 10,
-				includedFeatures: [
+				included: [
 					["completed", 0],
 					["feature A", 70],
 					["feature B", 30]
 				],
-				excludedFeatures: [
+				excluded: [
 					["excluded 1", 20]
 				]
 			}]

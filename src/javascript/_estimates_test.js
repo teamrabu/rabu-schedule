@@ -59,7 +59,7 @@
 			started: "1 Jan 2011",
 			length: 7,
 			velocity: 10,
-			includedFeatures: [
+			included: [
 				["feature A", 10],
 				["feature B", 20],
 				["feature C", 70]
@@ -94,7 +94,7 @@
 	};
 
 	Test.prototype.test_excludedFeatures = function() {
-		config.excludedFeatures = [
+		config.excluded = [
 			["excluded 1", 5],
 			["excluded 2", 10]
 		];
@@ -105,7 +105,7 @@
 	};
 
 	Test.prototype.test_includedFeatures_whenUndefined = function() {
-		config.includedFeatures = undefined;
+		config.included = undefined;
 		assertEquals(0, iteration.includedFeatures().length);
 	};
 
@@ -116,15 +116,15 @@
 	Test.prototype.test_effortRemaining_isSumOfFeatureEstimates = function() {
 		assertEquals(100, iteration.totalEstimate());
 
-		config.includedFeatures = [["feature A", 10]];
+		config.included = [["feature A", 10]];
 		assertEquals("one feature", 10, iteration.totalEstimate());
 
-		config.includedFeatures = [];
+		config.included = [];
 		assertEquals("no feature", 0, iteration.totalEstimate());
 	};
 
 	Test.prototype.test_effortRemaining_doesNotIncludeExcludedFeatures = function() {
-		config.excludedFeatures = [["excluded feature", 42]];
+		config.excluded = [["excluded feature", 42]];
 		assertEquals(100, iteration.totalEstimate());
 	};
 }());

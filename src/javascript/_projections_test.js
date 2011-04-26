@@ -14,12 +14,12 @@
 				started: "1 Jan 2011",
 				length: 7,
 				velocity: 10,
-				includedFeatures: [
+				included: [
 					["completed", 0],
 					["feature A", 70],
 					["feature B", 30]
 				],
-				excludedFeatures: [
+				excluded: [
 					["excluded 1", 20]
 				]
 			}]
@@ -42,7 +42,7 @@
 	Test.prototype.test_iterationProjectionsShouldNotRound = function() {
 		config.riskMultipliers = [0.6, 1.4, 1.6];
 		config.iterations[0].velocity = 9.5;
-		config.iterations[0].includedFeatures = [["A", 73]];
+		config.iterations[0].included = [["A", 73]];
 
 		assertEquals("10%", 4.610526315789474, projections.tenPercentIterationsRemaining());
 		assertEquals("50%", 10.757894736842104, projections.fiftyPercentIterationsRemaining());
@@ -50,7 +50,7 @@
 	};
 
 	Test.prototype.test_dateProjectionsShouldRoundUpToNextDay = function() {
-		config.iterations[0].includedFeatures = [["A", 14]];
+		config.iterations[0].included = [["A", 14]];
 		config.iterations[0].length = 1;
 
 		assertEquals("10%", 1.4, projections.tenPercentIterationsRemaining());

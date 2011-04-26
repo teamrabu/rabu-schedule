@@ -88,11 +88,11 @@ rabu.schedule.Iteration = function(iterationJson) {
 	}
 
 	this.includedFeatures = function() {
-		return featuresFromList(iteration.includedFeatures);
+		return featuresFromList(iteration.included);
 	};
 	
 	this.excludedFeatures = function() {
-		return featuresFromList(iteration.excludedFeatures);
+		return featuresFromList(iteration.excluded);
 	};
 };
 
