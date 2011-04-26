@@ -6,7 +6,9 @@
 	"iterationLength": 7,
 	"velocity": 6,
 	"includedFeatures": [
-		["RABU chart", 7]
+		["Visualization essay", 1.5],
+		["Javascript charting research", 2.5],
+		["RABU chart implementation", 3]
 	],
 	"excludedFeatures": [
 		["Drag-n-drop inclusion slider", "?"],
