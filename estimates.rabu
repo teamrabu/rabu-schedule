@@ -2,23 +2,27 @@
 	"name": "Rabu Schedule 0.2",
 	"updated": "25 Apr 2011",
 	"riskMultipliers": [1, 1.4, 1.8],
-	"currentIterationStarted": "22 Apr 2011",
-	"iterationLength": 7,
-	"velocity": 6,
-	"includedFeatures": [
-		["Visualization essay", 1.5],
-		["Javascript charting research", 2.5],
-		["RABU chart implementation", 3]
-	],
-	"excludedFeatures": [
-		["Drag-n-drop inclusion slider", "?"],
-		["Mini timelines", "?"],
-		["Friendly CLI (Java)", "?"],
-		["Drag-n-drop feature reordering", "?"],
-		["Runtime error handling", "?"],
-		["CLI error handling", "?"],
-		["'?' estimates", "?"],
-		["Broad browser support", "?"],
-		["Smaller page size", "?"]
+	"iterations": [
+		{
+			"started": "22 Apr 2011",
+			"length": 7,
+			"velocity": 6,
+			"included": [
+				["Visualization essay", 1.5],
+				["Javascript charting research", 2.5],
+				["RABU chart implementation", 3]
+			],
+			"excluded": [
+				["Drag-n-drop inclusion slider", "?"],
+				["Mini timelines", "?"],
+				["Friendly CLI (Java)", "?"],
+				["Drag-n-drop feature reordering", "?"],
+				["Runtime error handling", "?"],
+				["CLI error handling", "?"],
+				["'?' estimates", "?"],
+				["Broad browser support", "?"],
+				["Smaller page size", "?"]
+			]
+		}		
 	]
 }
