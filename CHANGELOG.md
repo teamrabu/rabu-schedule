@@ -1,6 +1,10 @@
 Rabu Schedule Change Log
 ========================
 
+Release 0.2 (dev)
+===
+* BREAKING CHANGE: Changed configuration file format to support iteration history
+
 Release 0.1 (17 Apr 2011)
 ===
 * Initial release
