@@ -1,6 +1,7 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
 rabu.schedule.Estimates = function(configJson) {
+	var rs = rabu.schedule;
 	var config = configJson;
 
 	this.name = function() {
@@ -9,18 +10,6 @@ rabu.schedule.Estimates = function(configJson) {
 
 	this.updated = function() {
 		return new Date(config.updated);
-	};
-
-	this.currentIterationStarted = function() {
-		return new Date(config.currentIterationStarted);
-	};
-
-	this.iterationLength = function() {
-		return config.iterationLength;
-	};
-
-	this.velocity = function() {
-		return config.velocity;
 	};
 
 	this.tenPercentMultiplier = function() {
@@ -35,13 +24,62 @@ rabu.schedule.Estimates = function(configJson) {
 		return config.riskMultipliers[2];
 	};
 
+	this.currentIteration = function() {
+		if (!config.iterations || config.iterations.length === 0) {
+			config.iterations = [{}];
+		}
+		
+		return new rs.Iteration(config.iterations[0]);
+	};
+
+	this.currentIterationStarted = function() {
+		return this.currentIteration().startDate();
+	};
+
+	this.iterationLength = function() {
+		return this.currentIteration().length();
+	};
+
+	this.velocity = function() {
+		return this.currentIteration().velocity();
+	};
+
+	this.totalEstimate = function() {
+		return this.currentIteration().totalEstimate();
+	};
+
+	this.includedFeatures = function() {
+		return this.currentIteration().includedFeatures();
+	};
+
+	this.excludedFeatures = function() {
+		return this.currentIteration().excludedFeatures();
+	};
+};
+
+
+rabu.schedule.Iteration = function(iterationJson) {
+	var iteration = iterationJson;
+	
+	this.startDate = function() {
+		return new Date(iteration.currentIterationStarted);
+	};
+	
+	this.length = function() {
+		return iteration.iterationLength;
+	};
+	
+	this.velocity = function() {
+		return iteration.velocity;
+	};
+	
 	this.totalEstimate = function() {
 		var adder = function(sum, feature) {
 			return sum + feature.estimate();
 		};
 		return this.includedFeatures().reduce(adder, 0);
 	};
-
+	
 	function featuresFromList(featureList) {
 		if (!featureList) { return []; }
 		return featureList.map(function(element) {
@@ -50,13 +88,14 @@ rabu.schedule.Estimates = function(configJson) {
 	}
 
 	this.includedFeatures = function() {
-		return featuresFromList(config.includedFeatures);
+		return featuresFromList(iteration.includedFeatures);
 	};
-
+	
 	this.excludedFeatures = function() {
-		return featuresFromList(config.excludedFeatures);
+		return featuresFromList(iteration.excludedFeatures);
 	};
 };
+
 
 rabu.schedule.Feature = function(featureJson) {
 	var feature = featureJson;

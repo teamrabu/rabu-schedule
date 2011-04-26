@@ -73,7 +73,7 @@
 				["excluded 1", 20]
 			]
 		};
-		estimates = new rabu.schedule.Estimates(config);
+		estimates = new rabu.schedule.Estimates({iterations: [config]});
 		populate();
 
 		assertEquals("assumption: li height", 20, li.first().outerHeight(true));

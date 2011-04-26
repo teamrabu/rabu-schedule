@@ -9,18 +9,20 @@
 		config = {
 			name: "My name",
 			updated: "5 Jan 2011",
-			riskMultipliers: [1, 2, 4], 
-			currentIterationStarted: "1 Jan 2011",
-			iterationLength: 7,
-			velocity: 10,
-			includedFeatures: [
-				["completed", 0],
-				["feature A", 70],
-				["feature B", 30]
-			],
-			excludedFeatures: [
-				["excluded 1", 20]
-			]
+			riskMultipliers: [1, 2, 4],
+			iterations: [{
+				currentIterationStarted: "1 Jan 2011",
+				iterationLength: 7,
+				velocity: 10,
+				includedFeatures: [
+					["completed", 0],
+					["feature A", 70],
+					["feature B", 30]
+				],
+				excludedFeatures: [
+					["excluded 1", 20]
+				]
+			}]
 		};
 		projections = new rabu.schedule.Projections(new rabu.schedule.Estimates(config));
 	};
@@ -39,8 +41,8 @@
 
 	Test.prototype.test_iterationProjectionsShouldNotRound = function() {
 		config.riskMultipliers = [0.6, 1.4, 1.6];
-		config.velocity = 9.5;
-		config.includedFeatures = [["A", 73]];
+		config.iterations[0].velocity = 9.5;
+		config.iterations[0].includedFeatures = [["A", 73]];
 
 		assertEquals("10%", 4.610526315789474, projections.tenPercentIterationsRemaining());
 		assertEquals("50%", 10.757894736842104, projections.fiftyPercentIterationsRemaining());
@@ -48,8 +50,8 @@
 	};
 
 	Test.prototype.test_dateProjectionsShouldRoundUpToNextDay = function() {
-		config.includedFeatures = [["A", 14]];
-		config.iterationLength = 1;
+		config.iterations[0].includedFeatures = [["A", 14]];
+		config.iterations[0].iterationLength = 1;
 
 		assertEquals("10%", 1.4, projections.tenPercentIterationsRemaining());
 		assertEquals("50%", 2.8, projections.fiftyPercentIterationsRemaining());
