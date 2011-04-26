@@ -24,7 +24,7 @@ def test_html(filename)
 end
 
 def assertPopulated(message, element, filename)
-	if (element.text == "") then
+	if (element.text == "" || element.text =~ /undefined/) then
 		puts "#{filename} failed"
 		puts "#{message} not populated"
 		raise "HTML unit tests failed"

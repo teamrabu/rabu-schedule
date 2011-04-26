@@ -62,7 +62,7 @@ rabu.schedule.Iteration = function(iterationJson) {
 	var iteration = iterationJson;
 	
 	this.startDate = function() {
-		return new Date(iteration.currentIterationStarted);
+		return new Date(iteration.started);
 	};
 	
 	this.length = function() {

@@ -56,7 +56,7 @@
 
 	Test.prototype.setUp = function() {
 		config = {
-			currentIterationStarted: "1 Jan 2011",
+			started: "1 Jan 2011",
 			iterationLength: 7,
 			velocity: 10,
 			includedFeatures: [
