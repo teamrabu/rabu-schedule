@@ -94,7 +94,7 @@ Submitting Patches
 
 Patches are welcome. Before we can accept your code, we need a signed copyright assignment form. You can find the form in the `copyrights/` directory.
 
-It's probably best to avoid working on the command-line Ruby tool (found in `src/ruby/`) because we're strongly considering switching to Java instead. (We're considering switching because of the possibility of sharing Javascript libraries using Rhino, the deployment convenience of .JAR files, and its large installed base.)
+It's probably best to avoid working on the command-line Ruby tool (found in `src/cli/`) because we're strongly considering switching to Java instead. (We're considering switching because of the possibility of sharing Javascript libraries using Rhino, the deployment convenience of .JAR files, and its large installed base.)
 
 
 Enjoy!
