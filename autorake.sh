@@ -22,6 +22,7 @@ loop do
         next if file.start_with? "./generated"
         next if file.start_with? "./released"
         next if file.start_with? "./gems"
+        next if file =~ /\.tmp_.*/
 
         ctime = File.ctime(file).to_i
 
