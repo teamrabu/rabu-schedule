@@ -1,3 +1,4 @@
+.tmp_*
 .idea/.name
 .idea/workspace.xml
 generated/
