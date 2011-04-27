@@ -18,23 +18,36 @@ You should have received a copy of the GNU General Public License along with thi
     <title>Schedule Projection</title>
 
 	<style type="text/css">
-		* { margin: 0; }
- 		html, body { height: 100%; }
+		* { margin: 0; padding: 0; }
+
+		/* Height hackery */
+		
+		html, body {
+		    height: 100%;
+		}
+		
+		#container {
+		    min-height: 100%;
+		}
+		
+		* html #container {
+		    height: 100%;
+		}
 
 		body {
 			background-color: #006666;
 		}
-		.wrapper {
+		
+		#container {
 			font-family: helvetica neue, helvetica, arial, sans-serif;
 			font-size: 14pt;
 			font-weight: 200;
 
 			background-color: white;
 			border-left: solid 1px; border-right: solid 1px;
-			padding: 2em 2em 1em 3em;
+			padding: 0em 2em 0em 3.25em;
 			margin-left: auto; margin-right: auto;
 			width: 525px;
-			height: 100%;
 
 			-moz-box-shadow: 0px 0px 15px 5px black;
 			-webkit-box-shadow: 0px 0px 15px 5px black;
@@ -42,6 +55,7 @@ You should have received a copy of the GNU General Public License along with thi
 		}
 
 		.header {
+			padding-top: 2em;
 			border-bottom: solid 1px gray;
 			width: 75%;
 		}
@@ -122,6 +136,7 @@ You should have received a copy of the GNU General Public License along with thi
 			font-size: 50%;
 			color: gray;
 			width: 33%;
+			padding-bottom: 1em;
 		}
 		.footer p {
 			margin: 0;
@@ -145,7 +160,7 @@ You should have received a copy of the GNU General Public License along with thi
 		});
 	});
 </script>
-<div class="wrapper">
+<div id="container">
 
 	<div class="header">
 		<h1>Schedule Projection</h1>
