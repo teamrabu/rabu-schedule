@@ -17,3 +17,4 @@ Datejs	http://www.datejs.com/
 jQuery	http://jquery.com/
 jQueryUI	http://jqueryui.com/
 Isolate	https://github.com/jbarnette/isolate
+Raphael	http://raphaeljs.com/
