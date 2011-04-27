@@ -157,7 +157,7 @@ task MERGED_JS => [MAIN_JS_SOURCE, MERGED_DIR] do
 		puts "Concatenating #{MERGED_JS}"
 		File.open(MERGED_JS, "w") do |dest_file|
 			files = FileList.new(
-				"#{LIB_DIR}/jquery.v1.5.1.js",
+				"#{LIB_DIR}/jquery-1.5.1.js",
 				"#{LIB_DIR}/jqueryui-1.8.11/jquery.ui.core.js",
 				"#{LIB_DIR}/jqueryui-1.8.11/jquery.ui.widget.js",
 				"#{LIB_DIR}/jqueryui-1.8.11/jquery.ui.mouse.js",
