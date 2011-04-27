@@ -21,9 +21,9 @@ var OPTIONS = {
 	browser: true,      // Assume a browser
 	maxerr: 10,         // Max number of errors
 	predef: [           // Global variables
-		"$", "jQuery",
+		"$", "jQuery", "Raphael",
 		"rabu",
-		"TestCase", "assertTrue", "assertFalse", "assertSame", "assertEquals"
+		"TestCase", "assertTrue", "assertFalse", "assertSame", "assertEquals", "assertNotUndefined"
 	]
 };
 

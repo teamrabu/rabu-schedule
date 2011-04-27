@@ -4,16 +4,15 @@ var rabu = rabu || {};
 rabu.schedule = {};
 
 rabu.schedule.Main = function(config) {
-	var estimates;
-	var projections;
-	var features;
-
+	var rs = rabu.schedule;
+	
 	if (!config) {
 		throw "Expected config";
 	}
-	estimates = new rabu.schedule.Estimates(config);
-	projections = new rabu.schedule.Projections(estimates);
-	features = new rabu.schedule.FeaturesDom($(".rabu-features"), estimates);
+	var estimates = new rs.Estimates(config);
+	var projections = new rs.Projections(estimates);
+	var featuresDom = new rs.FeaturesDom($(".rabu-features"), estimates);
+	var burnupDom = new rs.BurnupDom($(".rabu-burnup"), estimates);
 
 	function dateToString(date) {
 		return date.toString('MMMM dS');
@@ -25,6 +24,7 @@ rabu.schedule.Main = function(config) {
 		$(".rabu-tenPercentDate").text(dateToString(projections.tenPercentDate()));
 		$(".rabu-fiftyPercentDate").text(dateToString(projections.fiftyPercentDate()));
 		$(".rabu-ninetyPercentDate").text(dateToString(projections.ninetyPercentDate()));
-		features.populate();
+		featuresDom.populate();
+		burnupDom.populate();
 	};
 };
