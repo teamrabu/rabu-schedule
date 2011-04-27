@@ -158,10 +158,11 @@ You should have received a copy of the GNU General Public License along with thi
 	$(document).ready(function() {
 		var config = <%= config %>;
 
-		new rabu.schedule.Main(config).populateDom();
+		var main = new rabu.schedule.Main(config)
+		main.populateDom();
 
 		$(window).resize(function() {
-			new rabu.schedule.Main(config).populateDom();
+			main.populateDom();
 		});
 	});
 </script>
