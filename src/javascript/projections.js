@@ -24,19 +24,7 @@ rabu.schedule.Projections = function(estimates) {
 	};
 
 	this.ninetyPercentDate = function() {
-		return ninetyPercent().date();
-	};
-
-	this.tenPercentIterationsRemaining = function() {
-		return tenPercent().iterationsRemaining();
-	};
-
-	this.fiftyPercentIterationsRemaining = function() {
-		return fiftyPercent().iterationsRemaining();
-	};
-
-	this.ninetyPercentIterationsRemaining = function() {
-		return ninetyPercent().iterationsRemaining();
+		return ninetyPercent().dateRoundedToIteration();
 	};
 };
 

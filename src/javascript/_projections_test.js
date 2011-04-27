@@ -1,6 +1,34 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
 (function() {
+	var Test = new TestCase("Projections");
+	var projections;
+	var config;
+
+	Test.prototype.setUp = function() {
+		config = {
+			riskMultipliers: [0.25, 0.25, 0.25],
+			iterations: [{
+				started: "1 Jan 2011",
+				length: 10,
+				velocity: 1,
+				included: [
+					["feature", 1]
+				]
+			}]
+		};
+		projections = new rabu.schedule.Projections(new rabu.schedule.Estimates(config));
+	};
+
+	Test.prototype.test_dateProjections = function() {
+		assertEquals("10% should round to next day", new Date("4 Jan 2011"), projections.tenPercentDate());
+		assertEquals("50% should round to next day", new Date("4 Jan 2011"), projections.fiftyPercentDate());
+		assertEquals("90% should round to next iteration", new Date("11 Jan 2011"), projections.ninetyPercentDate());
+	};
+}());
+
+
+(function() {
 	var Test = new TestCase("Projection");
 	var rs = rabu.schedule;
 	var projection, iteration, config;
