@@ -18,7 +18,11 @@ You should have received a copy of the GNU General Public License along with thi
     <title>Schedule Projection</title>
 
 	<style type="text/css">
+		
+		/* Reset */
+
 		* { margin: 0; padding: 0; }
+
 
 		/* Height hackery */
 		
@@ -34,6 +38,9 @@ You should have received a copy of the GNU General Public License along with thi
 		    height: 100%;
 		}
 
+
+		/* Page */
+		
 		body {
 			background-color: #006666;
 		}
@@ -53,38 +60,74 @@ You should have received a copy of the GNU General Public License along with thi
 			-webkit-box-shadow: 0px 0px 15px 5px black;
 			box-shadow: 0px 0px 15px 5px black;
 		}
+		
+		
+		/* Header */
 
 		.header {
 			padding-top: 2em;
 			border-bottom: solid 1px gray;
 			width: 75%;
 		}
+		
 		.header h1 {
 			font-weight: normal;
 			font-size: 200%;
 		}
+		
 		.header h2 {
 			font-weight: 200;
 			font-size: 150%;
 		}
+		
 		.header p {
 			margin: 0;
 			margin-top: 1em;
 		}
+		
 		.updated {
 			color: gray;
 			font-size: 75%;
 		}
+		
+		
+		/* Footer */
+
+		.footer {
+			border-top: solid 1px lightgray;
+			font-size: 50%;
+			color: gray;
+			width: 33%;
+			padding-bottom: 1em;
+		}
+		
+		.footer p {
+			margin: 0;
+		}
+		
+		.rabuLogo, .rabuLogo a, .rabuLogo a:visited {
+			color: #cc00cc;
+			text-decoration: none;
+		}
+		
+		.rabuLogo a:hover {
+			text-decoration: underline;
+		}
+
+
+		/* Body */
 
 		.body {
 			margin-bottom: 4ex;
 		}
+		
 		.body h3 {
 			font-size: 100%;
 			font-weight: 200;
 			color: #cc0000;
 			margin-top: 3ex;
 		}
+		
 		.body ol {
 			list-style-position: outside;
 			list-style-type: none;
@@ -93,13 +136,22 @@ You should have received a copy of the GNU General Public License along with thi
 			padding-left: 1em;
 			margin-top: 1ex;
 		}
+		
+		
+		/* Date Projections */
+		
 		.body .date {
 			font-weight: normal;
 		}
+		
 		.body .qualifier {
 			font-style: italic;
 			font-weight: 200;
 		}
+		
+		
+		/* Feature List */
+		
 		.body .rabu-features .rabu-done {
 			margin-left: -1em;
 			padding-left: 1em;
@@ -107,14 +159,17 @@ You should have received a copy of the GNU General Public License along with thi
 			font-weight: normal;
 			color: #007000;
 		}
+		
 		.body .rabu-features .rabu-done:after {
 			content: " (done)";
 			font-style: italic;
 			font-weight: 200;
 		}
+		
 		.body .rabu-features .rabu-excluded {
 			color: darkgray;
 		}
+		
 		.body .rabu-divider {
 			position: absolute;
 			font-size: 75%;
@@ -124,29 +179,21 @@ You should have received a copy of the GNU General Public License along with thi
 			margin-left: -3.5em;
 			margin-top: -1.75ex; margin-bottom: -1.75ex;
 		}
+		
 		.body .rabu-divider .in {
 			border-bottom: dashed 1px;
 		}
+		
 		.body .rabu-divider .out {
 			margin-top: -0.25ex;
 		}
-
-		.footer {
-			border-top: solid 1px lightgray;
-			font-size: 50%;
-			color: gray;
-			width: 33%;
-			padding-bottom: 1em;
-		}
-		.footer p {
-			margin: 0;
-		}
-		.rabuLogo, .rabuLogo a, .rabuLogo a:visited {
-			color: #cc00cc;
-			text-decoration: none;
-		}
-		.rabuLogo a:hover {
-			text-decoration: underline;
+		
+		
+		/* Burn-Up Chart */
+		
+		.rabu-burnup {
+			height: 200px;
+			border: dotted 1px;
 		}
 		
 	</style>
@@ -190,6 +237,9 @@ You should have received a copy of the GNU General Public License along with thi
 		    <li><span class="date rabu-fiftyPercentDate"></span> &ndash; <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Possible</span></li>
 		    <li>By <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Yes</span></li>
 	    </ol>
+		
+		<h3>How are we progressing?</h3>
+		<div class="rabu-burnup"></div>
 	</div>
 
 	<div class="footer">
