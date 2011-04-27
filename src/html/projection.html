@@ -141,9 +141,14 @@ You should have received a copy of the GNU General Public License along with thi
 		.footer p {
 			margin: 0;
 		}
-		.rabuLogo {
+		.rabuLogo, .rabuLogo a, .rabuLogo a:visited {
 			color: #cc00cc;
+			text-decoration: none;
 		}
+		.rabuLogo a:hover {
+			text-decoration: underline;
+		}
+		
 	</style>
 </head>
 <body>
@@ -170,24 +175,24 @@ You should have received a copy of the GNU General Public License along with thi
 	</div>
 
     <div class="body">
-	    <h3>When will <span class="rabu-name"></span> be ready?</h3>
+	    <h3>What are we working on?</h3>
+	    <ol class="rabu-features"></ol>
+	    <div class="rabu-divider">
+		    <div class="in">in</div>
+		    <div class="out">out</div>
+	    </div>
+
+	    <h3>When will we be done?</h3>
 	    <ol class="projection">
 		    <li>Before <span class="date rabu-tenPercentDate"></span>: <span class="qualifier">No</span></li>
 		    <li><span class="date rabu-tenPercentDate"></span> &ndash; <span class="date rabu-fiftyPercentDate"></span>: <span class="qualifier">Unlikely</span></li>
 		    <li><span class="date rabu-fiftyPercentDate"></span> &ndash; <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Possible</span></li>
 		    <li>By <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Yes</span></li>
 	    </ol>
-
-	    <h3>Which features will <span class="rabu-name"></span> include?</h3>
-	    <ol class="rabu-features"></ol>
-	    <div class="rabu-divider">
-		    <div class="in">yes</div>
-		    <div class="out">no</div>
-	    </div>
 	</div>
 
 	<div class="footer">
-		<p>Powered by <span class="rabuLogo">&#10084;rabu</span></p>
+		<p>Powered by <span class="rabuLogo"><a href="http://www.teamrabu.com">&#10084;rabu</a></span></p>
 	</div>
 
 </div>
