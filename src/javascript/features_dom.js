@@ -66,30 +66,6 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		divider.css("top", position);
 	}
 
-//	function drag() {
-//		var dividerPosition = divider.offset().top;
-//		var i;
-//		for (i = 0; i < li.length; i++) {
-//			var element = $(li[i]);
-//			var liPosition = $(element).offset().top;
-//			if (dividerPosition < liPosition + $(element).height()) {
-//				createGapForDividerBefore(i + 1);
-//				return;
-//			}
-//		}
-//	}
-//
-//	function makeDraggable() {
-//		list = $(".rabu-features");
-//		divider.draggable({
-//			axis: 'y',
-//			containment: [0, list.offset().top, 0, list.offset().top + list.height()],
-//			scrollSpeed: 10,
-//			cursorAt: { top: (divider.outerHeight() / 2) },
-//			drag: drag
-//		});
-//	}
-
 	this.populate = function() {
 		populateFeatureList();
 		initializeElementVars();
@@ -98,6 +74,5 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		saveInitialPositions();
 		createGapForDividerBefore(included.length);
 		positionDivider();
-//		makeDraggable();
 	};
 };

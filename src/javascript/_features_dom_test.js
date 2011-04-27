@@ -140,29 +140,4 @@
 		assertLiPositions("li positions", [50, 70]);
 		assertEquals("divider position", 34, divider.offset().top);
 	};
-//
-//	Test.prototype.test_makeDraggable = function() {
-//		function option(key) { return divider.draggable("option", key); }
-//
-//		assertTrue("should be draggable", divider.hasClass("ui-draggable"));
-//		assertEquals("constrained vertically", "y", option("axis"));
-//		assertEquals("top", 0, option("containment")[1]);
-//		assertEquals("bottom", 80, option("containment")[3]);
-//		assertEquals("scroll speed", 10, option("scrollSpeed"));
-//		assertEquals("cursor should be centered on divider", 8, option("cursorAt").top);
-//	};
-//
-//	Test.prototype.test_dragging_repositionsDivider = function() {
-//		assertEquals("assumption: divider starting position", 94, divider.offset().top);
-//		dragDividerTo(50);
-//		assertEquals("divider ending position", 50, divider.offset().top);
-//	};
-//
-//	Test.prototype.test_dragging_shouldRepositionGapAsSoonAsElementTouched = function() {
-//		assertLiPositions("assumption: starting positions", [0, 20, 40, 110]);
-//		dragDividerTo(60);
-//		assertLiPositions("element not yet touched", [0, 20, 40, 110]);
-//		dragDividerTo(59);
-//		assertLiPositions("gap should have moved", [0, 20, 90, 110]);
-//	};
 }());
