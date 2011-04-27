@@ -4,6 +4,8 @@ Rabu Schedule Change Log
 Release 0.2 (dev)
 ===
 * BREAKING CHANGE: Changed configuration file format to support iteration history
+* FIXED: HTML page background renders properly when window is smaller than page height
+* FIXED: HTML scroll bar no longer appears when window is larger than page height  
 
 Release 0.1 (17 Apr 2011)
 ===
