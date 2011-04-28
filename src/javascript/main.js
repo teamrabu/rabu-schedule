@@ -12,7 +12,7 @@ rabu.schedule.Main = function(config) {
 	var estimates = new rs.Estimates(config);
 	var projections = new rs.Projections(estimates);
 	var featuresDom = new rs.FeaturesDom($(".rabu-features"), estimates);
-	var burnupDom = new rs.BurnupDom($(".rabu-burnup"), estimates);
+	var burnupDom = new rs.BurnupDom($(".rabu-burnup"), estimates, projections);
 
 	function dateToString(date) {
 		return date.toString('MMMM dS');

@@ -24,7 +24,7 @@ var OPTIONS = {
 		"$", "jQuery", "Raphael",
 		"rabu",
 		"TestCase", "assertTrue", "assertFalse", "assertSame", "assertEquals", 
-		"assertNotNull", "assertNotUndefined"
+		"assertNull", "assertNotNull", "assertNotUndefined"
 	]
 };
 

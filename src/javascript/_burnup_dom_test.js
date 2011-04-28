@@ -4,14 +4,20 @@
 	var Test = new TestCase("BurnupDom");
 	var rs = rabu.schedule;
 	var burnup, paper;
-	var xAxis, yAxis, xLabel, yLabel;
+	var xAxis, yAxis, xLabel, yLabel, xTicks;
 	var xLabelBounds, yLabelBounds;
 	
 	function loadNodeVars() {
 		xLabel = paper.bottom;
 		yLabel = xLabel.next;
-		xAxis= yLabel.next;
+		xAxis = yLabel.next;
 		yAxis = xAxis.next;
+		xTicks = [ yAxis.next ];
+		var i;
+		for (i = 1; i < 8; i++) {
+			xTicks[i] = xTicks[i-1].next;
+		}
+		assertNull("should not be any more Raphael nodes", xTicks[7].next);
 		
 		xLabelBounds = xLabel.getBBox();
 		yLabelBounds = yLabel.getBBox();
@@ -23,7 +29,7 @@
 		              <div class="rabu-yLabel" style="font-size: 12px; font-family: sans-serif; font-weight: 200;">Y Label</div>
                   </div> */
 		var config = {
-			riskModifiers: [1, 2, 4],
+			riskMultipliers: [1, 2, 4],
 			iterations: [{
 				started: "1 Jan 2011",
 				length: 7,
@@ -33,8 +39,8 @@
 				]
 			}]
 		};
-		var estimates = new rabu.schedule.Estimates(config);
-		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates);
+		var estimates = new rs.Estimates(config);
+		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates, new rs.Projections(estimates));
 		burnup.populate();
 		paper = burnup.paper();
 		loadNodeVars();
@@ -48,6 +54,12 @@
 	
 	function line(x1, y1, x2, y2) {
 		return "M" + x1 + "," + y1 + "L" + x2 + "," + y2;
+	}
+	
+	function assertFloatEquals(message, expected, actual) {
+		if (actual < expected - 0.0005 || actual > expected + 0.0005) {
+			assertEquals(message, expected, actual);
+		}
 	}
 	
 	Test.prototype.test_populate_isIdempotent = function() {
@@ -86,13 +98,24 @@
 	};
 	
     Test.prototype.test_populate_drawsAxes = function() {
-        var expectedX = burnup.TICK_LENGTH + yLabelBounds.height;
-        var expectedY = 300 - burnup.TICK_LENGTH - xLabelBounds.height;
+        var expectedX = burnup.AXIS_OVERHANG + yLabelBounds.height;
+        var expectedY = 300 - burnup.AXIS_OVERHANG - xLabelBounds.height;
         assertEquals("x axis", line(yLabelBounds.height, expectedY, 200, expectedY), path(xAxis));
         assertEquals("y axis", line(expectedX, 0, expectedX, 300 - xLabelBounds.height), path(yAxis));
     };
 
-    Test.prototype.test_populate_drawsAxisTickMarks = function() {
-		
+    Test.prototype.test_populate_drawsXAxisTickMarks = function() {
+		var xAxisBounds = xAxis.getBBox();
+		var xAxisLength = xAxisBounds.width - burnup.AXIS_OVERHANG;
+		var xAxisOrigin = xAxisBounds.x + burnup.AXIS_OVERHANG;
+		var tickDistance = xAxisLength / 8.5;
+		assertFloatEquals("tick 1", xAxisOrigin + (tickDistance), xTicks[0].getBBox().x); 
+        assertFloatEquals("tick 2", xAxisOrigin + (tickDistance * 2), xTicks[1].getBBox().x); 
+        assertFloatEquals("tick 3", xAxisOrigin + (tickDistance * 3), xTicks[2].getBBox().x); 
+        assertFloatEquals("tick 4", xAxisOrigin + (tickDistance * 4), xTicks[3].getBBox().x); 
+        assertFloatEquals("tick 5", xAxisOrigin + (tickDistance * 5), xTicks[4].getBBox().x); 
+        assertFloatEquals("tick 6", xAxisOrigin + (tickDistance * 6), xTicks[5].getBBox().x); 
+        assertFloatEquals("tick 7", xAxisOrigin + (tickDistance * 7), xTicks[6].getBBox().x); 
+        assertFloatEquals("tick 8", xAxisOrigin + (tickDistance * 8), xTicks[7].getBBox().x); 
 	};
 }());
