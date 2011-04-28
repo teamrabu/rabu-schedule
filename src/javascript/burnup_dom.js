@@ -27,19 +27,17 @@ rabu.schedule.BurnupDom = function(element, estimates) {
 		});
 		return result;
 	}
-	
-    function axisLabels() {
-		xLabel = copyText(xLabelElement);        
-        yLabel = copyText(yLabelElement);
-		
-        xLabel.translate((paper.width + yLabel.getBBox().height) / 2, paper.height - (xLabel.getBBox().height / 2));
-		yLabel.translate(yLabel.getBBox().height / 2, (paper.height - xLabel.getBBox().height) / 2);
-		yLabel.rotate(270, true);
-    }
 
     function axes() {
-		var xLabelHeight = xLabel.getBBox().height;
-		var yLabelWidth = yLabel.getBBox().height;    // the width of the label is its height because it's rotated 270 degrees
+        xLabel = copyText(xLabelElement);        
+        yLabel = copyText(yLabelElement);
+        var xLabelHeight = xLabel.getBBox().height;
+        var yLabelWidth = yLabel.getBBox().height;    // the width of the label is its height because it's rotated 270 degrees
+        
+        xLabel.translate((paper.width + yLabelWidth) / 2, paper.height - (xLabelHeight / 2));
+        yLabel.translate(yLabelWidth / 2, (paper.height - xLabelHeight) / 2);
+        yLabel.rotate(270, true);
+
 		var x = self.TICK_LENGTH + yLabelWidth;
 		var y = paper.height - self.TICK_LENGTH - xLabelHeight;
 		xAxis = line(yLabelWidth, y, paper.width, y);
@@ -49,7 +47,6 @@ rabu.schedule.BurnupDom = function(element, estimates) {
 	this.populate = function() {
 		hideInteriorElements();
 		paper = raphael(element[0], element.width(), element.height());
-		axisLabels();
         axes();
 	};
 	
