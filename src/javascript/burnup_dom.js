@@ -36,8 +36,8 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
         var xLabelHeight = xLabel.getBBox().height;
         var yLabelWidth = yLabel.getBBox().height;    // the width of the label is its height because it's rotated 270 degrees
         
-        xLabel.translate((paper.width + yLabelWidth) / 2, paper.height - (xLabelHeight / 2));
-        yLabel.translate(yLabelWidth / 2, (paper.height - xLabelHeight) / 2);
+        xLabel.translate((paper.width + yLabelWidth + self.AXIS_OVERHANG) / 2, paper.height - (xLabelHeight / 2));
+        yLabel.translate(yLabelWidth / 2, (paper.height - xLabelHeight - self.AXIS_OVERHANG) / 2);
         yLabel.rotate(270, true);
 
         // axis lines

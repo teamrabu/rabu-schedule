@@ -83,7 +83,7 @@
         assertEquals("X Label font-family", "serif", xLabel.attrs["font-family"]);
 		assertEquals("X Label font-size", "16px", xLabel.attrs["font-size"]);
 		assertEquals("X Label font-weight", "100", xLabel.attrs["font-weight"]);
-        assertEquals("X Label should be centered", (200 + yLabelBounds.height) / 2, xLabel.attrs.x);
+        assertEquals("X Label should be centered", (200 + yLabelBounds.height + burnup.AXIS_OVERHANG) / 2, xLabel.attrs.x);
         assertEquals("X Label text anchor", "middle", xLabel.attrs["text-anchor"]);
         assertEquals("X Label should be on bottom", 300 - (xLabelBounds.height / 2), xLabel.attrs.y);
 
@@ -92,7 +92,7 @@
 		assertEquals("Y Label font-size", "12px", yLabel.attrs["font-size"]);
 		assertEquals("Y Label font-weight", "200", yLabel.attrs["font-weight"]);
 		var yExpectedXPos = yLabelBounds.height / 2;
-		var yExpectedYPos = (300 - xLabelBounds.height) / 2;
+		var yExpectedYPos = (300 - xLabelBounds.height - burnup.AXIS_OVERHANG) / 2;
         assertEquals("Y Label rotation and position", "rotate(270 " + yExpectedXPos + " " + yExpectedYPos + ")", yLabel.transformations[0]);
 		assertEquals("Y Label text anchor", "middle", yLabel.attrs["text-anchor"]);
 	};
