@@ -117,5 +117,7 @@
         assertFloatEquals("tick 6", xAxisOrigin + (tickDistance * 6), xTicks[5].getBBox().x); 
         assertFloatEquals("tick 7", xAxisOrigin + (tickDistance * 7), xTicks[6].getBBox().x); 
         assertFloatEquals("tick 8", xAxisOrigin + (tickDistance * 8), xTicks[7].getBBox().x); 
+		
+		// TODO: add tick marks when there's historical data
 	};
 }());
