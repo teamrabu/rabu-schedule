@@ -46,6 +46,11 @@
 		config.iterations = [ { velocity: 1}, { velocity: 2}, { velocity: 3}];
 		assertEquals("multiple iterations--should use first", 1, estimates.currentIteration().velocity());
 	};
+	
+	Test.prototype.test_iterationCount = function() {
+        config.iterations = [ { velocity: 1}, { velocity: 2}, { velocity: 3}];
+        assertEquals(3, estimates.iterationCount());
+	};
 }());
 
 

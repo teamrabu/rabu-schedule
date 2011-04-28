@@ -32,6 +32,10 @@ rabu.schedule.Estimates = function(configJson) {
 		return new rs.Iteration(config.iterations[0]);
 	};
 
+    this.iterationCount = function() {
+		return config.iterations.length;
+	};
+
 	this.currentIterationStarted = function() {
 		return this.currentIteration().startDate();
 	};

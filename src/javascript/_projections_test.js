@@ -7,13 +7,13 @@
 
 	Test.prototype.setUp = function() {
 		config = {
-			riskMultipliers: [0.25, 0.25, 0.25],
+			riskMultipliers: [0.25, 0.25, 0.75],
 			iterations: [{
 				started: "1 Jan 2011",
 				length: 10,
 				velocity: 1,
 				included: [
-					["feature", 1]
+					["feature", 2]
 				]
 			}]
 		};
@@ -21,9 +21,13 @@
 	};
 
 	Test.prototype.test_dateProjections = function() {
-		assertEquals("10% should round to next day", new Date("4 Jan 2011"), projections.tenPercentDate());
-		assertEquals("50% should round to next day", new Date("4 Jan 2011"), projections.fiftyPercentDate());
-		assertEquals("90% should round to next iteration", new Date("11 Jan 2011"), projections.ninetyPercentDate());
+		assertEquals("10% should round to next day", new Date("6 Jan 2011"), projections.tenPercentDate());
+		assertEquals("50% should round to next day", new Date("6 Jan 2011"), projections.fiftyPercentDate());
+		assertEquals("90% should round to next iteration", new Date("21 Jan 2011"), projections.ninetyPercentDate());
+	};
+
+	Test.prototype.test_maxIterations = function() {
+		assertEquals(2, projections.maxIterations());
 	};
 }());
 

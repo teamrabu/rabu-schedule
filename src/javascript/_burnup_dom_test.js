@@ -23,11 +23,17 @@
 		              <div class="rabu-yLabel" style="font-size: 12px; font-family: sans-serif; font-weight: 200;">Y Label</div>
                   </div> */
 		var config = {
-			included: [
-				["features", 100]
-			]
+			riskModifiers: [1, 2, 4],
+			iterations: [{
+				started: "1 Jan 2011",
+				length: 7,
+				velocity: 10,
+				included: [
+					["features", 20]
+				]
+			}]
 		};
-		var estimates = new rabu.schedule.Estimates({iterations: [config]});
+		var estimates = new rabu.schedule.Estimates(config);
 		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates);
 		burnup.populate();
 		paper = burnup.paper();
@@ -44,6 +50,12 @@
 		return "M" + x1 + "," + y1 + "L" + x2 + "," + y2;
 	}
 	
+	Test.prototype.test_populate_isIdempotent = function() {
+	   burnup.populate();
+	   burnup.populate();
+	   assertEquals("should only be one drawing area", 1, $(".rabu-burnup svg").length);
+	};
+	
 	Test.prototype.test_populate_hidesInteriorDivs = function() {
 		assertFalse("X-axis label markup should be hidden", $(".rabu-xLabel").is(":visible"));
 		assertFalse("Y-axis label markup should be hidden", $(".rabu-yLabel").is(":visible"));
@@ -53,14 +65,7 @@
         assertEquals("width", 200, paper.width);
 		assertEquals("height", 300, paper.height);
 	};
-	
-	Test.prototype.test_populate_drawsAxes = function() {
-		var expectedX = burnup.TICK_LENGTH + yLabelBounds.height;
-		var expectedY = 300 - burnup.TICK_LENGTH - xLabelBounds.height;
-		assertEquals("x axis", line(yLabelBounds.height, expectedY, 200, expectedY), path(xAxis));
-		assertEquals("y axis", line(expectedX, 0, expectedX, 300 - xLabelBounds.height), path(yAxis));
-	};
-	
+		
 	Test.prototype.test_populate_drawsAxisLabels = function() {
 		assertEquals("X Label", xLabel.attrs.text);
         assertEquals("X Label font-family", "serif", xLabel.attrs["font-family"]);
@@ -80,4 +85,14 @@
 		assertEquals("Y Label text anchor", "middle", yLabel.attrs["text-anchor"]);
 	};
 	
+    Test.prototype.test_populate_drawsAxes = function() {
+        var expectedX = burnup.TICK_LENGTH + yLabelBounds.height;
+        var expectedY = 300 - burnup.TICK_LENGTH - xLabelBounds.height;
+        assertEquals("x axis", line(yLabelBounds.height, expectedY, 200, expectedY), path(xAxis));
+        assertEquals("y axis", line(expectedX, 0, expectedX, 300 - xLabelBounds.height), path(yAxis));
+    };
+
+    Test.prototype.test_populate_drawsAxisTickMarks = function() {
+		
+	};
 }());

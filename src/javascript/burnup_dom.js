@@ -46,7 +46,10 @@ rabu.schedule.BurnupDom = function(element, estimates) {
 	
 	this.populate = function() {
 		hideInteriorElements();
-		paper = raphael(element[0], element.width(), element.height());
+		if (!paper) {
+			paper = raphael(element[0], element.width(), element.height());
+		}
+		paper.clear();
         axes();
 	};
 	

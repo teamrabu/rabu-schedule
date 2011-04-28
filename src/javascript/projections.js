@@ -26,6 +26,10 @@ rabu.schedule.Projections = function(estimates) {
 	this.ninetyPercentDate = function() {
 		return ninetyPercent().dateRoundedToIteration();
 	};
+	
+	this.maxIterations = function() {
+		return Math.ceil(ninetyPercent().iterationsRemaining());
+	};
 };
 
 rabu.schedule.Projection = function(iteration, riskMultiplier) {
