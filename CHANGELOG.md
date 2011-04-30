@@ -1,7 +1,7 @@
 Rabu Schedule Change Log
 ========================
 
-Release 0.2 (dev)
+Release 0.2 (in progress)
 ===
 * BREAKING CHANGE: Changed configuration file format to support iteration history
 * FIXED (cosmetic): HTML page background renders properly when window is smaller than page height
