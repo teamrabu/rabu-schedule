@@ -56,7 +56,7 @@
 
 	Test.prototype.setUp = function() {
 		/*:DOC +=   <style type='text/css'>
-						li { font-size: 19px }
+						li { height: 20px }
 						ul { margin: 0; }
 						body { margin: 0; }
 						.rabu-divider { margin-top: 34px; padding-top: 16px; }
