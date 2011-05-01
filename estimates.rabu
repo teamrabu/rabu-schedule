@@ -17,6 +17,7 @@
             ],
             "excluded": [
                 ["Internet Explorer support", "?"],
+                ["Mobile browser support", "?"],
                 ["Runtime error handling", "?"],
                 ["Documentation", "?"],
                 ["Smaller page size", "?"],

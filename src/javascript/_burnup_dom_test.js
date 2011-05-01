@@ -42,6 +42,8 @@
 		var estimates = new rs.Estimates(config);
 		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates, new rs.Projections(estimates));
 		burnup.populate();
+        var metrics = new rs.BurnupChartMetrics(500, 100, 20, 10);
+        burnup.populate(metrics);
 		paper = burnup.paper();
 		loadNodeVars();
 	};
@@ -77,31 +79,32 @@
         assertEquals("width", 200, paper.width);
 		assertEquals("height", 300, paper.height);
 	};
-		
-	Test.prototype.test_populate_drawsAxisLabels = function() {
-		assertEquals("X Label", xLabel.attrs.text);
-        assertEquals("X Label font-family", "serif", xLabel.attrs["font-family"]);
-		assertEquals("X Label font-size", "16px", xLabel.attrs["font-size"]);
-		assertEquals("X Label font-weight", "100", xLabel.attrs["font-weight"]);
-        assertEquals("X Label should be centered", (200 + yLabelBounds.height + burnup.AXIS_OVERHANG) / 2, xLabel.attrs.x);
-        assertEquals("X Label text anchor", "middle", xLabel.attrs["text-anchor"]);
-        assertEquals("X Label should be on bottom", 300 - (xLabelBounds.height / 2), xLabel.attrs.y);
+
+    Test.prototype.test_populate_copiesLabelsFromHtml = function() {
+        assertEquals("X Label", xLabel.attrs.text);
+        assertEquals("X-axis label font-family", "serif", xLabel.attrs["font-family"]);
+        assertEquals("X-axis label font-size", "16px", xLabel.attrs["font-size"]);
+        assertEquals("X-axis label font-weight", "100", xLabel.attrs["font-weight"]);
 
         assertEquals("Y Label", yLabel.attrs.text);
-        assertEquals("Y Label font-family", "sans-serif", yLabel.attrs["font-family"]);
-		assertEquals("Y Label font-size", "12px", yLabel.attrs["font-size"]);
-		assertEquals("Y Label font-weight", "200", yLabel.attrs["font-weight"]);
-		var yExpectedXPos = yLabelBounds.height / 2;
-		var yExpectedYPos = (300 - xLabelBounds.height - burnup.AXIS_OVERHANG) / 2;
-        assertEquals("Y Label rotation and position", "rotate(270 " + yExpectedXPos + " " + yExpectedYPos + ")", yLabel.transformations[0]);
-		assertEquals("Y Label text anchor", "middle", yLabel.attrs["text-anchor"]);
+        assertEquals("Y-axis label font-family", "sans-serif", yLabel.attrs["font-family"]);
+        assertEquals("Y-axis label font-size", "12px", yLabel.attrs["font-size"]);
+        assertEquals("Y-axis label font-weight", "200", yLabel.attrs["font-weight"]);
+    };
+
+    Test.prototype.test_populate_positionsLabels = function() {
+		assertEquals("X-axis label position (x)", 260, xLabel.attrs.x);
+		assertEquals("X-axis label position (y)", 90, xLabel.attrs.y);
+        assertEquals("X-axis label text anchor", "middle", xLabel.attrs["text-anchor"]);
+
+        assertEquals("Y-axis label position (x)", 5, yLabel.attrs.x);
+		assertEquals("Y-axis label position (y)", 35, yLabel.attrs.y);
+        assertEquals("Y-axis label text anchor", "middle", yLabel.attrs["text-anchor"]);
 	};
-	
+		
     Test.prototype.test_populate_drawsAxes = function() {
-        var expectedX = burnup.AXIS_OVERHANG + yLabelBounds.height;
-        var expectedY = 300 - burnup.AXIS_OVERHANG - xLabelBounds.height;
-        assertEquals("x axis", line(yLabelBounds.height, expectedY, 200, expectedY), path(xAxis));
-        assertEquals("y axis", line(expectedX, 0, expectedX, 300 - xLabelBounds.height), path(yAxis));
+		assertEquals("X-axis", line(10, 70, 500, 70), path(xAxis));
+		assertEquals("Y-axis", line(20, 0, 20, 80), path(yAxis));
     };
 
     Test.prototype.test_populate_drawsXAxisTickMarks = function() {
@@ -119,5 +122,35 @@
         assertFloatEquals("tick 8", xAxisOrigin + (tickDistance * 8), xTicks[7].getBBox().x); 
 		
 		// TODO: add tick marks when there's historical data
+	};
+}());
+
+
+(function() {
+    var Test = new TestCase("BurnupChartMetrics");
+    var rs = rabu.schedule;
+	var metrics, left, bottom;
+	
+	Test.prototype.setUp = function() {
+        metrics = new rs.BurnupChartMetrics(500, 100, 20, 10);
+		left = 10 + metrics.AXIS_OVERHANG;
+		bottom = 80 - metrics.AXIS_OVERHANG;
+	};
+	
+	Test.prototype.testChartArea = function() {	
+		assertEquals("left", left, metrics.left);
+		assertEquals("right", 500, metrics.right);
+		assertEquals("width", 500 - left, metrics.width);
+		
+		assertEquals("top", 0, metrics.top);
+		assertEquals("bottom", bottom, metrics.bottom);
+		assertEquals("height", bottom, metrics.height);
+	};
+	
+	Test.prototype.testLabels = function() {
+		assertEquals("X-axis label horizontal center", left + ((500 - left) / 2), metrics.xLabelCenter);
+		assertEquals("X-axis label vertical center", 90, metrics.xLabelVerticalCenter);
+		assertEquals("Y-axis label horizontal center", 35, metrics.yLabelCenter);
+		assertEquals("Y-axis label vertical center", 5, metrics.yLabelVerticalCenter);
 	};
 }());

@@ -1,14 +1,15 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
 rabu.schedule.BurnupDom = function(element, estimates, projections) {
-    this.TICK_LENGTH = 6;
-	this.AXIS_OVERHANG = 10;
-
     var raphael = Raphael;     // prevent JSLint error resulting from calling Raphael without 'new'
     var self = this; 
 	var xLabelElement = $(".rabu-xLabel");
 	var yLabelElement = $(".rabu-yLabel");
-    var paper, xLabel, yLabel, xAxis, yAxis;
+    var paper, metrics, xLabel, yLabel;
+
+    this.TICK_LENGTH = 6;       //TODO: delete me
+    this.AXIS_OVERHANG = 10;    //TODO: delete me
+
 	
 	function hideInteriorElements() {
 		xLabelElement.hide();
@@ -19,28 +20,6 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		return paper.path("M" + x1 + "," + y1 + " L" + x2 + "," + y2);
 	}
 	
-	function chart() {
-		var area = {};
-		
-		area.xLabelHeight = xLabel.getBBox().height;
-		area.yLabelHeight = yLabel.getBBox().height;
-		
-		area.left = area.yLabelHeight + self.AXIS_OVERHANG;
-		area.right = paper.width;
-		area.width = area.right - area.left;
-		
-		area.top = 0;
-		area.bottom = paper.height - (area.xLabelHeight + self.AXIS_OVERHANG);
-		area.height = area.bottom - area.top;
-        
-        area.xLabelCenter = area.left + (area.width / 2);
-		area.yLabelCenter = area.top + (area.height / 2);
-		area.xLabelVerticalCenter = area.bottom + self.AXIS_OVERHANG + (area.xLabelHeight / 2);
-		area.yLabelVerticalCenter = area.left - self.AXIS_OVERHANG - (area.yLabelHeight / 2);
-		
-		return area;
-	}
-    
 	function copyText(textElement) {
 		var result = paper.text(0, 0, textElement.text());
 		result.attr({
@@ -51,41 +30,71 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		return result;
 	}
 
-    function axisLabels() {
+    function copyTextElements() {
 		xLabel = copyText(xLabelElement);
 		yLabel = copyText(yLabelElement);
-		
-		xLabel.translate(chart().xLabelCenter, chart().xLabelVerticalCenter);
-		yLabel.translate(chart().yLabelVerticalCenter, chart().yLabelCenter);
+	}
+
+    function axisLabels() {
+		xLabel.translate(metrics.xLabelCenter, metrics.xLabelVerticalCenter);
+		yLabel.translate(metrics.yLabelVerticalCenter, metrics.yLabelCenter);
 		yLabel.rotate(270, true);
 	}
 	
 	function axisLines() {
-		xAxis = line(chart().left - self.AXIS_OVERHANG, chart().bottom, chart().right, chart().bottom);
-		yAxis = line(chart().left, chart().top, chart().left, chart().bottom + self.AXIS_OVERHANG);
+		line(metrics.left - self.AXIS_OVERHANG, metrics.bottom, metrics.right, metrics.bottom);
+		line(metrics.left, metrics.top, metrics.left, metrics.bottom + metrics.AXIS_OVERHANG);
 	}
 	
 	function xAxisTicks(iterationCount) {
 		var i, x;
-		var tickDistance = chart().width / (iterationCount + 0.5);
+		var tickDistance = metrics.width / (iterationCount + 0.5);
 		for (i = 1; i <= iterationCount; i++) {
-			x = chart().left + (tickDistance * i);
-			line(x, chart().bottom - self.TICK_LENGTH, x, chart().bottom + self.TICK_LENGTH);
+			x = metrics.left + (tickDistance * i);
+			line(x, metrics.bottom - metrics.TICK_LENGTH, x, metrics.bottom + metrics.TICK_LENGTH);
 		}
 	}
 	
-	this.populate = function() {
+	this.populate = function(metricsForTesting) {
 		hideInteriorElements();
 		if (paper) {
 			paper.remove();
 		}
         paper = raphael(element[0], element.width(), element.height());
+		copyTextElements();
+		if (metricsForTesting) {
+			metrics = metricsForTesting;
+		}
+		else {
+            metrics = new rabu.schedule.BurnupChartMetrics(paper.width, paper.height, xLabel.getBBox().height, yLabel.getBBox().height);
+		}
+
 		axisLabels();
 		axisLines();
 		xAxisTicks(projections.maxIterations());
 	};
 	
-	this.paper = function(){
+	this.paper = function() {
 		return paper;
 	};
+};
+
+
+rabu.schedule.BurnupChartMetrics = function(paperWidth, paperHeight, xLabelHeight, yLabelHeight) {
+    var area = this;
+	this.TICK_LENGTH = 6;
+	this.AXIS_OVERHANG = 10;
+    
+    this.left = yLabelHeight + this.AXIS_OVERHANG;
+    this.right = paperWidth;
+    this.width = this.right - this.left;
+    
+    this.top = 0;
+    this.bottom = paperHeight - (xLabelHeight + this.AXIS_OVERHANG);
+    this.height = this.bottom - this.top;
+    
+    this.xLabelCenter = this.left + (this.width / 2);
+    this.yLabelCenter = this.top + (this.height / 2);
+    this.xLabelVerticalCenter = this.bottom + this.AXIS_OVERHANG + (xLabelHeight / 2);
+    this.yLabelVerticalCenter = this.left - this.AXIS_OVERHANG - (yLabelHeight / 2);
 };
