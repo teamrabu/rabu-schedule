@@ -42,7 +42,7 @@
 		var estimates = new rs.Estimates(config);
 		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates, new rs.Projections(estimates));
 		burnup.populate();
-        var metrics = new rs.BurnupChartMetrics(500, 100, 20, 10);
+        var metrics = new rs.BurnupChartMetrics(500, 100, 20, 10, 4);
         burnup.populate(metrics);
 		paper = burnup.paper();
 		loadNodeVars();
@@ -108,20 +108,10 @@
     };
 
     Test.prototype.test_populate_drawsXAxisTickMarks = function() {
-		var xAxisBounds = xAxis.getBBox();
-		var xAxisLength = xAxisBounds.width - burnup.AXIS_OVERHANG;
-		var xAxisOrigin = xAxisBounds.x + burnup.AXIS_OVERHANG;
-		var tickDistance = xAxisLength / 8.5;
-		assertFloatEquals("tick 1", xAxisOrigin + (tickDistance), xTicks[0].getBBox().x); 
-        assertFloatEquals("tick 2", xAxisOrigin + (tickDistance * 2), xTicks[1].getBBox().x); 
-        assertFloatEquals("tick 3", xAxisOrigin + (tickDistance * 3), xTicks[2].getBBox().x); 
-        assertFloatEquals("tick 4", xAxisOrigin + (tickDistance * 4), xTicks[3].getBBox().x); 
-        assertFloatEquals("tick 5", xAxisOrigin + (tickDistance * 5), xTicks[4].getBBox().x); 
-        assertFloatEquals("tick 6", xAxisOrigin + (tickDistance * 6), xTicks[5].getBBox().x); 
-        assertFloatEquals("tick 7", xAxisOrigin + (tickDistance * 7), xTicks[6].getBBox().x); 
-        assertFloatEquals("tick 8", xAxisOrigin + (tickDistance * 8), xTicks[7].getBBox().x); 
-		
-		// TODO: add tick marks when there's historical data
+		assertFloatEquals("tick 0", 20, xTicks[0].getBBox().x);
+        assertFloatEquals("tick 1", 20 + 137.14285, xTicks[1].getBBox().x);
+        assertFloatEquals("tick 2", 20 + 274.28571, xTicks[2].getBBox().x);
+        assertFloatEquals("tick 3", 20 + 411.42857, xTicks[3].getBBox().x);
 	};
 }());
 
@@ -132,25 +122,36 @@
 	var metrics, left, bottom;
 	
 	Test.prototype.setUp = function() {
-        metrics = new rs.BurnupChartMetrics(500, 100, 20, 10);
-		left = 10 + metrics.AXIS_OVERHANG;
-		bottom = 80 - metrics.AXIS_OVERHANG;
+        metrics = new rs.BurnupChartMetrics(500, 100, 20, 10, 4);
 	};
+
+    function assertFloatEquals(message, expected, actual) {
+        if (actual < expected - 0.0005 || actual > expected + 0.0005) {
+            assertEquals(message, expected, actual);
+        }
+    }
 	
 	Test.prototype.testChartArea = function() {	
-		assertEquals("left", left, metrics.left);
+		assertEquals("left", 20, metrics.left);
 		assertEquals("right", 500, metrics.right);
-		assertEquals("width", 500 - left, metrics.width);
+		assertEquals("width", 480, metrics.width);
 		
 		assertEquals("top", 0, metrics.top);
-		assertEquals("bottom", bottom, metrics.bottom);
-		assertEquals("height", bottom, metrics.height);
+		assertEquals("bottom", 70, metrics.bottom);
+		assertEquals("height", 70, metrics.height);
 	};
 	
 	Test.prototype.testLabels = function() {
-		assertEquals("X-axis label horizontal center", left + ((500 - left) / 2), metrics.xLabelCenter);
+		assertEquals("X-axis label horizontal center", 260, metrics.xLabelCenter);
 		assertEquals("X-axis label vertical center", 90, metrics.xLabelVerticalCenter);
 		assertEquals("Y-axis label horizontal center", 35, metrics.yLabelCenter);
 		assertEquals("Y-axis label vertical center", 5, metrics.yLabelVerticalCenter);
+	};
+	
+	Test.prototype.testXTicks = function() {
+		assertFloatEquals("X-axis tick 0", 20, metrics.xTick(0));
+		assertFloatEquals("X-axis tick 1", 20 + 137.14285, metrics.xTick(1));
+        assertFloatEquals("X-axis tick 2", 20 + 274.28571, metrics.xTick(2));
+		assertFloatEquals("X-axis tick 3", 20 + 411.42857, metrics.xTick(3));
 	};
 }());

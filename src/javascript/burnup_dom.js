@@ -47,26 +47,25 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	}
 	
 	function xAxisTicks(iterationCount) {
-		var i, x;
-		var tickDistance = metrics.width / (iterationCount + 0.5);
-		for (i = 1; i <= iterationCount; i++) {
-			x = metrics.left + (tickDistance * i);
+		var i;
+		for (i = 0; i < iterationCount; i++) {
+			var x = metrics.xTick(i);
 			line(x, metrics.bottom - metrics.TICK_LENGTH, x, metrics.bottom + metrics.TICK_LENGTH);
 		}
 	}
 	
-	this.populate = function(metricsForTesting) {
+	this.populate = function(optionalMetricsForTesting) {
 		hideInteriorElements();
 		if (paper) {
 			paper.remove();
 		}
         paper = raphael(element[0], element.width(), element.height());
 		copyTextElements();
-		if (metricsForTesting) {
-			metrics = metricsForTesting;
+		if (optionalMetricsForTesting) {
+			metrics = optionalMetricsForTesting;
 		}
 		else {
-            metrics = new rabu.schedule.BurnupChartMetrics(paper.width, paper.height, xLabel.getBBox().height, yLabel.getBBox().height);
+            metrics = new rabu.schedule.BurnupChartMetrics(paper.width, paper.height, xLabel.getBBox().height, yLabel.getBBox().height, projections.maxIterations());
 		}
 
 		axisLabels();
@@ -80,8 +79,8 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 };
 
 
-rabu.schedule.BurnupChartMetrics = function(paperWidth, paperHeight, xLabelHeight, yLabelHeight) {
-    var area = this;
+rabu.schedule.BurnupChartMetrics = function(paperWidth, paperHeight, xLabelHeight, yLabelHeight, iterations) {
+    var self = this;
 	this.TICK_LENGTH = 6;
 	this.AXIS_OVERHANG = 10;
     
@@ -97,4 +96,9 @@ rabu.schedule.BurnupChartMetrics = function(paperWidth, paperHeight, xLabelHeigh
     this.yLabelCenter = this.top + (this.height / 2);
     this.xLabelVerticalCenter = this.bottom + this.AXIS_OVERHANG + (xLabelHeight / 2);
     this.yLabelVerticalCenter = this.left - this.AXIS_OVERHANG - (yLabelHeight / 2);
+	
+	this.xTick = function(offset) {
+		var tickDistance = self.width / (iterations - 1 + 0.5);
+		return self.left + (offset * tickDistance);
+	};
 };
