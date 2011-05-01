@@ -4,28 +4,6 @@
 	var Test = new TestCase("BurnupDom");
 	var rs = rabu.schedule;
 	var burnup, paper;
-//	var xAxis, yAxis, xLabel, yLabel, xTicks, xTickLabels;
-//	var xLabelBounds, yLabelBounds;
-	
-//	function loadNodeVars() {
-//		xLabel = paper.bottom;
-//		yLabel = xLabel.next;
-//		xAxis = yLabel.next;
-//		yAxis = xAxis.next;
-//		xTicks = [ yAxis.next ];
-//		var i;
-//		for (i = 1; i < 4; i++) {
-//			xTicks[i] = xTicks[i-1].next;
-//		}
-//		xTickLabels = [ xTicks[3].next ];
-//		for (i = 1; i < 3; i++) {
-//			xTickLabels[i] = xTickLabels[i-1].next;
-//		}
-////		assertNull("should not be any more Raphael nodes", xTickLabels[2].next);
-//		
-//		xLabelBounds = xLabel.getBBox();
-//		yLabelBounds = yLabel.getBBox();
-//	}
 	
 	Test.prototype.setUp = function() {
 		/*:DOC += <div class="rabu-burnup" style="height:300px; width:200px">
@@ -48,7 +26,12 @@
 		var estimates = new rs.Estimates(config);
 		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates, new rs.Projections(estimates));
 		burnup.populate();
-        var metrics = new rs.BurnupChartMetrics(500, 100, 20, 10, 10, 6, 4);
+        var metrics = new rs.BurnupChartMetrics({
+            paperWidth: 500, paperHeight: 100,
+            xLabelHeight: 20, yLabelHeight: 10,
+            xTickLabelHeight: 10, yTickLabelHeight: 8,
+            iterationCount: 4
+        });
         burnup.populate(metrics);
 		paper = burnup.paper();
 //		loadNodeVars();
@@ -77,7 +60,8 @@
 	};
 	
 	Test.prototype.test_populate_hidesPrototypicalTickLabels = function() {
-		assertEquals("prototypical tick label should be hidden", "none", burnup.xTickLabel.node.style.display);
+		assertEquals("prototypical X-axis tick label should be hidden", "none", burnup.xTickLabel.node.style.display);
+        assertEquals("prototypical Y-axis tick label should be hidden", "none", burnup.yTickLabel.node.style.display);
 	};
 	
 	Test.prototype.test_populate_hidesInteriorDivs = function() {
@@ -144,7 +128,12 @@
 	var metrics, left, bottom;
 	
 	Test.prototype.setUp = function() {
-        metrics = new rs.BurnupChartMetrics(500, 100, 20, 10, 10, 8, 4);
+        metrics = new rs.BurnupChartMetrics({
+			paperWidth: 500, paperHeight: 100,
+			xLabelHeight: 20, yLabelHeight: 10,
+			xTickLabelHeight: 10, yTickLabelHeight: 8,
+			iterationCount: 4
+		});
 	};
 
     function assertFloatEquals(message, expected, actual) {
@@ -179,14 +168,18 @@
 		assertFloatEquals("X-axis tick 3", 20 + 411.42857, metrics.xTick(3));
 	};
 	
-	Test.prototype.test_shouldDrawXLabel = function() {
-        assertTrue("should draw label that doesn't overlap anything", metrics.shouldDrawXLabel(1, 10, 0));
-		assertFalse("should never draw label on tick 0", metrics.shouldDrawXLabel(0, 1, 0));
-		assertFalse("should not draw label when it overlaps left edge", metrics.shouldDrawXLabel(1, 300, 0));
-		assertFalse("should not draw label when padding overlaps left edge", metrics.shouldDrawXLabel(1, 270, 0));
-        assertFalse("should not draw label when it overlaps right edge", metrics.shouldDrawXLabel(3, 200, 0));
-		assertFalse("should not draw label when padding overlaps right edge", metrics.shouldDrawXLabel(3, 137, 0));
-		assertFalse("should not draw label when it overlaps previous label", metrics.shouldDrawXLabel(2, 20, 290));
-		assertFalse("should not draw label when padding overlaps previous label", metrics.shouldDrawXLabel(2, 20, 282));
+	Test.prototype.test_shouldDrawXTickLabel = function() {
+        assertTrue("should draw label that doesn't overlap anything", metrics.shouldDrawXTickLabel(1, 10, 0));
+		assertFalse("should never draw label on tick 0", metrics.shouldDrawXTickLabel(0, 1, 0));
+		assertFalse("should not draw label when it overlaps left edge", metrics.shouldDrawXTickLabel(1, 300, 0));
+		assertFalse("should not draw label when padding overlaps left edge", metrics.shouldDrawXTickLabel(1, 270, 0));
+        assertFalse("should not draw label when it overlaps right edge", metrics.shouldDrawXTickLabel(3, 200, 0));
+		assertFalse("should not draw label when padding overlaps right edge", metrics.shouldDrawXTickLabel(3, 137, 0));
+		assertFalse("should not draw label when it overlaps previous label", metrics.shouldDrawXTickLabel(2, 20, 290));
+		assertFalse("should not draw label when padding overlaps previous label", metrics.shouldDrawXTickLabel(2, 20, 282));
+	};
+	
+	Test.prototype.test_xTickLabel = function() {
+		
 	};
 }());

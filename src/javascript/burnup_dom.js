@@ -35,6 +35,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		self.xLabel = copyText(xLabelElement);
 		self.yLabel = copyText(yLabelElement);
 		self.xTickLabel = copyText(xTickLabelElement).hide();
+		self.yTickLabel = copyText(yTickLabelElement).hide();
 	}
 
     function axisLabels() {
@@ -68,7 +69,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			label.translate(metrics.xTick(i), metrics.xTickLabelVerticalCenter); 
 			
 			var labelWidth = label.getBBox().width;
-			if (metrics.shouldDrawXLabel(i, labelWidth, previousLabelRightEdge)) {
+			if (metrics.shouldDrawXTickLabel(i, labelWidth, previousLabelRightEdge)) {
 				var x = metrics.xTick(i);
 				self.xTickLabels.push(label);
 				previousLabelRightEdge = x + (labelWidth / 2);
@@ -90,12 +91,15 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			metrics = optionalMetricsForTesting;
 		}
 		else {
-		    metrics = new rabu.schedule.BurnupChartMetrics(
-			    paper.width, paper.height, 
-				self.xLabel.getBBox().height, self.yLabel.getBBox().height,
-				self.xTickLabel.getBBox().height, -10,
-				projections.maxIterations()
-			);
+		    metrics = new rabu.schedule.BurnupChartMetrics({
+	            paperWidth: paper.width, 
+				paperHeight: paper.height,
+	            xLabelHeight: self.xLabel.getBBox().height,
+				yLabelHeight: self.yLabel.getBBox().height,
+	            xTickLabelHeight: self.xTickLabel.getBBox().height,
+				yTickLabelHeight: -10,
+	            iterationCount: projections.maxIterations()
+			});
 		}
 
 		axisLabels();
@@ -110,35 +114,35 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 };
 
 
-rabu.schedule.BurnupChartMetrics = function(paperWidth, paperHeight, xLabelHeight, yLabelHeight, xTickLabelHeight, yTickLabelHeight, iterations) {
+rabu.schedule.BurnupChartMetrics = function(data) {
     var self = this;
 	this.TICK_LENGTH = 6;
 	this.AXIS_OVERHANG = 10;
 	this.LABEL_PADDING = 3;
     
-    this.left = yLabelHeight + this.AXIS_OVERHANG;
-    this.right = paperWidth;
+    this.left = data.yLabelHeight + this.AXIS_OVERHANG;
+    this.right = data.paperWidth;
     this.width = this.right - this.left;
     
     this.top = 0;
-    this.bottom = paperHeight - (xLabelHeight + this.TICK_LENGTH + xTickLabelHeight);
+    this.bottom = data.paperHeight - (data.xLabelHeight + this.TICK_LENGTH + data.xTickLabelHeight);
     this.height = this.bottom - this.top;
     
     this.xLabelCenter = this.left + (this.width / 2);
     this.yLabelCenter = this.top + (this.height / 2);
-    this.xLabelVerticalCenter = paperHeight - (xLabelHeight / 2);
-    this.yLabelVerticalCenter = this.left - this.AXIS_OVERHANG - (yLabelHeight / 2);
+    this.xLabelVerticalCenter = data.paperHeight - (data.xLabelHeight / 2);
+    this.yLabelVerticalCenter = this.left - this.AXIS_OVERHANG - (data.yLabelHeight / 2);
 	
-	this.xTickLabelVerticalCenter = this.bottom + this.TICK_LENGTH + (xTickLabelHeight / 2);
+	this.xTickLabelVerticalCenter = this.bottom + this.TICK_LENGTH + (data.xTickLabelHeight / 2);
 	
-	this.xTickCount = iterations;
+	this.xTickCount = data.iterationCount;
 	
 	this.xTick = function(offset) {
-		var tickDistance = self.width / (iterations - 1 + 0.5);
+		var tickDistance = self.width / (data.iterationCount - 1 + 0.5);
 		return self.left + (offset * tickDistance);
 	};
 	
-	this.shouldDrawXLabel = function(tickOffset, labelWidth, previousRightEdge) {
+	this.shouldDrawXTickLabel = function(tickOffset, labelWidth, previousRightEdge) {
 		var x = self.xTick(tickOffset) - (labelWidth / 2) - self.LABEL_PADDING;
 		
 		var tickZero = (tickOffset === 0);
