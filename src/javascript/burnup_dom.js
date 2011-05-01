@@ -18,6 +18,28 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	function line(x1, y1, x2, y2) {
 		return paper.path("M" + x1 + "," + y1 + " L" + x2 + "," + y2);
 	}
+	
+	function chart() {
+		var area = {};
+		
+		area.xLabelHeight = xLabel.getBBox().height;
+		area.yLabelHeight = yLabel.getBBox().height;
+		
+		area.left = area.yLabelHeight + self.AXIS_OVERHANG;
+		area.right = paper.width;
+		area.width = area.right - area.left;
+		
+		area.top = 0;
+		area.bottom = paper.height - (area.xLabelHeight + self.AXIS_OVERHANG);
+		area.height = area.bottom - area.top;
+        
+        area.xLabelCenter = area.left + (area.width / 2);
+		area.yLabelCenter = area.top + (area.height / 2);
+		area.xLabelVerticalCenter = area.bottom + self.AXIS_OVERHANG + (area.xLabelHeight / 2);
+		area.yLabelVerticalCenter = area.left - self.AXIS_OVERHANG - (area.yLabelHeight / 2);
+		
+		return area;
+	}
     
 	function copyText(textElement) {
 		var result = paper.text(0, 0, textElement.text());
@@ -29,35 +51,27 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		return result;
 	}
 
-    function axes() {
-		// axis labels
-        xLabel = copyText(xLabelElement);        
-        yLabel = copyText(yLabelElement);
-        var xLabelHeight = xLabel.getBBox().height;
-        var yLabelWidth = yLabel.getBBox().height;    // the width of the label is its height because it's rotated 270 degrees
-        
-        xLabel.translate((paper.width + yLabelWidth + self.AXIS_OVERHANG) / 2, paper.height - (xLabelHeight / 2));
-        yLabel.translate(yLabelWidth / 2, (paper.height - xLabelHeight - self.AXIS_OVERHANG) / 2);
-        yLabel.rotate(270, true);
-
-        // axis lines
-		var x = self.AXIS_OVERHANG + yLabelWidth;
-		var y = paper.height - self.AXIS_OVERHANG - xLabelHeight;
-		xAxis = line(yLabelWidth, y, paper.width, y);
-		yAxis = line(x, 0, x, paper.height - xLabelHeight);
+    function axisLabels() {
+		xLabel = copyText(xLabelElement);
+		yLabel = copyText(yLabelElement);
 		
-		// x-axis tick marks
-		var iterations = projections.maxIterations();
-		var xAxisBounds = xAxis.getBBox();
-		var startX = xAxisBounds.x + self.AXIS_OVERHANG;
-		var startY = xAxisBounds.y;
-		var tickDistance = (xAxisBounds.width - self.AXIS_OVERHANG) / (iterations + 0.5);
-		var i;
-        for (i = 0; i < iterations; i++) {
-			startX += tickDistance;
-			line(startX, startY - self.TICK_LENGTH, startX, startY + self.TICK_LENGTH);
+		xLabel.translate(chart().xLabelCenter, chart().xLabelVerticalCenter);
+		yLabel.translate(chart().yLabelVerticalCenter, chart().yLabelCenter);
+		yLabel.rotate(270, true);
+	}
+	
+	function axisLines() {
+		xAxis = line(chart().left - self.AXIS_OVERHANG, chart().bottom, chart().right, chart().bottom);
+		yAxis = line(chart().left, chart().top, chart().left, chart().bottom + self.AXIS_OVERHANG);
+	}
+	
+	function xAxisTicks(iterationCount) {
+		var i, x;
+		var tickDistance = chart().width / (iterationCount + 0.5);
+		for (i = 1; i <= iterationCount; i++) {
+			x = chart().left + (tickDistance * i);
+			line(x, chart().bottom - self.TICK_LENGTH, x, chart().bottom + self.TICK_LENGTH);
 		}
-
 	}
 	
 	this.populate = function() {
@@ -66,7 +80,9 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			paper.remove();
 		}
         paper = raphael(element[0], element.width(), element.height());
-        axes();
+		axisLabels();
+		axisLines();
+		xAxisTicks(projections.maxIterations());
 	};
 	
 	this.paper = function(){
