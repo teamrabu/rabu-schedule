@@ -21,8 +21,9 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		return paper.path("M" + x1 + "," + y1 + " L" + x2 + "," + y2);
 	}
 	
-	function copyText(textElement) {
-		var result = paper.text(0, 0, textElement.text());
+	function copyOneTextElement(textElement, optionalText) {
+		var text = optionalText || textElement.text();
+		var result = paper.text(0, 0, text);
 		result.attr({
             "font-family": textElement.css("font-family"),
             "font-size": textElement.css("font-size"),
@@ -32,10 +33,10 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	}
 
     function copyTextElements() {
-		self.xLabel = copyText(xLabelElement);
-		self.yLabel = copyText(yLabelElement);
-		self.xTickLabel = copyText(xTickLabelElement).hide();
-		self.yTickLabel = copyText(yTickLabelElement).hide();
+		self.xLabel = copyOneTextElement(xLabelElement);
+		self.yLabel = copyOneTextElement(yLabelElement);
+		self.xTickLabel = copyOneTextElement(xTickLabelElement).hide();
+		self.yTickLabel = copyOneTextElement(yTickLabelElement).hide();
 	}
 
     function axisLabels() {
@@ -65,9 +66,9 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
         self.xTickLabels = [];
         var previousLabelRightEdge = 0;
 		for (i = 0; i < metrics.xTickCount; i++) {
-			var label = self.xTickLabel.clone();
+			var label = copyOneTextElement(xTickLabelElement, metrics.xTickLabel(i));
 			label.translate(metrics.xTick(i), metrics.xTickLabelVerticalCenter); 
-			
+
 			var labelWidth = label.getBBox().width;
 			if (metrics.shouldDrawXTickLabel(i, labelWidth, previousLabelRightEdge)) {
 				var x = metrics.xTick(i);
@@ -98,6 +99,8 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 				yLabelHeight: self.yLabel.getBBox().height,
 	            xTickLabelHeight: self.xTickLabel.getBBox().height,
 				yTickLabelHeight: -10,
+				startDate: estimates.firstIteration().startDate(),
+				iterationLength: estimates.firstIteration().length(),
 	            iterationCount: projections.maxIterations()
 			});
 		}

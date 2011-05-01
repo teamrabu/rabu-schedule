@@ -33,22 +33,26 @@
 		assertEquals(4, estimates.ninetyPercentMultiplier());
 	};
 	
-	Test.prototype.test_currentIteration = function() {
+	Test.prototype.test_currentIteration_firstIteration = function() {
 		config.iterations = undefined;
-		assertEquals("undefined iterations", undefined, estimates.currentIteration().velocity());
+		assertEquals("undefined iterations (current)", undefined, estimates.currentIteration().velocity());
+        assertEquals("undefined iterations (first)", undefined, estimates.firstIteration().velocity());
 		
 		config.iterations = [];
-		assertEquals("no iterations", undefined, estimates.currentIteration().velocity());
+		assertEquals("no iterations (current)", undefined, estimates.currentIteration().velocity());
+        assertEquals("no iterations (first)", undefined, estimates.firstIteration().velocity());
 		
 		config.iterations = [ { velocity: 10 }];
-		assertEquals("one iteration", 10, estimates.currentIteration().velocity());
+		assertEquals("one iteration (current)", 10, estimates.currentIteration().velocity());
+        assertEquals("one iteration (first)", 10, estimates.firstIteration().velocity());
 		
-		config.iterations = [ { velocity: 1}, { velocity: 2}, { velocity: 3}];
-		assertEquals("multiple iterations--should use first", 1, estimates.currentIteration().velocity());
+		config.iterations = [ { velocity: 1 }, { velocity: 2 }, { velocity: 3 }];
+		assertEquals("multiple iterations (current)", 1, estimates.currentIteration().velocity());
+		assertEquals("multiple iterations (first)", 3, estimates.firstIteration().velocity());
 	};
 	
 	Test.prototype.test_iterationCount = function() {
-        config.iterations = [ { velocity: 1}, { velocity: 2}, { velocity: 3}];
+        config.iterations = [ { velocity: 1 }, { velocity: 2 }, { velocity: 3 }];
         assertEquals(3, estimates.iterationCount());
 	};
 }());

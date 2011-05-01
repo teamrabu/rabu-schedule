@@ -4,6 +4,15 @@ rabu.schedule.Estimates = function(configJson) {
 	var rs = rabu.schedule;
 	var config = configJson;
 
+    function iterations() {
+        if (!config.iterations || config.iterations.length === 0) {
+            return [{}];
+        }
+        else {
+            return config.iterations;
+        }
+    }
+
 	this.name = function() {
 		return config.name;
 	};
@@ -25,11 +34,12 @@ rabu.schedule.Estimates = function(configJson) {
 	};
 
 	this.currentIteration = function() {
-		if (!config.iterations || config.iterations.length === 0) {
-			config.iterations = [{}];
-		}
-		
-		return new rs.Iteration(config.iterations[0]);
+		return new rs.Iteration(iterations()[0]);
+	};
+	
+	this.firstIteration = function() {
+		var list = iterations();
+		return new rs.Iteration(list[list.length - 1]);
 	};
 
     this.iterationCount = function() {
@@ -38,6 +48,10 @@ rabu.schedule.Estimates = function(configJson) {
 
 	this.currentIterationStarted = function() {
 		return this.currentIteration().startDate();
+	};
+	
+	this.firstIterationStarted = function() {
+		return this.firstIteration().startDate();
 	};
 
 	this.iterationLength = function() {

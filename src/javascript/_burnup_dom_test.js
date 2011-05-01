@@ -30,6 +30,7 @@
             paperWidth: 500, paperHeight: 100,
             xLabelHeight: 20, yLabelHeight: 10,
             xTickLabelHeight: 10, yTickLabelHeight: 8,
+            startDate: "1 Jan 2011", iterationLength: 5,
             iterationCount: 4
         });
         burnup.populate(metrics);
@@ -114,6 +115,7 @@
 	Test.prototype.test_populate_drawsXAxisLabels = function() {
 		assertEquals("# of X-axis tick labels", 3, burnup.xTickLabels.length);
 		var label = burnup.xTickLabels[0];
+		assertEquals("X-axis tick label name", "Jan 6", label.attrs.text);
 		assertEquals("X-axis tick label text anchor", "middle", label.attrs["text-anchor"]);
 		assertFloatEquals("X-axis tick label x position", 157.14285, label.attrs.x);
         assertEquals("X-axis tick label y position", 75, label.attrs.y);
