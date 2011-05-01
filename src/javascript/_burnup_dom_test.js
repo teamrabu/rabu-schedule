@@ -132,6 +132,7 @@
 			paperWidth: 500, paperHeight: 100,
 			xLabelHeight: 20, yLabelHeight: 10,
 			xTickLabelHeight: 10, yTickLabelHeight: 8,
+			startDate: "1 Jan 2011", iterationLength: 5,
 			iterationCount: 4
 		});
 	};
@@ -180,6 +181,9 @@
 	};
 	
 	Test.prototype.test_xTickLabel = function() {
-		
+		assertEquals("X-axis tick 0 label", "Jan 1", metrics.xTickLabel(0));
+        assertEquals("X-axis tick 1 label", "Jan 6", metrics.xTickLabel(1));
+        assertEquals("X-axis tick 2 label", "Jan 11", metrics.xTickLabel(2));
+        assertEquals("X-axis tick 3 label", "Jan 16", metrics.xTickLabel(3));
 	};
 }());

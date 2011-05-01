@@ -152,4 +152,10 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 		
 		return !tickZero && !overlapsLeftEdge && !overlapsRightEdge && !overlapsPreviousLabel;
 	};
+	
+	this.xTickLabel = function(tickOffset) {
+		var date = new Date(data.startDate);
+		date.setDate(date.getDate() + (data.iterationLength * tickOffset));
+		return date.toString('MMM d');
+	};
 };
