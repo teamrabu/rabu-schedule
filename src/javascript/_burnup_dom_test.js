@@ -4,29 +4,35 @@
 	var Test = new TestCase("BurnupDom");
 	var rs = rabu.schedule;
 	var burnup, paper;
-	var xAxis, yAxis, xLabel, yLabel, xTicks;
-	var xLabelBounds, yLabelBounds;
+//	var xAxis, yAxis, xLabel, yLabel, xTicks, xTickLabels;
+//	var xLabelBounds, yLabelBounds;
 	
-	function loadNodeVars() {
-		xLabel = paper.bottom;
-		yLabel = xLabel.next;
-		xAxis = yLabel.next;
-		yAxis = xAxis.next;
-		xTicks = [ yAxis.next ];
-		var i;
-		for (i = 1; i < 8; i++) {
-			xTicks[i] = xTicks[i-1].next;
-		}
-		assertNull("should not be any more Raphael nodes", xTicks[7].next);
-		
-		xLabelBounds = xLabel.getBBox();
-		yLabelBounds = yLabel.getBBox();
-	}
+//	function loadNodeVars() {
+//		xLabel = paper.bottom;
+//		yLabel = xLabel.next;
+//		xAxis = yLabel.next;
+//		yAxis = xAxis.next;
+//		xTicks = [ yAxis.next ];
+//		var i;
+//		for (i = 1; i < 4; i++) {
+//			xTicks[i] = xTicks[i-1].next;
+//		}
+//		xTickLabels = [ xTicks[3].next ];
+//		for (i = 1; i < 3; i++) {
+//			xTickLabels[i] = xTickLabels[i-1].next;
+//		}
+////		assertNull("should not be any more Raphael nodes", xTickLabels[2].next);
+//		
+//		xLabelBounds = xLabel.getBBox();
+//		yLabelBounds = yLabel.getBBox();
+//	}
 	
 	Test.prototype.setUp = function() {
 		/*:DOC += <div class="rabu-burnup" style="height:300px; width:200px">
 		              <div class="rabu-xLabel" style="font-size: 16px; font-family: serif; font-weight: 100;">X Label</div>
 		              <div class="rabu-yLabel" style="font-size: 12px; font-family: sans-serif; font-weight: 200;">Y Label</div>
+		              <div class="rabu-xTickLabel" style="font-size: 8px">X Tick Label</div>
+		              <div class="rabu-yTickLabel" style="font-size: 4px">Y Tick Label</div>
                   </div> */
 		var config = {
 			riskMultipliers: [1, 2, 4],
@@ -42,10 +48,10 @@
 		var estimates = new rs.Estimates(config);
 		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates, new rs.Projections(estimates));
 		burnup.populate();
-        var metrics = new rs.BurnupChartMetrics(500, 100, 20, 10, 4);
+        var metrics = new rs.BurnupChartMetrics(500, 100, 20, 10, 10, 6, 4);
         burnup.populate(metrics);
 		paper = burnup.paper();
-		loadNodeVars();
+//		loadNodeVars();
 	};
 	
 	function path(raphaelObject) {
@@ -70,9 +76,15 @@
 	   assertEquals("should only be one drawing area", 1, $(".rabu-burnup svg").length);
 	};
 	
+	Test.prototype.test_populate_hidesPrototypicalTickLabels = function() {
+		assertEquals("prototypical tick label should be hidden", "none", burnup.xTickLabel.node.style.display);
+	};
+	
 	Test.prototype.test_populate_hidesInteriorDivs = function() {
 		assertFalse("X-axis label markup should be hidden", $(".rabu-xLabel").is(":visible"));
 		assertFalse("Y-axis label markup should be hidden", $(".rabu-yLabel").is(":visible"));
+        assertFalse("X-axis tick label markup should be hidden", $(".rabu-xTickLabel").is(":visible"));
+        assertFalse("Y-axis tick label markup should be hidden", $(".rabu-yTickLabel").is(":visible"));
 	};
 	
 	Test.prototype.test_populate_paperSizeMatchesDivSize = function() {
@@ -81,37 +93,47 @@
 	};
 
     Test.prototype.test_populate_copiesLabelsFromHtml = function() {
-        assertEquals("X Label", xLabel.attrs.text);
-        assertEquals("X-axis label font-family", "serif", xLabel.attrs["font-family"]);
-        assertEquals("X-axis label font-size", "16px", xLabel.attrs["font-size"]);
-        assertEquals("X-axis label font-weight", "100", xLabel.attrs["font-weight"]);
+        assertEquals("X Label", burnup.xLabel.attrs.text);
+        assertEquals("X-axis label font-family", "serif", burnup.xLabel.attrs["font-family"]);
+        assertEquals("X-axis label font-size", "16px", burnup.xLabel.attrs["font-size"]);
+        assertEquals("X-axis label font-weight", "100", burnup.xLabel.attrs["font-weight"]);
 
-        assertEquals("Y Label", yLabel.attrs.text);
-        assertEquals("Y-axis label font-family", "sans-serif", yLabel.attrs["font-family"]);
-        assertEquals("Y-axis label font-size", "12px", yLabel.attrs["font-size"]);
-        assertEquals("Y-axis label font-weight", "200", yLabel.attrs["font-weight"]);
+        assertEquals("Y Label", burnup.yLabel.attrs.text);
+        assertEquals("Y-axis label font-family", "sans-serif", burnup.yLabel.attrs["font-family"]);
+        assertEquals("Y-axis label font-size", "12px", burnup.yLabel.attrs["font-size"]);
+        assertEquals("Y-axis label font-weight", "200", burnup.yLabel.attrs["font-weight"]);
     };
 
     Test.prototype.test_populate_positionsLabels = function() {
-		assertEquals("X-axis label position (x)", 260, xLabel.attrs.x);
-		assertEquals("X-axis label position (y)", 90, xLabel.attrs.y);
-        assertEquals("X-axis label text anchor", "middle", xLabel.attrs["text-anchor"]);
+		assertEquals("X-axis label position (x)", 260, burnup.xLabel.attrs.x);
+		assertEquals("X-axis label position (y)", 90, burnup.xLabel.attrs.y);
+        assertEquals("X-axis label text anchor", "middle", burnup.xLabel.attrs["text-anchor"]);
 
-        assertEquals("Y-axis label position (x)", 5, yLabel.attrs.x);
-		assertEquals("Y-axis label position (y)", 35, yLabel.attrs.y);
-        assertEquals("Y-axis label text anchor", "middle", yLabel.attrs["text-anchor"]);
+        assertEquals("Y-axis label position (x)", 5, burnup.yLabel.attrs.x);
+		assertEquals("Y-axis label position (y)", 32, burnup.yLabel.attrs.y);
+        assertEquals("Y-axis label text anchor", "middle", burnup.yLabel.attrs["text-anchor"]);
 	};
 		
     Test.prototype.test_populate_drawsAxes = function() {
-		assertEquals("X-axis", line(10, 70, 500, 70), path(xAxis));
-		assertEquals("Y-axis", line(20, 0, 20, 80), path(yAxis));
+		assertEquals("X-axis", line(10, 64, 500, 64), path(burnup.xAxis));
+		assertEquals("Y-axis", line(20, 0, 20, 74), path(burnup.yAxis));
     };
 
     Test.prototype.test_populate_drawsXAxisTickMarks = function() {
-		assertFloatEquals("tick 0", 20, xTicks[0].getBBox().x);
-        assertFloatEquals("tick 1", 20 + 137.14285, xTicks[1].getBBox().x);
-        assertFloatEquals("tick 2", 20 + 274.28571, xTicks[2].getBBox().x);
-        assertFloatEquals("tick 3", 20 + 411.42857, xTicks[3].getBBox().x);
+		assertEquals("# of X-axis ticks", 4, burnup.xTicks.length);
+		assertFloatEquals("X-axis tick 0", 20, burnup.xTicks[0].getBBox().x);
+        assertFloatEquals("X-axis tick 1", 20 + 137.14285, burnup.xTicks[1].getBBox().x);
+        assertFloatEquals("X-axis tick 2", 20 + 274.28571, burnup.xTicks[2].getBBox().x);
+        assertFloatEquals("X-axis tick 3", 20 + 411.42857, burnup.xTicks[3].getBBox().x);
+	};
+	
+	Test.prototype.test_populate_drawsXAxisLabels = function() {
+		assertEquals("# of X-axis tick labels", 3, burnup.xTickLabels.length);
+		var label = burnup.xTickLabels[0];
+		assertEquals("X-axis tick label text anchor", "middle", label.attrs["text-anchor"]);
+		assertFloatEquals("X-axis tick label x position", 157.14285, label.attrs.x);
+        assertEquals("X-axis tick label y position", 75, label.attrs.y);
+        assertEquals("X-axis tick label font-size", "8px", label.attrs["font-size"]);
 	};
 }());
 
@@ -122,7 +144,7 @@
 	var metrics, left, bottom;
 	
 	Test.prototype.setUp = function() {
-        metrics = new rs.BurnupChartMetrics(500, 100, 20, 10, 4);
+        metrics = new rs.BurnupChartMetrics(500, 100, 20, 10, 10, 8, 4);
 	};
 
     function assertFloatEquals(message, expected, actual) {
@@ -131,27 +153,40 @@
         }
     }
 	
-	Test.prototype.testChartArea = function() {	
+	Test.prototype.test_chartArea = function() {	
 		assertEquals("left", 20, metrics.left);
 		assertEquals("right", 500, metrics.right);
 		assertEquals("width", 480, metrics.width);
 		
 		assertEquals("top", 0, metrics.top);
-		assertEquals("bottom", 70, metrics.bottom);
-		assertEquals("height", 70, metrics.height);
+		assertEquals("bottom", 64, metrics.bottom);
+		assertEquals("height", 64, metrics.height);
 	};
 	
-	Test.prototype.testLabels = function() {
+	Test.prototype.test_labels = function() {
 		assertEquals("X-axis label horizontal center", 260, metrics.xLabelCenter);
-		assertEquals("X-axis label vertical center", 90, metrics.xLabelVerticalCenter);
-		assertEquals("Y-axis label horizontal center", 35, metrics.yLabelCenter);
+		assertEquals("X-axis label vertical center", 100 - 10, metrics.xLabelVerticalCenter);
+		assertEquals("Y-axis label horizontal center", 32, metrics.yLabelCenter);
 		assertEquals("Y-axis label vertical center", 5, metrics.yLabelVerticalCenter);
+
+        assertFloatEquals("X-axis tick label vertical center", 64 + 5 + 6, metrics.xTickLabelVerticalCenter);
 	};
 	
-	Test.prototype.testXTicks = function() {
+	Test.prototype.test_xTicks = function() {
 		assertFloatEquals("X-axis tick 0", 20, metrics.xTick(0));
 		assertFloatEquals("X-axis tick 1", 20 + 137.14285, metrics.xTick(1));
         assertFloatEquals("X-axis tick 2", 20 + 274.28571, metrics.xTick(2));
 		assertFloatEquals("X-axis tick 3", 20 + 411.42857, metrics.xTick(3));
+	};
+	
+	Test.prototype.test_shouldDrawXLabel = function() {
+        assertTrue("should draw label that doesn't overlap anything", metrics.shouldDrawXLabel(1, 10, 0));
+		assertFalse("should never draw label on tick 0", metrics.shouldDrawXLabel(0, 1, 0));
+		assertFalse("should not draw label when it overlaps left edge", metrics.shouldDrawXLabel(1, 300, 0));
+		assertFalse("should not draw label when padding overlaps left edge", metrics.shouldDrawXLabel(1, 270, 0));
+        assertFalse("should not draw label when it overlaps right edge", metrics.shouldDrawXLabel(3, 200, 0));
+		assertFalse("should not draw label when padding overlaps right edge", metrics.shouldDrawXLabel(3, 137, 0));
+		assertFalse("should not draw label when it overlaps previous label", metrics.shouldDrawXLabel(2, 20, 290));
+		assertFalse("should not draw label when padding overlaps previous label", metrics.shouldDrawXLabel(2, 20, 282));
 	};
 }());
