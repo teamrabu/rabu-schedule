@@ -147,6 +147,7 @@
     var Test = new TestCase("BurnupChartMetrics");
     var rs = rabu.schedule;
 	var metricsConfig, metrics;
+	var bottom;
 	
 	Test.prototype.setUp = function() {
         metricsConfig = {
@@ -158,6 +159,7 @@
 			maxEffort: 10
 		};
 		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		bottom = 61;
 	};
 
     function assertFloatEquals(message, expected, actual) {
@@ -233,6 +235,11 @@
 	Test.prototype.test_yTickPosition = function() {
 		metricsConfig.maxEffort = 1;
 		
-//		assertEquals("")
+		var tickDistance = bottom / 4.5;
+		assertFloatEquals("Y-axis tick 0 position", bottom, metrics.yTickPosition(0));
+		assertFloatEquals("Y-axis tick 1 position", bottom - (tickDistance), metrics.yTickPosition(1));
+        assertFloatEquals("Y-axis tick 2 position", bottom - (tickDistance * 2), metrics.yTickPosition(2));
+        assertFloatEquals("Y-axis tick 3 position", bottom - (tickDistance * 3), metrics.yTickPosition(3));
+        assertFloatEquals("Y-axis tick 4 position", bottom - (tickDistance * 4), metrics.yTickPosition(4));
 	};
 }());

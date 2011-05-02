@@ -179,4 +179,9 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 			return 1 + data.maxEffort;
 		}
 	};
+	
+	this.yTickPosition = function(tickOffset) {
+		var tickDistance = self.height / (self.yTickCount() - 1 + 0.5);
+		return self.bottom - (tickDistance * tickOffset);
+	};
 };
