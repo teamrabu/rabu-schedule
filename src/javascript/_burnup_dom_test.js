@@ -156,7 +156,7 @@
 			startDate: "1 Jan 2011", iterationLength: 5,
 			iterationCount: 4,
 			maxEffort: 10,
-			Y_TICK_SPACING: 10
+			Y_TICK_SPACING: 3
 		};
 		metrics = new rs.BurnupChartMetrics(metricsConfig);
 		bottom = 61;
@@ -254,8 +254,8 @@
 	
 	Test.prototype.test_yTickLabel = function() {
 		 assertEquals("tick label should increase (0)", "0", metrics.yTickLabel(0));
-         assertEquals("tick label should increase (1)", "5", metrics.yTickLabel(1));
-         assertEquals("tick label should increase (2)", "10", metrics.yTickLabel(2));
+         assertEquals("tick label should increase (1)", "0.5", metrics.yTickLabel(1));
+         assertEquals("tick label should increase (2)", "1", metrics.yTickLabel(2));
 	};
 	
 	Test.prototype.test_yTickPosition = function() {
@@ -267,5 +267,36 @@
         assertFloatEquals("Y-axis tick 2 position", bottom - (tickDistance * 2), metrics.yTickPosition(2));
         assertFloatEquals("Y-axis tick 3 position", bottom - (tickDistance * 3), metrics.yTickPosition(3));
         assertFloatEquals("Y-axis tick 4 position", bottom - (tickDistance * 4), metrics.yTickPosition(4));
+	};
+	
+	Test.prototype.test_shouldDrawYTickLabel = function() {
+        metricsConfig.xLabelHeight = 0;
+        metricsConfig.xTickLabelHeight = 0;
+        metricsConfig.paperHeight = 100 + 5;
+        metricsConfig.MAJOR_TICK_LENGTH = 10;
+        metricsConfig.Y_TICK_SPACING = 10;
+        metricsConfig.yTickLabelHeight = 10;
+		metricsConfig.maxEffort = 10;
+        metrics = new rs.BurnupChartMetrics(metricsConfig);
+        assertEquals("assumption: chart height", 100, metrics.bottom);
+		assertEquals("assumption: y-axis tick count", 11, metrics.yTickCount());
+		
+        assertTrue("should draw label that doesn't overlap anything", metrics.shouldDrawYTickLabel(1, 500));
+		assertFalse("should never draw label on tick 0", metrics.shouldDrawYTickLabel(0, 500));
+		
+		metricsConfig.yTickLabelHeight = 20;
+		metricsConfig.Y_TICK_LABEL_PADDING_MULTIPLIER = 1;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		assertFalse("should not draw label when it overlaps bottom edge", metrics.shouldDrawYTickLabel(1, 500));
+        assertFalse("should not draw label when it overlaps top edge", metrics.shouldDrawYTickLabel(10, 500));
+        assertFalse("should not draw label when it overlaps previous label", metrics.shouldDrawYTickLabel(2, 90));
+		
+		metricsConfig.yTickLabelHeight = 1;
+		metricsConfig.Y_TICK_LABEL_PADDING_MULTIPLIER = 20;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		assertFalse("should not draw label when padding overlaps bottom edge", metrics.shouldDrawYTickLabel(1, 500));
+		assertFalse("should not draw label when padding overlaps top edge", metrics.shouldDrawYTickLabel(10, 500));
+		assertFalse("should not draw label when padding overlaps previous label", metrics.shouldDrawYTickLabel(3, 90));
+		
 	};
 }());

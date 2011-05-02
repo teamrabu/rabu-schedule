@@ -132,8 +132,9 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	this.MAJOR_TICK_LENGTH = data.MAJOR_TICK_LENGTH || 8;
 	this.MINOR_TICK_LENGTH = data.MINOR_TICK_LENGTH || 4;
 	this.AXIS_OVERHANG = data.AXIS_OVERHANG || 10;
-	this.LABEL_PADDING = data.LABEL_PADDING || 10;
+	this.X_TICK_LABEL_PADDING = data.X_TICK_LABEL_PADDING || 10;
 	this.Y_TICK_SPACING = data.Y_TICK_SPACING || 20;
+	this.Y_TICK_LABEL_PADDING_MULTIPLIER = data.Y_TICK_LABEL_PADDING_MULTIPLIER || 1.1;
     
     this.left = data.yLabelHeight + this.AXIS_OVERHANG;
     this.right = data.paperWidth;
@@ -158,12 +159,13 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	};
 	
 	this.shouldDrawXTickLabel = function(tickOffset, labelWidth, previousRightEdge) {
-		var x = self.xTickPosition(tickOffset) - (labelWidth / 2) - self.LABEL_PADDING;
+		var labelLeft = self.xTickPosition(tickOffset) - (labelWidth / 2) - self.X_TICK_LABEL_PADDING;
+		var labelRight = self.xTickPosition(tickOffset) + (labelWidth / 2) + self.X_TICK_LABEL_PADDING;
 		
 		var tickZero = (tickOffset === 0);
-		var overlapsLeftEdge = (x <= self.left);
-		var overlapsRightEdge = (x + labelWidth + (self.LABEL_PADDING * 2) >= self.right);
-		var overlapsPreviousLabel = (x <= previousRightEdge);
+		var overlapsLeftEdge = (labelLeft <= self.left);
+		var overlapsRightEdge = (labelRight >= self.right);
+		var overlapsPreviousLabel = (labelLeft <= previousRightEdge);
 		
 		return !tickZero && !overlapsLeftEdge && !overlapsRightEdge && !overlapsPreviousLabel;
 	};
@@ -215,5 +217,18 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	
 	this.yTickLabel = function(tickOffset) {
 		return (yTickScale() * tickOffset).toString();
+	};
+	
+	this.shouldDrawYTickLabel = function(tickOffset, previousTopEdge) {
+		var padding = data.yTickLabelHeight * (self.Y_TICK_LABEL_PADDING_MULTIPLIER - 1);
+		var labelBottom = self.yTickPosition(tickOffset) + (data.yTickLabelHeight / 2) + padding;
+		var labelTop = self.yTickPosition(tickOffset) - (data.yTickLabelHeight / 2) - padding;
+		
+		var tickZero = (tickOffset === 0);
+		var overlapsBottomEdge = (labelBottom >= self.bottom);
+		var overlapsTopEdge = (labelTop <= self.top);
+		var overlapsPreviousLabel = (labelBottom >= previousTopEdge);
+		
+		return !tickZero && !overlapsBottomEdge && !overlapsTopEdge && !overlapsPreviousLabel;
 	};
 };
