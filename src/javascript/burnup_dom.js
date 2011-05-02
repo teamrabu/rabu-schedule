@@ -119,7 +119,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
 	            iterationCount: projections.maxIterations(),
-				maxEffort: paper.width / 10 // TODO: replace me!
+				maxEffort: projections.maxEffort()
 			});
 		}
 
@@ -208,6 +208,12 @@ rabu.schedule.BurnupChartMetrics = function(data) {
     };
 		
 	function yTickScale() {
+//		var maxEffort = self.roundUpEffort(data.maxEffort);
+//		var pixels = self.heght;
+//		var effortPerPixel = maxEffort / pixels;
+//		var effortPerTick = effortPerPixel * self.Y_TICK_SPACING;
+//		return self.roundUpEffort(effortPerTick);
+		
 		var pixels = self.height;
 		var effortPerPixel = data.maxEffort / pixels;
 		var effortPerTick = effortPerPixel * self.Y_TICK_SPACING;
@@ -215,7 +221,8 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	}
 	
 	this.yTickCount = function() {
-		return Math.floor(1 + data.maxEffort / yTickScale());
+		var count = 1 + data.maxEffort / yTickScale();
+		return Math.ceil(count);
 	};
 	
 	this.yTickPosition = function(tickOffset) {

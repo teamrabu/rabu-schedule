@@ -245,11 +245,11 @@
 		}
 		
 		assertTickScale("Minimum tick value is 0.25", 1, 0.25, 5);
-		assertTickScale("When tick spacing exceeded, tick values go up to 0.5", 1.25, 0.5, 3);
+		assertTickScale("When tick spacing exceeded, tick values go up to 0.5", 1.25, 0.5, 4);
 		assertTickScale("And then to 1", 4, 1, 5);
 		assertTickScale("Then 5", 5, 5, 2);
 		assertTickScale("Then 10", 40, 10, 5);
-		assertTickScale("And so forth", 49000, 50000, 1);
+		assertTickScale("And so forth", 49000, 50000, 2);
 	};
 	
 	Test.prototype.test_yTickLabel = function() {
