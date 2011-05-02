@@ -104,7 +104,7 @@
 		assertEquals("Y-axis", line(20, 0, 20, 71), path(burnup.yAxis));
     };
 
-    Test.prototype.test_populate_drawsXAxisTickMarks = function() {
+    Test.prototype.test_populate_drawsMajorXAxisTickMarks = function() {
 		assertEquals("# of X-axis ticks", 4, burnup.xTicks.length);
 		assertFloatEquals("X-axis tick 0", 20, burnup.xTicks[0].getBBox().x);
         assertFloatEquals("X-axis tick 1", 20 + 137.14285, burnup.xTicks[1].getBBox().x);

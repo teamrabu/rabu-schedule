@@ -21,6 +21,7 @@
                 ["Runtime error handling", "?"],
                 ["Documentation", "?"],
                 ["Smaller page size", "?"],
+                ["Internationalization", "?"],
                 ["Mini timelines", "?"],
                 ["Friendly CLI (Java?)", "?"],
                 ["CLI error handling", "?"]
