@@ -198,25 +198,10 @@ rabu.schedule.BurnupChartMetrics = function(data) {
     };
 		
 	function yTickSize() {
-		function spacing(size) {
-			var count = 1 + data.maxEffort / size;
-			return self.height / (count - 1 + 0.5);
-		}
-
-        var size = 0.25;		
-		if (spacing(size) < self.Y_TICK_SPACING) {
-			size = 0.5;
-		} 
-		if (spacing(size) < self.Y_TICK_SPACING) {
-			size = 1;
-		}
-		if (spacing(size) < self.Y_TICK_SPACING) {
-			size = 5;
-		}
-		if (spacing(size) < self.Y_TICK_SPACING) {
-			size = 10;
-		}
-		return size;
+		var pixels = self.height;
+		var effortPerPixel = data.maxEffort / pixels;
+		var effortPerTick = effortPerPixel * self.Y_TICK_SPACING;
+		return self.roundUpEffort(effortPerTick);
 	}
 	
 	this.yTickCount = function() {
