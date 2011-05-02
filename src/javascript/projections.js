@@ -32,7 +32,7 @@ rabu.schedule.Projections = function(estimates) {
 	};
 	
 	this.maxEffort = function() {
-		return 1.6;
+		return ninetyPercent().totalEffort();
 	};
 };
 
