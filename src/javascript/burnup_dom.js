@@ -86,7 +86,10 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		for (i = 0; i < metrics.yTickCount(); i++) {
 			var x = metrics.left;
 			var y = metrics.yTickPosition(i);
-			var tickOffset = metrics.MAJOR_TICK_LENGTH / 2;
+			var tickOffset = metrics.MINOR_TICK_LENGTH / 2;
+			if (metrics.shouldDrawYTickLabel(i, metrics.bottom)) {
+				tickOffset = metrics.MAJOR_TICK_LENGTH / 2;
+			}
 			self.yTicks.push(line(x - tickOffset, y, x + tickOffset, y));
 		}
 //		var i;

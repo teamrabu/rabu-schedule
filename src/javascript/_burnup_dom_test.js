@@ -123,7 +123,7 @@
 		metrics = new rs.BurnupChartMetrics(metricsConfig);
         burnup.populate(metrics);
 		
-		assertEquals("assumption: x-axis tick 1 has no label", "Jan 11", burnup.xTickLabels[0].attrs.text);
+		assertEquals("assumption: x-axis tick 1 is minor", "Jan 11", burnup.xTickLabels[0].attrs.text);
 		assertEquals("X-axis minor tick height", metrics.MINOR_TICK_LENGTH, burnup.xTicks[1].getBBox().height);
 		assertEquals("X-axis minor tick y", 61 - (metrics.MINOR_TICK_LENGTH / 2), burnup.xTicks[1].getBBox().y);
 	};
@@ -149,7 +149,17 @@
 		var tick = burnup.yTicks[1].getBBox();
 		assertEquals("Y-axis major tick width", metrics.MAJOR_TICK_LENGTH, tick.width);
 		assertEquals("Y-axis major tick height", 0, tick.height);
-		assertEquals("Y-axis major tick x", 16, tick.x);
+		assertEquals("Y-axis major tick x", metrics.left - (metrics.MAJOR_TICK_LENGTH / 2), tick.x);
+	};
+	
+	Test.prototype.test_populate_drawsMinorYAxisTickMarks = function() {
+		metricsConfig.yTickLabelHeight = 500;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		burnup.populate(metrics);
+		
+		var tick = burnup.yTicks[1].getBBox();
+		assertEquals("Y-axis minor tick width", metrics.MINOR_TICK_LENGTH, tick.width);
+		assertEquals("Y-axis minor tick x", metrics.left - (metrics.MINOR_TICK_LENGTH / 2), tick.x);
 	};
 }());
 
