@@ -29,6 +29,10 @@
 	Test.prototype.test_maxIterations = function() {
 		assertEquals(2, projections.maxIterations());
 	};
+	
+	Test.prototype.test_maxEffort = function() {
+		assertEquals(1.6, projections.maxEffort());
+	};
 }());
 
 
@@ -76,5 +80,27 @@
 		
 		projection = new rs.Projection(iteration, 0.1);
 		assertEquals("should not add time when no fraction", new Date("8 Jan 2011"), projection.dateRoundedToIteration());
+	};
+	
+	Test.prototype.test_totalEffort_and_velocity = function() {
+		projection = new rs.Projection(iteration, 4);
+		// original scope = 100; multiplied by risk factor = 400; increase = (400 - 100) = 300.
+		// 80% of increase = 300 * .8 = 240
+		// projected increase = original + 80% increase = 100 + 240 = 340
+		assertEquals("80% of increase in projection should be due to increased scope", 340, projection.totalEffort());
+		// projected iterations = 40; projected scope = 340; projected velocity = 340 / 40 = 8.5
+		assertEquals("20% of increase in projection should be due to reduced velocity", 8.5, projection.velocity());
+
+        projection = new rs.Projection(iteration, 2);
+		assertEquals("2x risk factor scope", 180, projection.totalEffort());
+		assertEquals("2x risk factor velocity", 9, projection.velocity());
+		
+		projection = new rs.Projection(iteration, 1);
+		assertEquals("1x risk factor scope", 100, projection.totalEffort());
+		assertEquals("1x risk factor velocity", 10, projection.velocity());
+		
+		projection = new rs.Projection(iteration, 0.8);
+		assertEquals("0.8x risk factor scope", 84, projection.totalEffort());
+		assertEquals("0.8x risk factor velocity", 10.5, projection.velocity());
 	};
 }());

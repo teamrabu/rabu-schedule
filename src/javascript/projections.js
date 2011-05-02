@@ -30,10 +30,15 @@ rabu.schedule.Projections = function(estimates) {
 	this.maxIterations = function() {
 		return Math.ceil(ninetyPercent().iterationsRemaining());
 	};
+	
+	this.maxEffort = function() {
+		return 1.6;
+	};
 };
 
 rabu.schedule.Projection = function(iteration, riskMultiplier) {
 	var self = this;
+	self.SCOPE_CHANGE_PERCENTAGE = 0.8;
 	
 	function daysToDate(days) {
 		var date = iteration.startDate();
@@ -56,5 +61,15 @@ rabu.schedule.Projection = function(iteration, riskMultiplier) {
 	this.dateRoundedToIteration = function() {
 		var days = Math.ceil(self.iterationsRemaining()) * iteration.length();
 		return daysToDate(days);
+	};
+	
+	this.totalEffort = function() {
+		var original = iteration.totalEstimate();
+		var increase = (original * riskMultiplier) - original;
+		return original + (increase * self.SCOPE_CHANGE_PERCENTAGE);		
+	};
+	
+	this.velocity = function() {
+		return self.totalEffort() / self.iterationsRemaining();
 	};
 };
