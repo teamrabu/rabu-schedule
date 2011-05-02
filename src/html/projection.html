@@ -214,9 +214,11 @@ You should have received a copy of the GNU General Public License along with thi
 		var main = new rabu.schedule.Main(config)
 		main.populateDom();
 
-		$(window).resize(function() {
-			main.populateDom();
-		});
+//        var resizeTimer;
+//		$(window).resize(function() {
+//			clearTimeout(resizeTimer);
+//			resizeTimer = setTimeout(main.populateDom, 1000);
+//		});
 	});
 </script>
 <div id="container">
