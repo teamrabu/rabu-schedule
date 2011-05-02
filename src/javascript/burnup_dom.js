@@ -64,12 +64,12 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
         self.xTickLabels = [];
         var previousLabelRightEdge = 0;
 		for (i = 0; i < metrics.xTickCount; i++) {
-            var x = metrics.xTick(i);
+            var x = metrics.xTickPosition(i);
 
 			if (metrics.shouldDrawXTickLabel(i, maxWidth, previousLabelRightEdge)) {
                 self.xTicks.push(line(x, metrics.bottom - (metrics.MAJOR_TICK_LENGTH / 2), x, metrics.bottom + (metrics.MAJOR_TICK_LENGTH / 2)));
                 label = copyOneTextElement(xTickLabelElement, metrics.xTickLabel(i));
-                label.translate(metrics.xTick(i), metrics.xTickLabelVerticalCenter); 
+                label.translate(metrics.xTickPosition(i), metrics.xTickLabelVerticalCenter); 
 				self.xTickLabels.push(label);
 				previousLabelRightEdge = x + (maxWidth / 2);
 			}
@@ -77,6 +77,12 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 				self.xTicks.push(line(x, metrics.bottom - (metrics.MINOR_TICK_LENGTH / 2), x, metrics.bottom + (metrics.MINOR_TICK_LENGTH / 2)));
 			}
 		}
+	}
+	
+	function yAxisTicks() {
+//		var i;
+//		for (i = 0; i < metrics.yTickCount(); i++) {
+//		}
 	}
 	
 	this.populate = function(optionalMetricsForTesting) {
@@ -99,13 +105,15 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 				yTickLabelHeight: -10,
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
-	            iterationCount: projections.maxIterations()
+	            iterationCount: projections.maxIterations(),
+				maxEffort: paper.width / 100  // TODO: replace me!
 			});
 		}
 
 		axisLabels();
 		axisLines();
 		xAxisTicks();
+		yAxisTicks(); //TODO: reimplement with tests
 	};
 	
 	this.paper = function() {
@@ -138,13 +146,13 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	
 	this.xTickCount = data.iterationCount;
 	
-	this.xTick = function(offset) {
+	this.xTickPosition = function(offset) {
 		var tickDistance = self.width / (data.iterationCount - 1 + 0.5);
 		return self.left + (offset * tickDistance);
 	};
 	
 	this.shouldDrawXTickLabel = function(tickOffset, labelWidth, previousRightEdge) {
-		var x = self.xTick(tickOffset) - (labelWidth / 2) - self.LABEL_PADDING;
+		var x = self.xTickPosition(tickOffset) - (labelWidth / 2) - self.LABEL_PADDING;
 		
 		var tickZero = (tickOffset === 0);
 		var overlapsLeftEdge = (x <= self.left);
@@ -158,5 +166,17 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 		var date = new Date(data.startDate);
 		date.setDate(date.getDate() + (data.iterationLength * tickOffset));
 		return date.toString('MMM d');
+	};
+	
+	this.yTickCount = function() {
+		if (data.maxEffort <= 10) {
+			return 1 + data.maxEffort / 0.25;
+		}
+		else if (data.maxEffort <= 20) {
+		    return 1 + data.maxEffort / 0.5;
+		}
+		else {
+			return 1 + data.maxEffort;
+		}
 	};
 };

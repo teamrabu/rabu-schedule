@@ -146,16 +146,18 @@
 (function() {
     var Test = new TestCase("BurnupChartMetrics");
     var rs = rabu.schedule;
-	var metrics, left, bottom;
+	var metricsConfig, metrics;
 	
 	Test.prototype.setUp = function() {
-        metrics = new rs.BurnupChartMetrics({
+        metricsConfig = {
 			paperWidth: 500, paperHeight: 100,
 			xLabelHeight: 20, yLabelHeight: 10,
 			xTickLabelHeight: 10, yTickLabelHeight: 8,
 			startDate: "1 Jan 2011", iterationLength: 5,
-			iterationCount: 4
-		});
+			iterationCount: 4,
+			maxEffort: 10
+		};
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
 	};
 
     function assertFloatEquals(message, expected, actual) {
@@ -183,11 +185,11 @@
         assertFloatEquals("X-axis tick label vertical center", 70, metrics.xTickLabelVerticalCenter);
 	};
 	
-	Test.prototype.test_xTicks = function() {
-		assertFloatEquals("X-axis tick 0", 20, metrics.xTick(0));
-		assertFloatEquals("X-axis tick 1", 20 + 137.14285, metrics.xTick(1));
-        assertFloatEquals("X-axis tick 2", 20 + 274.28571, metrics.xTick(2));
-		assertFloatEquals("X-axis tick 3", 20 + 411.42857, metrics.xTick(3));
+	Test.prototype.test_xTickPosition = function() {
+		assertFloatEquals("X-axis tick 0 position", 20, metrics.xTickPosition(0));
+		assertFloatEquals("X-axis tick 1 position", 20 + 137.14285, metrics.xTickPosition(1));
+        assertFloatEquals("X-axis tick 2 position", 20 + 274.28571, metrics.xTickPosition(2));
+		assertFloatEquals("X-axis tick 3 position", 20 + 411.42857, metrics.xTickPosition(3));
 	};
 	
 	Test.prototype.test_shouldDrawXTickLabel = function() {
@@ -206,5 +208,31 @@
         assertEquals("X-axis tick 1 label", "Jan 6", metrics.xTickLabel(1));
         assertEquals("X-axis tick 2 label", "Jan 11", metrics.xTickLabel(2));
         assertEquals("X-axis tick 3 label", "Jan 16", metrics.xTickLabel(3));
+	};
+	
+	Test.prototype.test_yTickCount = function() {
+		metricsConfig.maxEffort = 10;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		assertEquals("y-axis ticks represent 0.25 points", 41, metrics.yTickCount());
+		
+		metricsConfig.maxEffort = 1;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		assertEquals("y-axis ticks never get smaller than 0.25 points", 5, metrics.yTickCount());
+
+        metricsConfig.maxEffort = 11;
+		assertEquals("when effort greater than 10, y-axis ticks represent 0.5 points", 23, metrics.yTickCount());
+		metricsConfig.maxEffort = 20;
+		assertEquals("20 effort", 41, metrics.yTickCount());
+		
+		metricsConfig.maxEffort = 21;
+		assertEquals("when effort greater than 20, y-axis ticks represent 1 point", 22, metrics.yTickCount());
+		
+		//TODO: finish
+	};
+	
+	Test.prototype.test_yTickPosition = function() {
+		metricsConfig.maxEffort = 1;
+		
+//		assertEquals("")
 	};
 }());

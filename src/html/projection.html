@@ -54,7 +54,8 @@ You should have received a copy of the GNU General Public License along with thi
 			border-left: solid 1px; border-right: solid 1px;
 			padding: 0em 2em 0em 3.25em;
 			margin-left: auto; margin-right: auto;
-			width: 525px;
+/*			width: 525px; */
+width: 75%;
 
 			-moz-box-shadow: 0px 0px 15px 5px black;
 			-webkit-box-shadow: 0px 0px 15px 5px black;
@@ -214,11 +215,11 @@ You should have received a copy of the GNU General Public License along with thi
 		var main = new rabu.schedule.Main(config)
 		main.populateDom();
 
-//        var resizeTimer;
-//		$(window).resize(function() {
-//			clearTimeout(resizeTimer);
-//			resizeTimer = setTimeout(main.populateDom, 1000);
-//		});
+        var resizeTimer;
+		$(window).resize(function() {
+			clearTimeout(resizeTimer);
+			resizeTimer = setTimeout(main.populateDom, 100);
+		});
 	});
 </script>
 <div id="container">
