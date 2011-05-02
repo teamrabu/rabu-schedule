@@ -297,6 +297,5 @@
 		assertFalse("should not draw label when padding overlaps bottom edge", metrics.shouldDrawYTickLabel(1, 500));
 		assertFalse("should not draw label when padding overlaps top edge", metrics.shouldDrawYTickLabel(10, 500));
 		assertFalse("should not draw label when padding overlaps previous label", metrics.shouldDrawYTickLabel(3, 90));
-		
 	};
 }());

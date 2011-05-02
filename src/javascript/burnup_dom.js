@@ -81,12 +81,20 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	
 	function yAxisTicks() {  // TODO: this is just a placeholder for visual testing
 		var i;
+		var previousLabelTopEdge = metrics.bottom;
 		for (i = 0; i < metrics.yTickCount(); i++) {
 			var x = metrics.left;
+            var y = metrics.yTickPosition(i);
+            var label = paper.text(x - 15, y, metrics.yTickLabel(i));
 			var xOffset = metrics.MINOR_TICK_LENGTH / 2;
-			var y = metrics.yTickPosition(i);
+			if (metrics.shouldDrawYTickLabel(i, previousLabelTopEdge)) {
+				xOffset = metrics.MAJOR_TICK_LENGTH / 2;
+				previousLabelTopEdge = y - (self.yTickLabel.getBBox().height / 2);
+			}
+			else {
+				label.remove();
+			}
 			line(x - xOffset, y, x + xOffset, y);
-			paper.text(x + 15, y, metrics.yTickLabel(i));
 		}
 	}
 	
@@ -107,11 +115,11 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	            xLabelHeight: self.xLabel.getBBox().height,
 				yLabelHeight: self.yLabel.getBBox().height,
 	            xTickLabelHeight: self.xTickLabel.getBBox().height,
-				yTickLabelHeight: -10,
+				yTickLabelHeight: 10,   // TODO: replace me!
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
 	            iterationCount: projections.maxIterations(),
-				maxEffort: paper.width  // TODO: replace me!
+				maxEffort: paper.width / 10 // TODO: replace me!
 			});
 		}
 
@@ -133,7 +141,7 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	this.MINOR_TICK_LENGTH = data.MINOR_TICK_LENGTH || 4;
 	this.AXIS_OVERHANG = data.AXIS_OVERHANG || 10;
 	this.X_TICK_LABEL_PADDING = data.X_TICK_LABEL_PADDING || 10;
-	this.Y_TICK_SPACING = data.Y_TICK_SPACING || 20;
+	this.Y_TICK_SPACING = data.Y_TICK_SPACING || 10;
 	this.Y_TICK_LABEL_PADDING_MULTIPLIER = data.Y_TICK_LABEL_PADDING_MULTIPLIER || 1.1;
     
     this.left = data.yLabelHeight + this.AXIS_OVERHANG;
