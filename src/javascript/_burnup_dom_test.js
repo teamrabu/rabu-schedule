@@ -151,13 +151,15 @@
 	};
 	
 	Test.prototype.test_populate_drawsMinorYAxisTickMarks = function() {
-		metricsConfig.yTickLabelHeight = 500;
+		metricsConfig.yTickLabelHeight = 50;
 		metrics = new rs.BurnupChartMetrics(metricsConfig);
 		burnup.populate(metrics);
 		
-		var tick = burnup.yTicks[1].getBBox();
+		var tick = burnup.yTicks[0].getBBox();
 		assertEquals("Y-axis minor tick width", metrics.MINOR_TICK_LENGTH, tick.width);
 		assertEquals("Y-axis minor tick x", metrics.left - (metrics.MINOR_TICK_LENGTH / 2), tick.x);
+		
+		assertEquals("Y-axis tick rendering should track top edge", metrics.MINOR_TICK_LENGTH, burnup.yTicks[1].getBBox().width);
 	};
 }());
 

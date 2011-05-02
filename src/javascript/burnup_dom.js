@@ -83,12 +83,14 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		var i;
 		
 		self.yTicks = [];
+		var previousLabelTopEdge = metrics.bottom;
 		for (i = 1; i < metrics.yTickCount(); i++) {
 			var x = metrics.left;
 			var y = metrics.yTickPosition(i);
 			var tickOffset = metrics.MINOR_TICK_LENGTH / 2;
-			if (metrics.shouldDrawYTickLabel(i, metrics.bottom)) {
+			if (metrics.shouldDrawYTickLabel(i, previousLabelTopEdge)) {
 				tickOffset = metrics.MAJOR_TICK_LENGTH / 2;
+				previousLabelTopEdge = y - (metrics.yTickLabelHeight / 2);
 			}
 			self.yTicks.push(line(x - tickOffset, y, x + tickOffset, y));
 		}
@@ -127,7 +129,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	            xLabelHeight: self.xLabel.getBBox().height,
 				yLabelHeight: self.yLabel.getBBox().height,
 	            xTickLabelHeight: self.xTickLabel.getBBox().height,
-				yTickLabelHeight: 10,   // TODO: replace me!
+				yTickLabelHeight: 30,   // TODO: replace me!
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
 	            iterationCount: projections.maxIterations(),
@@ -163,6 +165,8 @@ rabu.schedule.BurnupChartMetrics = function(data) {
     this.top = 0;
     this.bottom = data.paperHeight - ((data.xLabelHeight * 1.25) + (this.MAJOR_TICK_LENGTH / 2) + data.xTickLabelHeight);
     this.height = this.bottom - this.top;
+	
+	this.yTickLabelHeight = data.yTickLabelHeight;
     
     this.xLabelCenter = this.left + (this.width / 2);
     this.yLabelCenter = this.top + (this.height / 2);
