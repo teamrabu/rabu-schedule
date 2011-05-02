@@ -95,13 +95,13 @@
         assertEquals("X-axis label text anchor", "middle", burnup.xLabel.attrs["text-anchor"]);
 
         assertEquals("Y-axis label position (x)", 5, burnup.yLabel.attrs.x);
-		assertEquals("Y-axis label position (y)", 32, burnup.yLabel.attrs.y);
+		assertEquals("Y-axis label position (y)", 33, burnup.yLabel.attrs.y);
         assertEquals("Y-axis label text anchor", "middle", burnup.yLabel.attrs["text-anchor"]);
 	};
 		
     Test.prototype.test_populate_drawsAxes = function() {
-		assertEquals("X-axis", line(10, 64, 500, 64), path(burnup.xAxis));
-		assertEquals("Y-axis", line(20, 0, 20, 74), path(burnup.yAxis));
+		assertEquals("X-axis", line(10, 66, 500, 66), path(burnup.xAxis));
+		assertEquals("Y-axis", line(20, 0, 20, 76), path(burnup.yAxis));
     };
 
     Test.prototype.test_populate_drawsXAxisTickMarks = function() {
@@ -114,7 +114,7 @@
 		var tick = burnup.xTicks[1].getBBox();
 		assertEquals("X-axis tick width", 0, tick.width);
 		assertEquals("X-axis tick height", metrics.MAJOR_TICK_LENGTH, tick.height);
-		assertEquals("X-axis tick y", 64 - (metrics.MAJOR_TICK_LENGTH / 2), tick.y);
+		assertEquals("X-axis tick y", 66 - (metrics.MAJOR_TICK_LENGTH / 2), tick.y);
 	};
 	
 	Test.prototype.test_populate_drawsMinorXAxisTickMarks_whenNoLabel = function() {
@@ -128,7 +128,7 @@
         burnup.populate(metrics);
 		assertEquals("assumption: x-axis tick 1 has no label", "Jan 11", burnup.xTickLabels[0].attrs.text);
 		assertEquals("X-axis minor tick height", metrics.MINOR_TICK_LENGTH, burnup.xTicks[1].getBBox().height);
-		assertEquals("X-axis minor tick y", 64 - (metrics.MINOR_TICK_LENGTH / 2), burnup.xTicks[1].getBBox().y);
+		assertEquals("X-axis minor tick y", 66 - (metrics.MINOR_TICK_LENGTH / 2), burnup.xTicks[1].getBBox().y);
 	};
 	
 	Test.prototype.test_populate_drawsXAxisTickLabels = function() {
@@ -170,14 +170,14 @@
 		assertEquals("width", 480, metrics.width);
 		
 		assertEquals("top", 0, metrics.top);
-		assertEquals("bottom", 64, metrics.bottom);
-		assertEquals("height", 64, metrics.height);
+		assertEquals("bottom", 66, metrics.bottom);
+		assertEquals("height", 66, metrics.height);
 	};
 	
 	Test.prototype.test_labels = function() {
 		assertEquals("X-axis label horizontal center", 260, metrics.xLabelCenter);
 		assertEquals("X-axis label vertical center", 100 - 10, metrics.xLabelVerticalCenter);
-		assertEquals("Y-axis label horizontal center", 32, metrics.yLabelCenter);
+		assertEquals("Y-axis label horizontal center", 33, metrics.yLabelCenter);
 		assertEquals("Y-axis label vertical center", 5, metrics.yLabelVerticalCenter);
 
         assertFloatEquals("X-axis tick label vertical center", 64 + 5 + 6, metrics.xTickLabelVerticalCenter);

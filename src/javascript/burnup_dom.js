@@ -118,17 +118,17 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 
 rabu.schedule.BurnupChartMetrics = function(data) {
     var self = this;
-	this.MAJOR_TICK_LENGTH = 6;
+	this.MAJOR_TICK_LENGTH = 8;
 	this.MINOR_TICK_LENGTH = 4;
 	this.AXIS_OVERHANG = 10;
-	this.LABEL_PADDING = 5;
+	this.LABEL_PADDING = 10;
     
     this.left = data.yLabelHeight + this.AXIS_OVERHANG;
     this.right = data.paperWidth;
     this.width = this.right - this.left;
     
     this.top = 0;
-    this.bottom = data.paperHeight - (data.xLabelHeight + this.MAJOR_TICK_LENGTH + data.xTickLabelHeight);
+    this.bottom = data.paperHeight - (data.xLabelHeight + (this.MAJOR_TICK_LENGTH / 2) + data.xTickLabelHeight);
     this.height = this.bottom - this.top;
     
     this.xLabelCenter = this.left + (this.width / 2);
@@ -136,7 +136,7 @@ rabu.schedule.BurnupChartMetrics = function(data) {
     this.xLabelVerticalCenter = data.paperHeight - (data.xLabelHeight / 2);
     this.yLabelVerticalCenter = this.left - this.AXIS_OVERHANG - (data.yLabelHeight / 2);
 	
-	this.xTickLabelVerticalCenter = this.bottom + this.MAJOR_TICK_LENGTH + (data.xTickLabelHeight / 2);
+	this.xTickLabelVerticalCenter = this.bottom + (this.MAJOR_TICK_LENGTH / 2) + (data.xTickLabelHeight / 2);
 	
 	this.xTickCount = data.iterationCount;
 	
