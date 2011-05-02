@@ -9,10 +9,6 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	var yTickLabelElement = $(".rabu-yTickLabel");
     var paper, metrics, xLabel, yLabel;
 
-    this.TICK_LENGTH = 6;       //TODO: delete me
-    this.AXIS_OVERHANG = 10;    //TODO: delete me
-
-	
 	function hideInteriorElements() {
 		element.children().hide();
 	}
@@ -46,7 +42,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	}
 	
 	function axisLines() {
-		self.xAxis = line(metrics.left - self.AXIS_OVERHANG, metrics.bottom, metrics.right, metrics.bottom);
+		self.xAxis = line(metrics.left - metrics.AXIS_OVERHANG, metrics.bottom, metrics.right, metrics.bottom);
 		self.yAxis = line(metrics.left, metrics.top, metrics.left, metrics.bottom + metrics.AXIS_OVERHANG);
 	}
 	
@@ -56,26 +52,29 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		self.xTicks = [];
 		for (i = 0; i < metrics.xTickCount; i++) {
 			var x = metrics.xTick(i);
-			self.xTicks.push(line(x, metrics.bottom - metrics.TICK_LENGTH, x, metrics.bottom + metrics.TICK_LENGTH));
+			self.xTicks.push(line(x, metrics.bottom - (metrics.MAJOR_TICK_LENGTH / 2), x, metrics.bottom + (metrics.MAJOR_TICK_LENGTH / 2)));
 		}
 	}
 	
 	function xAxisTickLabels() {
 		var i;
-		
+
+        self.xTicks = [];		
         self.xTickLabels = [];
         var previousLabelRightEdge = 0;
 		for (i = 0; i < metrics.xTickCount; i++) {
+            var x = metrics.xTick(i);
 			var label = copyOneTextElement(xTickLabelElement, metrics.xTickLabel(i));
 			label.translate(metrics.xTick(i), metrics.xTickLabelVerticalCenter); 
 
 			var labelWidth = label.getBBox().width;
 			if (metrics.shouldDrawXTickLabel(i, labelWidth, previousLabelRightEdge)) {
-				var x = metrics.xTick(i);
+                self.xTicks.push(line(x, metrics.bottom - (metrics.MAJOR_TICK_LENGTH / 2), x, metrics.bottom + (metrics.MAJOR_TICK_LENGTH / 2)));
 				self.xTickLabels.push(label);
 				previousLabelRightEdge = x + (labelWidth / 2);
 			}
 			else {
+				self.xTicks.push(line(x, metrics.bottom - (metrics.MINOR_TICK_LENGTH / 2), x, metrics.bottom + (metrics.MINOR_TICK_LENGTH / 2)));
 				label.remove();
 			}
 		}
@@ -107,7 +106,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 
 		axisLabels();
 		axisLines();
-		xAxisTicks();
+//		xAxisTicks();
 		xAxisTickLabels();
 	};
 	
@@ -119,16 +118,17 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 
 rabu.schedule.BurnupChartMetrics = function(data) {
     var self = this;
-	this.TICK_LENGTH = 6;
+	this.MAJOR_TICK_LENGTH = 6;
+	this.MINOR_TICK_LENGTH = 4;
 	this.AXIS_OVERHANG = 10;
-	this.LABEL_PADDING = 3;
+	this.LABEL_PADDING = 5;
     
     this.left = data.yLabelHeight + this.AXIS_OVERHANG;
     this.right = data.paperWidth;
     this.width = this.right - this.left;
     
     this.top = 0;
-    this.bottom = data.paperHeight - (data.xLabelHeight + this.TICK_LENGTH + data.xTickLabelHeight);
+    this.bottom = data.paperHeight - (data.xLabelHeight + this.MAJOR_TICK_LENGTH + data.xTickLabelHeight);
     this.height = this.bottom - this.top;
     
     this.xLabelCenter = this.left + (this.width / 2);
@@ -136,7 +136,7 @@ rabu.schedule.BurnupChartMetrics = function(data) {
     this.xLabelVerticalCenter = data.paperHeight - (data.xLabelHeight / 2);
     this.yLabelVerticalCenter = this.left - this.AXIS_OVERHANG - (data.yLabelHeight / 2);
 	
-	this.xTickLabelVerticalCenter = this.bottom + this.TICK_LENGTH + (data.xTickLabelHeight / 2);
+	this.xTickLabelVerticalCenter = this.bottom + this.MAJOR_TICK_LENGTH + (data.xTickLabelHeight / 2);
 	
 	this.xTickCount = data.iterationCount;
 	

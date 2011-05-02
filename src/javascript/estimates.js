@@ -41,17 +41,13 @@ rabu.schedule.Estimates = function(configJson) {
 		var list = iterations();
 		return new rs.Iteration(list[list.length - 1]);
 	};
-
+	
     this.iterationCount = function() {
 		return config.iterations.length;
 	};
 
 	this.currentIterationStarted = function() {
 		return this.currentIteration().startDate();
-	};
-	
-	this.firstIterationStarted = function() {
-		return this.firstIteration().startDate();
 	};
 
 	this.iterationLength = function() {

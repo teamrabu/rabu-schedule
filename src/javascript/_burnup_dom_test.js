@@ -3,7 +3,7 @@
 (function() {
 	var Test = new TestCase("BurnupDom");
 	var rs = rabu.schedule;
-	var burnup, paper;
+	var burnup, paper, metrics;
 	
 	Test.prototype.setUp = function() {
 		/*:DOC += <div class="rabu-burnup" style="height:300px; width:200px">
@@ -26,7 +26,7 @@
 		var estimates = new rs.Estimates(config);
 		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates, new rs.Projections(estimates));
 		burnup.populate();
-        var metrics = new rs.BurnupChartMetrics({
+        metrics = new rs.BurnupChartMetrics({
             paperWidth: 500, paperHeight: 100,
             xLabelHeight: 20, yLabelHeight: 10,
             xTickLabelHeight: 10, yTickLabelHeight: 8,
@@ -110,9 +110,28 @@
         assertFloatEquals("X-axis tick 1", 20 + 137.14285, burnup.xTicks[1].getBBox().x);
         assertFloatEquals("X-axis tick 2", 20 + 274.28571, burnup.xTicks[2].getBBox().x);
         assertFloatEquals("X-axis tick 3", 20 + 411.42857, burnup.xTicks[3].getBBox().x);
+		
+		var tick = burnup.xTicks[1].getBBox();
+		assertEquals("X-axis tick width", 0, tick.width);
+		assertEquals("X-axis tick height", metrics.MAJOR_TICK_LENGTH, tick.height);
+		assertEquals("X-axis tick y", 64 - (metrics.MAJOR_TICK_LENGTH / 2), tick.y);
 	};
 	
-	Test.prototype.test_populate_drawsXAxisLabels = function() {
+	Test.prototype.test_populate_drawsMinorXAxisTickMarks_whenNoLabel = function() {
+        var metrics = new rs.BurnupChartMetrics({
+            paperWidth: 500, paperHeight: 100,
+            xLabelHeight: 20, yLabelHeight: 10,
+            xTickLabelHeight: 10, yTickLabelHeight: 8,
+            startDate: "1 Jan 2011", iterationLength: 5,
+            iterationCount: 40
+        });
+        burnup.populate(metrics);
+		assertEquals("assumption: x-axis tick 1 has no label", "Jan 11", burnup.xTickLabels[0].attrs.text);
+		assertEquals("X-axis minor tick height", metrics.MINOR_TICK_LENGTH, burnup.xTicks[1].getBBox().height);
+		assertEquals("X-axis minor tick y", 64 - (metrics.MINOR_TICK_LENGTH / 2), burnup.xTicks[1].getBBox().y);
+	};
+	
+	Test.prototype.test_populate_drawsXAxisTickLabels = function() {
 		assertEquals("# of X-axis tick labels", 3, burnup.xTickLabels.length);
 		var label = burnup.xTickLabels[0];
 		assertEquals("X-axis tick label name", "Jan 6", label.attrs.text);
