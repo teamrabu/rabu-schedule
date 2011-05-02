@@ -212,7 +212,23 @@
         assertEquals("X-axis tick 2 label", "Jan 11", metrics.xTickLabel(2));
         assertEquals("X-axis tick 3 label", "Jan 16", metrics.xTickLabel(3));
 	};
-	
+    
+    Test.prototype.test_roundUpEffort = function() {
+        assertEquals(0.25, metrics.roundUpEffort(0.0001));
+        assertEquals(0.25, metrics.roundUpEffort(0.1));
+        assertEquals(0.25, metrics.roundUpEffort(0.25));
+        assertEquals(0.5, metrics.roundUpEffort(0.4));
+        assertEquals(0.5, metrics.roundUpEffort(0.5));
+        assertEquals(1, metrics.roundUpEffort(0.6));
+        assertEquals(1, metrics.roundUpEffort(1));
+        assertEquals(5, metrics.roundUpEffort(2));
+        assertEquals(5, metrics.roundUpEffort(5));
+        assertEquals(50, metrics.roundUpEffort(20));
+        assertEquals(100, metrics.roundUpEffort(70));
+        assertEquals(100, metrics.roundUpEffort(100));
+        assertEquals(500000, metrics.roundUpEffort(400000));
+    };
+
 	Test.prototype.test_yTicks_scaleIntelligently = function() {
 		metricsConfig.xLabelHeight = 0;
 		metricsConfig.xTickLabelHeight = 0;
@@ -222,61 +238,20 @@
 		metrics = new rs.BurnupChartMetrics(metricsConfig);
 		assertEquals("assumption: chart height", 45, metrics.bottom);
 		
-		// Minimum tick value is 0.25
-		metricsConfig.maxEffort = 1;
-		metrics = new rs.BurnupChartMetrics(metricsConfig);
-		assertEquals("y-axis tick label @ 0.25", "0.25", metrics.yTickLabel(1));
-		assertEquals("y-axis tick count @ 0.25", 5, metrics.yTickCount());
-			
-		// When tick spacing is exceeded, tick values go up to 0.5
-		metricsConfig.maxEffort = 1.25;
-        metrics = new rs.BurnupChartMetrics(metricsConfig);
-		assertEquals("y-axis tick label @ 0.5", "0.5", metrics.yTickLabel(1));
-		assertEquals("y-axis tick count @ 0.5", 3, metrics.yTickCount());
+		function assertTickScale(message, maxEffort, scale, count) {
+			metricsConfig.maxEffort = maxEffort;
+			metrics = new rs.BurnupChartMetrics(metricsConfig);
+			assertEquals("y-axis tick label @ " + scale + " scale", scale, metrics.yTickLabel(1));
+			assertEquals("y-axis count @ " + scale + " scale", count, metrics.yTickCount());
+		}
 		
-		// And then to 1
-		metricsConfig.maxEffort = 4;
-		metrics = new rs.BurnupChartMetrics(metricsConfig);
-		assertEquals("y-axis tick label @ 1", "1", metrics.yTickLabel(1));
-		assertEquals("y-axis tick count @ 1", 5, metrics.yTickCount());
-		
-		// Then 5
-		metricsConfig.maxEffort = 5;
-		metrics = new rs.BurnupChartMetrics(metricsConfig);
-		assertEquals("y-axis tick label @ 5", "5", metrics.yTickLabel(1));
-		assertEquals("y-axis tick count @ 5", 2, metrics.yTickCount());
-		
-		// Then 10
-		metricsConfig.maxEffort = 40;
-		metrics = new rs.BurnupChartMetrics(metricsConfig);
-		assertEquals("y-axis tick label @ 10", "10", metrics.yTickLabel(1));
-		assertEquals("y-axis tick count @ 10", 5, metrics.yTickCount());
-		
-		// And so forth
-		metricsConfig.maxEffort = 50000;
-		metrics = new rs.BurnupChartMetrics(metricsConfig);
-//		assertEquals("y-axis tick label @ 50000", "50000", metrics.yTickLabel(1));
-//		assertEquals("y-axis tick count @ 50000", 2, metrics.yTickCount());
-		
-//		//TODO: finish
+		assertTickScale("Minimum tick value is 0.25", 1, 0.25, 5);
+		assertTickScale("When tick spacing exceeded, tick values go up to 0.5", 1.25, 0.5, 3);
+		assertTickScale("And then to 1", 4, 1, 5);
+		assertTickScale("Then 5", 5, 5, 2);
+		assertTickScale("Then 10", 40, 10, 5);
+		assertTickScale("And so forth", 49000, 50000, 1);
 	};
-	
-	Test.prototype.test_roundUpEffort = function() {
-		assertEquals(0.25, metrics.roundUpEffort(0.0001));
-		assertEquals(0.25, metrics.roundUpEffort(0.1));
-		assertEquals(0.25, metrics.roundUpEffort(0.25));
-		assertEquals(0.5, metrics.roundUpEffort(0.4));
-		assertEquals(0.5, metrics.roundUpEffort(0.5));
-		assertEquals(1, metrics.roundUpEffort(0.6));
-		assertEquals(1, metrics.roundUpEffort(1));
-		assertEquals(5, metrics.roundUpEffort(2));
-		assertEquals(5, metrics.roundUpEffort(5));
-		assertEquals(50, metrics.roundUpEffort(20));
-		assertEquals(100, metrics.roundUpEffort(70));
-		assertEquals(100, metrics.roundUpEffort(100));
-		assertEquals(500000, metrics.roundUpEffort(400000));
-	};
-	
 	
 	Test.prototype.test_yTickLabel = function() {
 		 assertEquals("tick label should increase (0)", "0", metrics.yTickLabel(0));

@@ -111,7 +111,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
 	            iterationCount: projections.maxIterations(),
-				maxEffort: paper.width / 10  // TODO: replace me!
+				maxEffort: paper.width  // TODO: replace me!
 			});
 		}
 
