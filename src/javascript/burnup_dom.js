@@ -47,16 +47,6 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	}
 	
 	function xAxisTicks() {
-		var i;
-		
-		self.xTicks = [];
-		for (i = 0; i < metrics.xTickCount; i++) {
-			var x = metrics.xTick(i);
-			self.xTicks.push(line(x, metrics.bottom - (metrics.MAJOR_TICK_LENGTH / 2), x, metrics.bottom + (metrics.MAJOR_TICK_LENGTH / 2)));
-		}
-	}
-	
-	function xAxisTickLabels() {
 		var i, label;
 
         // figure out maximum tick label width
@@ -115,8 +105,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 
 		axisLabels();
 		axisLines();
-//		xAxisTicks();
-		xAxisTickLabels();
+		xAxisTicks();
 	};
 	
 	this.paper = function() {
