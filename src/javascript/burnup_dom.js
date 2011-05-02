@@ -51,7 +51,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 
         // figure out maximum tick label width
 		var maxWidth = 0;
-		for (i = 0; i < metrics.xTickCount; i++) {
+		for (i = 1; i < metrics.xTickCount; i++) {
             label = copyOneTextElement(xTickLabelElement, metrics.xTickLabel(i));
 			var width = label.getBBox().width;
 			if (width > maxWidth) {
@@ -63,7 +63,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
         self.xTicks = [];		
         self.xTickLabels = [];
         var previousLabelRightEdge = 0;
-		for (i = 0; i < metrics.xTickCount; i++) {
+		for (i = 1; i < metrics.xTickCount; i++) {
             var x = metrics.xTickPosition(i);
 
 			if (metrics.shouldDrawXTickLabel(i, maxWidth, previousLabelRightEdge)) {
@@ -83,7 +83,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		var i;
 		
 		self.yTicks = [];
-		for (i = 0; i < metrics.yTickCount(); i++) {
+		for (i = 1; i < metrics.yTickCount(); i++) {
 			var x = metrics.left;
 			var y = metrics.yTickPosition(i);
 			var tickOffset = metrics.MINOR_TICK_LENGTH / 2;

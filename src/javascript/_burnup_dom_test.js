@@ -106,11 +106,10 @@
     };
 
     Test.prototype.test_populate_drawsMajorXAxisTickMarks = function() {
-		assertEquals("# of X-axis ticks", 4, burnup.xTicks.length);
-		assertFloatEquals("X-axis tick 0", 20, burnup.xTicks[0].getBBox().x);
-        assertFloatEquals("X-axis tick 1", 20 + 137.14285, burnup.xTicks[1].getBBox().x);
-        assertFloatEquals("X-axis tick 2", 20 + 274.28571, burnup.xTicks[2].getBBox().x);
-        assertFloatEquals("X-axis tick 3", 20 + 411.42857, burnup.xTicks[3].getBBox().x);
+		assertEquals("# of X-axis ticks (does not render tick #0)", 3, burnup.xTicks.length);
+        assertFloatEquals("X-axis tick 1", 20 + 137.14285, burnup.xTicks[0].getBBox().x);
+        assertFloatEquals("X-axis tick 2", 20 + 274.28571, burnup.xTicks[1].getBBox().x);
+        assertFloatEquals("X-axis tick 3", 20 + 411.42857, burnup.xTicks[2].getBBox().x);
 		
 		var tick = burnup.xTicks[1].getBBox();
 		assertEquals("X-axis major tick width", 0, tick.width);
@@ -124,8 +123,8 @@
         burnup.populate(metrics);
 		
 		assertEquals("assumption: x-axis tick 1 is minor", "Jan 11", burnup.xTickLabels[0].attrs.text);
-		assertEquals("X-axis minor tick height", metrics.MINOR_TICK_LENGTH, burnup.xTicks[1].getBBox().height);
-		assertEquals("X-axis minor tick y", 61 - (metrics.MINOR_TICK_LENGTH / 2), burnup.xTicks[1].getBBox().y);
+		assertEquals("X-axis minor tick height", metrics.MINOR_TICK_LENGTH, burnup.xTicks[0].getBBox().height);
+		assertEquals("X-axis minor tick y", 61 - (metrics.MINOR_TICK_LENGTH / 2), burnup.xTicks[0].getBBox().y);
 	};
 	
 	Test.prototype.test_populate_drawsXAxisTickLabels = function() {
@@ -139,12 +138,11 @@
 	};
 	
 	Test.prototype.test_populate_drawsMajorYAxisTickMarks = function() {
-		assertEquals("# of Y-axis ticks", 5, burnup.yTicks.length);
-		assertFloatEquals("Y-axis tick 0", metrics.yTickPosition(0), burnup.yTicks[0].getBBox().y);
-        assertFloatEquals("Y-axis tick 1", metrics.yTickPosition(1), burnup.yTicks[1].getBBox().y);
-        assertFloatEquals("Y-axis tick 2", metrics.yTickPosition(2), burnup.yTicks[2].getBBox().y);
-        assertFloatEquals("Y-axis tick 3", metrics.yTickPosition(3), burnup.yTicks[3].getBBox().y);
-        assertFloatEquals("Y-axis tick 4", metrics.yTickPosition(4), burnup.yTicks[4].getBBox().y);
+		assertEquals("# of Y-axis ticks (does not render tick #0)", 4, burnup.yTicks.length);
+        assertFloatEquals("Y-axis tick 1", metrics.yTickPosition(1), burnup.yTicks[0].getBBox().y);
+        assertFloatEquals("Y-axis tick 2", metrics.yTickPosition(2), burnup.yTicks[1].getBBox().y);
+        assertFloatEquals("Y-axis tick 3", metrics.yTickPosition(3), burnup.yTicks[2].getBBox().y);
+        assertFloatEquals("Y-axis tick 4", metrics.yTickPosition(4), burnup.yTicks[3].getBBox().y);
 		
 		var tick = burnup.yTicks[1].getBBox();
 		assertEquals("Y-axis major tick width", metrics.MAJOR_TICK_LENGTH, tick.width);
