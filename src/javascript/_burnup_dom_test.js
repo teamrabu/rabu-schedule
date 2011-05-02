@@ -259,14 +259,14 @@
          assertEquals("tick label should increase (2)", "10", metrics.yTickLabel(2));
 	};
 	
-//	Test.prototype.test_yTickPosition = function() {
-//		metricsConfig.maxEffort = 1;
-//		
-//		var tickDistance = bottom / 4.5;
-//		assertFloatEquals("Y-axis tick 0 position", bottom, metrics.yTickPosition(0));
-//		assertFloatEquals("Y-axis tick 1 position", bottom - (tickDistance), metrics.yTickPosition(1));
-//        assertFloatEquals("Y-axis tick 2 position", bottom - (tickDistance * 2), metrics.yTickPosition(2));
-//        assertFloatEquals("Y-axis tick 3 position", bottom - (tickDistance * 3), metrics.yTickPosition(3));
-//        assertFloatEquals("Y-axis tick 4 position", bottom - (tickDistance * 4), metrics.yTickPosition(4));
-//	};
+	Test.prototype.test_yTickPosition = function() {
+		metricsConfig.maxEffort = 1;
+		
+		var tickDistance = bottom / 4.5;
+		assertFloatEquals("Y-axis tick 0 position", bottom, metrics.yTickPosition(0));
+		assertFloatEquals("Y-axis tick 1 position", bottom - (tickDistance), metrics.yTickPosition(1));
+        assertFloatEquals("Y-axis tick 2 position", bottom - (tickDistance * 2), metrics.yTickPosition(2));
+        assertFloatEquals("Y-axis tick 3 position", bottom - (tickDistance * 3), metrics.yTickPosition(3));
+        assertFloatEquals("Y-axis tick 4 position", bottom - (tickDistance * 4), metrics.yTickPosition(4));
+	};
 }());

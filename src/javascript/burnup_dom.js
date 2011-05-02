@@ -206,15 +206,6 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	
 	this.yTickCount = function() {
 		return Math.floor(1 + data.maxEffort / yTickSize());
-//		if (data.maxEffort <= 10) {
-//			return 1 + data.maxEffort / 0.25;
-//		}
-//		else if (data.maxEffort <= 20) {
-//		    return 1 + data.maxEffort / 0.5;
-//		}
-//		else {
-//			return 1 + data.maxEffort;
-//		}
 	};
 	
 	this.yTickPosition = function(tickOffset) {
