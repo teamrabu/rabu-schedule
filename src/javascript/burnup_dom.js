@@ -80,9 +80,13 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	}
 	
 	function yAxisTicks() {
-//		var i;
-//		for (i = 0; i < metrics.yTickCount(); i++) {
-//		}
+		var i;
+		for (i = 0; i < metrics.yTickCount(); i++) {
+			var x = metrics.left;
+			var xOffset = metrics.MINOR_TICK_LENGTH / 2;
+			var y = metrics.yTickPosition(i);
+			line(x - xOffset, y, x + xOffset, y);
+		}
 	}
 	
 	this.populate = function(optionalMetricsForTesting) {
@@ -106,7 +110,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
 	            iterationCount: projections.maxIterations(),
-				maxEffort: paper.width / 100  // TODO: replace me!
+				maxEffort: paper.width / 10  // TODO: replace me!
 			});
 		}
 
@@ -128,6 +132,7 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	this.MINOR_TICK_LENGTH = 4;
 	this.AXIS_OVERHANG = 10;
 	this.LABEL_PADDING = 10;
+	this.Y_TICK_SPACING = data.Y_TICK_SPACING || 5;
     
     this.left = data.yLabelHeight + this.AXIS_OVERHANG;
     this.right = data.paperWidth;
