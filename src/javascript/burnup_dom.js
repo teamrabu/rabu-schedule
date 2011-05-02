@@ -128,7 +128,7 @@ rabu.schedule.BurnupChartMetrics = function(data) {
     this.width = this.right - this.left;
     
     this.top = 0;
-    this.bottom = data.paperHeight - (data.xLabelHeight + (this.MAJOR_TICK_LENGTH / 2) + data.xTickLabelHeight);
+    this.bottom = data.paperHeight - ((data.xLabelHeight * 1.25) + (this.MAJOR_TICK_LENGTH / 2) + data.xTickLabelHeight);
     this.height = this.bottom - this.top;
     
     this.xLabelCenter = this.left + (this.width / 2);
