@@ -197,7 +197,7 @@ rabu.schedule.BurnupChartMetrics = function(data) {
         return result;
     };
 		
-	function yTickSize() {
+	function yTickScale() {
 		var pixels = self.height;
 		var effortPerPixel = data.maxEffort / pixels;
 		var effortPerTick = effortPerPixel * self.Y_TICK_SPACING;
@@ -205,7 +205,7 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	}
 	
 	this.yTickCount = function() {
-		return Math.floor(1 + data.maxEffort / yTickSize());
+		return Math.floor(1 + data.maxEffort / yTickScale());
 	};
 	
 	this.yTickPosition = function(tickOffset) {
@@ -214,6 +214,6 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	};
 	
 	this.yTickLabel = function(tickOffset) {
-		return (yTickSize() * tickOffset).toString();
+		return (yTickScale() * tickOffset).toString();
 	};
 };

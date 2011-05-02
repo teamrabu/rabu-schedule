@@ -35,7 +35,6 @@
         });
         burnup.populate(metrics);
 		paper = burnup.paper();
-//		loadNodeVars();
 	};
 	
 	function path(raphaelObject) {
