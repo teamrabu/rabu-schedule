@@ -79,23 +79,32 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 	}
 	
-	function yAxisTicks() {  // TODO: this is just a placeholder for visual testing
+	function yAxisTicks() {
 		var i;
-		var previousLabelTopEdge = metrics.bottom;
+		
+		self.yTicks = [];
 		for (i = 0; i < metrics.yTickCount(); i++) {
 			var x = metrics.left;
-            var y = metrics.yTickPosition(i);
-            var label = paper.text(x - 15, y, metrics.yTickLabel(i));
-			var xOffset = metrics.MINOR_TICK_LENGTH / 2;
-			if (metrics.shouldDrawYTickLabel(i, previousLabelTopEdge)) {
-				xOffset = metrics.MAJOR_TICK_LENGTH / 2;
-				previousLabelTopEdge = y - (self.yTickLabel.getBBox().height / 2);
-			}
-			else {
-				label.remove();
-			}
-			line(x - xOffset, y, x + xOffset, y);
+			var y = metrics.yTickPosition(i);
+			var tickOffset = metrics.MAJOR_TICK_LENGTH / 2;
+			self.yTicks.push(line(x - tickOffset, y, x + tickOffset, y));
 		}
+//		var i;
+//		var previousLabelTopEdge = metrics.bottom;
+//		for (i = 0; i < metrics.yTickCount(); i++) {
+//			var x = metrics.left;
+//            var y = metrics.yTickPosition(i);
+//            var label = paper.text(x - 15, y, metrics.yTickLabel(i));
+//			var xOffset = metrics.MINOR_TICK_LENGTH / 2;
+//			if (metrics.shouldDrawYTickLabel(i, previousLabelTopEdge)) {
+//				xOffset = metrics.MAJOR_TICK_LENGTH / 2;
+//				previousLabelTopEdge = y - (self.yTickLabel.getBBox().height / 2);
+//			}
+//			else {
+//				label.remove();
+//			}
+//			line(x - xOffset, y, x + xOffset, y);
+//		}
 	}
 	
 	this.populate = function(optionalMetricsForTesting) {
@@ -119,14 +128,14 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
 	            iterationCount: projections.maxIterations(),
-				maxEffort: projections.maxEffort()
+				maxEffort: paper.width  // TODO: replace me!
 			});
 		}
 
 		axisLabels();
 		axisLines();
 		xAxisTicks();
-		yAxisTicks(); //TODO: reimplement with tests
+		yAxisTicks();
 	};
 	
 	this.paper = function() {

@@ -3,7 +3,7 @@
 (function() {
 	var Test = new TestCase("BurnupDom");
 	var rs = rabu.schedule;
-	var burnup, paper, metrics;
+	var burnup, paper, metricsConfig, metrics;
 	
 	Test.prototype.setUp = function() {
 		/*:DOC += <div class="rabu-burnup" style="height:300px; width:200px">
@@ -26,13 +26,15 @@
 		var estimates = new rs.Estimates(config);
 		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates, new rs.Projections(estimates));
 		burnup.populate();
-        metrics = new rs.BurnupChartMetrics({
+        metricsConfig = {
             paperWidth: 500, paperHeight: 100,
             xLabelHeight: 20, yLabelHeight: 10,
             xTickLabelHeight: 10, yTickLabelHeight: 8,
             startDate: "1 Jan 2011", iterationLength: 5,
-            iterationCount: 4
-        });
+            iterationCount: 4, maxEffort: 1,
+            Y_TICK_SPACING: 3
+        };
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
         burnup.populate(metrics);
 		paper = burnup.paper();
 	};
@@ -111,20 +113,16 @@
         assertFloatEquals("X-axis tick 3", 20 + 411.42857, burnup.xTicks[3].getBBox().x);
 		
 		var tick = burnup.xTicks[1].getBBox();
-		assertEquals("X-axis tick width", 0, tick.width);
-		assertEquals("X-axis tick height", metrics.MAJOR_TICK_LENGTH, tick.height);
-		assertEquals("X-axis tick y", 61 - (metrics.MAJOR_TICK_LENGTH / 2), tick.y);
+		assertEquals("X-axis major tick width", 0, tick.width);
+		assertEquals("X-axis major tick height", metrics.MAJOR_TICK_LENGTH, tick.height);
+		assertEquals("X-axis major tick y", 61 - (metrics.MAJOR_TICK_LENGTH / 2), tick.y);
 	};
 	
 	Test.prototype.test_populate_drawsMinorXAxisTickMarks_whenNoLabel = function() {
-        var metrics = new rs.BurnupChartMetrics({
-            paperWidth: 500, paperHeight: 100,
-            xLabelHeight: 20, yLabelHeight: 10,
-            xTickLabelHeight: 10, yTickLabelHeight: 8,
-            startDate: "1 Jan 2011", iterationLength: 5,
-            iterationCount: 40
-        });
+        metricsConfig.iterationCount = 40;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
         burnup.populate(metrics);
+		
 		assertEquals("assumption: x-axis tick 1 has no label", "Jan 11", burnup.xTickLabels[0].attrs.text);
 		assertEquals("X-axis minor tick height", metrics.MINOR_TICK_LENGTH, burnup.xTicks[1].getBBox().height);
 		assertEquals("X-axis minor tick y", 61 - (metrics.MINOR_TICK_LENGTH / 2), burnup.xTicks[1].getBBox().y);
@@ -138,6 +136,20 @@
 		assertFloatEquals("X-axis tick label x position", 157.14285, label.attrs.x);
         assertEquals("X-axis tick label y position", 70, label.attrs.y);
         assertEquals("X-axis tick label font-size", "8px", label.attrs["font-size"]);
+	};
+	
+	Test.prototype.test_populate_drawsMajorYAxisTickMarks = function() {
+		assertEquals("# of Y-axis ticks", 5, burnup.yTicks.length);
+		assertFloatEquals("Y-axis tick 0", metrics.yTickPosition(0), burnup.yTicks[0].getBBox().y);
+        assertFloatEquals("Y-axis tick 1", metrics.yTickPosition(1), burnup.yTicks[1].getBBox().y);
+        assertFloatEquals("Y-axis tick 2", metrics.yTickPosition(2), burnup.yTicks[2].getBBox().y);
+        assertFloatEquals("Y-axis tick 3", metrics.yTickPosition(3), burnup.yTicks[3].getBBox().y);
+        assertFloatEquals("Y-axis tick 4", metrics.yTickPosition(4), burnup.yTicks[4].getBBox().y);
+		
+		var tick = burnup.yTicks[1].getBBox();
+		assertEquals("Y-axis major tick width", metrics.MAJOR_TICK_LENGTH, tick.width);
+		assertEquals("Y-axis major tick height", 0, tick.height);
+		assertEquals("Y-axis major tick x", 16, tick.x);
 	};
 }());
 
