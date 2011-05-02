@@ -213,37 +213,85 @@
         assertEquals("X-axis tick 3 label", "Jan 16", metrics.xTickLabel(3));
 	};
 	
-	Test.prototype.test_yTickCount = function() {
+	Test.prototype.test_yTicks_scaleIntelligently = function() {
+		metricsConfig.xLabelHeight = 0;
+		metricsConfig.xTickLabelHeight = 0;
+		metricsConfig.paperHeight = 45 + 5;
+		metricsConfig.MAJOR_TICK_LENGTH = 10;
+        metricsConfig.Y_TICK_SPACING = 10;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		assertEquals("assumption: chart height", 45, metrics.bottom);
 		
+		// Minimum tick value is 0.25
+		metricsConfig.maxEffort = 1;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		assertEquals("y-axis tick label @ 0.25", "0.25", metrics.yTickLabel(1));
+		assertEquals("y-axis tick count @ 0.25", 5, metrics.yTickCount());
+			
+		// When tick spacing is exceeded, tick values go up to 0.5
+		metricsConfig.maxEffort = 1.25;
+        metrics = new rs.BurnupChartMetrics(metricsConfig);
+		assertEquals("y-axis tick label @ 0.5", "0.5", metrics.yTickLabel(1));
+		assertEquals("y-axis tick count @ 0.5", 3, metrics.yTickCount());
 		
+		// And then to 1
+		metricsConfig.maxEffort = 4;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		assertEquals("y-axis tick label @ 1", "1", metrics.yTickLabel(1));
+		assertEquals("y-axis tick count @ 1", 5, metrics.yTickCount());
 		
-//		metricsConfig.maxEffort = 10;
-//		metrics = new rs.BurnupChartMetrics(metricsConfig);
-//		assertEquals("y-axis ticks represent 0.25 points", 41, metrics.yTickCount());
-//		
-//		metricsConfig.maxEffort = 1;
-//		metrics = new rs.BurnupChartMetrics(metricsConfig);
-//		assertEquals("y-axis ticks never get smaller than 0.25 points", 5, metrics.yTickCount());
-//
-//        metricsConfig.maxEffort = 11;
-//		assertEquals("when effort greater than 10, y-axis ticks represent 0.5 points", 23, metrics.yTickCount());
-//		metricsConfig.maxEffort = 20;
-//		assertEquals("20 effort", 41, metrics.yTickCount());
-//		
-//		metricsConfig.maxEffort = 21;
-//		assertEquals("when effort greater than 20, y-axis ticks represent 1 point", 22, metrics.yTickCount());
-//		
+		// Then 5
+		metricsConfig.maxEffort = 5;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		assertEquals("y-axis tick label @ 5", "5", metrics.yTickLabel(1));
+		assertEquals("y-axis tick count @ 5", 2, metrics.yTickCount());
+		
+		// Then 10
+		metricsConfig.maxEffort = 40;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		assertEquals("y-axis tick label @ 10", "10", metrics.yTickLabel(1));
+		assertEquals("y-axis tick count @ 10", 5, metrics.yTickCount());
+		
+		// And so forth
+		metricsConfig.maxEffort = 50000;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+//		assertEquals("y-axis tick label @ 50000", "50000", metrics.yTickLabel(1));
+//		assertEquals("y-axis tick count @ 50000", 2, metrics.yTickCount());
+		
 //		//TODO: finish
 	};
 	
-	Test.prototype.test_yTickPosition = function() {
-		metricsConfig.maxEffort = 1;
-		
-		var tickDistance = bottom / 4.5;
-		assertFloatEquals("Y-axis tick 0 position", bottom, metrics.yTickPosition(0));
-		assertFloatEquals("Y-axis tick 1 position", bottom - (tickDistance), metrics.yTickPosition(1));
-        assertFloatEquals("Y-axis tick 2 position", bottom - (tickDistance * 2), metrics.yTickPosition(2));
-        assertFloatEquals("Y-axis tick 3 position", bottom - (tickDistance * 3), metrics.yTickPosition(3));
-        assertFloatEquals("Y-axis tick 4 position", bottom - (tickDistance * 4), metrics.yTickPosition(4));
+	Test.prototype.test_roundUpEffort = function() {
+		assertEquals(0.25, metrics.roundUpEffort(0.0001));
+		assertEquals(0.25, metrics.roundUpEffort(0.1));
+		assertEquals(0.25, metrics.roundUpEffort(0.25));
+		assertEquals(0.5, metrics.roundUpEffort(0.4));
+		assertEquals(0.5, metrics.roundUpEffort(0.5));
+		assertEquals(1, metrics.roundUpEffort(0.6));
+		assertEquals(1, metrics.roundUpEffort(1));
+		assertEquals(5, metrics.roundUpEffort(2));
+		assertEquals(5, metrics.roundUpEffort(5));
+		assertEquals(50, metrics.roundUpEffort(20));
+		assertEquals(100, metrics.roundUpEffort(70));
+		assertEquals(100, metrics.roundUpEffort(100));
+		assertEquals(500000, metrics.roundUpEffort(400000));
 	};
+	
+	
+	Test.prototype.test_yTickLabel = function() {
+		 assertEquals("tick label should increase (0)", "0", metrics.yTickLabel(0));
+         assertEquals("tick label should increase (1)", "5", metrics.yTickLabel(1));
+         assertEquals("tick label should increase (2)", "10", metrics.yTickLabel(2));
+	};
+	
+//	Test.prototype.test_yTickPosition = function() {
+//		metricsConfig.maxEffort = 1;
+//		
+//		var tickDistance = bottom / 4.5;
+//		assertFloatEquals("Y-axis tick 0 position", bottom, metrics.yTickPosition(0));
+//		assertFloatEquals("Y-axis tick 1 position", bottom - (tickDistance), metrics.yTickPosition(1));
+//        assertFloatEquals("Y-axis tick 2 position", bottom - (tickDistance * 2), metrics.yTickPosition(2));
+//        assertFloatEquals("Y-axis tick 3 position", bottom - (tickDistance * 3), metrics.yTickPosition(3));
+//        assertFloatEquals("Y-axis tick 4 position", bottom - (tickDistance * 4), metrics.yTickPosition(4));
+//	};
 }());

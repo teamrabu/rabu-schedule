@@ -79,13 +79,14 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 	}
 	
-	function yAxisTicks() {
+	function yAxisTicks() {  // TODO: this is just a placeholder for visual testing
 		var i;
 		for (i = 0; i < metrics.yTickCount(); i++) {
 			var x = metrics.left;
 			var xOffset = metrics.MINOR_TICK_LENGTH / 2;
 			var y = metrics.yTickPosition(i);
 			line(x - xOffset, y, x + xOffset, y);
+			paper.text(x + 15, y, metrics.yTickLabel(i));
 		}
 	}
 	
@@ -128,11 +129,11 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 
 rabu.schedule.BurnupChartMetrics = function(data) {
     var self = this;
-	this.MAJOR_TICK_LENGTH = 8;
-	this.MINOR_TICK_LENGTH = 4;
-	this.AXIS_OVERHANG = 10;
-	this.LABEL_PADDING = 10;
-	this.Y_TICK_SPACING = data.Y_TICK_SPACING || 5;
+	this.MAJOR_TICK_LENGTH = data.MAJOR_TICK_LENGTH || 8;
+	this.MINOR_TICK_LENGTH = data.MINOR_TICK_LENGTH || 4;
+	this.AXIS_OVERHANG = data.AXIS_OVERHANG || 10;
+	this.LABEL_PADDING = data.LABEL_PADDING || 10;
+	this.Y_TICK_SPACING = data.Y_TICK_SPACING || 20;
     
     this.left = data.yLabelHeight + this.AXIS_OVERHANG;
     this.right = data.paperWidth;
@@ -172,21 +173,71 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 		date.setDate(date.getDate() + (data.iterationLength * tickOffset));
 		return date.toString('MMM d');
 	};
+       
+	this.roundUpEffort = function(effort) {
+        if (effort <= 0.25) {
+            return 0.25;
+        }
+        if (effort <= 0.5) {
+            return 0.5;
+        }
+        
+        var result = 1;
+        var adjusted = effort;
+        while (adjusted >= 10) {
+            result *= 10;
+            adjusted /= 10;
+        }
+        if (result < effort) {
+            result *= 5;
+        }
+        if (result < effort) {
+            result *= 2;
+        }
+        return result;
+    };
+		
+	function yTickSize() {
+		function spacing(size) {
+			var count = 1 + data.maxEffort / size;
+			return self.height / (count - 1 + 0.5);
+		}
+
+        var size = 0.25;		
+		if (spacing(size) < self.Y_TICK_SPACING) {
+			size = 0.5;
+		} 
+		if (spacing(size) < self.Y_TICK_SPACING) {
+			size = 1;
+		}
+		if (spacing(size) < self.Y_TICK_SPACING) {
+			size = 5;
+		}
+		if (spacing(size) < self.Y_TICK_SPACING) {
+			size = 10;
+		}
+		return size;
+	}
 	
 	this.yTickCount = function() {
-		if (data.maxEffort <= 10) {
-			return 1 + data.maxEffort / 0.25;
-		}
-		else if (data.maxEffort <= 20) {
-		    return 1 + data.maxEffort / 0.5;
-		}
-		else {
-			return 1 + data.maxEffort;
-		}
+		return Math.floor(1 + data.maxEffort / yTickSize());
+//		if (data.maxEffort <= 10) {
+//			return 1 + data.maxEffort / 0.25;
+//		}
+//		else if (data.maxEffort <= 20) {
+//		    return 1 + data.maxEffort / 0.5;
+//		}
+//		else {
+//			return 1 + data.maxEffort;
+//		}
 	};
 	
 	this.yTickPosition = function(tickOffset) {
 		var tickDistance = self.height / (self.yTickCount() - 1 + 0.5);
 		return self.bottom - (tickDistance * tickOffset);
+	};
+	
+	this.yTickLabel = function(tickOffset) {
+		return (yTickSize() * tickOffset).toString();
 	};
 };
