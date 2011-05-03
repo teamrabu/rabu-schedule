@@ -112,11 +112,14 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		for (i = 0; i < toFeatures.length; i++) {
 			var from = fromFeatures[i].totalEffort();
 			var to = toFeatures[i].totalEffort();
-			var fromY = 0;
-			var toY = 0;
-			var text = i + ". " + fromX + "," + fromY + " " + toX + "," + toY;
-			var drawn = paper.text(110, y + (10 * (i + 1)), text);
-			drawn.attr("text-anchor", "begin");
+			var fromY = metrics.yForEffort(from);
+			var toY = metrics.yForEffort(to);
+			var path = "M" + fromX + "," + fromY + " L" + toX + "," + toY;
+			var text = i + ". " + path;
+			var line = paper.path(path);
+			var info = paper.text(110, y + (10 * (i + 1)), text);
+			info.attr("text-anchor", "begin");
+			line.attr("stroke", "#f00");
 		}
 	}
 	

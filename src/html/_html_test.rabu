@@ -27,9 +27,9 @@
            "length": 7,
            "velocity": 15,
            "included": [
-                ["Feature A", 70],
+                ["Feature A", 75],
                 ["Feature B", 30],
-                ["Feature C", 10]
+                ["Feature C", 40]
             ]
         },    
         
@@ -39,8 +39,8 @@
            "velocity": 15,
            "included": [
                 ["Feature A", 80],
-                ["Feature B", 30],
-                ["Feature C", 10]
+                ["Feature B", 20],
+                ["Feature C", 20]
             ]
         },         
         
@@ -49,9 +49,9 @@
            "length": 7,
            "velocity": 15,
            "included": [
-                ["Feature A", 90],
-                ["Feature B", 30],
-                ["Feature C", 10]
+                ["Feature A", 100],
+                ["Feature B", 33],
+                ["Feature C", 15]
             ]
         },         
     	
