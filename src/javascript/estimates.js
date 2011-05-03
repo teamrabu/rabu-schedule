@@ -78,8 +78,8 @@ rabu.schedule.Estimates = function(configJson) {
 };
 
 
-rabu.schedule.Iteration = function(iterationJson) {
-	var iteration = iterationJson;
+rabu.schedule.Iteration = function(iteration, effortToDate) {
+    var self = this;
 	
 	this.startDate = function() {
 		return new Date(iteration.started);
@@ -98,6 +98,10 @@ rabu.schedule.Iteration = function(iterationJson) {
 			return sum + feature.estimate();
 		};
 		return this.includedFeatures().reduce(adder, 0);
+	};
+	
+	this.totalEffort = function() {
+		return effortToDate + self.effortRemaining();
 	};
 	
 	function featuresFromList(featureList) {

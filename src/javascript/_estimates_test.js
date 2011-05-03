@@ -78,7 +78,7 @@
 				["feature C", 70]
 			]
 		};
-		iteration = new rabu.schedule.Iteration(config);
+		iteration = new rs.Iteration(config, 0);
 	};
 
 	function assertFeatureEquals(name, expected, actual) {
@@ -139,6 +139,12 @@
 	Test.prototype.test_effortRemaining_doesNotIncludeExcludedFeatures = function() {
 		config.excluded = [["excluded feature", 42]];
 		assertEquals(100, iteration.effortRemaining());
+	};
+	
+	Test.prototype.test_totalEffort_isEffortRemainingPlusEffortToDate = function() {
+		iteration = new rs.Iteration(config, 13);
+		assertEquals(113, iteration.totalEffort());
+		assertEquals("should not affect effort remaining", 100, iteration.effortRemaining());
 	};
 }());
 
