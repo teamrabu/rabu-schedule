@@ -104,15 +104,17 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 	}
 	
-	function stackFeatures(y, fromIter, toIter) {
+	function stackFeatures(y, fromIter, toIter, fromX, toX) {
 		// TODO: delete and redo with TDD
 		var fromFeatures = fromIter.includedFeatures();
         var toFeatures = toIter.includedFeatures();
 		var i;
 		for (i = 0; i < toFeatures.length; i++) {
-			var from = fromFeatures[i].estimate();
-			var to = toFeatures[i].estimate();
-			var text = i + ". " + from + " - " + to;
+			var from = fromFeatures[i].totalEffort();
+			var to = toFeatures[i].totalEffort();
+			var fromY = 0;
+			var toY = 0;
+			var text = i + ". " + fromX + "," + fromY + " " + toX + "," + toY;
 			var drawn = paper.text(110, y + (10 * (i + 1)), text);
 			drawn.attr("text-anchor", "begin");
 		}
@@ -128,7 +130,9 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			var text = "#" + i + ": " + from.totalEffort() + " - " + to.totalEffort();
 			var drawn = paper.text(100, skip + 10 * (i+ 1), text);
 			drawn.attr("text-anchor", "begin");
-			stackFeatures(skip + (10 * (i + 1)), from, to);
+			var fromX = metrics.xTickPosition(i - 1);
+			var toX = metrics.xTickPosition(i);
+			stackFeatures(skip + (10 * (i + 1)), from, to, fromX, toX);
 			skip += to.includedFeatures().length * 10;
 		}
 	}
@@ -205,9 +209,13 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	
 	this.xTickCount = data.iterationCount + 1;
 	
+	this.xForIteration = function(iteration) {
+        var tickDistance = self.width / (this.xTickCount - 1 + 0.5);
+        return self.left + (iteration * tickDistance);
+	};
+	
 	this.xTickPosition = function(offset) {
-		var tickDistance = self.width / (this.xTickCount - 1 + 0.5);
-		return self.left + (offset * tickDistance);
+		return self.xForIteration(offset);
 	};
 	
 	this.shouldDrawXTickLabel = function(tickOffset, labelWidth, previousRightEdge) {

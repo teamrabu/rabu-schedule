@@ -231,6 +231,11 @@
 		
 		assertEquals("should be extra tick for end of last iteration", 11, metrics.xTickCount);
 	};
+    
+    Test.prototype.test_xForIteration = function() {
+        assertFloatEquals("whole iteration", 20 + 274.28571, metrics.xForIteration(2));
+        assertFloatEquals("fractional iteration", 20 + 205.71428, metrics.xTickPosition(1.5));
+    };
 	
 	Test.prototype.test_xTickPosition = function() {
 		assertFloatEquals("X-axis tick 0 position", 20, metrics.xTickPosition(0));
