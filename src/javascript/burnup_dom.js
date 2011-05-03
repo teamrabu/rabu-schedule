@@ -104,15 +104,32 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 	}
 	
+	function stackFeatures(y, fromIter, toIter) {
+		// TODO: delete and redo with TDD
+		var fromFeatures = fromIter.includedFeatures();
+        var toFeatures = toIter.includedFeatures();
+		var i;
+		for (i = 0; i < toFeatures.length; i++) {
+			var from = fromFeatures[i].estimate();
+			var to = toFeatures[i].estimate();
+			var text = i + ". " + from + " - " + to;
+			var drawn = paper.text(110, y + (10 * (i + 1)), text);
+			drawn.attr("text-anchor", "begin");
+		}
+	}
+	
 	function history() {
 		// TODO: delete and redo with TDD
 		var i;
+		var skip = -10;
 		for (i = 1; i < estimates.iterationCount(); i++) {
-			var from = estimates.iteration(i - 1).totalEffort();
-			var to = estimates.iteration(i).totalEffort();
-			var text = "#" + i + ": " + from + " - " + to;
-			var drawn = paper.text(100, 10 * (i+ 1), text);
+			var from = estimates.iteration(i - 1);
+			var to = estimates.iteration(i);
+			var text = "#" + i + ": " + from.totalEffort() + " - " + to.totalEffort();
+			var drawn = paper.text(100, skip + 10 * (i+ 1), text);
 			drawn.attr("text-anchor", "begin");
+			stackFeatures(skip + (10 * (i + 1)), from, to);
+			skip += to.includedFeatures().length * 10;
 		}
 	}
 	

@@ -25,7 +25,7 @@
         {
            "started": "22 Jan 2011",
            "length": 7,
-           "velocity": 10,
+           "velocity": 15,
            "included": [
                 ["Feature A", 70],
                 ["Feature B", 30],
@@ -36,7 +36,7 @@
         {
            "started": "15 Jan 2011",
            "length": 7,
-           "velocity": 10,
+           "velocity": 15,
            "included": [
                 ["Feature A", 80],
                 ["Feature B", 30],
@@ -47,7 +47,7 @@
         {
            "started": "8 Jan 2011",
            "length": 7,
-           "velocity": 10,
+           "velocity": 15,
            "included": [
                 ["Feature A", 90],
                 ["Feature B", 30],
@@ -58,7 +58,7 @@
     	{
     	   "started": "1 Jan 2011",
     	   "length": 7,
-    	   "velocity": 10,
+    	   "velocity": 15,
            "included": [
                 ["Feature A", 100],
                 ["Feature B", 30],
