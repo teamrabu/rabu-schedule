@@ -145,12 +145,8 @@ rabu.schedule.Feature = function(feature, cumulativeEstimate, effortToDate) {
 		return feature[1];
 	};
 	
-	this.cumulativeEstimate = function() {
-		return cumulativeEstimate + self.estimate();
-	};
-	
 	this.totalEffort = function() {
-		return self.cumulativeEstimate() + effortToDate;
+		return cumulativeEstimate + self.estimate() + effortToDate;
 	};
 
 	this.isDone = function() {

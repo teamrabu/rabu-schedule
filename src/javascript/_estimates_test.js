@@ -214,11 +214,6 @@
 		assertFalse("not done", new rs.Feature(["not done", 10], 20, 30).isDone());
 	};
 	
-	Test.prototype.test_cumulativeEstimate = function() {
-		var feature = new rs.Feature(["feature", 10], 20, 30);
-		assertEquals(30, feature.cumulativeEstimate());
-	};
-	
 	Test.prototype.test_totalEffort = function() {
 		var feature = new rs.Feature(["feature", 10], 20, 30);
 		assertEquals(60, feature.totalEffort());
