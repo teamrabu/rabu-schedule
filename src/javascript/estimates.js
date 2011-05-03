@@ -111,13 +111,16 @@ rabu.schedule.Iteration = function(iteration, effortToDate) {
 	};
 	
 	this.totalEffort = function() {
-		return effortToDate + self.effortRemaining();
+		return self.effortToDate() + self.effortRemaining();
 	};
 	
 	function featuresFromList(featureList) {
 		if (!featureList) { return []; }
+		var cumulativeEstimate = 0;
 		return featureList.map(function(element) {
-			return new rabu.schedule.Feature(element);
+			var result = new rabu.schedule.Feature(element, cumulativeEstimate, self.effortToDate());
+			cumulativeEstimate += result.estimate();
+			return result;
 		});
 	}
 

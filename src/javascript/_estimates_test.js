@@ -113,9 +113,9 @@
 	Test.prototype.test_includedFeatures = function() {
 		var actual = iteration.includedFeatures();
 		assertEquals("length", 3, actual.length);
-		assertFeatureEquals("feature 1", new rs.Feature(["feature A", 10]), actual[0]);
-		assertFeatureEquals("feature 2", new rs.Feature(["feature B", 20]), actual[1]);
-		assertFeatureEquals("feature 3", new rs.Feature(["feature C", 70]), actual[2]);
+		assertFeatureEquals("feature 0", new rs.Feature(["feature A", 10]), actual[0]);
+		assertFeatureEquals("feature 1", new rs.Feature(["feature B", 20]), actual[1]);
+		assertFeatureEquals("feature 2", new rs.Feature(["feature C", 70]), actual[2]);
 	};
 
 	Test.prototype.test_excludedFeatures = function() {
@@ -125,8 +125,8 @@
 		];
 		var actual = iteration.excludedFeatures();
 		assertEquals("length", 2, actual.length);
-		assertFeatureEquals("excluded 1", new rs.Feature(["excluded 1", 5]), actual[0]);
-		assertFeatureEquals("excluded 2", new rs.Feature(["excluded 2", 10]), actual[1]);
+		assertFeatureEquals("excluded 0", new rs.Feature(["excluded 1", 5]), actual[0]);
+		assertFeatureEquals("excluded 1", new rs.Feature(["excluded 2", 10]), actual[1]);
 	};
 
 	Test.prototype.test_includedFeatures_whenUndefined = function() {
@@ -162,6 +162,19 @@
 		iteration = new rs.Iteration(config, 13);
 		assertEquals(113, iteration.totalEffort());
 		assertEquals("should not affect effort remaining", 100, iteration.effortRemaining());
+	};
+	
+	Test.prototype.test_includedFeatures_areConstructedWithCumulativeEffortAndEffortToDate = function() {
+		iteration = new rs.Iteration(config, 100);
+		var features = iteration.includedFeatures();
+		assertEquals("assumption: length", 3, features.length);
+		assertEquals("feature 0 total effort", 110, features[0].totalEffort());
+		assertEquals("feature 1 total effort", 130, features[1].totalEffort());
+		assertEquals("feature 2 total effort", 200, features[2].totalEffort());
+	};
+	
+	Test.prototype.test_excludedFeatures_haveNoCumulativeEffortOrEffortToDate = function() {
+		// TODO
 	};
 }());
 
