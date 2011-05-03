@@ -160,17 +160,19 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	this.MAJOR_TICK_LENGTH = data.MAJOR_TICK_LENGTH || 8;
 	this.MINOR_TICK_LENGTH = data.MINOR_TICK_LENGTH || 4;
 	this.AXIS_OVERHANG = data.AXIS_OVERHANG || 10;
+	this.X_LABEL_PADDING_MULTIPLIER = data.X_LABEL_PADDING_MULTIPLIER || 1.25;
+	this.Y_LABEL_PADDING_MULTIPLIER = data.Y_LABEL_PADDING_MULTIPLIER || 1.25;
 	this.X_TICK_LABEL_PADDING = data.X_TICK_LABEL_PADDING || 10;
 	this.Y_TICK_SPACING = data.Y_TICK_SPACING || 10;
 	this.Y_TICK_LABEL_PADDING_MULTIPLIER = data.Y_TICK_LABEL_PADDING_MULTIPLIER || 1.1;
 	this.Y_TICK_LABEL_RIGHT_PADDING = data.Y_TICK_LABEL_RIGHT_PADDING || 3;
     
-    this.left = data.yLabelHeight + this.AXIS_OVERHANG + data.yTickLabelWidth;
+    this.left = data.yLabelHeight + this.AXIS_OVERHANG + (data.yTickLabelWidth * self.Y_LABEL_PADDING_MULTIPLIER);
     this.right = data.paperWidth;
     this.width = this.right - this.left;
     
     this.top = 0;
-    this.bottom = data.paperHeight - ((data.xLabelHeight * 1.25) + (this.MAJOR_TICK_LENGTH / 2) + data.xTickLabelHeight);
+    this.bottom = data.paperHeight - ((data.xLabelHeight * self.X_LABEL_PADDING_MULTIPLIER) + (this.MAJOR_TICK_LENGTH / 2) + data.xTickLabelHeight);
     this.height = this.bottom - this.top;
 	
 	this.yTickLabelHeight = data.yTickLabelHeight;

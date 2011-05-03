@@ -204,7 +204,8 @@
     }
 	
 	Test.prototype.test_dimensions = function() {
-		metricsConfig.yTickLabelWidth = 7;
+		metricsConfig.yTickLabelWidth = 3.5;
+		metricsConfig.Y_LABEL_PADDING_MULTIPLIER = 2;
 		metrics = new rs.BurnupChartMetrics(metricsConfig);
 		
 		assertEquals("left", 27, metrics.left);
