@@ -51,7 +51,7 @@
 	}
 	
 	function assertFloatEquals(message, expected, actual) {
-		if (actual < expected - 0.0005 || actual > expected + 0.0005) {
+		if (typeof(expected) !== "number" || typeof(actual) !== "number" || actual < expected - 0.0005 || actual > expected + 0.0005) {
 			assertEquals(message, expected, actual);
 		}
 	}
@@ -237,6 +237,17 @@
         assertFloatEquals("fractional iteration", 20 + 205.71428, metrics.xTickPosition(1.5));
     };
 	
+	Test.prototype.test_yForEffort = function() {
+        metricsConfig.maxEffort = 1;
+        metrics = new rs.BurnupChartMetrics(metricsConfig);
+		// height = 61, bottom = 61, effort per tick = 0.25, number of ticks = 4.
+		// pixels per tick = height / (# of ticks + 0.5) = 61 / 4.5 = 13.555...
+		// pixels per effort = pixels per tick /  effort per tick = 13.555... / 0.25 = 54.222...
+		// pixels for 0.6 effort = 0.6 * 54.222... = 32.5333...
+		// x value = bottom - pixels = 61 - 32.5333... = 28.4666...
+		assertFloatEquals("", 28.46666, metrics.yForEffort(0.6));
+	};
+	
 	Test.prototype.test_xTickPosition = function() {
 		assertFloatEquals("X-axis tick 0 position", 20, metrics.xTickPosition(0));
 		assertFloatEquals("X-axis tick 1 position", 20 + 137.14285, metrics.xTickPosition(1));
@@ -312,6 +323,7 @@
 	
 	Test.prototype.test_yTickPosition = function() {
 		metricsConfig.maxEffort = 1;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
 		
 		var tickDistance = bottom / 4.5;
 		assertFloatEquals("Y-axis tick 0 position", bottom, metrics.yTickPosition(0));

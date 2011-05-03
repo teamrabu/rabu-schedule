@@ -214,6 +214,21 @@ rabu.schedule.BurnupChartMetrics = function(data) {
         return self.left + (iteration * tickDistance);
 	};
 	
+    function yTickScale() {
+        var pixels = self.height;
+        var effortPerPixel = data.maxEffort / pixels;
+        var effortPerTick = effortPerPixel * self.Y_TICK_SPACING;
+        return rs.BurnupChartMetrics.roundUpEffort(effortPerTick);
+    }
+	
+	this.yForEffort = function(effort) {
+        var pixelsPerTick = self.height / (self.yTickCount() - 1 + 0.5);
+		var effortPerTick = yTickScale();
+		var pixelsPerEffort = pixelsPerTick / effortPerTick;
+		var pixels = effort * pixelsPerEffort;
+        return self.bottom - pixels;
+	};
+	
 	this.xTickPosition = function(offset) {
 		return self.xForIteration(offset);
 	};
@@ -235,13 +250,6 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 		date.setDate(date.getDate() + (data.iterationLength * tickOffset));
 		return date.toString('MMM d');
 	};
-		
-	function yTickScale() {
-		var pixels = self.height;
-		var effortPerPixel = data.maxEffort / pixels;
-		var effortPerTick = effortPerPixel * self.Y_TICK_SPACING;
-		return rs.BurnupChartMetrics.roundUpEffort(effortPerTick);
-	}
 	
 	this.yTickCount = function() {
 		var count = 1 + data.maxEffort / yTickScale();
@@ -249,8 +257,7 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	};
 	
 	this.yTickPosition = function(tickOffset) {
-		var tickDistance = self.height / (self.yTickCount() - 1 + 0.5);
-		return self.bottom - (tickDistance * tickOffset);
+		return self.yForEffort(tickOffset * yTickScale());
 	};
 	
 	this.yTickLabel = function(tickOffset) {
