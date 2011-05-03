@@ -134,6 +134,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	            xLabelHeight: self.xLabel.getBBox().height,
 				yLabelHeight: self.yLabel.getBBox().height,
 	            xTickLabelHeight: self.xTickLabel.getBBox().height,
+				yTickLabelWidth: 50,  // TODO: replace me!
 				yTickLabelHeight: self.yTickLabel.getBBox().height,
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
@@ -164,7 +165,7 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	this.Y_TICK_LABEL_PADDING_MULTIPLIER = data.Y_TICK_LABEL_PADDING_MULTIPLIER || 1.1;
 	this.Y_TICK_LABEL_RIGHT_PADDING = data.Y_TICK_LABEL_RIGHT_PADDING || 3;
     
-    this.left = data.yLabelHeight + this.AXIS_OVERHANG;
+    this.left = data.yLabelHeight + this.AXIS_OVERHANG + data.yTickLabelWidth;
     this.right = data.paperWidth;
     this.width = this.right - this.left;
     
@@ -177,7 +178,7 @@ rabu.schedule.BurnupChartMetrics = function(data) {
     this.xLabelCenter = this.left + (this.width / 2);
     this.yLabelCenter = this.top + (this.height / 2);
     this.xLabelVerticalCenter = data.paperHeight - (data.xLabelHeight / 2);
-    this.yLabelVerticalCenter = this.left - this.AXIS_OVERHANG - (data.yLabelHeight / 2);
+    this.yLabelVerticalCenter = data.yLabelHeight / 2;
 	
 	this.xTickLabelVerticalCenter = this.bottom + (this.MAJOR_TICK_LENGTH / 2) + (data.xTickLabelHeight / 2);
 	this.yTickLabelRightEdge = this.left - (this.MAJOR_TICK_LENGTH / 2) - this.Y_TICK_LABEL_RIGHT_PADDING;

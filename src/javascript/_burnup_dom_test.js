@@ -29,7 +29,8 @@
         metricsConfig = {
             paperWidth: 500, paperHeight: 100,
             xLabelHeight: 20, yLabelHeight: 10,
-            xTickLabelHeight: 10, yTickLabelHeight: 8,
+            xTickLabelHeight: 10, 
+			yTickLabelWidth: 0, yTickLabelHeight: 8,
             startDate: "1 Jan 2011", iterationLength: 5,
             iterationCount: 4, maxEffort: 1,
             Y_TICK_SPACING: 3
@@ -183,7 +184,8 @@
         metricsConfig = {
 			paperWidth: 500, paperHeight: 100,
 			xLabelHeight: 20, yLabelHeight: 10,
-			xTickLabelHeight: 10, yTickLabelHeight: 8,
+			xTickLabelHeight: 10,
+			yTickLabelHeight: 8, yTickLabelWidth: 0,
 			startDate: "1 Jan 2011", iterationLength: 5,
 			iterationCount: 4,
 			maxEffort: 10,
@@ -201,24 +203,25 @@
         }
     }
 	
-	Test.prototype.test_chartArea = function() {	
-		assertEquals("left", 20, metrics.left);
+	Test.prototype.test_dimensions = function() {
+		metricsConfig.yTickLabelWidth = 7;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		
+		assertEquals("left", 27, metrics.left);
 		assertEquals("right", 500, metrics.right);
-		assertEquals("width", 480, metrics.width);
+		assertEquals("width", 473, metrics.width);
 		
 		assertEquals("top", 0, metrics.top);
 		assertEquals("bottom", bottom, metrics.bottom);
 		assertEquals("height", 61, metrics.height);
-	};
-	
-	Test.prototype.test_labels = function() {
-		assertEquals("X-axis label horizontal center", 260, metrics.xLabelCenter);
-		assertEquals("X-axis label vertical center", 100 - 10, metrics.xLabelVerticalCenter);
+
+		assertEquals("X-axis label horizontal center", 263.5, metrics.xLabelCenter);
+		assertEquals("X-axis label vertical center", 90, metrics.xLabelVerticalCenter);
 		assertEquals("Y-axis label horizontal center", 30.5, metrics.yLabelCenter);
 		assertEquals("Y-axis label vertical center", 5, metrics.yLabelVerticalCenter);
 
         assertFloatEquals("X-axis tick label vertical center", 70, metrics.xTickLabelVerticalCenter);
-		assertFloatEquals("Y-axis tick label right edge", 11, metrics.yTickLabelRightEdge);
+		assertFloatEquals("Y-axis tick label right edge", 18, metrics.yTickLabelRightEdge);
 	};
 	
 	Test.prototype.test_xTickPosition = function() {
