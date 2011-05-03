@@ -32,7 +32,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		self.xLabel = copyOneTextElement(xLabelElement);
 		self.yLabel = copyOneTextElement(yLabelElement);
 		self.xTickLabel = copyOneTextElement(xTickLabelElement).hide();
-		self.yTickLabel = copyOneTextElement(yTickLabelElement).hide();
+		self.yTickLabel = copyOneTextElement(yTickLabelElement, projections.maxEffort().toString()).hide();
 	}
 
     function axisLabels() {
@@ -134,7 +134,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	            xLabelHeight: self.xLabel.getBBox().height,
 				yLabelHeight: self.yLabel.getBBox().height,
 	            xTickLabelHeight: self.xTickLabel.getBBox().height,
-				yTickLabelWidth: 50,  // TODO: replace me!
+				yTickLabelWidth: self.yTickLabel.getBBox().width,
 				yTickLabelHeight: self.yTickLabel.getBBox().height,
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
