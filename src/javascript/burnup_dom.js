@@ -29,10 +29,34 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	}
 
     function copyTextElements() {
+
+	    function roundUpEffort(effort) {
+	        if (effort <= 0.25) {
+	            return 0.25;
+	        }
+	        if (effort <= 0.5) {
+	            return 0.5;
+	        }
+	        
+	        var result = 1;
+	        var adjusted = effort;
+	        while (adjusted >= 10) {
+	            result *= 10;
+	            adjusted /= 10;
+	        }
+	        if (result < effort) {
+	            result *= 5;
+	        }
+	        if (result < effort) {
+	            result *= 2;
+	        }
+	        return result;
+	    }
+		
 		self.xLabel = copyOneTextElement(xLabelElement);
 		self.yLabel = copyOneTextElement(yLabelElement);
 		self.xTickLabel = copyOneTextElement(xTickLabelElement).hide();
-		self.yTickLabel = copyOneTextElement(yTickLabelElement, projections.maxEffort().toString()).hide();
+		self.yTickLabel = copyOneTextElement(yTickLabelElement, roundUpEffort(projections.maxEffort()).toString()).hide();
 	}
 
     function axisLabels() {
@@ -139,7 +163,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
 	            iterationCount: projections.maxIterations(),
-				maxEffort: paper.width  // TODO: replace me!
+				maxEffort: projections.maxEffort()  // TODO: replace me!
 			});
 		}
 
