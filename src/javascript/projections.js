@@ -50,7 +50,7 @@ rabu.schedule.Projection = function(iteration, riskMultiplier) {
 	}
 	
 	this.iterationsRemaining = function() {
-		return iteration.totalEstimate() / iteration.velocity() * riskMultiplier; 
+		return iteration.effortRemaining() / iteration.velocity() * riskMultiplier; 
 	};
 	
 	this.daysRemaining = function() {
@@ -67,7 +67,7 @@ rabu.schedule.Projection = function(iteration, riskMultiplier) {
 	};
 	
 	this.totalEffort = function() {
-		var original = iteration.totalEstimate();
+		var original = iteration.effortRemaining();
 		var increase = (original * riskMultiplier) - original;
 		return original + (increase * self.SCOPE_CHANGE_PERCENTAGE);		
 	};

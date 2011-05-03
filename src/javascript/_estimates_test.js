@@ -127,18 +127,18 @@
 	};
 
 	Test.prototype.test_effortRemaining_isSumOfFeatureEstimates = function() {
-		assertEquals(100, iteration.totalEstimate());
+		assertEquals(100, iteration.effortRemaining());
 
 		config.included = [["feature A", 10]];
-		assertEquals("one feature", 10, iteration.totalEstimate());
+		assertEquals("one feature", 10, iteration.effortRemaining());
 
 		config.included = [];
-		assertEquals("no feature", 0, iteration.totalEstimate());
+		assertEquals("no feature", 0, iteration.effortRemaining());
 	};
 
 	Test.prototype.test_effortRemaining_doesNotIncludeExcludedFeatures = function() {
 		config.excluded = [["excluded feature", 42]];
-		assertEquals(100, iteration.totalEstimate());
+		assertEquals(100, iteration.effortRemaining());
 	};
 }());
 

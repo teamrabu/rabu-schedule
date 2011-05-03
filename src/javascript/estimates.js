@@ -93,7 +93,7 @@ rabu.schedule.Iteration = function(iterationJson) {
 		return iteration.velocity;
 	};
 	
-	this.totalEstimate = function() {
+	this.effortRemaining = function() {
 		var adder = function(sum, feature) {
 			return sum + feature.estimate();
 		};
