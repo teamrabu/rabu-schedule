@@ -173,8 +173,13 @@
 		assertEquals("feature 2 total effort", 200, features[2].totalEffort());
 	};
 	
-	Test.prototype.test_excludedFeatures_haveNoCumulativeEffortOrEffortToDate = function() {
-		// TODO
+	Test.prototype.test_excludedFeatures_accumulateAfterIncludedFeatures = function() {
+		config.excluded = [["excluded A", 10], ["excluded B", 20]];
+		iteration = new rs.Iteration(config, 100);
+		var features = iteration.excludedFeatures();
+		assertEquals("assumption: length", 2, features.length);
+		assertEquals("feature 0 total effort", 210, features[0].totalEffort());
+		assertEquals("feature 1 total effort", 230, features[1].totalEffort());
 	};
 }());
 

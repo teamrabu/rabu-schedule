@@ -114,22 +114,22 @@ rabu.schedule.Iteration = function(iteration, effortToDate) {
 		return self.effortToDate() + self.effortRemaining();
 	};
 	
-	function featuresFromList(featureList) {
+	function featuresFromList(featureList, effort) {
 		if (!featureList) { return []; }
 		var cumulativeEstimate = 0;
 		return featureList.map(function(element) {
-			var result = new rabu.schedule.Feature(element, cumulativeEstimate, self.effortToDate());
+			var result = new rabu.schedule.Feature(element, cumulativeEstimate, effort);
 			cumulativeEstimate += result.estimate();
 			return result;
 		});
 	}
 
 	this.includedFeatures = function() {
-		return featuresFromList(iteration.included);
+		return featuresFromList(iteration.included, self.effortToDate());
 	};
 	
 	this.excludedFeatures = function() {
-		return featuresFromList(iteration.excluded);
+		return featuresFromList(iteration.excluded, self.totalEffort());
 	};
 };
 
