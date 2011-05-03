@@ -1,6 +1,7 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
 rabu.schedule.BurnupDom = function(element, estimates, projections) {
+	var rs = rabu.schedule;
     var raphael = Raphael;     // prevent JSLint error resulting from calling Raphael without 'new'
     var self = this; 
 	var xLabelElement = $(".rabu-xLabel");
@@ -29,29 +30,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	}
 
     function copyTextElements() {
-
-	    function roundUpEffort(effort) {
-	        if (effort <= 0.25) {
-	            return 0.25;
-	        }
-	        if (effort <= 0.5) {
-	            return 0.5;
-	        }
-	        
-	        var result = 1;
-	        var adjusted = effort;
-	        while (adjusted >= 10) {
-	            result *= 10;
-	            adjusted /= 10;
-	        }
-	        if (result < effort) {
-	            result *= 5;
-	        }
-	        if (result < effort) {
-	            result *= 2;
-	        }
-	        return result;
-	    }
+        var roundUpEffort = rs.BurnupChartMetrics.roundUpEffort;
 		
 		self.xLabel = copyOneTextElement(xLabelElement);
 		self.yLabel = copyOneTextElement(yLabelElement);
@@ -123,22 +102,6 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			}
 			self.yTicks.push(line(x - tickOffset, y, x + tickOffset, y));
 		}
-//		var i;
-//		var previousLabelTopEdge = metrics.bottom;
-//		for (i = 0; i < metrics.yTickCount(); i++) {
-//			var x = metrics.left;
-//            var y = metrics.yTickPosition(i);
-//            var label = paper.text(x - 15, y, metrics.yTickLabel(i));
-//			var xOffset = metrics.MINOR_TICK_LENGTH / 2;
-//			if (metrics.shouldDrawYTickLabel(i, previousLabelTopEdge)) {
-//				xOffset = metrics.MAJOR_TICK_LENGTH / 2;
-//				previousLabelTopEdge = y - (self.yTickLabel.getBBox().height / 2);
-//			}
-//			else {
-//				label.remove();
-//			}
-//			line(x - xOffset, y, x + xOffset, y);
-//		}
 	}
 	
 	this.populate = function(optionalMetricsForTesting) {
@@ -163,7 +126,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
 	            iterationCount: projections.maxIterations(),
-				maxEffort: projections.maxEffort()  // TODO: replace me!
+				maxEffort: projections.maxEffort()
 			});
 		}
 
@@ -180,6 +143,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 
 
 rabu.schedule.BurnupChartMetrics = function(data) {
+	var rs = rabu.schedule;
     var self = this;
 	this.MAJOR_TICK_LENGTH = data.MAJOR_TICK_LENGTH || 8;
 	this.MINOR_TICK_LENGTH = data.MINOR_TICK_LENGTH || 4;
@@ -233,35 +197,12 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 		date.setDate(date.getDate() + (data.iterationLength * tickOffset));
 		return date.toString('MMM d');
 	};
-       
-	this.roundUpEffort = function(effort) {
-        if (effort <= 0.25) {
-            return 0.25;
-        }
-        if (effort <= 0.5) {
-            return 0.5;
-        }
-        
-        var result = 1;
-        var adjusted = effort;
-        while (adjusted >= 10) {
-            result *= 10;
-            adjusted /= 10;
-        }
-        if (result < effort) {
-            result *= 5;
-        }
-        if (result < effort) {
-            result *= 2;
-        }
-        return result;
-    };
 		
 	function yTickScale() {
 		var pixels = self.height;
 		var effortPerPixel = data.maxEffort / pixels;
 		var effortPerTick = effortPerPixel * self.Y_TICK_SPACING;
-		return self.roundUpEffort(effortPerTick);
+		return rs.BurnupChartMetrics.roundUpEffort(effortPerTick);
 	}
 	
 	this.yTickCount = function() {
@@ -290,4 +231,28 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 		
 		return !tickZero && !overlapsBottomEdge && !overlapsTopEdge && !overlapsPreviousLabel;
 	};
+};
+
+       
+rabu.schedule.BurnupChartMetrics.roundUpEffort = function(effort) {
+    if (effort <= 0.25) {
+        return 0.25;
+    }
+    if (effort <= 0.5) {
+        return 0.5;
+    }
+    
+    var result = 1;
+    var adjusted = effort;
+    while (adjusted >= 10) {
+        result *= 10;
+        adjusted /= 10;
+    }
+    if (result < effort) {
+        result *= 5;
+    }
+    if (result < effort) {
+        result *= 2;
+    }
+    return result;
 };

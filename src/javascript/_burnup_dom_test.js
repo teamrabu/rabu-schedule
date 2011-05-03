@@ -251,19 +251,21 @@
 	};
     
     Test.prototype.test_roundUpEffort = function() {
-        assertEquals(0.25, metrics.roundUpEffort(0.0001));
-        assertEquals(0.25, metrics.roundUpEffort(0.1));
-        assertEquals(0.25, metrics.roundUpEffort(0.25));
-        assertEquals(0.5, metrics.roundUpEffort(0.4));
-        assertEquals(0.5, metrics.roundUpEffort(0.5));
-        assertEquals(1, metrics.roundUpEffort(0.6));
-        assertEquals(1, metrics.roundUpEffort(1));
-        assertEquals(5, metrics.roundUpEffort(2));
-        assertEquals(5, metrics.roundUpEffort(5));
-        assertEquals(50, metrics.roundUpEffort(20));
-        assertEquals(100, metrics.roundUpEffort(70));
-        assertEquals(100, metrics.roundUpEffort(100));
-        assertEquals(500000, metrics.roundUpEffort(400000));
+		var roundUpEffort = rs.BurnupChartMetrics.roundUpEffort;
+		
+        assertEquals(0.25, roundUpEffort(0.0001));
+        assertEquals(0.25, roundUpEffort(0.1));
+        assertEquals(0.25, roundUpEffort(0.25));
+        assertEquals(0.5, roundUpEffort(0.4));
+        assertEquals(0.5, roundUpEffort(0.5));
+        assertEquals(1, roundUpEffort(0.6));
+        assertEquals(1, roundUpEffort(1));
+        assertEquals(5, roundUpEffort(2));
+        assertEquals(5, roundUpEffort(5));
+        assertEquals(50, roundUpEffort(20));
+        assertEquals(100, roundUpEffort(70));
+        assertEquals(100, roundUpEffort(100));
+        assertEquals(500000, roundUpEffort(400000));
     };
 
 	Test.prototype.test_yTicks_scaleIntelligently = function() {
