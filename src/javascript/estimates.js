@@ -131,8 +131,8 @@ rabu.schedule.Iteration = function(iteration, effortToDate) {
 };
 
 
-rabu.schedule.Feature = function(featureJson) {
-	var feature = featureJson;
+rabu.schedule.Feature = function(feature, cumulativeEstimate, effortToDate) {
+    var self = this;
 
 	this.name = function() {
 		return feature[0];
@@ -141,13 +141,21 @@ rabu.schedule.Feature = function(featureJson) {
 	this.estimate = function() {
 		return feature[1];
 	};
+	
+	this.cumulativeEstimate = function() {
+		return cumulativeEstimate + self.estimate();
+	};
+	
+	this.totalEffort = function() {
+		return self.cumulativeEstimate() + effortToDate;
+	};
 
 	this.isDone = function() {
-		return this.estimate() === 0;
+		return self.estimate() === 0;
 	};
 
 	this.equals = function(that) {
-		return (this.name() === that.name()) && (this.estimate() === that.estimate());
+		return (self.name() === that.name()) && (self.estimate() === that.estimate());
 	};
 
 	this.toString = function() {

@@ -168,12 +168,13 @@
 
 (function() {
 	var Test = new TestCase("FeatureTest");
+	var rs = rabu.schedule;
 
 	Test.prototype.test_equals = function() {
-		var a1 = new rabu.schedule.Feature(["feature A", 10]);
-		var a2 = new rabu.schedule.Feature(["feature A", 10]);
-		var b = new rabu.schedule.Feature(["feature B", 10]);
-		var b2 = new rabu.schedule.Feature(["feature B", 20]);
+		var a1 = new rs.Feature(["feature A", 10], 0, 0);
+		var a2 = new rs.Feature(["feature A", 10], 0, 0);
+		var b = new rs.Feature(["feature B", 10], 0, 0);
+		var b2 = new rs.Feature(["feature B", 20], 0, 0);
 
 		assertTrue(a1.equals(a2));
 		assertFalse(a1.equals(b));
@@ -181,17 +182,27 @@
 	};
 
 	Test.prototype.test_toString = function() {
-		assertEquals("['feature', 10]", new rabu.schedule.Feature(["feature", 10]).toString());
+		assertEquals("['feature', 10]", new rs.Feature(["feature", 10], 0, 0).toString());
 	};
 
 	Test.prototype.test_bareData = function() {
-		var feature = new rabu.schedule.Feature(["feature name", 33]);
+		var feature = new rs.Feature(["feature name", 33], 20, 30);
 		assertEquals("name", "feature name", feature.name());
 		assertEquals("estimate", 33, feature.estimate());
 	};
 
 	Test.prototype.test_done = function() {
-		assertTrue("done", new rabu.schedule.Feature(["done", 0]).isDone());
-		assertFalse("not done", new rabu.schedule.Feature(["not done", 10]).isDone());
+		assertTrue("done", new rs.Feature(["done", 0], 20, 30).isDone());
+		assertFalse("not done", new rs.Feature(["not done", 10], 20, 30).isDone());
+	};
+	
+	Test.prototype.test_cumulativeEstimate = function() {
+		var feature = new rs.Feature(["feature", 10], 20, 30);
+		assertEquals(30, feature.cumulativeEstimate());
+	};
+	
+	Test.prototype.test_totalEffort = function() {
+		var feature = new rs.Feature(["feature", 10], 20, 30);
+		assertEquals(60, feature.totalEffort());
 	};
 }());
