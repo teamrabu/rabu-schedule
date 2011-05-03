@@ -32,7 +32,7 @@
             xTickLabelHeight: 10, 
 			yTickLabelWidth: 0, yTickLabelHeight: 8,
             startDate: "1 Jan 2011", iterationLength: 5,
-            iterationCount: 4, maxEffort: 1,
+            iterationCount: 3, maxEffort: 1,
             Y_TICK_SPACING: 3
         };
 		metrics = new rs.BurnupChartMetrics(metricsConfig);
@@ -187,7 +187,7 @@
 			xTickLabelHeight: 10,
 			yTickLabelHeight: 8, yTickLabelWidth: 0,
 			startDate: "1 Jan 2011", iterationLength: 5,
-			iterationCount: 4,
+			iterationCount: 3,
 			maxEffort: 10,
 			MAJOR_TICK_LENGTH: 8,
 			Y_TICK_SPACING: 3,
@@ -223,6 +223,13 @@
 
         assertFloatEquals("X-axis tick label vertical center", 70, metrics.xTickLabelVerticalCenter);
 		assertFloatEquals("Y-axis tick label right edge", 18, metrics.yTickLabelRightEdge);
+	};
+	
+	Test.prototype.test_dimensions = function() {
+		metricsConfig.iterationCount = 10;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		
+		assertEquals("should be extra tick for end of last iteration", 11, metrics.xTickCount);
 	};
 	
 	Test.prototype.test_xTickPosition = function() {

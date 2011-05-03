@@ -7,7 +7,7 @@
 
 	Test.prototype.setUp = function() {
 		config = {
-			riskMultipliers: [0.25, 0.25, 0.75],
+			riskMultipliers: [1, 2, 4],
 			iterations: [{
 				started: "1 Jan 2011",
 				length: 10,
@@ -21,17 +21,24 @@
 	};
 
 	Test.prototype.test_dateProjections = function() {
+		config.riskMultipliers = [0.25, 0.25, 0.75];
+		
 		assertEquals("10% should round to next day", new Date("6 Jan 2011"), projections.tenPercentDate());
 		assertEquals("50% should round to next day", new Date("6 Jan 2011"), projections.fiftyPercentDate());
 		assertEquals("90% should round to next iteration", new Date("21 Jan 2011"), projections.ninetyPercentDate());
 	};
 
-	Test.prototype.test_maxIterations = function() {
-		assertEquals(2, projections.maxIterations());
+	Test.prototype.test_totalIterations = function() {
+		config.riskMultipliers = [1, 2, 4.3];
+		assertEquals("should round up to whole number", 9, projections.totalIterations());
+				
+		config.iterations.push({});
+		config.iterations.push({});
+		assertEquals("should include historical iterations", 11, projections.totalIterations());
 	};
 	
 	Test.prototype.test_maxEffort = function() {
-		assertEquals(1.6, projections.maxEffort());
+		assertEquals(projections.ninetyPercentProjection().totalEffort(), projections.maxEffort());
 	};
 }());
 

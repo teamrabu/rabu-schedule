@@ -125,7 +125,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 				yTickLabelHeight: self.yTickLabel.getBBox().height,
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
-	            iterationCount: projections.maxIterations(),
+	            iterationCount: projections.totalIterations(),
 				maxEffort: projections.maxEffort()
 			});
 		}
@@ -173,7 +173,7 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	this.xTickLabelVerticalCenter = this.bottom + (this.MAJOR_TICK_LENGTH / 2) + (data.xTickLabelHeight / 2);
 	this.yTickLabelRightEdge = this.left - (this.MAJOR_TICK_LENGTH / 2) - this.Y_TICK_LABEL_RIGHT_PADDING;
 	
-	this.xTickCount = data.iterationCount;
+	this.xTickCount = data.iterationCount + 1;
 	
 	this.xTickPosition = function(offset) {
 		var tickDistance = self.width / (this.xTickCount - 1 + 0.5);

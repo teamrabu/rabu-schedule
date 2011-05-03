@@ -2,6 +2,7 @@
 
 rabu.schedule.Projections = function(estimates) {
 	var rs = rabu.schedule;
+	var self = this;
 	
 	function tenPercent() {
 		return new rs.Projection(estimates.currentIteration(), estimates.tenPercentMultiplier()); 
@@ -11,9 +12,9 @@ rabu.schedule.Projections = function(estimates) {
 		return new rs.Projection(estimates.currentIteration(), estimates.fiftyPercentMultiplier());
 	}
 	
-	function ninetyPercent() {
+	this.ninetyPercentProjection = function() {
 		return new rs.Projection(estimates.currentIteration(), estimates.ninetyPercentMultiplier());
-	}
+	};
 
 	this.tenPercentDate = function() {
 		return tenPercent().date();
@@ -24,15 +25,17 @@ rabu.schedule.Projections = function(estimates) {
 	};
 
 	this.ninetyPercentDate = function() {
-		return ninetyPercent().dateRoundedToIteration();
+		return self.ninetyPercentProjection().dateRoundedToIteration();
 	};
 	
-	this.maxIterations = function() {
-		return Math.ceil(ninetyPercent().iterationsRemaining());
+	this.totalIterations = function() {
+		var projected = Math.ceil(self.ninetyPercentProjection().iterationsRemaining());
+		var historical = estimates.iterationCount() - 1;  // don't include current iteration
+		return projected + historical;
 	};
 	
 	this.maxEffort = function() {
-		return ninetyPercent().totalEffort();
+		return self.ninetyPercentProjection().totalEffort();
 	};
 };
 
