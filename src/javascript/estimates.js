@@ -42,6 +42,12 @@ rabu.schedule.Estimates = function(configJson) {
 		return new rs.Iteration(list[list.length - 1]);
 	};
 	
+	this.iteration = function(offsetFromOldest) {
+		var iterationData = iterations();
+		var index = iterationData.length - (offsetFromOldest + 1);
+		return new rs.Iteration(iterationData[index]);
+	};
+	
     this.iterationCount = function() {
 		return config.iterations.length;
 	};

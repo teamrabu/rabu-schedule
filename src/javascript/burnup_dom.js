@@ -108,7 +108,11 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		// TODO: delete and redo with TDD
 		var i;
 		for (i = 1; i < estimates.iterationCount(); i++) {
-			paper.text(100, 10 * (i+ 1), "#" + i);
+			var from = estimates.iteration(i - 1).totalEstimate();
+			var to = estimates.iteration(i).totalEstimate();
+			var text = "#" + i + ": " + from + " - " + to;
+			var drawn = paper.text(100, 10 * (i+ 1), text);
+			drawn.attr("text-anchor", "begin");
 		}
 	}
 	
