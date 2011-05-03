@@ -5,12 +5,20 @@ rabu.schedule.Estimates = function(configJson) {
 	var config = configJson;
 
     function iterations() {
-        if (!config.iterations || config.iterations.length === 0) {
-            return [{}];
-        }
-        else {
-            return config.iterations;
-        }
+		var iterationData = config.iterations;
+		if (!iterationData || iterationData.length === 0) {
+			iterationData = [{}];
+		}
+		
+		var i;
+		var effortToDate = 0;
+		var result = [];
+        for (i = iterationData.length - 1; i >= 0; i--) {
+			var iteration = new rs.Iteration(iterationData[i], effortToDate);
+			result.push(iteration);
+			effortToDate += iteration.velocity();
+		}
+		return result;
     }
 
 	this.name = function() {
@@ -34,18 +42,16 @@ rabu.schedule.Estimates = function(configJson) {
 	};
 
 	this.currentIteration = function() {
-		return new rs.Iteration(iterations()[0]);
+		var list = iterations();
+		return list[list.length - 1];
 	};
 	
 	this.firstIteration = function() {
-		var list = iterations();
-		return new rs.Iteration(list[list.length - 1]);
+		return iterations()[0];
 	};
 	
 	this.iteration = function(offsetFromOldest) {
-		var iterationData = iterations();
-		var index = iterationData.length - (offsetFromOldest + 1);
-		return new rs.Iteration(iterationData[index]);
+		return iterations()[offsetFromOldest];
 	};
 	
     this.iterationCount = function() {
@@ -91,6 +97,10 @@ rabu.schedule.Iteration = function(iteration, effortToDate) {
 	
 	this.velocity = function() {
 		return iteration.velocity;
+	};
+	
+	this.effortToDate = function() {
+		return effortToDate;
 	};
 	
 	this.effortRemaining = function() {

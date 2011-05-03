@@ -33,6 +33,11 @@
 		assertEquals(4, estimates.ninetyPercentMultiplier());
 	};
 	
+    Test.prototype.test_iterationCount = function() {
+        config.iterations = [ { velocity: 1 }, { velocity: 2 }, { velocity: 3 }];
+        assertEquals(3, estimates.iterationCount());
+    };
+	
 	Test.prototype.test_iterationAccessors = function() {
 		config.iterations = undefined;
 		assertEquals("undefined iterations (current)", undefined, estimates.currentIteration().velocity());
@@ -49,15 +54,22 @@
         assertEquals("one iteration (first)", 10, estimates.firstIteration().velocity());
 		assertEquals("one iteration (nth)", 10, estimates.iteration(0).velocity());
 		
-		config.iterations = [ { velocity: 1 }, { velocity: 2 }, { velocity: 3 }];
+		config.iterations = [ { velocity: 1 }, { velocity: 2 }, { velocity: 3 } ];
 		assertEquals("multiple iterations (current)", 1, estimates.currentIteration().velocity());
 		assertEquals("multiple iterations (first)", 3, estimates.firstIteration().velocity());
 		assertEquals("multiple iterations (nth)", 2, estimates.iteration(1).velocity());
 	};
 	
-	Test.prototype.test_iterationCount = function() {
-        config.iterations = [ { velocity: 1 }, { velocity: 2 }, { velocity: 3 }];
-        assertEquals(3, estimates.iterationCount());
+	Test.prototype.test_iterationsAreConstructedWithEffortToDate = function() {
+		config.iterations = [ 
+            { velocity: 1, included: [["feature", 10]]},
+            { velocity: 2, included: [["feature", 20]]},
+			{ velocity: 3, included: [["feature", 30]]}
+		];
+		
+		assertEquals("iteration 0", 30, estimates.iteration(0).totalEffort());
+		assertEquals("iteration 1", 23, estimates.iteration(1).totalEffort());
+		assertEquals("iteration 2", 15, estimates.iteration(2).totalEffort());
 	};
 }());
 
@@ -139,6 +151,11 @@
 	Test.prototype.test_effortRemaining_doesNotIncludeExcludedFeatures = function() {
 		config.excluded = [["excluded feature", 42]];
 		assertEquals(100, iteration.effortRemaining());
+	};
+	
+	Test.prototype.test_effortToDate = function() {
+		iteration = new rs.Iteration(config, 13);
+		assertEquals(13, iteration.effortToDate());
 	};
 	
 	Test.prototype.test_totalEffort_isEffortRemainingPlusEffortToDate = function() {
