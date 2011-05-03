@@ -161,6 +161,15 @@
 		
 		assertEquals("Y-axis tick rendering should track top edge", metrics.MINOR_TICK_LENGTH, burnup.yTicks[1].getBBox().width);
 	};
+	
+	Test.prototype.test_populate_drawsYAxisTickLabels = function() {
+		assertEquals("# of Y-axis tick labels", 4, burnup.yTickLabels.length);
+		var label = burnup.yTickLabels[0];
+		assertEquals("Y-axis tick label name", metrics.yTickLabel(1), label.attrs.text);
+		assertEquals("Y-axis tick label text anchor", "end", label.attrs["text-anchor"]);
+        assertEquals("Y-axis tick label x position", metrics.yTickLabelRightEdge, label.attrs.x);
+		assertEquals("Y-axis tick label y position", metrics.yTickPosition(1), label.attrs.y);
+	};
 }());
 
 
@@ -178,7 +187,9 @@
 			startDate: "1 Jan 2011", iterationLength: 5,
 			iterationCount: 4,
 			maxEffort: 10,
-			Y_TICK_SPACING: 3
+			MAJOR_TICK_LENGTH: 8,
+			Y_TICK_SPACING: 3,
+			Y_TICK_LABEL_RIGHT_PADDING: 5
 		};
 		metrics = new rs.BurnupChartMetrics(metricsConfig);
 		bottom = 61;
@@ -207,6 +218,7 @@
 		assertEquals("Y-axis label vertical center", 5, metrics.yLabelVerticalCenter);
 
         assertFloatEquals("X-axis tick label vertical center", 70, metrics.xTickLabelVerticalCenter);
+		assertFloatEquals("Y-axis tick label right edge", 11, metrics.yTickLabelRightEdge);
 	};
 	
 	Test.prototype.test_xTickPosition = function() {

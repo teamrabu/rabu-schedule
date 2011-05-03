@@ -83,6 +83,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		var i;
 		
 		self.yTicks = [];
+		self.yTickLabels = [];
 		var previousLabelTopEdge = metrics.bottom;
 		for (i = 1; i < metrics.yTickCount(); i++) {
 			var x = metrics.left;
@@ -91,6 +92,10 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			if (metrics.shouldDrawYTickLabel(i, previousLabelTopEdge)) {
 				tickOffset = metrics.MAJOR_TICK_LENGTH / 2;
 				previousLabelTopEdge = y - (metrics.yTickLabelHeight / 2);
+				var label = copyOneTextElement(yTickLabelElement, metrics.yTickLabel(i));
+				label.attr("text-anchor", "end");
+				label.translate(metrics.yTickLabelRightEdge, metrics.yTickPosition(i));
+				self.yTickLabels.push(label);
 			}
 			self.yTicks.push(line(x - tickOffset, y, x + tickOffset, y));
 		}
@@ -129,7 +134,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	            xLabelHeight: self.xLabel.getBBox().height,
 				yLabelHeight: self.yLabel.getBBox().height,
 	            xTickLabelHeight: self.xTickLabel.getBBox().height,
-				yTickLabelHeight: 30,   // TODO: replace me!
+				yTickLabelHeight: self.yTickLabel.getBBox().height,
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
 	            iterationCount: projections.maxIterations(),
@@ -157,6 +162,7 @@ rabu.schedule.BurnupChartMetrics = function(data) {
 	this.X_TICK_LABEL_PADDING = data.X_TICK_LABEL_PADDING || 10;
 	this.Y_TICK_SPACING = data.Y_TICK_SPACING || 10;
 	this.Y_TICK_LABEL_PADDING_MULTIPLIER = data.Y_TICK_LABEL_PADDING_MULTIPLIER || 1.1;
+	this.Y_TICK_LABEL_RIGHT_PADDING = data.Y_TICK_LABEL_RIGHT_PADDING || 3;
     
     this.left = data.yLabelHeight + this.AXIS_OVERHANG;
     this.right = data.paperWidth;
@@ -174,6 +180,7 @@ rabu.schedule.BurnupChartMetrics = function(data) {
     this.yLabelVerticalCenter = this.left - this.AXIS_OVERHANG - (data.yLabelHeight / 2);
 	
 	this.xTickLabelVerticalCenter = this.bottom + (this.MAJOR_TICK_LENGTH / 2) + (data.xTickLabelHeight / 2);
+	this.yTickLabelRightEdge = this.left - (this.MAJOR_TICK_LENGTH / 2) - this.Y_TICK_LABEL_RIGHT_PADDING;
 	
 	this.xTickCount = data.iterationCount;
 	
