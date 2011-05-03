@@ -104,6 +104,14 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 	}
 	
+	function history() {
+		// TODO: delete and redo with TDD
+		var i;
+		for (i = 1; i < estimates.iterationCount(); i++) {
+			paper.text(100, 10 * (i+ 1), "#" + i);
+		}
+	}
+	
 	this.populate = function(optionalMetricsForTesting) {
 		hideInteriorElements();
 		if (paper) {
@@ -134,6 +142,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		axisLines();
 		xAxisTicks();
 		yAxisTicks();
+		history();
 	};
 	
 	this.paper = function() {
