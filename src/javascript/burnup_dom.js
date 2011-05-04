@@ -168,7 +168,11 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	}
 	
 	function velocity(iterationNumber) {
-		return paper.set();
+		var fromX = metrics.xForIteration(iterationNumber - 1);
+		var toX = metrics.xForIteration(iterationNumber);
+		var fromY = metrics.yForEffort(estimates.iteration(iterationNumber - 1).effortToDate());
+		var toY = metrics.yForEffort(estimates.iteration(iterationNumber).effortToDate());
+		return historyPolygon(fromX, fromY, toX, toY, rgb(0, 100, 0), rgb(100, 200, 100), "Completed");
 	}
 
     function history() {

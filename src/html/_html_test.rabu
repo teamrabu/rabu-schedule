@@ -7,7 +7,7 @@
     	{
     		"started": "29 Jan 2011",
     		"length": 7,
-    		"velocity": 30,
+    		"velocity": 50,
     		"included": [
 //    			["Completed feature", 0],
     			["Feature A", 80],
@@ -25,7 +25,7 @@
         {
            "started": "22 Jan 2011",
            "length": 7,
-           "velocity": 30,
+           "velocity": 20,
            "included": [
                 ["Feature A", 90],
                 ["Feature B", 80],
@@ -47,7 +47,7 @@
         {
            "started": "8 Jan 2011",
            "length": 7,
-           "velocity": 30,
+           "velocity": 40,
            "included": [
                 ["Feature A", 100],
                 ["Feature B", 70],

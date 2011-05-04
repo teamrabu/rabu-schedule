@@ -259,6 +259,8 @@
 	};
 	       
     function assertHistoryPolygonEquals(message, fromIteration, fromEffort, toEffort, lineColor, fillColor, title, historyPolygon) {
+		assertNotUndefined(message, historyPolygon);
+		
         var width = "3";
         var linecap = "round";
 
@@ -271,6 +273,7 @@
         var polygonPath = moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z";
         
         var polygon = historyPolygon[0];
+		assertNotUndefined(message + " polygon", polygon);
         assertEquals(message + " polygon path", polygonPath, path(polygon));
         assertEquals(message + " polygon title", title, polygon.attrs.title);
         assertEquals(message + " polygon outline color", "white", polygon.attrs.stroke);
@@ -278,6 +281,7 @@
         assertEquals(message + " polygon fill color", fillColor, polygon.attrs.fill);
     
         var myLine = historyPolygon[1];
+		assertNotUndefined(message + " line", myLine);
         assertEquals(message + " line path", line(fromX, fromY, toX, toY), path(myLine));
         assertEquals(message + " line title", title, myLine.attrs.title);
         assertEquals(message + " line color", lineColor, myLine.attrs.stroke);
@@ -289,11 +293,11 @@
 		setupFeatureTest(3);
         burnup.populate(metrics);
 		
-		var strokeColor = rgb(100, 0, 0);
+		var lineColor = rgb(100, 0, 0);
 		
-		assertHistoryPolygonEquals("top polygon", 0, 600, 68, strokeColor, rgb(255, 600 / 3, 600 / 3), "feature C", burnup.iterations[0][0]);
-		assertHistoryPolygonEquals("middle polygon", 0, 300, 38, strokeColor, rgb(255, 400 / 3, 400 / 3), "feature B", burnup.iterations[0][1]);
-		assertHistoryPolygonEquals("bottom polygon", 0, 100, 18, strokeColor, rgb(255, 200 / 3, 200 / 3), "feature A", burnup.iterations[0][2]);
+		assertHistoryPolygonEquals("top polygon", 0, 600, 68, lineColor, rgb(255, 600 / 3, 600 / 3), "feature C", burnup.iterations[0][0]);
+		assertHistoryPolygonEquals("middle polygon", 0, 300, 38, lineColor, rgb(255, 400 / 3, 400 / 3), "feature B", burnup.iterations[0][1]);
+		assertHistoryPolygonEquals("bottom polygon", 0, 100, 18, lineColor, rgb(255, 200 / 3, 200 / 3), "feature A", burnup.iterations[0][2]);
 	};
 	
     Test.prototype.test_populate_drawsVelocity = function() {
@@ -308,6 +312,12 @@
         setupIterationTest(3);
         burnup.populate(metrics);
         assertEquals("when three iterations", 2, burnup.velocity.length);
+		
+        var lineColor = rgb(0, 100, 0);
+		var fillColor = rgb(100, 200, 100);
+		
+		assertHistoryPolygonEquals("velocity, iteration 0-1", 0, 0, 8, lineColor, fillColor, "Completed", burnup.velocity[0]);
+        assertHistoryPolygonEquals("velocity, iteration 1-2", 1, 8, 15, lineColor, fillColor, "Completed", burnup.velocity[1]);
     };
     
 	Test.prototype.test_populate_doesntCrashWhenALaterIterationHasMoreFeaturesThanAnEarlierIteration_thisIsATemporarySolution = function() {
