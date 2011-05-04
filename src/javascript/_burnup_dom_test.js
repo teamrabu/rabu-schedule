@@ -214,17 +214,19 @@
 		}
 		metricsConfig.maxEffort = 1000;
 		metrics = new rs.BurnupChartMetrics(metricsConfig);
-		burnup.populate(metrics);
 	}
 
 	Test.prototype.test_populate_drawsIterations = function() {
 		setupIterationTest(0);
+        burnup.populate(metrics);
 		assertEquals("when zero iterations", 0, burnup.iterations.length);
 		
 		setupIterationTest(1);
+        burnup.populate(metrics);
 		assertEquals("when one iteration", 0, burnup.iterations.length);
 		
 		setupIterationTest(3);
+        burnup.populate(metrics);
 		assertEquals("when three iterations", 2, burnup.iterations.length);
 	};
 	
@@ -240,17 +242,19 @@
 				iteration.included.pop();
 			}
 		});
-		burnup.populate(metrics);
 	}
 	
 	Test.prototype.test_populate_drawsFeatures = function() {
 		setupFeatureTest(0);
+        burnup.populate(metrics);
 		assertEquals("when zero features", 0, burnup.iterations[0].length);
 		
 		setupFeatureTest(1);
+        burnup.populate(metrics);
 		assertEquals("when one feature", 1, burnup.iterations[0].length);
 		
 		setupFeatureTest(3);
+        burnup.populate(metrics);
 		assertEquals("when three features", 3, burnup.iterations[0].length);
 	};
 	
@@ -260,6 +264,7 @@
 			return moveTo(x1, y1) + lineTo(x2, y2) + lineTo(x2, bottom) + lineTo(x1, bottom) + "Z"; 
 		}
 		setupFeatureTest(3);
+        burnup.populate(metrics);
 		var fromX = metrics.xForIteration(0);
 		var toX = metrics.xForIteration(1);
 		var polygon;
@@ -303,9 +308,19 @@
 		}
 		
 		setupFeatureTest(3);
+        burnup.populate(metrics);
         assertFeatureLineEquals("top line", 600, 68, "feature C", 0);
         assertFeatureLineEquals("middle line", 300, 38, "feature B", 1);
         assertFeatureLineEquals("bottom line", 100, 18, "feature A", 2);
+	};
+	
+	Test.prototype.test_populate_doesntCrashWhenALaterIterationHasMoreFeaturesThanAnEarlierIteration_thisIsATemporarySolution = function() {
+		setupIterationTest(3);
+		config.iterations[2].included.pop();
+        
+		assertNoException(function(){
+			burnup.populate(metrics);
+		});
 	};
 }());
 

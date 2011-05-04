@@ -117,11 +117,17 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
     }
     
     function feature(fromX, toX, fromFeatures, toFeatures, featureNumber) {
-		var fromFeature = fromFeatures[featureNumber];
-		var toFeature = toFeatures[featureNumber];
-		var fromY = metrics.yForEffort(fromFeature.totalEffort());
-		var toY = metrics.yForEffort(toFeature.totalEffort());
 		var bottom = metrics.bottom;
+        var fromY;
+		if (featureNumber < fromFeatures.length) {
+			var fromFeature = fromFeatures[featureNumber];
+			fromY = metrics.yForEffort(fromFeature.totalEffort());
+		}
+		else {
+			fromY = bottom;
+		}
+		var toFeature = toFeatures[featureNumber];
+		var toY = metrics.yForEffort(toFeature.totalEffort());
 		
 		var polygon = paper.path(moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z");
         polygon.attr("title", toFeature.name());

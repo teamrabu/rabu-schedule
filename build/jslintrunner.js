@@ -23,7 +23,8 @@ var OPTIONS = {
 	predef: [           // Global variables
 		"$", "jQuery", "Raphael",
 		"rabu",
-		"TestCase", "fail", "assertTrue", "assertFalse", "assertSame", "assertEquals", 
+		"TestCase", "fail", "assertNoException", 
+		"assertTrue", "assertFalse", "assertSame", "assertEquals", 
 		"assertNull", "assertNotNull", "assertNotUndefined"
 	]
 };
