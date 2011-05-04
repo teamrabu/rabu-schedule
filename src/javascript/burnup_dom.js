@@ -176,13 +176,16 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	}
 
     function history() {
-		self.iterations = [];
-		self.velocity = [];
+		self.iterations = paper.set();
+		self.velocity = paper.set();
 		var i;
 		for (i = 1; i < estimates.iterationCount(); i++) {
 			self.iterations.push(iteration(i));
 			self.velocity.push(velocity(i));
 		}
+		var width = metrics.xForIteration(estimates.iterationCount() - 1) - metrics.left;
+		var clip = metrics.left + "," + metrics.top + "," + width + "," + metrics.height;
+        paper.set(self.iterations, self.velocity).attr("clip-rect", clip);
 	}
 	
 	this.populate = function(optionalMetricsForTesting) {
