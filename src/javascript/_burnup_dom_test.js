@@ -46,8 +46,17 @@
 		return raphaelObject.node.attributes.d.value;
 	}
 	
+	function moveTo(x, y) {
+		return "M" + x + "," + y;
+	}
+	
+	function lineTo(x, y) {
+		return "L" + x + "," + y;
+	}
+	
 	function line(x1, y1, x2, y2) {
-		return "M" + x1 + "," + y1 + "L" + x2 + "," + y2;
+		return moveTo(x1, y1) + lineTo(x2, y2);
+//		return "M" + x1 + "," + y1 + "L" + x2 + "," + y2;
 	}
 	
 	function assertFloatEquals(message, expected, actual) {
@@ -180,15 +189,24 @@
 		config.iterations = [];
 		if (iterationCount === 1 || iterationCount === 3) {
 			config.iterations.push({
+               "started": "15 Jan 2011",
+               "length": 7,
+				velocity: 6,
 				included: [["feature A", 1], ["feature B", 2], ["feature C", 3]]
 			});
 		}
 		if (iterationCount === 3) {
             config.iterations.push({
+               "started": "8 Jan 2011",
+               "length": 7,
+				velocity: 7,
 				included: [["feature A", 10], ["feature B", 20], ["feature C", 30]]
 			});
             config.iterations.push({
-                included: [["feature A", 100], ["feature B", 200], ["feature C", 300]]
+	           "started": "1 Jan 2011",
+	           "length": 7,
+                velocity: 8,
+				included: [["feature A", 100], ["feature B", 200], ["feature C", 300]]
 			});
 		}
 		metricsConfig.maxEffort = 1000;
@@ -231,6 +249,18 @@
 		
 		setupFeatureTest(3);
 		assertEquals("when three features", 3, burnup.iterations[0].length);
+	};
+	
+	Test.prototype.test_populate_drawsPolygonsForStackedFeatures = function() {
+		function polygonPath(x1, y1, x2, y2) {
+			var bottom = metrics.bottom;
+			return moveTo(x1, y1) + lineTo(x2, y2) + lineTo(x2, bottom) + lineTo(x1, bottom) + "Z"; 
+		}
+		
+		setupFeatureTest(3);
+		
+		var expectedPath = polygonPath(metrics.xForIteration(0), metrics.yForEffort(600), metrics.xForIteration(1), metrics.yForEffort(68));
+		assertEquals(expectedPath, path(burnup.iterations[0][0][0]));
 	};
 }());
 

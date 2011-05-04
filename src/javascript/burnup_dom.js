@@ -104,18 +104,6 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 	}
 
-	function moveTo(x, y) {
-	   return " M" + x + "," + y;
-	}
-	
-	function lineTo(x, y) {
-		return " L" + x + "," + y;
-	}
-	
-	function rgb(r, g, b) {
-        return "rgb(" + r + ", " + g + ", " + b + ")";
-	}
-	
 //	function stackFeatures(y, fromIter, toIter, fromX, toX) {
 //		// TODO: delete and redo with TDD
 //		var fromFeatures = fromIter.includedFeatures();
@@ -163,20 +151,51 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 //		}
 //	}
 
-    function features(iteration) {
+    function moveTo(x, y) {
+       return " M" + x + "," + y;
+    }
+    
+    function lineTo(x, y) {
+        return " L" + x + "," + y;
+    }
+    
+    function rgb(r, g, b) {
+        return "rgb(" + r + ", " + g + ", " + b + ")";
+    }
+    
+    function feature(fromX, toX, fromFeature, toFeature) {
+		var fromY = metrics.yForEffort(fromFeature.totalEffort());
+		var toY = metrics.yForEffort(toFeature.totalEffort());
+		var bottom = metrics.bottom;
+		
+		var result = paper.set();
+		var path = moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z";
+		var polygon = paper.path(path);
+		result.push(polygon);
+		return result;
+	}
+
+    function iteration(iterationNumber) {
+        var fromIteration = estimates.iteration(iterationNumber - 1);
+		var toIteration = estimates.iteration(iterationNumber);
+		var fromFeatures = fromIteration.includedFeatures();
+		var toFeatures = toIteration.includedFeatures();
+		var fromX = metrics.xForIteration(iterationNumber - 1);
+		var toX = metrics.xForIteration(iterationNumber);
+		
 		var result = paper.set();
 		var i;
-		for (i = 0; i < iteration.includedFeatures().length; i++) {
-			result.push(paper.text(0, 0, "foo"));
+		for (i = toFeatures.length - 1; i >= 0; i--) {
+			result.push(feature(fromX, toX, fromFeatures[i], toFeatures[i]));
 		}
 		return result;
 	}
 
-    function iterations() {
+    function history() {
 		self.iterations = [];
 		var i;
 		for (i = 1; i < estimates.iterationCount(); i++) {
-			self.iterations.push(features(estimates.iteration(i)));
+			self.iterations.push(iteration(i));
 		}
 	}
 	
@@ -206,7 +225,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			});
 		}
 
-        iterations();
+        history();
 		axisLabels();
 		axisLines();
 		xAxisTicks();
