@@ -256,11 +256,27 @@
 			var bottom = metrics.bottom;
 			return moveTo(x1, y1) + lineTo(x2, y2) + lineTo(x2, bottom) + lineTo(x1, bottom) + "Z"; 
 		}
-		
 		setupFeatureTest(3);
+		var fromX = metrics.xForIteration(0);
+		var toX = metrics.xForIteration(1);
+		var actualPolygon;
+		var polygon;
 		
-		var expectedPath = polygonPath(metrics.xForIteration(0), metrics.yForEffort(600), metrics.xForIteration(1), metrics.yForEffort(68));
-		assertEquals(expectedPath, path(burnup.iterations[0][0][0]));
+		polygon = burnup.iterations[0][0][0];		
+		assertEquals("top polygon path", polygonPath(fromX, metrics.yForEffort(600), toX, metrics.yForEffort(68)), path(polygon));
+		assertEquals("top polygon title", "feature C", polygon.attrs.title);
+
+
+        assertEquals("middle feature",
+            polygonPath(fromX, metrics.yForEffort(300), toX, metrics.yForEffort(38)),
+			path(burnup.iterations[0][1][0])
+		);
+        assertEquals("bottom feature",
+            polygonPath(fromX, metrics.yForEffort(100), toX, metrics.yForEffort(18)),
+            path(burnup.iterations[0][2][0])
+        );
+		
+//		assertEquals("")
 	};
 }());
 

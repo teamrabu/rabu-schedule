@@ -169,8 +169,12 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		var bottom = metrics.bottom;
 		
 		var result = paper.set();
-		var path = moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z";
-		var polygon = paper.path(path);
+		var polygon = paper.path(moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z");
+        polygon.attr("title", toFeature.name());
+//          polygon.attr("stroke", "white");
+//          polygon.attr("stroke-width", 0.5);
+//          polygon.attr("fill", color);
+
 		result.push(polygon);
 		return result;
 	}
