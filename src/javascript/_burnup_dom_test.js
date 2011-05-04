@@ -324,7 +324,7 @@
 		setupIterationTest(3);
 		burnup.populate(metrics);
 		
-		var width = metrics.xForIteration(2) - metrics.xForIteration(0);
+		var width = metrics.xForIteration(2) - metrics.xForIteration(0) - 0.5;
 		var clip = metrics.left + "," + metrics.top + "," + width + "," + metrics.height;
 		assertEquals("features", clip, burnup.iterations[0][0][0].attrs["clip-rect"]);
         assertEquals("velocity", clip, burnup.velocity[0][0].attrs["clip-rect"]);
