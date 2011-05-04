@@ -262,7 +262,6 @@
 		setupFeatureTest(3);
 		var fromX = metrics.xForIteration(0);
 		var toX = metrics.xForIteration(1);
-		var actualPolygon;
 		var polygon;
 		
 		polygon = burnup.iterations[0][0][0];		
@@ -285,6 +284,28 @@
         assertEquals("bottom polygon stroke color", "white", polygon.attrs.stroke);
         assertEquals("bottom polygon stroke width", "0.5", polygon.attrs["stroke-width"]);
         assertEquals("bottom polygon fill color", rgb(255, 200 / 3, 200 / 3), polygon.attrs.fill);
+	};
+	
+	Test.prototype.test_populate_drawsLinesForStackedFeatures = function() {
+        function assertFeatureLineEquals(message, fromEffort, toEffort, title, offset) {
+	        var fromX = metrics.xForIteration(0);
+	        var toX = metrics.xForIteration(1);
+			var color = rgb(100, 0, 0); 
+			var width = "3";
+			var linecap = "round";
+		
+			var myLine = burnup.iterations[0][offset][1];
+			assertEquals(message + " path", line(fromX, metrics.yForEffort(fromEffort), toX, metrics.yForEffort(toEffort)), path(myLine));
+			assertEquals(message + " title", title, myLine.attrs.title);
+			assertEquals(message + " color", color, myLine.attrs.stroke);
+			assertEquals(message + " width", width, myLine.attrs["stroke-width"]);
+			assertEquals(message + " linecap", linecap, myLine.attrs["stroke-linecap"]);
+		}
+		
+		setupFeatureTest(3);
+        assertFeatureLineEquals("top line", 600, 68, "feature C", 0);
+        assertFeatureLineEquals("middle line", 300, 38, "feature B", 1);
+        assertFeatureLineEquals("bottom line", 100, 18, "feature A", 2);
 	};
 }());
 

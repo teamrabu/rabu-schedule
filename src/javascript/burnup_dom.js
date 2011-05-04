@@ -177,8 +177,15 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		var whiteness = 200 * (featureNumber + 1) / toFeatures.length;
         polygon.attr("fill", rgb(255, whiteness, whiteness));
 
+        var myLine = line(fromX, fromY, toX, toY);
+		myLine.attr("title", toFeature.name());
+		myLine.attr("stroke", "rgb(100, 0, 0)");
+		myLine.attr("stroke-width", 3);
+		myLine.attr("stroke-linecap", "round");
+
 		var result = paper.set();
 		result.push(polygon);
+		result.push(myLine);
 		return result;
 	}
 
