@@ -1,18 +1,18 @@
 {
 	"name": "Hello World",
 	"updated": "5 Jan 2011",
-	"riskMultipliers": [1, 2, 4],
+	"riskMultipliers": [1, 1.4, 1.8],
 	"iterations": [
 	
     	{
     		"started": "29 Jan 2011",
     		"length": 7,
-    		"velocity": 10,
+    		"velocity": 30,
     		"included": [
 //    			["Completed feature", 0],
-    			["Feature A", 60],
-    			["Another feature", 30],
-    			["A third feature whose sole purpose in life is to cause word wrapping, so you can visually inspect the results", 10] //,
+    			["Feature A", 80],
+    			["Another feature", 80],
+    			["A third feature whose sole purpose in life is to cause word wrapping, so you can visually inspect the results", 120] //,
 //    			["This feature's checkmark might collide with the divider", 0]
     		],
     		"excluded": [
@@ -25,44 +25,44 @@
         {
            "started": "22 Jan 2011",
            "length": 7,
-           "velocity": 15,
+           "velocity": 30,
            "included": [
-                ["Feature A", 75],
-                ["Feature B", 30],
-                ["Feature C", 40]
+                ["Feature A", 90],
+                ["Feature B", 80],
+                ["Feature C", 120]
             ]
         },    
         
         {
            "started": "15 Jan 2011",
            "length": 7,
-           "velocity": 15,
+           "velocity": 30,
            "included": [
-                ["Feature A", 80],
-                ["Feature B", 20],
-                ["Feature C", 20]
+                ["Feature A", 100],
+                ["Feature B", 70],
+                ["Feature C", 130]
             ]
         },         
         
         {
            "started": "8 Jan 2011",
            "length": 7,
-           "velocity": 15,
+           "velocity": 30,
            "included": [
                 ["Feature A", 100],
-                ["Feature B", 33],
-                ["Feature C", 15]
+                ["Feature B", 70],
+                ["Feature C", 120]
             ]
         },         
     	
     	{
     	   "started": "1 Jan 2011",
     	   "length": 7,
-    	   "velocity": 15,
+    	   "velocity": 30,
            "included": [
-                ["Feature A", 100],
-                ["Feature B", 30],
-                ["Feature C", 10]
+                ["Feature A", 120],
+                ["Feature B", 60],
+                ["Feature C", 130]
             ]
         }    	   
     ]
