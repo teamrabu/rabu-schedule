@@ -116,6 +116,24 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
         return "rgb(" + r + ", " + g + ", " + b + ")";
     }
     
+	function historyPolygon(fromX, fromY, toX, toY, strokeColor, fillColor, title) {
+		var bottom = metrics.bottom;
+		
+		var polygon = paper.path(moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z");
+		polygon.attr("title", title);
+		polygon.attr("stroke", "white");
+		polygon.attr("stroke-width", 0.5);
+		polygon.attr("fill", fillColor);
+		
+		var stroke = line(fromX, fromY, toX, toY);
+		stroke.attr("title", title); 
+		stroke.attr("stroke", strokeColor);
+		stroke.attr("stroke-width", 3);
+		stroke.attr("stroke-linecap", "round");
+		
+		return paper.set(polygon, stroke);
+	}
+	
     function feature(fromX, toX, fromFeatures, toFeatures, featureNumber) {
 		var bottom = metrics.bottom;
         var fromY;
@@ -128,24 +146,9 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 		var toFeature = toFeatures[featureNumber];
 		var toY = metrics.yForEffort(toFeature.totalEffort());
-		
-		var polygon = paper.path(moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z");
-        polygon.attr("title", toFeature.name());
-        polygon.attr("stroke", "white");
-        polygon.attr("stroke-width", 0.5);
-		var whiteness = 200 * (featureNumber + 1) / toFeatures.length;
-        polygon.attr("fill", rgb(255, whiteness, whiteness));
 
-        var myLine = line(fromX, fromY, toX, toY);
-		myLine.attr("title", toFeature.name());
-		myLine.attr("stroke", "rgb(100, 0, 0)");
-		myLine.attr("stroke-width", 3);
-		myLine.attr("stroke-linecap", "round");
-
-		var result = paper.set();
-		result.push(polygon);
-		result.push(myLine);
-		return result;
+        var whiteness = 200 * (featureNumber + 1) / toFeatures.length;
+        return historyPolygon(fromX, fromY, toX, toY, rgb(100, 0, 0), rgb(255, whiteness, whiteness), toFeature.name());
 	}
 
     function iteration(iterationNumber) {
