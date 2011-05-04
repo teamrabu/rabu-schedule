@@ -116,7 +116,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
         return "rgb(" + r + ", " + g + ", " + b + ")";
     }
     
-	function historyPolygon(fromX, fromY, toX, toY, strokeColor, fillColor, title) {
+	function historyPolygon(fromX, fromY, toX, toY, lineColor, fillColor, title) {
 		var bottom = metrics.bottom;
 		
 		var polygon = paper.path(moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z");
@@ -127,7 +127,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		
 		var stroke = line(fromX, fromY, toX, toY);
 		stroke.attr("title", title); 
-		stroke.attr("stroke", strokeColor);
+		stroke.attr("stroke", lineColor);
 		stroke.attr("stroke-width", 3);
 		stroke.attr("stroke-linecap", "round");
 		
@@ -166,12 +166,18 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 		return result;
 	}
+	
+	function velocity(iterationNumber) {
+		return paper.set();
+	}
 
     function history() {
 		self.iterations = [];
+		self.velocity = [];
 		var i;
 		for (i = 1; i < estimates.iterationCount(); i++) {
 			self.iterations.push(iteration(i));
+			self.velocity.push(velocity(i));
 		}
 	}
 	

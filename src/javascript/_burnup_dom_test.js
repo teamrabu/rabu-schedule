@@ -257,63 +257,59 @@
         burnup.populate(metrics);
 		assertEquals("when three features", 3, burnup.iterations[0].length);
 	};
-	
-	Test.prototype.test_populate_drawsPolygonsForStackedFeatures = function() {
-		function polygonPath(x1, y1, x2, y2) {
-			var bottom = metrics.bottom;
-			return moveTo(x1, y1) + lineTo(x2, y2) + lineTo(x2, bottom) + lineTo(x1, bottom) + "Z"; 
-		}
-		setupFeatureTest(3);
-        burnup.populate(metrics);
-		var fromX = metrics.xForIteration(0);
-		var toX = metrics.xForIteration(1);
-		var polygon;
-		
-		polygon = burnup.iterations[0][0][0];		
-		assertEquals("top polygon path", polygonPath(fromX, metrics.yForEffort(600), toX, metrics.yForEffort(68)), path(polygon));
-		assertEquals("top polygon title", "feature C", polygon.attrs.title);
-		assertEquals("top polygon stroke color", "white", polygon.attrs.stroke);
-		assertEquals("top polygon stroke width", "0.5", polygon.attrs["stroke-width"]);
-		assertEquals("top polygon fill color", rgb(255, 200, 200), polygon.attrs.fill);
+	       
+    function assertHistoryPolygonEquals(message, fromIteration, fromEffort, toEffort, lineColor, fillColor, title, historyPolygon) {
+        var width = "3";
+        var linecap = "round";
 
-        polygon = burnup.iterations[0][1][0];
-        assertEquals("middle polygon path", polygonPath(fromX, metrics.yForEffort(300), toX, metrics.yForEffort(38)), path(polygon));
-        assertEquals("middle polygon title", "feature B", polygon.attrs.title);
-        assertEquals("middle polygon stroke color", "white", polygon.attrs.stroke);
-        assertEquals("middle polygon stroke width", "0.5", polygon.attrs["stroke-width"]);
-        assertEquals("middle polygon fill color", rgb(255, 200 * 2 / 3, 200 * 2 / 3), polygon.attrs.fill);
-		
-        polygon = burnup.iterations[0][2][0];
-        assertEquals("bottom polygon path", polygonPath(fromX, metrics.yForEffort(100), toX, metrics.yForEffort(18)), path(polygon));
-        assertEquals("bottom polygon title", "feature A", polygon.attrs.title);
-        assertEquals("bottom polygon stroke color", "white", polygon.attrs.stroke);
-        assertEquals("bottom polygon stroke width", "0.5", polygon.attrs["stroke-width"]);
-        assertEquals("bottom polygon fill color", rgb(255, 200 / 3, 200 / 3), polygon.attrs.fill);
-	};
-	
-	Test.prototype.test_populate_drawsLinesForStackedFeatures = function() {
-        function assertFeatureLineEquals(message, fromEffort, toEffort, title, offset) {
-	        var fromX = metrics.xForIteration(0);
-	        var toX = metrics.xForIteration(1);
-			var color = rgb(100, 0, 0); 
-			var width = "3";
-			var linecap = "round";
-		
-			var myLine = burnup.iterations[0][offset][1];
-			assertEquals(message + " path", line(fromX, metrics.yForEffort(fromEffort), toX, metrics.yForEffort(toEffort)), path(myLine));
-			assertEquals(message + " title", title, myLine.attrs.title);
-			assertEquals(message + " color", color, myLine.attrs.stroke);
-			assertEquals(message + " width", width, myLine.attrs["stroke-width"]);
-			assertEquals(message + " linecap", linecap, myLine.attrs["stroke-linecap"]);
-		}
-		
+        var fromX = metrics.xForIteration(fromIteration);
+        var fromY = metrics.yForEffort(fromEffort);
+        var toX = metrics.xForIteration(fromIteration + 1);
+        var toY = metrics.yForEffort(toEffort);
+        
+        var bottom = metrics.bottom;
+        var polygonPath = moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z";
+        
+        var polygon = historyPolygon[0];
+        assertEquals(message + " polygon path", polygonPath, path(polygon));
+        assertEquals(message + " polygon title", title, polygon.attrs.title);
+        assertEquals(message + " polygon outline color", "white", polygon.attrs.stroke);
+        assertEquals(message + " polygon outline width", "0.5", polygon.attrs["stroke-width"]);
+        assertEquals(message + " polygon fill color", fillColor, polygon.attrs.fill);
+    
+        var myLine = historyPolygon[1];
+        assertEquals(message + " line path", line(fromX, fromY, toX, toY), path(myLine));
+        assertEquals(message + " line title", title, myLine.attrs.title);
+        assertEquals(message + " line color", lineColor, myLine.attrs.stroke);
+        assertEquals(message + " line width", width, myLine.attrs["stroke-width"]);
+        assertEquals(message + " line linecap", linecap, myLine.attrs["stroke-linecap"]);
+    }
+
+	Test.prototype.test_populate_drawsPolygonsForStackedFeatures = function() {
 		setupFeatureTest(3);
         burnup.populate(metrics);
-        assertFeatureLineEquals("top line", 600, 68, "feature C", 0);
-        assertFeatureLineEquals("middle line", 300, 38, "feature B", 1);
-        assertFeatureLineEquals("bottom line", 100, 18, "feature A", 2);
+		
+		var strokeColor = rgb(100, 0, 0);
+		
+		assertHistoryPolygonEquals("top polygon", 0, 600, 68, strokeColor, rgb(255, 600 / 3, 600 / 3), "feature C", burnup.iterations[0][0]);
+		assertHistoryPolygonEquals("middle polygon", 0, 300, 38, strokeColor, rgb(255, 400 / 3, 400 / 3), "feature B", burnup.iterations[0][1]);
+		assertHistoryPolygonEquals("bottom polygon", 0, 100, 18, strokeColor, rgb(255, 200 / 3, 200 / 3), "feature A", burnup.iterations[0][2]);
 	};
 	
+    Test.prototype.test_populate_drawsVelocity = function() {
+        setupIterationTest(0);
+        burnup.populate(metrics);
+        assertEquals("when zero iterations", 0, burnup.velocity.length);
+        
+        setupIterationTest(1);
+        burnup.populate(metrics);
+        assertEquals("when one iteration", 0, burnup.velocity.length);
+        
+        setupIterationTest(3);
+        burnup.populate(metrics);
+        assertEquals("when three iterations", 2, burnup.velocity.length);
+    };
+    
 	Test.prototype.test_populate_doesntCrashWhenALaterIterationHasMoreFeaturesThanAnEarlierIteration_thisIsATemporarySolution = function() {
 		setupIterationTest(3);
 		config.iterations[2].included.pop();
