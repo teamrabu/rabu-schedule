@@ -56,7 +56,10 @@
 	
 	function line(x1, y1, x2, y2) {
 		return moveTo(x1, y1) + lineTo(x2, y2);
-//		return "M" + x1 + "," + y1 + "L" + x2 + "," + y2;
+	}
+	
+	function rgb(r, g, b) {
+		return "rgb(" + r + ", " + g + ", " + b + ")";
 	}
 	
 	function assertFloatEquals(message, expected, actual) {
@@ -265,18 +268,23 @@
 		polygon = burnup.iterations[0][0][0];		
 		assertEquals("top polygon path", polygonPath(fromX, metrics.yForEffort(600), toX, metrics.yForEffort(68)), path(polygon));
 		assertEquals("top polygon title", "feature C", polygon.attrs.title);
+		assertEquals("top polygon stroke color", "white", polygon.attrs.stroke);
+		assertEquals("top polygon stroke width", "0.5", polygon.attrs["stroke-width"]);
+		assertEquals("top polygon fill color", rgb(255, 200, 200), polygon.attrs.fill);
 
-
-        assertEquals("middle feature",
-            polygonPath(fromX, metrics.yForEffort(300), toX, metrics.yForEffort(38)),
-			path(burnup.iterations[0][1][0])
-		);
-        assertEquals("bottom feature",
-            polygonPath(fromX, metrics.yForEffort(100), toX, metrics.yForEffort(18)),
-            path(burnup.iterations[0][2][0])
-        );
+        polygon = burnup.iterations[0][1][0];
+        assertEquals("middle polygon path", polygonPath(fromX, metrics.yForEffort(300), toX, metrics.yForEffort(38)), path(polygon));
+        assertEquals("middle polygon title", "feature B", polygon.attrs.title);
+        assertEquals("middle polygon stroke color", "white", polygon.attrs.stroke);
+        assertEquals("middle polygon stroke width", "0.5", polygon.attrs["stroke-width"]);
+        assertEquals("middle polygon fill color", rgb(255, 200 * 2 / 3, 200 * 2 / 3), polygon.attrs.fill);
 		
-//		assertEquals("")
+        polygon = burnup.iterations[0][2][0];
+        assertEquals("bottom polygon path", polygonPath(fromX, metrics.yForEffort(100), toX, metrics.yForEffort(18)), path(polygon));
+        assertEquals("bottom polygon title", "feature A", polygon.attrs.title);
+        assertEquals("bottom polygon stroke color", "white", polygon.attrs.stroke);
+        assertEquals("bottom polygon stroke width", "0.5", polygon.attrs["stroke-width"]);
+        assertEquals("bottom polygon fill color", rgb(255, 200 / 3, 200 / 3), polygon.attrs.fill);
 	};
 }());
 

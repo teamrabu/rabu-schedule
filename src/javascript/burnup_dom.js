@@ -163,18 +163,21 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
         return "rgb(" + r + ", " + g + ", " + b + ")";
     }
     
-    function feature(fromX, toX, fromFeature, toFeature) {
+    function feature(fromX, toX, fromFeatures, toFeatures, featureNumber) {
+		var fromFeature = fromFeatures[featureNumber];
+		var toFeature = toFeatures[featureNumber];
 		var fromY = metrics.yForEffort(fromFeature.totalEffort());
 		var toY = metrics.yForEffort(toFeature.totalEffort());
 		var bottom = metrics.bottom;
 		
-		var result = paper.set();
 		var polygon = paper.path(moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z");
         polygon.attr("title", toFeature.name());
-//          polygon.attr("stroke", "white");
-//          polygon.attr("stroke-width", 0.5);
-//          polygon.attr("fill", color);
+        polygon.attr("stroke", "white");
+        polygon.attr("stroke-width", 0.5);
+		var whiteness = 200 * (featureNumber + 1) / toFeatures.length;
+        polygon.attr("fill", rgb(255, whiteness, whiteness));
 
+		var result = paper.set();
 		result.push(polygon);
 		return result;
 	}
@@ -190,7 +193,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		var result = paper.set();
 		var i;
 		for (i = toFeatures.length - 1; i >= 0; i--) {
-			result.push(feature(fromX, toX, fromFeatures[i], toFeatures[i]));
+			result.push(feature(fromX, toX, fromFeatures, toFeatures, i));
 		}
 		return result;
 	}
