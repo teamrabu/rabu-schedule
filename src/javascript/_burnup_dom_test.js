@@ -293,7 +293,7 @@
 		setupFeatureTest(3);
         burnup.populate(metrics);
 		
-		var lineColor = rgb(100, 0, 0);
+		var lineColor = rgb(112, 0, 0);
 		
 		assertHistoryPolygonEquals("top polygon", 0, 600, 68, lineColor, rgb(255, 600 / 3, 600 / 3), "feature C", burnup.iterations[0][0]);
 		assertHistoryPolygonEquals("middle polygon", 0, 300, 38, lineColor, rgb(255, 400 / 3, 400 / 3), "feature B", burnup.iterations[0][1]);
@@ -313,8 +313,8 @@
         burnup.populate(metrics);
         assertEquals("when three iterations", 2, burnup.velocity.length);
 		
-        var lineColor = rgb(0, 100, 0);
-		var fillColor = rgb(100, 200, 100);
+        var lineColor = rgb(0, 112, 0);
+		var fillColor = rgb(60, 170, 60);
 		
 		assertHistoryPolygonEquals("velocity, iteration 0-1", 0, 0, 8, lineColor, fillColor, "Completed", burnup.velocity[0]);
         assertHistoryPolygonEquals("velocity, iteration 1-2", 1, 8, 15, lineColor, fillColor, "Completed", burnup.velocity[1]);

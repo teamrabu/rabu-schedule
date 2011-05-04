@@ -150,7 +150,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		var toY = metrics.yForEffort(toFeature.totalEffort());
 
         var whiteness = 200 * (featureNumber + 1) / toFeatures.length;
-        return historyPolygon(fromX, fromY, toX, toY, rgb(100, 0, 0), rgb(255, whiteness, whiteness), toFeature.name());
+        return historyPolygon(fromX, fromY, toX, toY, rgb(112, 0, 0), rgb(255, whiteness, whiteness), toFeature.name());
 	}
 
     function iteration(iterationNumber) {
@@ -174,7 +174,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		var toX = metrics.xForIteration(iterationNumber);
 		var fromY = metrics.yForEffort(estimates.iteration(iterationNumber - 1).effortToDate());
 		var toY = metrics.yForEffort(estimates.iteration(iterationNumber).effortToDate());
-		return historyPolygon(fromX, fromY, toX, toY, rgb(0, 100, 0), rgb(100, 200, 100), "Completed");
+		return historyPolygon(fromX, fromY, toX, toY, rgb(0, 112, 0), rgb(60, 170, 60), "Completed");
 	}
 
     function history() {
