@@ -3,7 +3,7 @@
 (function() {
 	var Test = new TestCase("BurnupDom");
 	var rs = rabu.schedule;
-	var burnup, paper, metricsConfig, metrics;
+	var config, burnup, paper, metricsConfig, metrics;
 	
 	Test.prototype.setUp = function() {
 		/*:DOC += <div class="rabu-burnup" style="height:300px; width:200px">
@@ -12,7 +12,7 @@
 		              <div class="rabu-xTickLabel" style="font-size: 8px">X Tick Label</div>
 		              <div class="rabu-yTickLabel" style="font-size: 4px">Y Tick Label</div>
                   </div> */
-		var config = {
+		config = {
 			riskMultipliers: [1, 2, 4],
 			iterations: [{
 				started: "1 Jan 2011",
@@ -170,6 +170,41 @@
 		assertEquals("Y-axis tick label text anchor", "end", label.attrs["text-anchor"]);
         assertEquals("Y-axis tick label x position", metrics.yTickLabelRightEdge, label.attrs.x);
 		assertEquals("Y-axis tick label y position", metrics.yTickPosition(1), label.attrs.y);
+	};
+	
+	function setupIterationTest(iterationCount) {
+		if (!(iterationCount === 0 || iterationCount === 1 || iterationCount === 3)) {
+			fail("unknown iterationCount: " + iterationCount);
+		}
+		
+		config.iterations = [];
+		if (iterationCount === 1 || iterationCount === 3) {
+			config.iterations.push({
+				included: [["feature A", 1], ["feature B", 2], ["feature C", 3]]
+			});
+		}
+		if (iterationCount === 3) {
+            config.iterations.push({
+				included: [["feature A", 10], ["feature B", 20], ["feature C", 30]]
+			});
+            config.iterations.push({
+                included: [["feature A", 100], ["feature B", 200], ["feature C", 300]]
+			});
+		}
+		metricsConfig.maxEffort = 1000;
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		burnup.populate(metrics);
+	}
+
+	Test.prototype.test_populate_drawsIterations = function() {
+		setupIterationTest(0);
+		assertEquals("when zero iterations", 0, burnup.iterations.length);
+		
+		setupIterationTest(1);
+		assertEquals("when one iteration", 0, burnup.iterations.length);
+		
+		setupIterationTest(3);
+		assertEquals("when three iterations", 2, burnup.iterations.length);
 	};
 }());
 

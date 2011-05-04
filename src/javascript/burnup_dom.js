@@ -105,12 +105,10 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	}
 
 	function moveTo(x, y) {
-	   // TODO: delete me
 	   return " M" + x + "," + y;
 	}
 	
 	function lineTo(x, y) {
-		// TODO: delete me
 		return " L" + x + "," + y;
 	}
 	
@@ -118,50 +116,58 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
         return "rgb(" + r + ", " + g + ", " + b + ")";
 	}
 	
-	function stackFeatures(y, fromIter, toIter, fromX, toX) {
-		// TODO: delete and redo with TDD
-		var fromFeatures = fromIter.includedFeatures();
-        var toFeatures = toIter.includedFeatures();
-		var i;
-		for (i = toFeatures.length - 1; i >= 0; i--) {
-//			if (i >= fromFeatures.length) { continue; }
-//			var from = fromFeatures[i].totalEffort();
-            var from = (i >= fromFeatures.length ? 0 : fromFeatures[i].totalEffort());
-			var to = toFeatures[i].totalEffort();
-			var fromY = metrics.yForEffort(from);
-			var toY = metrics.yForEffort(to);
-			var path = moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, metrics.bottom) + lineTo(fromX, metrics.bottom) + " Z";
-			var text = i + ". " + path;
-			var polygon = paper.path(path);
-//			var info = paper.text(110, y + (10 * (i + 1)), text);
-//			info.attr("text-anchor", "begin");
-            var whiteness = 200 * (i + 1) / toFeatures.length;
-			var color = rgb(255, whiteness, whiteness);
-			polygon.attr("stroke", "white");
-			polygon.attr("stroke-width", 0.5);
-			polygon.attr("fill", color);
-			polygon.attr("title", toFeatures[i].name());
-			var line = paper.path(moveTo(fromX, fromY) + lineTo(toX, toY));
-			line.attr("stroke", rgb(100, 0, 0));
-			line.attr("stroke-width", 3);
-			line.attr("stroke-linecap", "round")
-		}
-	}
+//	function stackFeatures(y, fromIter, toIter, fromX, toX) {
+//		// TODO: delete and redo with TDD
+//		var fromFeatures = fromIter.includedFeatures();
+//        var toFeatures = toIter.includedFeatures();
+//		var i;
+//		for (i = toFeatures.length - 1; i >= 0; i--) {
+////			if (i >= fromFeatures.length) { continue; }
+////			var from = fromFeatures[i].totalEffort();
+//            var from = (i >= fromFeatures.length ? 0 : fromFeatures[i].totalEffort());
+//			var to = toFeatures[i].totalEffort();
+//			var fromY = metrics.yForEffort(from);
+//			var toY = metrics.yForEffort(to);
+//			var path = moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, metrics.bottom) + lineTo(fromX, metrics.bottom) + " Z";
+//			var text = i + ". " + path;
+//			var polygon = paper.path(path);
+////			var info = paper.text(110, y + (10 * (i + 1)), text);
+////			info.attr("text-anchor", "begin");
+//            var whiteness = 200 * (i + 1) / toFeatures.length;
+//			var color = rgb(255, whiteness, whiteness);
+//			polygon.attr("stroke", "white");
+//			polygon.attr("stroke-width", 0.5);
+//			polygon.attr("fill", color);
+//			polygon.attr("title", toFeatures[i].name());
+//			var line = paper.path(moveTo(fromX, fromY) + lineTo(toX, toY));
+//			line.attr("stroke", rgb(100, 0, 0));
+//			line.attr("stroke-width", 3);
+//			line.attr("stroke-linecap", "round")
+//		}
+//	}
 	
-	function history() {
-		// TODO: delete and redo with TDD
+//	function history() {
+//		// TODO: delete and redo with TDD
+//		var i;
+//		var skip = -10;
+//		for (i = 1; i < estimates.iterationCount(); i++) {
+//			var from = estimates.iteration(i - 1);
+//			var to = estimates.iteration(i);
+//			var text = "#" + i + ": " + from.totalEffort() + " - " + to.totalEffort();
+////			var drawn = paper.text(100, skip + 10 * (i+ 1), text);
+////			drawn.attr("text-anchor", "begin");
+//			var fromX = metrics.xTickPosition(i - 1);
+//			var toX = metrics.xTickPosition(i);
+//			stackFeatures(skip + (10 * (i + 1)), from, to, fromX, toX);
+//			skip += to.includedFeatures().length * 10;
+//		}
+//	}
+
+    function iterations() {
+		self.iterations = [];
 		var i;
-		var skip = -10;
 		for (i = 1; i < estimates.iterationCount(); i++) {
-			var from = estimates.iteration(i - 1);
-			var to = estimates.iteration(i);
-			var text = "#" + i + ": " + from.totalEffort() + " - " + to.totalEffort();
-//			var drawn = paper.text(100, skip + 10 * (i+ 1), text);
-//			drawn.attr("text-anchor", "begin");
-			var fromX = metrics.xTickPosition(i - 1);
-			var toX = metrics.xTickPosition(i);
-			stackFeatures(skip + (10 * (i + 1)), from, to, fromX, toX);
-			skip += to.includedFeatures().length * 10;
+			self.iterations.push(paper.text(0, 0, "foo"));
 		}
 	}
 	
@@ -191,7 +197,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			});
 		}
 
-        history();
+        iterations();
 		axisLabels();
 		axisLines();
 		xAxisTicks();
