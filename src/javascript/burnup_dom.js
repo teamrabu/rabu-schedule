@@ -163,11 +163,20 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 //		}
 //	}
 
+    function features(iteration) {
+		var result = paper.set();
+		var i;
+		for (i = 0; i < iteration.includedFeatures().length; i++) {
+			result.push(paper.text(0, 0, "foo"));
+		}
+		return result;
+	}
+
     function iterations() {
 		self.iterations = [];
 		var i;
 		for (i = 1; i < estimates.iterationCount(); i++) {
-			self.iterations.push(paper.text(0, 0, "foo"));
+			self.iterations.push(features(estimates.iteration(i)));
 		}
 	}
 	

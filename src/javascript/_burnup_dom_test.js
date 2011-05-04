@@ -206,6 +206,32 @@
 		setupIterationTest(3);
 		assertEquals("when three iterations", 2, burnup.iterations.length);
 	};
+	
+	function setupFeatureTest(featureCount) {
+		if (!(featureCount === 0 || featureCount === 1 || featureCount === 3)) {
+			fail("unknown featureCount: " + featureCount);
+		}
+		
+		setupIterationTest(3);
+		config.iterations.forEach(function(iteration) {
+			var i;
+			for (i = 3; i > featureCount; i--) {
+				iteration.included.pop();
+			}
+		});
+		burnup.populate(metrics);
+	}
+	
+	Test.prototype.test_populate_drawsFeatures = function() {
+		setupFeatureTest(0);
+		assertEquals("when zero features", 0, burnup.iterations[0].length);
+		
+		setupFeatureTest(1);
+		assertEquals("when one feature", 1, burnup.iterations[0].length);
+		
+		setupFeatureTest(3);
+		assertEquals("when three features", 3, burnup.iterations[0].length);
+	};
 }());
 
 
