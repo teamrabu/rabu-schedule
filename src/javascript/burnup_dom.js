@@ -220,14 +220,37 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			var toX = metrics.xForIteration(currentIteration + iterationsLeft);
 			var toY = metrics.yForEffort(effortToDate + (projection.velocity() * iterationsLeft));
             
-			var vLine = paper.set(
-			    line(fromX, fromVelocity, toX, toY),
-				line(fromX, fromEffort, toX, toY)
-			).attr("stroke-dasharray", "-");
+//			var vLine = paper.set(
+//			    line(fromX, fromVelocity, toX, toY),
+//				line(fromX, fromEffort, toX, toY)
+//			).attr("stroke-dasharray", "-");
 		}
         drawProjection(ten);
 		drawProjection(fifty);
 		drawProjection(ninety);
+
+        function calcProjection(projection) {
+			var iterationsLeft = projection.iterationsRemaining();
+			return {
+				x: metrics.xForIteration(currentIteration + iterationsLeft),
+				y: metrics.yForEffort(effortToDate + (projection.velocity() * iterationsLeft))
+			};
+		}
+
+        var p10 = calcProjection(ten);
+		var p50 = calcProjection(fifty);
+		var p90 = calcProjection(ninety);
+
+        paper.set(
+	      paper.path(moveTo(fromX, fromEffort) + lineTo(p10.x, p10.y) + lineTo(p90.x, p90.y) + "Z")
+	        .attr("stroke", rgb(112, 0, 0))
+		    .attr("fill", rgb(112, 0, 0)),
+		  paper.path(moveTo(fromX, fromVelocity) + lineTo(p10.x, p10.y) + lineTo(p90.x, p90.y) + "Z")
+		    .attr("stroke", rgb(0, 112, 0))
+			.attr("fill", rgb(0, 112, 0))
+        ).attr("stroke-width", 3)
+		  .attr("filter", "filter:url(#Gaussian_Blur)");
+		
 	}
 	
 	this.populate = function(optionalMetricsForTesting) {
