@@ -147,10 +147,21 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			fromY = bottom;
 		}
 		var toFeature = toFeatures[featureNumber];
-		var toY = metrics.yForEffort(toFeature.totalEffort());
+		var toY;
+		if (toFeature.isDone()) {
+			toY = fromY;
+		}
+		else {
+			toY = metrics.yForEffort(toFeature.totalEffort());
+		}
+		
+		var title = toFeature.name();
+		if (toFeature.isDone()) {
+			title += " (done)";
+		}
 
         var whiteness = 200 * (featureNumber + 1) / toFeatures.length;
-        return historyPolygon(fromX, fromY, toX, toY, rgb(112, 0, 0), rgb(255, whiteness, whiteness), toFeature.name());
+        return historyPolygon(fromX, fromY, toX, toY, rgb(112, 0, 0), rgb(255, whiteness, whiteness), title);
 	}
 
     function iteration(iterationNumber) {
@@ -190,6 +201,33 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
         paper.set(self.iterations, self.velocity).attr("clip-rect", clip);
 	}
 	
+	function velocityProjection() {
+		// TODO: spike -- delete me and replace
+
+//        var ten = projections.tenPercent();
+//		var fifty = projections.fiftyPercent();		
+		var ninety = projections.ninetyPercentProjection();
+
+        var currentIteration = estimates.iterationCount() - 1;
+		var effortToDate = estimates.effortToDate();
+		var fromX = metrics.xForIteration(currentIteration);
+        var fromY = metrics.yForEffort(effortToDate);
+
+        var ninetyX = metrics.xForIteration(currentIteration + ninety.iterationsRemaining());
+        var ninetyY = metrics.yForEffort(effortToDate + (ninety.velocity() * ninety.iterationsRemaining()));
+
+        line(fromX, fromY, ninetyX, ninetyY);
+	}
+	
+	function effortProjection() {
+		
+	}
+	
+	function projection() {
+		velocityProjection();
+		effortProjection();
+	}
+	
 	this.populate = function(optionalMetricsForTesting) {
 		hideInteriorElements();
 		if (paper) {
@@ -217,6 +255,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 
         history();
+		projection();
 		axisLabels();
 		axisLines();
 		xAxisTicks();

@@ -4,24 +4,24 @@ rabu.schedule.Projections = function(estimates) {
 	var rs = rabu.schedule;
 	var self = this;
 	
-	function tenPercent() {
+	this.tenPercentProjection = function() {
 		return new rs.Projection(estimates.currentIteration(), estimates.tenPercentMultiplier()); 
-	}
+	};
 	
-	function fiftyPercent() {
+	this.fiftyPercentProjection = function() {
 		return new rs.Projection(estimates.currentIteration(), estimates.fiftyPercentMultiplier());
-	}
+	};
 	
 	this.ninetyPercentProjection = function() {
 		return new rs.Projection(estimates.currentIteration(), estimates.ninetyPercentMultiplier());
 	};
 
 	this.tenPercentDate = function() {
-		return tenPercent().date();
+		return self.tenPercentProjection().date();
 	};
 
 	this.fiftyPercentDate = function() {
-		return fiftyPercent().date();
+		return self.fiftyPercentProjection().date();
 	};
 
 	this.ninetyPercentDate = function() {
