@@ -1,12 +1,37 @@
 {
 	"name": "Rabu Schedule 0.2",
-	"updated": "1 May 2011",
+	"updated": "4 May 2011",
 	"riskMultipliers": [1, 1.4, 1.8],
 	"iterations": [
         {
+            "started": "6 May 2011",
+            "length": 7,
+            "velocity": 5,
+            "included": [
+                ["Visualization essay", 0],
+                ["Javascript charting research", 0],
+                ["Risk-adjusted burn-up chart (labels)", 0],
+                ["Risk-adjusted burn-up chart (history)", 0],
+                ["Risk-adjusted burn-up chart (projections)", 2.5],
+                ["Risk-adjusted burn-up chart (edge cases)", 4]
+            ],
+            "excluded": [
+                ["Internet Explorer support", "?"],
+                ["Mobile browser support", "?"],
+                ["Runtime error handling", "?"],
+                ["Documentation", "?"],
+                ["Smaller page size", "?"],
+                ["Internationalization", "?"],
+                ["Mini timelines", "?"],
+                ["Friendly CLI (Java?)", "?"],
+                ["CLI error handling", "?"]
+            ]
+        },
+
+        {
             "started": "29 Apr 2011",
             "length": 7,
-            "velocity": 7,
+            "velocity": 5,
             "included": [
                 ["Visualization essay", 0],
                 ["Javascript charting research", 0],

@@ -212,7 +212,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
 	            iterationCount: projections.totalIterations(),
-				maxEffort: projections.maxEffort()
+				maxEffort: estimates.effortToDate() + projections.maxEffort()
 			});
 		}
 

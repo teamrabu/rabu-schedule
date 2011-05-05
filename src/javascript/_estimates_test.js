@@ -71,6 +71,16 @@
 		assertEquals("iteration 1", 23, estimates.iteration(1).totalEffort());
 		assertEquals("iteration 2", 15, estimates.iteration(2).totalEffort());
 	};
+	
+	Test.prototype.test_effortToDate = function() {
+        config.iterations = [ 
+            { velocity: 1, included: [["feature", 10]]},
+            { velocity: 2, included: [["feature", 20]]},
+            { velocity: 3, included: [["feature", 30]]}
+        ];
+
+		assertEquals(5, estimates.effortToDate());
+	};
 }());
 
 

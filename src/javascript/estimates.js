@@ -1,8 +1,8 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
-rabu.schedule.Estimates = function(configJson) {
+rabu.schedule.Estimates = function(config) {
 	var rs = rabu.schedule;
-	var config = configJson;
+	var self = this;
 
     function iterations() {
 		var iterationData = config.iterations;
@@ -59,27 +59,31 @@ rabu.schedule.Estimates = function(configJson) {
 	};
 
 	this.currentIterationStarted = function() {
-		return this.currentIteration().startDate();
+		return self.currentIteration().startDate();
 	};
 
 	this.iterationLength = function() {
-		return this.currentIteration().length();
+		return self.currentIteration().length();
 	};
 
 	this.velocity = function() {
-		return this.currentIteration().velocity();
+		return self.currentIteration().velocity();
+	};
+	
+	this.effortToDate = function() {
+		return self.currentIteration().effortToDate();
 	};
 
 	this.totalEstimate = function() {
-		return this.currentIteration().totalEstimate();
+		return self.currentIteration().totalEstimate();
 	};
 
 	this.includedFeatures = function() {
-		return this.currentIteration().includedFeatures();
+		return self.currentIteration().includedFeatures();
 	};
 
 	this.excludedFeatures = function() {
-		return this.currentIteration().excludedFeatures();
+		return self.currentIteration().excludedFeatures();
 	};
 };
 
@@ -107,7 +111,7 @@ rabu.schedule.Iteration = function(iteration, effortToDate) {
 		var adder = function(sum, feature) {
 			return sum + feature.estimate();
 		};
-		return this.includedFeatures().reduce(adder, 0);
+		return self.includedFeatures().reduce(adder, 0);
 	};
 	
 	this.totalEffort = function() {
@@ -158,6 +162,6 @@ rabu.schedule.Feature = function(feature, cumulativeEstimate, effortToDate) {
 	};
 
 	this.toString = function() {
-		return "['" + this.name() + "', " + this.estimate() + "]";
+		return "['" + self.name() + "', " + self.estimate() + "]";
 	};
 };
