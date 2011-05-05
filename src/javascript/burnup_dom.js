@@ -201,31 +201,33 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
         paper.set(self.iterations, self.velocity).attr("clip-rect", clip);
 	}
 	
-	function velocityProjection() {
+	function projection() {
 		// TODO: spike -- delete me and replace
 
-//        var ten = projections.tenPercent();
-//		var fifty = projections.fiftyPercent();		
+        var ten = projections.tenPercentProjection();
+		var fifty = projections.fiftyPercentProjection();
 		var ninety = projections.ninetyPercentProjection();
 
         var currentIteration = estimates.iterationCount() - 1;
 		var effortToDate = estimates.effortToDate();
 		var fromX = metrics.xForIteration(currentIteration);
-        var fromY = metrics.yForEffort(effortToDate);
+        
+		var fromVelocity = metrics.yForEffort(effortToDate);
+        var fromEffort = metrics.yForEffort(estimates.currentIteration().totalEffort());
 
-        var ninetyX = metrics.xForIteration(currentIteration + ninety.iterationsRemaining());
-        var ninetyY = metrics.yForEffort(effortToDate + (ninety.velocity() * ninety.iterationsRemaining()));
-
-        line(fromX, fromY, ninetyX, ninetyY);
-	}
-	
-	function effortProjection() {
-		
-	}
-	
-	function projection() {
-		velocityProjection();
-		effortProjection();
+        function drawProjection(projection) {
+			var iterationsLeft = projection.iterationsRemaining();
+			var toX = metrics.xForIteration(currentIteration + iterationsLeft);
+			var toY = metrics.yForEffort(effortToDate + (projection.velocity() * iterationsLeft));
+            
+			var vLine = paper.set(
+			    line(fromX, fromVelocity, toX, toY),
+				line(fromX, fromEffort, toX, toY)
+			).attr("stroke-dasharray", "-");
+		}
+        drawProjection(ten);
+		drawProjection(fifty);
+		drawProjection(ninety);
 	}
 	
 	this.populate = function(optionalMetricsForTesting) {
