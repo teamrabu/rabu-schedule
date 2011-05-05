@@ -7,7 +7,7 @@
     	{
     		"started": "29 Jan 2011",
     		"length": 7,
-    		"velocity": 50,
+    		"velocity": 30,
     		"included": [
 //    			["Completed feature", 0],
     			["Feature A", 80],

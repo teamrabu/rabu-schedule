@@ -201,55 +201,97 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
         paper.set(self.iterations, self.velocity).attr("clip-rect", clip);
 	}
 	
-	function projection() {
+	function projection(){
 		// TODO: spike -- delete me and replace
-
-        var ten = projections.tenPercentProjection();
+		
+		var ten = projections.tenPercentProjection();
 		var fifty = projections.fiftyPercentProjection();
 		var ninety = projections.ninetyPercentProjection();
-
-        var currentIteration = estimates.iterationCount() - 1;
+		
+		var currentIteration = estimates.iterationCount() - 1;
 		var effortToDate = estimates.effortToDate();
 		var fromX = metrics.xForIteration(currentIteration);
-        
+		
 		var fromVelocity = metrics.yForEffort(effortToDate);
-        var fromEffort = metrics.yForEffort(estimates.currentIteration().totalEffort());
-
-        function drawProjection(projection) {
-			var iterationsLeft = projection.iterationsRemaining();
-			var toX = metrics.xForIteration(currentIteration + iterationsLeft);
-			var toY = metrics.yForEffort(effortToDate + (projection.velocity() * iterationsLeft));
-            
-//			var vLine = paper.set(
-//			    line(fromX, fromVelocity, toX, toY),
-//				line(fromX, fromEffort, toX, toY)
-//			).attr("stroke-dasharray", "-");
-		}
-        drawProjection(ten);
-		drawProjection(fifty);
-		drawProjection(ninety);
-
-        function calcProjection(projection) {
+		var fromEffort = metrics.yForEffort(estimates.currentIteration().totalEffort());
+				
+		function calcProjection(projection){
 			var iterationsLeft = projection.iterationsRemaining();
 			return {
 				x: metrics.xForIteration(currentIteration + iterationsLeft),
 				y: metrics.yForEffort(effortToDate + (projection.velocity() * iterationsLeft))
 			};
 		}
-
-        var p10 = calcProjection(ten);
+		
+		var p10 = calcProjection(ten);
 		var p50 = calcProjection(fifty);
 		var p90 = calcProjection(ninety);
+		
+		var effortColor = rgb(112, 0, 0);
+		var velocityColor = rgb(0, 112, 0);
+		var angle = raphael.angle(fromX, fromEffort, p90.x, p90.y) - 45;
+		//		angle = 135
+		angle = 0;
+		var effortFill = angle + "-" + effortColor + "-#fff";
+		//		var effortFill = angle + "-#fff-" + effortColor + "-#fff";
+		
+		
+		function drawLine(fromY, color) {
+			var aLine = line(fromX, fromY, p50.x, p50.y);
+			aLine.attr("stroke", color).attr("stroke-width", 3).attr("stroke-linecap", "round");
+		}
 
-        paper.set(
-	      paper.path(moveTo(fromX, fromEffort) + lineTo(p10.x, p10.y) + lineTo(p90.x, p90.y) + "Z")
-	        .attr("stroke", rgb(112, 0, 0))
-		    .attr("fill", rgb(112, 0, 0)),
-		  paper.path(moveTo(fromX, fromVelocity) + lineTo(p10.x, p10.y) + lineTo(p90.x, p90.y) + "Z")
-		    .attr("stroke", rgb(0, 112, 0))
-			.attr("fill", rgb(0, 112, 0))
-        ).attr("stroke-width", 3)
-		  .attr("filter", "filter:url(#Gaussian_Blur)");
+        function drawTriangle(x1, y1, color) {
+			var fill = "0-" + color + "-#fff";
+			var triangle = paper.path(moveTo(x1, y1) + lineTo(p10.x, p10.y) + lineTo(p90.x, p90.y) + "Z");
+			triangle.attr("stroke", "black").attr("stroke-dasharray", ". ")
+			  .attr("stroke", "none")
+			  .attr("fill", fill);
+			  
+//			return paper.set(aLine, triangle);
+            return triangle;
+		}
+		
+        function drawProjection(projection){
+            var iterationsLeft = projection.iterationsRemaining();
+            var toX = metrics.xForIteration(currentIteration + iterationsLeft);
+            var toY = metrics.yForEffort(effortToDate + (projection.velocity() * iterationsLeft));
+            
+//          paper.set(
+//           line(fromX, fromVelocity, toX, toY), 
+             line(fromX, fromEffort, toX, toY)
+//          )
+            .attr("stroke-dasharray", "- ")
+             .attr("stroke-width", "0.5");
+        }
+
+//        drawTriangle(fromX, fromEffort, p50.x, p50.y, p90.x, p90.y);
+//		drawTriangle(fromX, fromEffort, p50.x, p50.y, p10.x, p10.y);
+        drawLine(fromEffort, effortColor);
+		drawLine(fromVelocity, velocityColor);
+        drawTriangle(fromX, fromEffort, effortColor);
+		drawTriangle(fromX, fromVelocity, velocityColor);
+		
+		paper.set(
+		  line(p10.x, p10.y, p10.x, metrics.bottom),
+		  line(p50.x, p50.y, p50.x, metrics.bottom),
+		  line(p90.x, p90.y, p90.x, metrics.bottom)
+		).attr("stroke-dasharray", "- ")
+		  .attr("stroke-width", "0.5");
+						
+        drawProjection(ten);
+        drawProjection(fifty);
+        drawProjection(ninety);
+	
+//        paper.set(
+//	      paper.path(moveTo(fromX, fromEffort) + lineTo(p10.x, p10.y) + lineTo(p90.x, p90.y) + "Z")
+//	        .attr("stroke", rgb(112, 0, 0))
+//		    .attr("fill", effortFill),
+//		  paper.path(moveTo(fromX, fromVelocity) + lineTo(p10.x, p10.y) + lineTo(p90.x, p90.y) + "Z")
+//		    .attr("stroke", rgb(0, 112, 0))
+//			.attr("fill", rgb(0, 112, 0))
+//        ).attr("stroke-width", 3)
+//		  .attr("stroke-linejoin", "round");
 		
 	}
 	

@@ -135,6 +135,10 @@ You should have received a copy of the GNU General Public License along with thi
 			text-indent: -1em;
 			padding-left: 1em;
 			margin-top: 1ex;
+			margin-bottom: 1ex;
+		}
+		
+		.body p {
 		}
 		
 		
@@ -147,6 +151,10 @@ You should have received a copy of the GNU General Public License along with thi
 		.body .qualifier {
 			font-style: italic;
 			font-weight: 200;
+		}
+		
+		.body .footnote {
+			font-size: 75%;
 		}
 		
 		
@@ -241,9 +249,10 @@ You should have received a copy of the GNU General Public License along with thi
 	    <ol class="projection">
 		    <li>Before <span class="date rabu-tenPercentDate"></span>: <span class="qualifier">No</span></li>
 		    <li><span class="date rabu-tenPercentDate"></span> &ndash; <span class="date rabu-fiftyPercentDate"></span>: <span class="qualifier">Unlikely</span></li>
-		    <li><span class="date rabu-fiftyPercentDate"></span> &ndash; <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Probable</span></li>
-		    <li>By <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Yes</span></li>
+		    <li><span class="date rabu-fiftyPercentDate"></span> &ndash; <span class="date rabu-ninetyPercentDate"></span>*: <span class="qualifier">Probable</span></li>
+		    <li>By <span class="date rabu-ninetyPercentDate"></span>*: <span class="qualifier">Yes</span></li>
 	    </ol>
+		<p class="footnote">*This date has been rounded up to the iteration boundary.</p>
 		
 		<h3>How are we progressing?</h3>
 		<div class="rabu-burnup">
