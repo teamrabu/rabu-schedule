@@ -220,14 +220,14 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			var toX = metrics.xForIteration(currentIteration + iterationsLeft);
 			var toY = metrics.yForEffort(effortToDate + (projection.velocity() * iterationsLeft));
             
-//			var vLine = paper.set(
-//			    line(fromX, fromVelocity, toX, toY),
-//				line(fromX, fromEffort, toX, toY)
-//			).attr("stroke-dasharray", "-");
+			var vLine = paper.set(
+			    line(fromX, fromVelocity, toX, toY),
+				line(fromX, fromEffort, toX, toY)
+			).attr("stroke-dasharray", "-");
 		}
-        drawProjection(ten);
+//        drawProjection(ten);
 		drawProjection(fifty);
-		drawProjection(ninety);
+//		drawProjection(ninety);
 
         function calcProjection(projection) {
 			var iterationsLeft = projection.iterationsRemaining();
@@ -237,6 +237,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			};
 		}
 
+/*
         var p10 = calcProjection(ten);
 		var p50 = calcProjection(fifty);
 		var p90 = calcProjection(ninety);
@@ -250,8 +251,24 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			.attr("fill", rgb(0, 112, 0))
         ).attr("stroke-width", 3)
 		  .attr("filter", "filter:url(#Gaussian_Blur)");
-		
+*/
+
+	function drawRange(ten, fifty, ninety) {
+	        var p10 = calcProjection(ten);
+		var p50 = calcProjection(fifty);
+		var p90 = calcProjection(ninety);
+		paper.set(	
+			paper.path(moveTo(p10.x, p50.y) + lineTo(p90.x, p50.y)),
+			paper.path(moveTo(p10.x, p50.y - 7) + lineTo(p10.x, p50.y + 7)),
+			paper.path(moveTo(p50.x, p50.y - 4) + lineTo(p50.x, p50.y + 4)),
+			paper.path(moveTo(p90.x, p50.y - 7) + lineTo(p90.x, p50.y + 7))
+		);
+	};	
+
+	drawRange(ten, fifty, ninety);		
 	}
+
+
 	
 	this.populate = function(optionalMetricsForTesting) {
 		hideInteriorElements();

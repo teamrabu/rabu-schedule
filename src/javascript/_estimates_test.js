@@ -10,6 +10,11 @@
 		assertTrue(message, expected.equals(actual));
 	}
 
+	// TODO eliminate the duplication (didn't see where TestCase is defined)
+	function assertDateEquals(expected, actual) {
+		assertEquals(expected+"", actual+"");
+	}
+
 	Test.prototype.setUp = function() {
 		config = {
 			name: "My name",
@@ -24,7 +29,7 @@
 	};
 	
 	Test.prototype.test_updated = function() {
-		assertEquals(new Date("5 Jan 2011"), estimates.updated());
+		assertDateEquals(new Date("5 Jan 2011"), estimates.updated()+"");
 	};
 
 	Test.prototype.test_riskMultipliers = function() {
@@ -89,6 +94,11 @@
 	var rs = rabu.schedule;
 	var config, iteration;
 
+	// TODO eliminate the duplication (didn't see where TestCase is defined)
+	function assertDateEquals(expected, actual) {
+		assertEquals(expected+"", actual+"");
+	}
+
 	Test.prototype.setUp = function() {
 		config = {
 			started: "1 Jan 2011",
@@ -109,7 +119,7 @@
 	}
 
 	Test.prototype.test_startDate = function() {
-		assertEquals(new Date("1 Jan 2011"), iteration.startDate());
+		assertDateEquals(new Date("1 Jan 2011"), iteration.startDate());
 	};
 	
 	Test.prototype.test_length = function() {
