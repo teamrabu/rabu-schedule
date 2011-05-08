@@ -3,7 +3,7 @@
 (function() {
 	var Test = new TestCase("BurnupDom");
 	var rs = rabu.schedule;
-	var config, burnup, paper, metricsConfig, metrics;
+	var config, estimates, burnup, paper, metricsConfig, metrics;
 	
 	Test.prototype.setUp = function() {
 		/*:DOC += <div class="rabu-burnup" style="height:300px; width:200px">
@@ -23,7 +23,7 @@
 				]
 			}]
 		};
-		var estimates = new rs.Estimates(config);
+		estimates = new rs.Estimates(config);
 		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates, new rs.Projections(estimates));
 		burnup.populate();
         metricsConfig = {
@@ -293,7 +293,7 @@
 		setupFeatureTest(3);
         burnup.populate(metrics);
 		
-		var lineColor = rgb(112, 0, 0);
+		var lineColor = burnup.FEATURE_STROKE;
 		
 		assertHistoryPolygonEquals("top polygon", 0, 600, 68, lineColor, rgb(255, 600 / 3, 600 / 3), "feature C", burnup.iterations[0][0]);
 		assertHistoryPolygonEquals("middle polygon", 0, 300, 38, lineColor, rgb(255, 400 / 3, 400 / 3), "feature B", burnup.iterations[0][1]);
@@ -313,8 +313,8 @@
         burnup.populate(metrics);
         assertEquals("when three iterations", 2, burnup.velocity.length);
 		
-        var lineColor = rgb(0, 112, 0);
-		var fillColor = rgb(60, 170, 60);
+        var lineColor = burnup.VELOCITY_STROKE;
+		var fillColor = burnup.VELOCITY_FILL;
 		
 		assertHistoryPolygonEquals("velocity, iteration 0-1", 0, 0, 8, lineColor, fillColor, "Completed", burnup.velocity[0]);
         assertHistoryPolygonEquals("velocity, iteration 1-2", 1, 8, 15, lineColor, fillColor, "Completed", burnup.velocity[1]);
@@ -329,7 +329,42 @@
 		assertEquals("features", clip, burnup.iterations[0][0][0].attrs["clip-rect"]);
         assertEquals("velocity", clip, burnup.velocity[0][0].attrs["clip-rect"]);
 	};
-    
+               
+//    function assertProjectionConeEquals(message, fromIteration, fromEffort, toEffort, lineColor, fillColor, title, historyPolygon) {
+//        assertNotUndefined(message, historyPolygon);
+//        
+//        var width = "3";
+//        var linecap = "round";
+//
+//        var fromX = metrics.xForIteration(fromIteration);
+//        var fromY = metrics.yForEffort(fromEffort);
+//        var toX = metrics.xForIteration(fromIteration + 1);
+//        var toY = metrics.yForEffort(toEffort);
+//        
+//        var bottom = metrics.bottom;
+//        var polygonPath = moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z";
+//        
+//        var polygon = historyPolygon[0];
+//        assertNotUndefined(message + " polygon", polygon);
+//        assertEquals(message + " polygon path", polygonPath, path(polygon));
+//        assertEquals(message + " polygon title", title, polygon.attrs.title);
+//        assertEquals(message + " polygon outline color", "white", polygon.attrs.stroke);
+//        assertEquals(message + " polygon outline width", "0.5", polygon.attrs["stroke-width"]);
+//        assertEquals(message + " polygon fill color", fillColor, polygon.attrs.fill);
+//    
+//        var myLine = historyPolygon[1];
+//        assertNotUndefined(message + " line", myLine);
+//        assertEquals(message + " line path", line(fromX, fromY, toX, toY), path(myLine));
+//        assertEquals(message + " line title", title, myLine.attrs.title);
+//        assertEquals(message + " line color", lineColor, myLine.attrs.stroke);
+//        assertEquals(message + " line width", width, myLine.attrs["stroke-width"]);
+//        assertEquals(message + " line linecap", linecap, myLine.attrs["stroke-linecap"]);
+//    }
+
+    Test.prototype.test_populateDrawsEffortProjectionCone = function() {
+//		assertProjectionConeEquals("effort", metrics.)
+	};	
+	    
 	Test.prototype.test_populate_doesntCrashWhenALaterIterationHasMoreFeaturesThanAnEarlierIteration_thisIsATemporarySolution = function() {
 		setupIterationTest(3);
 		config.iterations[2].included.pop();
@@ -338,8 +373,7 @@
 			burnup.populate(metrics);
 		});
 	};
-	
-	
+
 }());
 
 
