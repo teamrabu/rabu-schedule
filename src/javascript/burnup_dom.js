@@ -322,7 +322,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 
         history();
-		projection();
+//		projection();
 		axisLabels();
 		axisLines();
 		xAxisTicks();

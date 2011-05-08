@@ -14,7 +14,7 @@
 		config = {
 			name: "My name",
 			updated: "5 Jan 2011",
-			riskMultipliers: [1, 1.4, 1.8]
+			riskMultipliers: [1, 2, 4]
 		};
 		estimates = new rabu.schedule.Estimates(config);
 	};
