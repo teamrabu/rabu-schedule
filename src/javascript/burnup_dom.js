@@ -17,7 +17,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
     this.VELOCITY_STROKE = rgb(0, 112, 0);
 	this.VELOCITY_FILL = rgb(60, 170, 60);
 	this.FEATURE_STROKE = rgb(112, 0, 0);
-	this.FEATURE_FILL = rgb(170, 60, 60);
+	this.FEATURE_FILL = rgb(255, 125, 125);
 
 	function hideInteriorElements() {
 		element.children().hide();
