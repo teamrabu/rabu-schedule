@@ -278,6 +278,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 
 		var startX = metrics.xForIteration(estimates.iterationCount() - 1);
 		var effortY = metrics.yForEffort(estimates.currentIteration().totalEffort());
+		var velocityY = metrics.yForEffort(estimates.effortToDate());
         var p10 = calcProjection(projections.tenPercentProjection());
 		var p50 = calcProjection(projections.fiftyPercentProjection());
 		var p90 = calcProjection(projections.ninetyPercentProjection());  
@@ -291,19 +292,18 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 		
 		function projectionCone(startY, title, color) {
-			return paper.path(moveTo(startX, startY) + lineTo(p10.x, p10.y) + lineTo(p90.x, p90.y) + "Z")
+			return paper.path(moveTo(startX, startY) + lineTo(p10.x, p10.y) + lineTo(p50.x, p50.y) + lineTo(p90.x, p90.y) + "Z")
 			    .attr("title", title)
 				.attr("stroke", "none")
 				.attr("fill", "0-" + color + "-#fff");
 		}
-
-        var effortLine = projectionLine(effortY, "Projected effort", self.FEATURE_STROKE);
-		var effortCone = projectionCone(effortY, "Projected effort", self.FEATURE_STROKE);
-				
-		var velocityLine = line(0, 0, 0, 0);
-		var velocityCone = paper.path();
-				
-        self.projection = paper.set(effortLine, velocityLine, effortCone, velocityCone);
+								
+        self.projection = paper.set(
+	        projectionLine(effortY, "Projected effort", self.FEATURE_STROKE),
+			projectionCone(effortY, "Projected effort", self.FEATURE_STROKE),
+			projectionCone(velocityY, "Projected velocity", self.VELOCITY_STROKE),
+			projectionLine(velocityY, "Projected velocity", self.VELOCITY_STROKE)
+		);
 	}
 	
 	this.populate = function(optionalMetricsForTesting) {
