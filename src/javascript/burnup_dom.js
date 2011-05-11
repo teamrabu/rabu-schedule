@@ -310,7 +310,8 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			projectionLine(velocityY, "Projected work completed", self.VELOCITY_STROKE),
 			projectionCone(effortY, "Projected work remaining", self.FEATURE_STROKE),
 			projectionCone(velocityY, "Projected work completed", self.VELOCITY_STROKE),
-			projectionTrace(startX, effortY, p10.x, p10.y)
+			projectionTrace(startX, effortY, p10.x, p10.y),
+			projectionTrace(p10.x, p10.y, p10.x, metrics.bottom)
 		);
 	}
 	

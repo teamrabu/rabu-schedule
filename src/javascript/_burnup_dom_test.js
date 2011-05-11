@@ -186,19 +186,17 @@
 	};
 	
 	function setupIterationTest(iterationCount) {
-		if (!(iterationCount === 0 || iterationCount === 1 || iterationCount === 3)) {
+		if (!(iterationCount === 1 || iterationCount === 3)) {
 			fail("unknown iterationCount: " + iterationCount);
 		}
 		
 		config.iterations = [];
-		if (iterationCount === 1 || iterationCount === 3) {
-			config.iterations.push({
-               "started": "15 Jan 2011",
-               "length": 7,
-				velocity: 6,
-				included: [["feature A", 1], ["feature B", 2], ["feature C", 3]]
-			});
-		}
+		config.iterations.push({
+           "started": "15 Jan 2011",
+           "length": 7,
+			velocity: 6,
+			included: [["feature A", 1], ["feature B", 2], ["feature C", 3]]
+		});
 		if (iterationCount === 3) {
             config.iterations.push({
                "started": "8 Jan 2011",
@@ -218,10 +216,6 @@
 	}
 
 	Test.prototype.test_populate_drawsIterations = function() {
-		setupIterationTest(0);
-        burnup.populate(metrics);
-		assertEquals("when zero iterations", 0, burnup.iterations.length);
-		
 		setupIterationTest(1);
         burnup.populate(metrics);
 		assertEquals("when one iteration", 0, burnup.iterations.length);
@@ -302,10 +296,6 @@
 	};
 	
     Test.prototype.test_populate_drawsVelocity = function() {
-        setupIterationTest(0);
-        burnup.populate(metrics);
-        assertEquals("when zero iterations", 0, burnup.velocity.length);
-        
         setupIterationTest(1);
         burnup.populate(metrics);
         assertEquals("when one iteration", 0, burnup.velocity.length);
@@ -410,7 +400,8 @@
         assertProjectionConeEquals("effort projection", iterationX, effortY, burnup.FEATURE_STROKE, "Projected work remaining", burnup.projection[2], burnup.projection[0]);
         assertProjectionConeEquals("velocity projection", iterationX, velocityY, burnup.VELOCITY_STROKE, "Projected work completed", burnup.projection[3], burnup.projection[1]);
 		
-		assertProjectionTraceEquals("uppert 10% projection trace", iterationX, effortY, x10, y10, burnup.projection[4]);
+		assertProjectionTraceEquals("upper projection trace (10%)", iterationX, effortY, x10, y10, burnup.projection[4]);
+		assertProjectionTraceEquals("lower projection trace (10%)", x10, y10, x10, metrics.bottom, burnup.projection[5]);
 	};	
 
     //TODO: need to assert cones and lines are in proper order
