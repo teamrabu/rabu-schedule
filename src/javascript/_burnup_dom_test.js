@@ -366,7 +366,7 @@
         setupIterationTest(3);
 		burnup.populate(metrics);
 
-		assertNotUndefined("effort projection cone", burnup.effortProjection);
+		assertNotUndefined("effort projection", burnup.effortProjection);
 		
 		var effortX = metrics.xForIteration(2);
 		var effortY = metrics.yForEffort(estimates.currentIteration().totalEffort());
@@ -382,8 +382,14 @@
 		var y50 = metrics.yForEffort(p50.totalEffort());
 		var y90 = metrics.yForEffort(p90.totalEffort());
 		
+		var cone = burnup.effortProjection;
+		assertNotUndefined("effort projection cone", cone);
 		var conePath = moveTo(effortX, effortY + lineTo(x10, y10) + lineTo(x90, y90) + "Z");
-		assertEquals("effort projection cone path", conePath, path(burnup.effortProjection));
+		assertEquals("effort projection cone path", conePath, path(cone));
+		assertEquals("effort projection cone title", "Projected effort", cone.attrs.title);
+		assertEquals("effort projection cone outline", "none", cone.attrs.stroke);
+		assertEquals("effort projection cone fill color", "0-" + burnup.FEATURE_STROKE + "-#fff", cone.attrs.gradient);
+
 	};	
 	    
 	Test.prototype.test_populate_doesntCrashWhenALaterIterationHasMoreFeaturesThanAnEarlierIteration_thisIsATemporarySolution = function() {
