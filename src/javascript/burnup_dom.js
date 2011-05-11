@@ -291,7 +291,21 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	}
 	
 	function projection() {
-		
+		var effortToDate = estimates.effortToDate();
+	    function calcProjection(projection){
+            return {
+                x: metrics.xForIteration(estimates.iterationCount() - 1 + projection.iterationsRemaining()),
+                y: metrics.yForEffort(effortToDate + projection.totalEffort())
+            };
+        }
+
+		var effortX = metrics.xForIteration(estimates.iterationCount() - 1);
+		var effortY = metrics.yForEffort(estimates.currentIteration().totalEffort());
+        var p10 = calcProjection(projections.tenPercentProjection());
+		var p50 = calcProjection(projections.fiftyPercentProjection());
+		var p90 = calcProjection(projections.ninetyPercentProjection());  
+
+		self.effortProjection = paper.path(moveTo(effortX, effortY) + lineTo(p10.x, p10.y) + lineTo(p90.x, p90.y) + "Z");
 	}
 	
 	this.populate = function(optionalMetricsForTesting) {
@@ -322,6 +336,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 
         history();
 //		projectionSpike();
+        projection();
 		axisLabels();
 		axisLines();
 		xAxisTicks();

@@ -3,7 +3,7 @@
 (function() {
 	var Test = new TestCase("BurnupDom");
 	var rs = rabu.schedule;
-	var config, estimates, burnup, paper, metricsConfig, metrics;
+	var config, estimates, projections, burnup, paper, metricsConfig, metrics;
 	
 	Test.prototype.setUp = function() {
 		/*:DOC += <div class="rabu-burnup" style="height:300px; width:200px">
@@ -24,7 +24,8 @@
 			}]
 		};
 		estimates = new rs.Estimates(config);
-		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates, new rs.Projections(estimates));
+		projections = new rs.Projections(estimates);
+		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates, projections);
 		burnup.populate();
         metricsConfig = {
             paperWidth: 500, paperHeight: 100,
@@ -362,7 +363,28 @@
 //    }
 
     Test.prototype.test_populateDrawsEffortProjectionCone = function() {
-//		assertProjectionConeEquals("effort", metrics.)
+        setupIterationTest(3);
+		burnup.populate(metrics);
+
+		assertNotUndefined("effort projection cone", burnup.effortProjection);
+		
+		var effortX = metrics.xForIteration(2);
+		var effortY = metrics.yForEffort(estimates.currentIteration().totalEffort());
+		var effortToDate = estimates.effortToDate();
+		
+		var p10 = projections.tenPercentProjection();
+		var p50 = projections.fiftyPercentProjection();
+		var p90 = projections.ninetyPercentProjection();
+		
+		var x10 = metrics.xForIteration(2 + p10.iterationsRemaining());
+		var x50 = metrics.xForIteration(2 + p50.iterationsRemaining());
+		var x90 = metrics.xForIteration(2 + p90.iterationsRemaining());
+		var y10 = metrics.yForEffort(effortToDate + p10.totalEffort());
+		var y50 = metrics.yForEffort(effortToDate + p50.totalEffort());
+		var y90 = metrics.yForEffort(effortToDate + p90.totalEffort());
+		
+		var conePath = moveTo(effortX, effortY + lineTo(x10, y10) + lineTo(x90, y90) + "Z");
+		assertEquals("effort projection cone path", conePath, path(burnup.effortProjection));
 	};	
 	    
 	Test.prototype.test_populate_doesntCrashWhenALaterIterationHasMoreFeaturesThanAnEarlierIteration_thisIsATemporarySolution = function() {
