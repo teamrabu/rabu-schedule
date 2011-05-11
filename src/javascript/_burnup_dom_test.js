@@ -362,42 +362,48 @@
 //        assertEquals(message + " line linecap", linecap, myLine.attrs["stroke-linecap"]);
 //    }
 
-    Test.prototype.test_populateDrawsEffortProjectionCone = function() {
+    function assertProjectionConeEquals(message, startX, startY, color, title, cone, theLine) {
+        var p10 = projections.tenPercentProjection();
+        var p50 = projections.fiftyPercentProjection();
+        var p90 = projections.ninetyPercentProjection();
+        
+        var iterationNumber = estimates.iterationCount() - 1;
+        var x10 = metrics.xForIteration(iterationNumber + p10.iterationsRemaining());
+        var x50 = metrics.xForIteration(iterationNumber + p50.iterationsRemaining());
+        var x90 = metrics.xForIteration(iterationNumber + p90.iterationsRemaining());
+        var y10 = metrics.yForEffort(p10.totalEffort());
+        var y50 = metrics.yForEffort(p50.totalEffort());
+        var y90 = metrics.yForEffort(p90.totalEffort());
+
+        assertNotUndefined(message + " cone", cone);
+        var conePath = moveTo(startX, startY) + lineTo(x10, y10) + lineTo(x90, y90) + "Z";
+        assertEquals(message + " cone path", conePath, path(cone));
+        assertEquals(message + " cone title", "Projected effort", cone.attrs.title);
+        assertEquals(message + " cone outline", "none", cone.attrs.stroke);
+        assertEquals(message + " cone fill color", "0-" + color + "-#fff", cone.attrs.gradient);
+		
+        assertNotUndefined(message + " line", theLine);
+        assertEquals(message + " line path", line(startX, startY, x50, y50), path(theLine));
+        assertEquals(message + " line title", "Projected effort", theLine.attrs.title);
+        assertEquals(message + " line stroke", color, theLine.attrs.stroke);
+        assertEquals(message + " line width", 3, theLine.attrs["stroke-width"]);
+        assertEquals(message + " line linecap", "round", theLine.attrs["stroke-linecap"]);
+	}
+
+    Test.prototype.test_populate_drawsProjectionCones = function() {
         setupIterationTest(3);
 		burnup.populate(metrics);
 
-		assertNotUndefined("effort projection", burnup.effortProjection);
-		
-		var effortX = metrics.xForIteration(2);
-		var effortY = metrics.yForEffort(estimates.currentIteration().totalEffort());
-		
-		var p10 = projections.tenPercentProjection();
-		var p50 = projections.fiftyPercentProjection();
-		var p90 = projections.ninetyPercentProjection();
-		
-		var x10 = metrics.xForIteration(2 + p10.iterationsRemaining());
-		var x50 = metrics.xForIteration(2 + p50.iterationsRemaining());
-		var x90 = metrics.xForIteration(2 + p90.iterationsRemaining());
-		var y10 = metrics.yForEffort(p10.totalEffort());
-		var y50 = metrics.yForEffort(p50.totalEffort());
-		var y90 = metrics.yForEffort(p90.totalEffort());
+        var iterationX = metrics.xForIteration(estimates.iterationCount() - 1);
+        var effortY = metrics.yForEffort(estimates.currentIteration().totalEffort());
+		var velocityY = metrics.yForEffort(estimates.effortToDate());
 
-        var myLine = burnup.effortProjection[0];
-		assertNotUndefined("effort projection line", myLine);
-		assertEquals("effort projection line path", line(effortX, effortY, x50, y50), path(myLine));
-		assertEquals("effort projection line title", "Projected effort", myLine.attrs.title);
-		assertEquals("effort projection line stroke", burnup.FEATURE_STROKE, myLine.attrs.stroke);
-		assertEquals("effort projection line width", 3, myLine.attrs["stroke-width"]);
-		assertEquals("effort projection line linecap", "round", myLine.attrs["stroke-linecap"]);
-		
-		var cone = burnup.effortProjection[1];
-		assertNotUndefined("effort projection cone", cone);
-		var conePath = moveTo(effortX, effortY) + lineTo(x10, y10) + lineTo(x90, y90) + "Z";
-		assertEquals("effort projection cone path", conePath, path(cone));
-		assertEquals("effort projection cone title", "Projected effort", cone.attrs.title);
-		assertEquals("effort projection cone outline", "none", cone.attrs.stroke);
-		assertEquals("effort projection cone fill color", "0-" + burnup.FEATURE_STROKE + "-#fff", cone.attrs.gradient);
+		assertNotUndefined("effort projection", burnup.projection);
+        assertProjectionConeEquals("effort projection", iterationX, effortY, burnup.FEATURE_STROKE, "Projected effort", burnup.projection[2], burnup.projection[0]);
+//        assertProjectionConeEquals("velocity projection", iterationX, velocityY, burnup.VELOCITY_STROKE, "Projected velocity", burnup.projection[3], burnup.projection[1]);		
 	};	
+
+    //TODO: need to assert cones and lines are in proper order
 	    
 	Test.prototype.test_populate_doesntCrashWhenALaterIterationHasMoreFeaturesThanAnEarlierIteration_thisIsATemporarySolution = function() {
 		setupIterationTest(3);
