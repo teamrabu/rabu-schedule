@@ -297,12 +297,20 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 				.attr("stroke", "none")
 				.attr("fill", "0-" + color + "-#fff");
 		}
+							
+		function projectionTrace(startX, startY, endX, endY) {
+			return line(startX, startY, endX, endY)
+			    .attr("stroke", "black")
+				.attr("stroke-width", 0.5)
+				.attr("stroke-dasharray", "- ");
+		}
 								
         self.projection = paper.set(
 	        projectionLine(effortY, "Projected work remaining", self.FEATURE_STROKE),
 			projectionLine(velocityY, "Projected work completed", self.VELOCITY_STROKE),
 			projectionCone(effortY, "Projected work remaining", self.FEATURE_STROKE),
-			projectionCone(velocityY, "Projected work completed", self.VELOCITY_STROKE)
+			projectionCone(velocityY, "Projected work completed", self.VELOCITY_STROKE),
+			projectionTrace(startX, effortY, p10.x, p10.y)
 		);
 	}
 	

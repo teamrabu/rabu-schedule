@@ -398,9 +398,19 @@
 	        assertEquals(message + " line linecap", "round", theLine.attrs["stroke-linecap"]);
 	    }
 
+        function assertProjectionTraceEquals(message, startX, startY, endX, endY, trace) {
+			assertNotUndefined(message, trace);
+			assertEquals(message + " path", line(startX, startY, endX, endY), path(trace));
+			assertEquals(message + " stroke", "black", trace.attrs.stroke);
+			assertEquals(message + " width", "0.5", trace.attrs["stroke-width"]);
+			assertEquals(message + " dasharray", "- ", trace.attrs["stroke-dasharray"]);
+		}
+
 		assertNotUndefined("effort projection", burnup.projection);
         assertProjectionConeEquals("effort projection", iterationX, effortY, burnup.FEATURE_STROKE, "Projected work remaining", burnup.projection[2], burnup.projection[0]);
         assertProjectionConeEquals("velocity projection", iterationX, velocityY, burnup.VELOCITY_STROKE, "Projected work completed", burnup.projection[3], burnup.projection[1]);
+		
+		assertProjectionTraceEquals("uppert 10% projection trace", iterationX, effortY, x10, y10, burnup.projection[4]);
 	};	
 
     //TODO: need to assert cones and lines are in proper order
