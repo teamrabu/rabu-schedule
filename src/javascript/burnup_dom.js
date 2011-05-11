@@ -295,7 +295,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 	    function calcProjection(projection){
             return {
                 x: metrics.xForIteration(estimates.iterationCount() - 1 + projection.iterationsRemaining()),
-                y: metrics.yForEffort(effortToDate + projection.totalEffort())
+                y: metrics.yForEffort(projection.totalEffort())
             };
         }
 
@@ -330,7 +330,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 				startDate: estimates.firstIteration().startDate(),
 				iterationLength: estimates.firstIteration().length(),
 	            iterationCount: projections.totalIterations(),
-				maxEffort: estimates.effortToDate() + projections.maxEffort()
+				maxEffort: projections.maxEffort()
 			});
 		}
 

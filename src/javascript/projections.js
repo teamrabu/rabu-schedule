@@ -5,15 +5,15 @@ rabu.schedule.Projections = function(estimates) {
 	var self = this;
 	
 	this.tenPercentProjection = function() {
-		return new rs.Projection(estimates.currentIteration(), estimates.tenPercentMultiplier()); 
+		return new rs.Projection(estimates.currentIteration(), estimates.tenPercentMultiplier(), estimates.effortToDate()); 
 	};
 	
 	this.fiftyPercentProjection = function() {
-		return new rs.Projection(estimates.currentIteration(), estimates.fiftyPercentMultiplier());
+		return new rs.Projection(estimates.currentIteration(), estimates.fiftyPercentMultiplier(), estimates.effortToDate());
 	};
 	
 	this.ninetyPercentProjection = function() {
-		return new rs.Projection(estimates.currentIteration(), estimates.ninetyPercentMultiplier());
+		return new rs.Projection(estimates.currentIteration(), estimates.ninetyPercentMultiplier(), estimates.effortToDate());
 	};
 
 	this.tenPercentDate = function() {
@@ -39,7 +39,7 @@ rabu.schedule.Projections = function(estimates) {
 	};
 };
 
-rabu.schedule.Projection = function(iteration, riskMultiplier) {
+rabu.schedule.Projection = function(iteration, riskMultiplier, effortToDate) {
 	var self = this;
 	self.SCOPE_CHANGE_PERCENTAGE = 0.8;
 	
@@ -69,7 +69,7 @@ rabu.schedule.Projection = function(iteration, riskMultiplier) {
 	this.totalEffort = function() {
 		var original = iteration.effortRemaining();
 		var increase = (original * riskMultiplier) - original;
-		return original + (increase * self.SCOPE_CHANGE_PERCENTAGE);		
+		return effortToDate + original + (increase * self.SCOPE_CHANGE_PERCENTAGE);		
 	};
 	
 	this.velocity = function() {

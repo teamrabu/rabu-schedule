@@ -370,7 +370,6 @@
 		
 		var effortX = metrics.xForIteration(2);
 		var effortY = metrics.yForEffort(estimates.currentIteration().totalEffort());
-		var effortToDate = estimates.effortToDate();
 		
 		var p10 = projections.tenPercentProjection();
 		var p50 = projections.fiftyPercentProjection();
@@ -379,9 +378,9 @@
 		var x10 = metrics.xForIteration(2 + p10.iterationsRemaining());
 		var x50 = metrics.xForIteration(2 + p50.iterationsRemaining());
 		var x90 = metrics.xForIteration(2 + p90.iterationsRemaining());
-		var y10 = metrics.yForEffort(effortToDate + p10.totalEffort());
-		var y50 = metrics.yForEffort(effortToDate + p50.totalEffort());
-		var y90 = metrics.yForEffort(effortToDate + p90.totalEffort());
+		var y10 = metrics.yForEffort(p10.totalEffort());
+		var y50 = metrics.yForEffort(p50.totalEffort());
+		var y90 = metrics.yForEffort(p90.totalEffort());
 		
 		var conePath = moveTo(effortX, effortY + lineTo(x10, y10) + lineTo(x90, y90) + "Z");
 		assertEquals("effort projection cone path", conePath, path(burnup.effortProjection));
