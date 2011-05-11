@@ -282,14 +282,18 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		var p50 = calcProjection(projections.fiftyPercentProjection());
 		var p90 = calcProjection(projections.ninetyPercentProjection());  
 
+        var effortLine = line(effortX, effortY, p50.x, p50.y)
+		    .attr("title", "Projected effort")
+			.attr("stroke", self.FEATURE_STROKE)
+			.attr("stroke-width", 3)
+			.attr("stroke-linecap", "round");
+
 		var effortCone = paper.path(moveTo(effortX, effortY) + lineTo(p10.x, p10.y) + lineTo(p90.x, p90.y) + "Z")
             .attr("title", "Projected effort")
 			.attr("stroke", "none")
 			.attr("fill", "0-" + self.FEATURE_STROKE + "-#fff");
 				
-//		self.effortProjection = paper.set();
-//		self.effortProjection.push(effortCone);
-        self.effortProjection = effortCone;
+        self.effortProjection = paper.set(effortLine, effortCone);
 	}
 	
 	this.populate = function(optionalMetricsForTesting) {

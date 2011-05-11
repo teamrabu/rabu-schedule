@@ -381,15 +381,22 @@
 		var y10 = metrics.yForEffort(p10.totalEffort());
 		var y50 = metrics.yForEffort(p50.totalEffort());
 		var y90 = metrics.yForEffort(p90.totalEffort());
+
+        var myLine = burnup.effortProjection[0];
+		assertNotUndefined("effort projection line", myLine);
+		assertEquals("effort projection line path", line(effortX, effortY, x50, y50), path(myLine));
+		assertEquals("effort projection line title", "Projected effort", myLine.attrs.title);
+		assertEquals("effort projection line stroke", burnup.FEATURE_STROKE, myLine.attrs.stroke);
+		assertEquals("effort projection line width", 3, myLine.attrs["stroke-width"]);
+		assertEquals("effort projection line linecap", "round", myLine.attrs["stroke-linecap"]);
 		
-		var cone = burnup.effortProjection;
+		var cone = burnup.effortProjection[1];
 		assertNotUndefined("effort projection cone", cone);
-		var conePath = moveTo(effortX, effortY + lineTo(x10, y10) + lineTo(x90, y90) + "Z");
+		var conePath = moveTo(effortX, effortY) + lineTo(x10, y10) + lineTo(x90, y90) + "Z";
 		assertEquals("effort projection cone path", conePath, path(cone));
 		assertEquals("effort projection cone title", "Projected effort", cone.attrs.title);
 		assertEquals("effort projection cone outline", "none", cone.attrs.stroke);
 		assertEquals("effort projection cone fill color", "0-" + burnup.FEATURE_STROKE + "-#fff", cone.attrs.gradient);
-
 	};	
 	    
 	Test.prototype.test_populate_doesntCrashWhenALaterIterationHasMoreFeaturesThanAnEarlierIteration_thisIsATemporarySolution = function() {
