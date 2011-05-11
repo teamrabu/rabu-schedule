@@ -402,6 +402,10 @@
 		
 		assertProjectionTraceEquals("upper projection trace (10%)", iterationX, effortY, x10, y10, burnup.projection[4]);
 		assertProjectionTraceEquals("lower projection trace (10%)", x10, y10, x10, metrics.bottom, burnup.projection[5]);
+		assertProjectionTraceEquals("upper projection trace (50%)", iterationX, effortY, x50, y50, burnup.projection[6]);
+		assertProjectionTraceEquals("lower projection trace (50%)", x50, y50, x50, metrics.bottom, burnup.projection[7]);
+		assertProjectionTraceEquals("upper projection trace (90%)", iterationX, effortY, x90, y90, burnup.projection[8]);
+		assertProjectionTraceEquals("lower projection trace (90%)", x90, y90, x90, metrics.bottom, burnup.projection[9]);
 	};	
 
     //TODO: need to assert cones and lines are in proper order
