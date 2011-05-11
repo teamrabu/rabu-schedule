@@ -17,6 +17,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
     this.VELOCITY_STROKE = rgb(0, 112, 0);
 	this.VELOCITY_FILL = rgb(60, 170, 60);
 	this.FEATURE_STROKE = rgb(112, 0, 0);
+	this.FEATURE_FILL = rgb(170, 60, 60);
 
 	function hideInteriorElements() {
 		element.children().hide();
@@ -140,39 +141,16 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		return paper.set(polygon, stroke);
 	}
 	
-    function feature(fromX, toX, fromFeatures, toFeatures, featureNumber) {
-		var bottom = metrics.bottom;
-        var fromY;
-		if (featureNumber < fromFeatures.length) {
-			var fromFeature = fromFeatures[featureNumber];
-			fromY = metrics.yForEffort(fromFeature.totalEffort());
-		}
-		else {
-			fromY = bottom;
-		}
-		var toFeature = toFeatures[featureNumber];
-		var toY = metrics.yForEffort(toFeature.totalEffort());
-		
-		var title = toFeature.name();
-
-        var whiteness = 200 * (featureNumber + 1) / toFeatures.length;
-        return historyPolygon(fromX, fromY, toX, toY, self.FEATURE_STROKE, rgb(255, whiteness, whiteness), title);
-	}
-
     function iteration(iterationNumber) {
         var fromIteration = estimates.iteration(iterationNumber - 1);
-		var toIteration = estimates.iteration(iterationNumber);
-		var fromFeatures = fromIteration.includedFeatures();
-		var toFeatures = toIteration.includedFeatures();
 		var fromX = metrics.xForIteration(iterationNumber - 1);
+		var fromY = metrics.yForEffort(fromIteration.totalEffort());
+
+		var toIteration = estimates.iteration(iterationNumber);
 		var toX = metrics.xForIteration(iterationNumber);
-		
-		var result = paper.set();
-		var i;
-		for (i = toFeatures.length - 1; i >= 0; i--) {
-			result.push(feature(fromX, toX, fromFeatures, toFeatures, i));
-		}
-		return result;
+		var toY = metrics.yForEffort(toIteration.totalEffort());
+
+        return historyPolygon(fromX, fromY, toX, toY, self.FEATURE_STROKE, self.FEATURE_FILL, "Work remaining");
 	}
 	
 	function velocity(iterationNumber) {
@@ -180,7 +158,7 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		var toX = metrics.xForIteration(iterationNumber);
 		var fromY = metrics.yForEffort(estimates.iteration(iterationNumber - 1).effortToDate());
 		var toY = metrics.yForEffort(estimates.iteration(iterationNumber).effortToDate());
-		return historyPolygon(fromX, fromY, toX, toY, self.VELOCITY_STROKE, self.VELOCITY_FILL, "Completed");
+		return historyPolygon(fromX, fromY, toX, toY, self.VELOCITY_STROKE, self.VELOCITY_FILL, "Work completed");
 	}
 
     function history() {
