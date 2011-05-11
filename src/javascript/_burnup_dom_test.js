@@ -320,37 +320,6 @@
 		assertEquals("features", clip, burnup.iterations[0][0][0].attrs["clip-rect"]);
         assertEquals("velocity", clip, burnup.velocity[0][0].attrs["clip-rect"]);
 	};
-               
-//    function assertProjectionConeEquals(message, fromIteration, fromEffort, toEffort, lineColor, fillColor, title, historyPolygon) {
-//        assertNotUndefined(message, historyPolygon);
-//        
-//        var width = "3";
-//        var linecap = "round";
-//
-//        var fromX = metrics.xForIteration(fromIteration);
-//        var fromY = metrics.yForEffort(fromEffort);
-//        var toX = metrics.xForIteration(fromIteration + 1);
-//        var toY = metrics.yForEffort(toEffort);
-//        
-//        var bottom = metrics.bottom;
-//        var polygonPath = moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z";
-//        
-//        var polygon = historyPolygon[0];
-//        assertNotUndefined(message + " polygon", polygon);
-//        assertEquals(message + " polygon path", polygonPath, path(polygon));
-//        assertEquals(message + " polygon title", title, polygon.attrs.title);
-//        assertEquals(message + " polygon outline color", "white", polygon.attrs.stroke);
-//        assertEquals(message + " polygon outline width", "0.5", polygon.attrs["stroke-width"]);
-//        assertEquals(message + " polygon fill color", fillColor, polygon.attrs.fill);
-//    
-//        var myLine = historyPolygon[1];
-//        assertNotUndefined(message + " line", myLine);
-//        assertEquals(message + " line path", line(fromX, fromY, toX, toY), path(myLine));
-//        assertEquals(message + " line title", title, myLine.attrs.title);
-//        assertEquals(message + " line color", lineColor, myLine.attrs.stroke);
-//        assertEquals(message + " line width", width, myLine.attrs["stroke-width"]);
-//        assertEquals(message + " line linecap", linecap, myLine.attrs["stroke-linecap"]);
-//    }
 
     Test.prototype.test_populate_drawsProjectionCones = function() {
         setupIterationTest(3);
