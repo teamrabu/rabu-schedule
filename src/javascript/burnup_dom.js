@@ -299,10 +299,10 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 								
         self.projection = paper.set(
-	        projectionLine(effortY, "Projected effort", self.FEATURE_STROKE),
-			projectionCone(effortY, "Projected effort", self.FEATURE_STROKE),
-			projectionCone(velocityY, "Projected velocity", self.VELOCITY_STROKE),
-			projectionLine(velocityY, "Projected velocity", self.VELOCITY_STROKE)
+	        projectionLine(effortY, "Projected work remaining", self.FEATURE_STROKE),
+			projectionLine(velocityY, "Projected work completed", self.VELOCITY_STROKE),
+			projectionCone(effortY, "Projected work remaining", self.FEATURE_STROKE),
+			projectionCone(velocityY, "Projected work completed", self.VELOCITY_STROKE)
 		);
 	}
 	
