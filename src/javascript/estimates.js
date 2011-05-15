@@ -30,15 +30,15 @@ rabu.schedule.Estimates = function(config) {
 	};
 
 	this.tenPercentMultiplier = function() {
-		return config.riskMultipliers[0];
+		return self.currentIteration().tenPercentMultiplier();
 	};
 
 	this.fiftyPercentMultiplier = function() {
-		return config.riskMultipliers[1];
+        return self.currentIteration().fiftyPercentMultiplier();
 	};
 
 	this.ninetyPercentMultiplier = function() {
-		return config.riskMultipliers[2];
+        return self.currentIteration().ninetyPercentMultiplier();
 	};
 
 	this.currentIteration = function() {
@@ -119,6 +119,18 @@ rabu.schedule.Iteration = function(iteration, effortToDate) {
 	
 	this.velocity = function() {
 		return iteration.velocity;
+	};
+	
+	this.tenPercentMultiplier = function() {
+		return iteration.riskMultipliers[0];
+	};
+	
+	this.fiftyPercentMultiplier = function() {
+		return iteration.riskMultipliers[1];
+	};
+	
+	this.ninetyPercentMultiplier = function() {
+		return iteration.riskMultipliers[2];
 	};
 	
 	this.effortToDate = function() {

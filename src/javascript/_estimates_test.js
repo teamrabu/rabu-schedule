@@ -13,8 +13,7 @@
 	Test.prototype.setUp = function() {
 		config = {
 			name: "My name",
-			updated: "5 Jan 2011",
-			riskMultipliers: [1, 2, 4]
+			updated: "5 Jan 2011"
 		};
 		estimates = new rabu.schedule.Estimates(config);
 	};
@@ -27,9 +26,12 @@
 		assertEquals(new Date("5 Jan 2011"), estimates.updated());
 	};
 
-	Test.prototype.test_riskMultipliers = function() {
-		assertEquals(1, estimates.tenPercentMultiplier());
-		assertEquals(2, estimates.fiftyPercentMultiplier());
+	Test.prototype.test_riskMultipliers_areBasedOnCurrentIteration = function() {
+		config.iterations = [
+		    { riskMultipliers: [1, 2, 4] },
+			{ riskMultipliers: [0.25, 0.5, 0.75] }
+		];		
+		
 		assertEquals(4, estimates.ninetyPercentMultiplier());
 	};
 	
@@ -128,6 +130,13 @@
 	
 	Test.prototype.test_length = function() {
 		assertEquals(7, iteration.length());
+	};
+	
+	Test.prototype.test_riskMultipliers = function() {
+		config.riskMultipliers = [1, 2, 4];
+        assertEquals(1, iteration.tenPercentMultiplier());
+        assertEquals(2, iteration.fiftyPercentMultiplier());
+        assertEquals(4, iteration.ninetyPercentMultiplier());
 	};
 	
 	Test.prototype.test_velocity = function() {

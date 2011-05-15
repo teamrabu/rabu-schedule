@@ -1,12 +1,12 @@
 {
 	"name": "Rabu Schedule 0.2",
 	"updated": "15 May 2011",
-	"riskMultipliers": [1, 1.4, 1.8],
 	"iterations": [
         {
             "started": "15 May 2011",
             "length": 7,
             "velocity": 5,
+            "riskMultipliers": [1, 1.4, 1.8],
             "included": [
                 ["Visualization essay", 0],
                 ["Javascript charting research", 0],
@@ -30,6 +30,7 @@
             "started": "8 May 2011",
             "length": 7,
             "velocity": 1.5,
+            "riskMultipliers": [1, 1.4, 1.8],
             "included": [
                 ["Visualization essay", 0],
                 ["Javascript charting research", 0],
@@ -53,6 +54,7 @@
             "started": "29 Apr 2011",
             "length": 7,
             "velocity": 5,
+            "riskMultipliers": [1, 1.4, 1.8],
             "included": [
                 ["Visualization essay", 0],
                 ["Javascript charting research", 0],
@@ -78,6 +80,7 @@
             "started": "22 Apr 2011",
             "length": 7,
             "velocity": 7,
+            "riskMultipliers": [1, 1.4, 1.8],
             "included": [
                 ["Visualization essay", 1.5],
                 ["Javascript charting research", 2.5],

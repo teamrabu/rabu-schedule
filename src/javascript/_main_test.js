@@ -1,7 +1,7 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
 (function() {
-	var Test = new TestCase("Rabu");
+	var Test = new TestCase("Main");
 	var r;
 	var config;
 
@@ -9,11 +9,11 @@
 		config = {
 			name: "My name",
 			updated: "5 Jan 2011",
-			riskMultipliers: [1, 2, 4],
 			iterations: [{
 				started: "1 Jan 2011",
 				length: 7,
 				velocity: 10,
+				riskMultipliers: [1, 2, 4],
 				included: [
 					["completed", 0],
 					["feature A", 70],

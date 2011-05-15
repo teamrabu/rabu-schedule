@@ -1,13 +1,13 @@
 {
 	"name": "Hello World",
 	"updated": "5 Jan 2011",
-	"riskMultipliers": [1, 1.4, 1.8],
 	"iterations": [
 	
     	{
     		"started": "13 Jan 2011",
     		"length": 7,
     		"velocity": 30,
+            "riskMultipliers": [1, 1.4, 1.8],
     		"included": [
     			["Completed feature", 0],
     			["Feature A", 8],
@@ -26,6 +26,7 @@
            "started": "5 Jan 2011",
            "length": 7,
            "velocity": 20,
+           "riskMultipliers": [1, 1.4, 1.8],
            "included": [
                 ["Feature A", 90],
                 ["Feature B", 80],
@@ -37,6 +38,7 @@
            "started": "9 Jan 2011",
            "length": 7,
            "velocity": 30,
+           "riskMultipliers": [1, 1.4, 1.8],
            "included": [
                 ["Feature A", 100],
                 ["Feature B", 70],
@@ -48,6 +50,7 @@
            "started": "8 Jan 2011",
            "length": 7,
            "velocity": 40,
+           "riskMultipliers": [1, 1.4, 1.8],
            "included": [
                 ["Feature A", 100],
                 ["Feature B", 70],
@@ -59,6 +62,7 @@
     	   "started": "1 Jan 2011",
     	   "length": 7,
     	   "velocity": 30,
+           "riskMultipliers": [1, 1.4, 1.8],
            "included": [
                 ["Feature A", 120],
                 ["Feature B", 60],

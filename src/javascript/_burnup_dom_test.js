@@ -13,11 +13,11 @@
 		              <div class="rabu-yTickLabel" style="font-size: 4px">Y Tick Label</div>
                   </div> */
 		config = {
-			riskMultipliers: [1, 2, 4],
 			iterations: [{
 				started: "1 Jan 2011",
 				length: 5,
 				velocity: 10,
+				riskMultipliers: [1, 2, 4],
 				included: [
 					["features", 20]
 				]
@@ -199,6 +199,7 @@
            "started": "15 Jan 2011",
            "length": 7,
 			velocity: 6,
+			riskMultipliers: [1, 2, 4],
 			included: [["feature A", 1], ["feature B", 2], ["feature C", 3]]
 		});
 		if (iterationCount === 3) {
@@ -364,17 +365,6 @@
 		assertProjectionTraceEquals("upper projection trace (90%)", iterationX, effortY, x90, y90, burnup.projection[8]);
 		assertProjectionTraceEquals("lower projection trace (90%)", x90, y90, x90, metrics.bottom, burnup.projection[9]);
 	};	
-
-    //TODO: need to assert cones and lines are in proper order
-	    
-	Test.prototype.test_populate_doesntCrashWhenALaterIterationHasMoreFeaturesThanAnEarlierIteration_thisIsATemporarySolution = function() {
-		setupIterationTest(3);
-		config.iterations[2].included.pop();
-        
-		assertNoException(function(){
-			burnup.populate(metrics);
-		});
-	};
 
 }());
 
