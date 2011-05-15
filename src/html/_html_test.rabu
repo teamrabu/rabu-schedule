@@ -10,9 +10,9 @@
             "riskMultipliers": [1, 1.4, 1.8],
     		"included": [
     			["Completed feature", 0],
-    			["Feature A", 8],
-    			["Another feature", 8],
-    			["A third feature whose sole purpose in life is to cause word wrapping, so you can visually inspect the results", 12],
+    			["Feature A", 80],
+    			["Another feature", 80],
+    			["A third feature whose sole purpose in life is to cause word wrapping, so you can visually inspect the results", 120],
     			["This feature's checkmark might collide with the divider", 0]
     		],
     		"excluded": [
