@@ -1,7 +1,7 @@
 Rabu Schedule 0.2.dev
-===================
+=================
 
-Rabu Schedule is a tool for collaborative product scheduling with the goal of creating exemplary customer relationships. For more information, see the [Team Rabu website](http://www.teamrabu.com).
+Rabu Schedule creates a visual aid for collaborative product scheduling. For more information, see the [Team Rabu website](http://www.teamrabu.com).
 
 This early release of Rabu Schedule is for people interested in getting their hands dirty. It has many limitations (details below) and very little documentation.
 
@@ -28,11 +28,11 @@ Switch to the `released` directory and run Rabu Schedule from the command line, 
 
 	ruby rabu-sched.rb < estimates.rabu > projection.html
 
-You'll need Ruby installed. Windows users may find an installer at [RubyInstaller](http://rubyinstaller.org/downloads/). 
+To view the results, open `projection.html` in Firefox. (**Important:** Firefox 3.6 is the only browser we've tested thoroughly. Firefox 4, Safari, Chrome, and IE 9 appear to work. Rabu Schedule *does not* work in Internet Explorer 7 or 8--yet.)
 
-Rabu Schedule takes a JSON file containing estimates on STDIN and outputs a self-contained HTML file containing projections on STDOUT. Load the HTML file in Firefox to see the projections. There is no documentation of the input file at this time, but you can find another example in `/src/html/_html_test.rabu`.
+You'll need Ruby installed to run Rabu Schedule. Windows users may find an installer at [RubyInstaller](http://rubyinstaller.org/downloads/). 
 
-**Important:** Rabu Schedule *does not* work in Internet Explorer yet. Firefox 3.6 is the only browser we've tested thoroughly, although Safari and Chrome appear to work fine.
+Rabu Schedule takes a JSON file containing a development team's estimates on STDIN and outputs a nicely-formatted HTML file on STDOUT. There is no documentation of the input file at this time, but you can work from `estimates.rabu` as an example. For another example, see `/src/html/_html_test.rabu`.
 
 
 Limitations
@@ -40,25 +40,21 @@ Limitations
 
 This early version of Rabu Schedule has many limitations. Here are a few:
 
-- *Subject to change.* Everything about Rabu Schedule is subject to change. In particular, the input file format is certain to change, and we may switch to a different language for the command-line script.
+- *Subject to change.* Everything about Rabu Schedule is subject to change. In particular, the input file format is likely to change, and we may switch to a different language for the command-line script.
 
-- *No command-line error checking.* If you give Rabu Schedule a bad JSON file, it doesn't warn you.
+- *No command-line error checking.* If you give the command-line tool a bad JSON file, it doesn't warn you.
 
 - *No run-time error handling.* When the Javascript in the HTML file encounters an error (such as a bad JSON file), it silently fails.
 
-- *Only tested on Firefox 3.6.* Rabu Schedule works in Firefox and will probably work in Safari and Chrome. Internet Explorer is a crap shoot, as usual.
-
-- *Not-so-powerful visuals.* The [Rabu website](http://www.teamrabu.com) describes a tool that produces "powerful visuals." We're not there yet.
-
-- *No interactivity.* The [Rabu Workflow](http://jamesshore.com/Blog/Rabu/Rabu-Workflow.html) describes creating a proposal that facilitates discussion. We're not there yet, either.
-
 - *No command-line parameters.* The command-line interface is primitive, even for a CLI.
+
+- *Only tested on Firefox 3.6.* Rabu Schedule works in Firefox and will probably work in Safari and Chrome. Internet Explorer is a crap shoot, as usual.
 
 Two apparent limitations are intentional:
 
-- *Command-line interface.* Rabu tools are meant to be a seamless part of a development team's workflow, so Rabu Schedule is designed to work with developers' tools. In particular, it runs from the command line so it can be easily automated, and it uses a text-based configuration file so that it plays nicely with version control.
+- *Command-line interface.* Rabu Schedule is meant to integrate with a development team's workflow. In particular, it runs from the command line so it can be easily automated, and it uses a text-based configuration file to play nicely with version control.
 
-- *Self-contained output.* Rabu Schedule's HTML output is completely self-contained, which allows it to be easily hosted on a webserver, emailed to stakeholders, or just opened from the file system.
+- *Single-file output.* Rabu Schedule's HTML output is self-contained within a single file so you can easily open, email, or host the result.
 
 
 Building Rabu Schedule
@@ -69,13 +65,14 @@ Building Rabu Schedule
 To build Rabu Schedule, you need the following tools installed:
 
 * Ruby
-* Rake
+* RubyGems (typically comes with Ruby)
+* Rake (`sudo gem install rake`)
 * Java
 * Firefox
 
-The build automatically downloads and installs its Ruby gem dependencies as needed. (They're installed into the `gems` directory and won't affect your Ruby installation.)
-	
-To build a release version of Rabu Schedule, use `rake release` from the command line. The results will be placed in the `released/` directory. Use `rake` on its own to run the tests. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets.
+The build depends on some other Ruby gems, but it automatically downloads and installs them into the `gems` directory. They're isolated from the rest of your Ruby installation.
+
+To build a release version of Rabu Schedule, use `rake release` from the command line. The results will be placed in the `released/` directory. Use `rake` on its own for ordinary development. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets.
 
 **Important:** After you're done building, be sure to run `rake shutdown` to stop the JsTestDriver server. If you use `./autorake.sh` (described below), breaking out of the script should automatically kill the server.
 
