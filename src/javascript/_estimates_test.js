@@ -81,6 +81,20 @@
 
 		assertEquals(5, estimates.effortToDate());
 	};
+	
+	Test.prototype.test_dateForIteration = function() {
+        config.iterations = [ 
+            { started: "15 Jan 2011", length: 7 },
+            { started: "6 Jan 2011", length: 7 },
+            { started: "9 Jan 2011", length: 7 },
+            { started: "1 Jan 2011", length: 7 }
+        ];
+		
+		assertEquals("current iteration", new Date("15 Jan 2011"), estimates.dateForIteration(3));
+		assertEquals("future iteration", new Date("29 Jan 2011"), estimates.dateForIteration(5));
+		assertEquals("historical iteration", new Date("6 Jan 2011"), estimates.dateForIteration(2));
+		assertEquals("first iteration", new Date("1 Jan 2011"), estimates.dateForIteration(0));
+	};
 }());
 
 

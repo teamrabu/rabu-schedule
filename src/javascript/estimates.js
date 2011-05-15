@@ -85,6 +85,24 @@ rabu.schedule.Estimates = function(config) {
 	this.excludedFeatures = function() {
 		return self.currentIteration().excludedFeatures();
 	};
+	
+	this.dateForIteration = function(iterationNumber) {
+		function calcFutureDate(futureOffset){
+			var days = futureOffset * self.currentIteration().length();
+			
+			var result = self.currentIteration().startDate();
+			result.setDate(result.getDate() + days);
+			return result;
+		}
+
+		var offsetFromCurrent = iterationNumber - (self.iterationCount() - 1);
+		if (offsetFromCurrent >= 0) {
+			return calcFutureDate(offsetFromCurrent);
+		}
+		else {
+			return self.iteration(iterationNumber).startDate();
+		}
+	};
 };
 
 
