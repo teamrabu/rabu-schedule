@@ -97,6 +97,24 @@
 		assertEquals("historical iteration", new Date("6 Jan 2011"), estimates.dateForIteration(2));
 		assertEquals("first iteration", new Date("1 Jan 2011"), estimates.dateForIteration(0));
 	};
+	
+	Test.prototype.test_peakEffortEstimate = function() {
+		config.iterations = [
+            { velocity: 1, included: [["feature", 10]]},
+            { velocity: 2, included: [["feature", 20]]},
+            { velocity: 3, included: [["feature", 30]]}
+		];
+		assertEquals("peak estimate", 30, estimates.peakEffortEstimate());
+	};
+	
+	Test.prototype.test_peakEffortEstimate_includesCompletedWork = function() {
+        config.iterations = [
+            { velocity: 1, included: [["feature", 10]]},
+            { velocity: 200, included: [["feature", 20]]},
+            { velocity: 3, included: [["feature", 30]]}
+        ];
+        assertEquals("peak estimate", 213, estimates.peakEffortEstimate());
+	};
 }());
 
 

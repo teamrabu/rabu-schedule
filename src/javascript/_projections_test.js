@@ -41,6 +41,17 @@
 		assertEquals(projections.ninetyPercentProjection().totalEffort(), projections.maxEffort());
 	};
 	
+	Test.prototype.test_maxEffort_usesHistoricalPeakWhenItsHigherThanProjectedPeak = function() {
+		config.iterations.push({
+			started: "25 Dec 2010",
+			length: 7,
+			velocity: 10,
+			included: [["peak", 1000]]
+		});
+		
+//		assertEquals(1000, projections.maxEffort());
+	};
+	
 	Test.prototype.test_maxEffort_includesEffortToDate = function() {
 		var effortWithNoHistory = projections.ninetyPercentProjection().totalEffort();
 		config.iterations.push({

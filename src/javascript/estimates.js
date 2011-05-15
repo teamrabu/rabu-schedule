@@ -73,6 +73,13 @@ rabu.schedule.Estimates = function(config) {
 	this.effortToDate = function() {
 		return self.currentIteration().effortToDate();
 	};
+	
+	this.peakEffortEstimate = function() {
+        return iterations().reduce(function(previousValue, iteration) {
+			var currentValue = iteration.totalEffort();
+			return currentValue > previousValue ? currentValue : previousValue;
+		}, 0);
+	};
 
 	this.totalEstimate = function() {
 		return self.currentIteration().totalEstimate();
