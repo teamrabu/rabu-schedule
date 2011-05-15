@@ -5,15 +5,15 @@
 	"iterations": [
 	
     	{
-    		"started": "29 Jan 2011",
+    		"started": "13 Jan 2011",
     		"length": 7,
     		"velocity": 30,
     		"included": [
-//    			["Completed feature", 0],
+    			["Completed feature", 0],
     			["Feature A", 80],
     			["Another feature", 80],
-    			["A third feature whose sole purpose in life is to cause word wrapping, so you can visually inspect the results", 120] //,
-//    			["This feature's checkmark might collide with the divider", 0]
+    			["A third feature whose sole purpose in life is to cause word wrapping, so you can visually inspect the results", 120],
+    			["This feature's checkmark might collide with the divider", 0]
     		],
     		"excluded": [
     			["An excluded feature", 3],
@@ -23,7 +23,7 @@
     	},
         
         {
-           "started": "22 Jan 2011",
+           "started": "5 Jan 2011",
            "length": 7,
            "velocity": 20,
            "included": [
@@ -34,7 +34,7 @@
         },    
         
         {
-           "started": "15 Jan 2011",
+           "started": "9 Jan 2011",
            "length": 7,
            "velocity": 30,
            "included": [

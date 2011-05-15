@@ -58,13 +58,23 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		self.yAxis = line(metrics.left, metrics.top, metrics.left, metrics.bottom + metrics.AXIS_OVERHANG);
 	}
 	
+	function xAxisTick(xPosition, length) {
+		return line(xPosition, metrics.bottom - (length / 2), xPosition, metrics.bottom + (length / 2));
+	}
+	
+	function xAxisTickLabel(tickNumber, xPosition) {
+        var label = copyOneTextElement(xTickLabelElement, metrics.xTickLabel(tickNumber));
+        label.translate(xPosition, metrics.xTickLabelVerticalCenter);
+		return label; 
+	}
+	
 	function xAxisTicks() {
-		var i, label;
+		var i;
 
         // figure out maximum tick label width
 		var maxWidth = 0;
 		for (i = 1; i < metrics.xTickCount; i++) {
-            label = copyOneTextElement(xTickLabelElement, metrics.xTickLabel(i));
+            var label = copyOneTextElement(xTickLabelElement, metrics.xTickLabel(i));
 			var width = label.getBBox().width;
 			if (width > maxWidth) {
 				maxWidth = width;
@@ -79,14 +89,12 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
             var x = metrics.xTickPosition(i);
 
 			if (metrics.shouldDrawXTickLabel(i, maxWidth, previousLabelRightEdge)) {
-                self.xTicks.push(line(x, metrics.bottom - (metrics.MAJOR_TICK_LENGTH / 2), x, metrics.bottom + (metrics.MAJOR_TICK_LENGTH / 2)));
-                label = copyOneTextElement(xTickLabelElement, metrics.xTickLabel(i));
-                label.translate(metrics.xTickPosition(i), metrics.xTickLabelVerticalCenter); 
-				self.xTickLabels.push(label);
+                self.xTicks.push(xAxisTick(x, metrics.MAJOR_TICK_LENGTH));
+				self.xTickLabels.push(xAxisTickLabel(i, x));
 				previousLabelRightEdge = x + (maxWidth / 2);
 			}
 			else {
-				self.xTicks.push(line(x, metrics.bottom - (metrics.MINOR_TICK_LENGTH / 2), x, metrics.bottom + (metrics.MINOR_TICK_LENGTH / 2)));
+				self.xTicks.push(xAxisTick(x, metrics.MINOR_TICK_LENGTH));
 			}
 		}
 	}
