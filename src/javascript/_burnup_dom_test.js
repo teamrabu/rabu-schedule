@@ -131,6 +131,10 @@
 		assertEquals("X-axis major tick y", 61 - (metrics.MAJOR_TICK_LENGTH / 2), tick.y);
 	};
 	
+    Test.prototype.test_populate_rendersDayAndMonthForXAxisTickLabels = function() {
+        assertEquals("X-axis label is a date", "Jan 6", burnup.xTickLabels[0].attrs.text);
+    };
+
 	Test.prototype.test_populate_drawsMinorXAxisTickMarks_whenNoLabel = function() {
         metricsConfig.iterationCount = 40;
 		metrics = new rs.BurnupChartMetrics(metricsConfig);
