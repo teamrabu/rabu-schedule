@@ -35,7 +35,9 @@ rabu.schedule.Projections = function(estimates) {
 	};
 	
 	this.maxEffort = function() {
-		return self.ninetyPercentProjection().totalEffort();
+		var projectedMax = self.ninetyPercentProjection().totalEffort();
+		var historicalMax = estimates.peakEffortEstimate();
+		return historicalMax > projectedMax ? historicalMax : projectedMax;
 	};
 };
 

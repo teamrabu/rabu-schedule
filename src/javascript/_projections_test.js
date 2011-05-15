@@ -49,7 +49,7 @@
 			included: [["peak", 1000]]
 		});
 		
-//		assertEquals(1000, projections.maxEffort());
+		assertEquals(1000, projections.maxEffort());
 	};
 	
 	Test.prototype.test_maxEffort_includesEffortToDate = function() {
