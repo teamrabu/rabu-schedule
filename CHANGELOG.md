@@ -1,13 +1,17 @@
 Rabu Schedule Change Log
 ========================
 
-Release 0.2 (in progress)
+Release 0.2 (15 May 2011)
 ===
+* ADDED: Risk-adjusted burn-up chart
 * BREAKING CHANGE: Changed configuration file format to support iteration history
+* CHANGED: Wording in HTML page
+* CHANGED: 90% projection rounds up to next iteration
+
+Minor changes in Release 0.2 
+---
 * FIXED (cosmetic): HTML page background renders properly when window is smaller than page height
 * FIXED (cosmetic): HTML scroll bar no longer appears when window is larger than page height
-* CHANGED (cosmetic): Wording in HTML page
-* CHANGED: 90% projection rounds up to next iteration
 
 Release 0.1 (17 Apr 2011)
 ===
