@@ -16,7 +16,7 @@
 			riskMultipliers: [1, 2, 4],
 			iterations: [{
 				started: "1 Jan 2011",
-				length: 7,
+				length: 5,
 				velocity: 10,
 				included: [
 					["features", 20]
@@ -132,7 +132,7 @@
 	};
 	
     Test.prototype.test_populate_rendersDayAndMonthForXAxisTickLabels = function() {
-        assertEquals("X-axis label is a date", "Jan 6", burnup.xTickLabels[0].attrs.text);
+        assertEquals("X-axis label", "Jan 6", burnup.xTickLabels[0].attrs.text);
     };
 
 	Test.prototype.test_populate_drawsMinorXAxisTickMarks_whenNoLabel = function() {
@@ -471,13 +471,6 @@
 		assertFalse("should not draw label when padding overlaps previous label", metrics.shouldDrawXTickLabel(2, 20, 282));
 	};
 	
-	Test.prototype.test_xTickLabel = function() {
-		assertEquals("X-axis tick 0 label", "Jan 1", metrics.xTickLabel(0));
-        assertEquals("X-axis tick 1 label", "Jan 6", metrics.xTickLabel(1));
-        assertEquals("X-axis tick 2 label", "Jan 11", metrics.xTickLabel(2));
-        assertEquals("X-axis tick 3 label", "Jan 16", metrics.xTickLabel(3));
-	};
-    
     Test.prototype.test_roundUpEffort = function() {
 		var roundUpEffort = rs.BurnupChartMetrics.roundUpEffort;
 		

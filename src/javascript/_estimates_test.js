@@ -85,9 +85,9 @@
 	Test.prototype.test_dateForIteration = function() {
         config.iterations = [ 
             { started: "15 Jan 2011", length: 7 },
-            { started: "6 Jan 2011", length: 7 },
-            { started: "9 Jan 2011", length: 7 },
-            { started: "1 Jan 2011", length: 7 }
+            { started: "6 Jan 2011", length: 3 },
+            { started: "9 Jan 2011", length: 2 },
+            { started: "1 Jan 2011", length: 1 }
         ];
 		
 		assertEquals("current iteration", new Date("15 Jan 2011"), estimates.dateForIteration(3));
