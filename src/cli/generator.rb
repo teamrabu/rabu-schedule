@@ -7,7 +7,7 @@ class Rabu
 	end
 
 	def html
-		config_tag = /<%=\s*config\s*%>/
+		config_tag = /<%=\s*config\s*%>/u     # The trailing 'u' should make this regex work on UTF-8 input
 		raise NoConfigTagError unless @template =~ config_tag
 		return @template.gsub(config_tag, @config)
 	end

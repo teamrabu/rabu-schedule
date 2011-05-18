@@ -19,6 +19,10 @@ class RabuTest < Test::Unit::TestCase
 		assert_equal("abcabc", Rabu.new("<%=config%><%=config%>", "abc").html)
 	end
 
+    def test_interpolation_when_unicode
+        assert_equal("‘ŠŸ", Rabu.new("‘<%=config%>Ÿ", "Š").html)
+    end
+
 	def test_interpolation_when_no_config_tag
 		assert_raise(NoConfigTagError) do
 			Rabu.new("a", "").html

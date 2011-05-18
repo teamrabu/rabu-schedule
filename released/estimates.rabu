@@ -1,102 +1,29 @@
 {
-	"name": "Rabu Schedule 0.2",
+	"name": "Rabu Schedule 0.3",
 	"updated": "15 May 2011",
 	"iterations": [
         {
             "started": "15 May 2011",
             "length": 7,
             "velocity": 5,
-            "riskMultipliers": [1, 1.4, 1.8],
+            "riskMultipliers": [1, 2, 4],
             "included": [
-                ["Visualization essay", 0],
-                ["Javascript charting research", 0],
-                ["Risk-adjusted burn-up chart (labels)", 0],
-                ["Risk-adjusted burn-up chart (history)", 0],
-                ["Risk-adjusted burn-up chart (projections)", 0],
-                ["Risk-adjusted burn-up chart (edge cases)", 2]
+                ["Risk-adjusted burn-up chart (edge cases)", 2],
+                ["Resolve open issues", 1.5],
+                ["Improve www.teamrabu.com", 2.5],
+                ["Exploratory testing", 1.5],
+                ["Gracefully degrade in unsupported browsers", 3],
+                ["Detect configuration file errors", 7],
+                ["Validate HTML", 1.5]       
             ],
             "excluded": [ 
                 ["Cross-browser testing & support", "?"],
                 ["Mobile browser support", "?"],
-                ["Runtime error handling", "?"],
                 ["Documentation", "?"],
                 ["Smaller page size", "?"],
                 ["Friendly CLI (Java?)", "?"],
                 ["Internationalization", "?"]
             ]
-        },
-
-        {
-            "started": "8 May 2011",
-            "length": 7,
-            "velocity": 1.5,
-            "riskMultipliers": [1, 1.4, 1.8],
-            "included": [
-                ["Visualization essay", 0],
-                ["Javascript charting research", 0],
-                ["Risk-adjusted burn-up chart (labels)", 0],
-                ["Risk-adjusted burn-up chart (history)", 0],
-                ["Risk-adjusted burn-up chart (projections)", 1],
-                ["Risk-adjusted burn-up chart (edge cases)", 4.5]
-            ],
-            "excluded": [ 
-                ["Cross-browser testing & support", "?"],
-                ["Mobile browser support", "?"],
-                ["Runtime error handling", "?"],
-                ["Documentation", "?"],
-                ["Smaller page size", "?"],
-                ["Friendly CLI (Java?)", "?"],
-                ["Internationalization", "?"]
-            ]
-        },
-
-        {
-            "started": "29 Apr 2011",
-            "length": 7,
-            "velocity": 5,
-            "riskMultipliers": [1, 1.4, 1.8],
-            "included": [
-                ["Visualization essay", 0],
-                ["Javascript charting research", 0],
-                ["Risk-adjusted burn-up chart (labels)", 3],
-                ["Risk-adjusted burn-up chart (history)", 2],
-                ["Risk-adjusted burn-up chart (projections)", 1.5],
-                ["Risk-adjusted burn-up chart (edge cases)", 3]
-            ],
-            "excluded": [
-                ["Internet Explorer support", "?"],
-                ["Mobile browser support", "?"],
-                ["Runtime error handling", "?"],
-                ["Documentation", "?"],
-                ["Smaller page size", "?"],
-                ["Internationalization", "?"],
-                ["Mini timelines", "?"],
-                ["Friendly CLI (Java?)", "?"],
-                ["CLI error handling", "?"]
-            ]
-        },
-               
-        {
-            "started": "22 Apr 2011",
-            "length": 7,
-            "velocity": 7,
-            "riskMultipliers": [1, 1.4, 1.8],
-            "included": [
-                ["Visualization essay", 1.5],
-                ["Javascript charting research", 2.5],
-                ["RABU chart implementation", 3]
-            ],
-            "excluded": [
-                ["Drag-n-drop inclusion slider", "?"],
-                ["Mini timelines", "?"],
-                ["Friendly CLI (Java)", "?"],
-                ["Drag-n-drop feature reordering", "?"],
-                ["Runtime error handling", "?"],
-                ["CLI error handling", "?"],
-                ["'?' estimates", "?"],
-                ["Broad browser support", "?"],
-                ["Smaller page size", "?"]
-            ]
-    	}		
+        }
 	]
 }

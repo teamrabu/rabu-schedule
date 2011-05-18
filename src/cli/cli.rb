@@ -1,3 +1,7 @@
+# encoding: UTF-8
+# The encoding line is required on Ruby 1.9 for the
+# es5-shim.js file, which has a non-ASCII character in it.
+
 # Rabu Schedule: A tool for collaborative product scheduling.
 # Copyright (C) 2011 Titanium I.T. LLC. All rights reserved.
 #
