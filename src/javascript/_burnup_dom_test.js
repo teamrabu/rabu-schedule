@@ -355,8 +355,8 @@
 		}
 
 		assertNotUndefined("effort projection", burnup.projection);
-        assertProjectionConeEquals("effort projection", iterationX, effortY, burnup.FEATURE_STROKE, "Projected work remaining", burnup.projection[2], burnup.projection[0]);
-        assertProjectionConeEquals("velocity projection", iterationX, velocityY, burnup.VELOCITY_STROKE, "Projected work completed", burnup.projection[3], burnup.projection[1]);
+        assertProjectionConeEquals("effort projection", iterationX, effortY, burnup.FEATURE_STROKE, "Projection of work remaining", burnup.projection[2], burnup.projection[0]);
+        assertProjectionConeEquals("velocity projection", iterationX, velocityY, burnup.VELOCITY_STROKE, "Projection of work completed", burnup.projection[3], burnup.projection[1]);
 		
 		assertProjectionTraceEquals("upper projection trace (10%)", iterationX, effortY, x10, y10, burnup.projection[4]);
 		assertProjectionTraceEquals("lower projection trace (10%)", x10, y10, x10, metrics.bottom, burnup.projection[5]);
