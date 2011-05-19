@@ -1,4 +1,4 @@
-Rabu Schedule 0.2.1.dev
+Rabu Schedule 0.2.1
 ===================
 
 Rabu Schedule creates a visual aid for collaborative product scheduling. For more information, see the [Team Rabu website](http://www.teamrabu.com).

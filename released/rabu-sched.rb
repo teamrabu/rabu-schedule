@@ -65,6 +65,7 @@ You should have received a copy of the GNU General Public License along with thi
 <html>
 <head>
     <title>Schedule Projection</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 
 	<style type="text/css">
 		
@@ -13542,10 +13543,10 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 								
         self.projection = paper.set(
-	        projectionLine(effortY, "Projected work remaining", self.FEATURE_STROKE),
-			projectionLine(velocityY, "Projected work completed", self.VELOCITY_STROKE),
-			projectionCone(effortY, "Projected work remaining", self.FEATURE_STROKE),
-			projectionCone(velocityY, "Projected work completed", self.VELOCITY_STROKE),
+	        projectionLine(effortY, "Projection of work remaining", self.FEATURE_STROKE),
+			projectionLine(velocityY, "Projection of work completed", self.VELOCITY_STROKE),
+			projectionCone(effortY, "Projection of work remaining", self.FEATURE_STROKE),
+			projectionCone(velocityY, "Projection of work completed", self.VELOCITY_STROKE),
 			projectionTrace(startX, effortY, p10.x, p10.y),
 			projectionTrace(p10.x, p10.y, p10.x, metrics.bottom),
 			projectionTrace(startX, effortY, p50.x, p50.y),
