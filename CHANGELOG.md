@@ -16,7 +16,7 @@ Minor changes in Release 0.2
 Release 0.2.1 (18 May 2011)
 ---
 * FIXED: Non-ASCII characters supported in configuration file, which must use the UTF-8 encoding
-* FIXED (uncomfirmed): "Invalid byte sequence" error should not occur on Ruby 1.9
+* FIXED (unconfirmed): "Invalid byte sequence" error should not occur on Ruby 1.9
 
 Release 0.1 (17 Apr 2011)
 ===
