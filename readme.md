@@ -32,7 +32,7 @@ To view the results, open `projection.html` in Firefox. (**Important:** Firefox 
 
 You'll need Ruby installed to run Rabu Schedule. Windows users may find an installer at [RubyInstaller](http://rubyinstaller.org/downloads/). 
 
-Rabu Schedule takes a JSON file containing a development team's estimates on STDIN and outputs a nicely-formatted HTML file on STDOUT. There is no documentation of the input file at this time, but you can work from `estimates.rabu` as an example. For another example, see `/src/html/_html_test.rabu`.
+Rabu Schedule takes a JSON file containing a development team's estimates on STDIN and outputs a nicely-formatted HTML file on STDOUT. (If the input contains non-ASCII characters, it must use the UTF-8 encoding.) There is no documentation of the input file at this time, but you can work from `estimates.rabu` as an example. For another example, see `/src/html/_html_test.rabu`.
 
 
 Limitations
