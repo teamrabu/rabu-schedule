@@ -1,22 +1,20 @@
 {
 	"name": "Rabu Schedule 0.3",
-	"updated": "18 May 2011",
+	"updated": "22 May 2011",
 	"iterations": [
         {
-            "started": "15 May 2011",
+            "started": "22 May 2011",
             "length": 7,
             "velocity": 5,
             "riskMultipliers": [1, 2, 4],
             "included": [
-                ["Risk-adjusted burn-up chart (edge cases)", 2],
-                ["Resolve open issues", 1.5],
                 ["Improve www.teamrabu.com", 2.5],
-                ["Exploratory testing", 1.5],
-                ["Gracefully degrade in unsupported browsers", 3],
-                ["Detect configuration file errors", 7],
-                ["Validate HTML", 1.5]       
+                ["Rewrite CLI in Java", 2],
+                ["Package CLI as JAR", 1],
+                ["Improve CLI usability", 4]
             ],
-            "excluded": [ 
+            "excluded": [
+                ["Robustness / error handling", 13], 
                 ["Cross-browser testing & support", "?"],
                 ["Mobile browser support", "?"],
                 ["Documentation", "?"],
