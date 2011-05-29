@@ -31,6 +31,10 @@ MAIN_JS_SOURCE = "#{JS_SRC_DIR}/main.js"
 MERGED_JS = "#{MERGED_DIR}/schedule.js"
 MERGE_REGEX = /<%=\s*rabu_library\s*%>/
 
+JAVA_PACKAGE_DIR = "com/teamrabu/schedule/cli"
+JAVA_SRC_DIR = "#{SRC_DIR}/cli/src/#{JAVA_PACKAGE_DIR}"
+JAVA_OUTPUT_DIR = "#{OUTPUT_DIR}/java"
+
 RUBY_SRC_DIR = "#{SRC_DIR}/cli-ruby"
 MERGED_RUBY = "#{MERGED_DIR}/rabu-sched.rb"
 MAIN_RUBY_SOURCE = "#{RUBY_SRC_DIR}/cli.rb"
@@ -65,6 +69,7 @@ isolate_gems
 
 directory PID_DIR
 directory MERGED_DIR
+directory JAVA_OUTPUT_DIR
 directory RESULTS_DIR
 directory PROJECTION_DIR
 directory RELEASE_DIR
@@ -205,6 +210,13 @@ task MERGED_RUBY => [MAIN_RUBY_SOURCE, MERGED_HTML, MERGED_DIR] do
 			puts "  #{MAIN_RUBY_SOURCE}"
 			append(MERGED_HTML, dest_file)
 		end
+	end
+end
+
+task :java => [JAVA_OUTPUT_DIR, MERGED_HTML] do
+	explain "Compiling Java" do
+		run "Java compile", "javac -cp #{LIB_DIR}/*.jar -d #{JAVA_OUTPUT_DIR} #{JAVA_SRC_DIR}/*.java"
+		cp MERGED_HTML, "#{JAVA_OUTPUT_DIR}/#{JAVA_PACKAGE_DIR}"
 	end
 end
 
