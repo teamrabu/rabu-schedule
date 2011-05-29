@@ -9,8 +9,8 @@ public class SimpleFile {
 		file = new File(name);
 	}
 
-	public void save(String text) throws IOException {
-		Writer output = new BufferedWriter(new FileWriter(file));
+	public void save(String text, String charset) throws IOException {
+		Writer output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), charset));
 		try {
 			output.write(text);
 		}
@@ -19,8 +19,8 @@ public class SimpleFile {
 		}
 	}
 
-	public String load() throws IOException {
-		BufferedReader input = new BufferedReader(new FileReader(file));
+	public String load(String charset) throws IOException {
+		BufferedReader input = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
 		try {
 			StringBuilder result = new StringBuilder();
 			char[] charBuffer = new char[8192];
