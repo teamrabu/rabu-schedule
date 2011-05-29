@@ -1,14 +1,34 @@
 {
 	"name": "Rabu Schedule 0.3",
-	"updated": "22 May 2011",
+	"updated": "29 May 2011",
 	"iterations": [
         {
-            "started": "22 May 2011",
+            "started": "29 May 2011",
             "length": 7,
             "velocity": 5,
             "riskMultipliers": [1, 2, 4],
             "included": [
-                ["Improve www.teamrabu.com", 2.5],
+                ["Improve teamrabu.com", 0.1],
+                ["Rewrite CLI in Java", 1.5],
+                ["Package CLI as JAR", 1]
+            ],
+            "excluded": [
+                ["Usage data", "?"],
+                ["Cross-browser testing & support", "?"],
+                ["Smaller page size", "?"],
+                ["Robustness / error handling", 13], 
+                ["Mobile browser support", "?"],
+                ["Documentation", "?"]
+            ]
+        },
+
+        {
+            "started": "22 May 2011",
+            "length": 7,
+            "velocity": 2.5,
+            "riskMultipliers": [1, 2, 4],
+            "included": [
+                ["Improve teamrabu.com", 2.5],
                 ["Rewrite CLI in Java", 2],
                 ["Package CLI as JAR", 1],
                 ["Improve CLI usability", 4]
@@ -18,9 +38,7 @@
                 ["Cross-browser testing & support", "?"],
                 ["Mobile browser support", "?"],
                 ["Documentation", "?"],
-                ["Smaller page size", "?"],
-                ["Friendly CLI (Java?)", "?"],
-                ["Internationalization", "?"]
+                ["Smaller page size", "?"]
             ]
         }
 	]
