@@ -35,6 +35,8 @@ JAVA_PACKAGE = "com.teamrabu.schedule.cli"
 JAVA_PACKAGE_DIR = "com/teamrabu/schedule/cli"
 JAVA_SRC_DIR = "#{SRC_DIR}/cli/src"
 JAVA_OUTPUT_DIR = "#{OUTPUT_DIR}/java"
+JAVA_SRC_RESOURCE_DIR = "#{JAVA_SRC_DIR}/#{JAVA_PACKAGE_DIR}/resources"
+JAVA_OUTPUT_RESOURCE_DIR = "#{JAVA_OUTPUT_DIR}/#{JAVA_PACKAGE_DIR}/resources"
 
 JAR_DIR = "#{OUTPUT_DIR}/jar"
 JAR_FILE = "#{JAR_DIR}/rabu.jar"
@@ -47,9 +49,12 @@ PROJECTION_DIR = "#{OUTPUT_DIR}/projection"
 PROJECTION_CONFIG = "estimates.rabu"
 PROJECTION_HTML = "#{PROJECTION_DIR}/projection.html"
 
+RELEASE_STAGING_DIR = "#{OUTPUT_DIR}/release"
+RELEASE_ZIP_FILE = "#{OUTPUT_DIR}/rabu.zip"
 RELEASE_DIR = "released"
 
 MARKDOWN_DIR = "#{OUTPUT_DIR}/markdown"
+README_HTML = "#{MARKDOWN_DIR}/README.html"
 
 
 ##### Isolate
@@ -74,8 +79,9 @@ directory JAVA_OUTPUT_DIR
 directory JAR_DIR
 directory RESULTS_DIR
 directory PROJECTION_DIR
-directory RELEASE_DIR
 directory MARKDOWN_DIR
+directory RELEASE_STAGING_DIR
+directory RELEASE_DIR
 
 
 ##### Clean
@@ -138,6 +144,9 @@ end
 desc "Update projection"
 task :projection => [PROJECTION_HTML]
 
+
+##### Builds
+
 desc "Build markdown"
 task :markdown => [MARKDOWN_DIR] do
 	explain "Rendering Markdown" do
@@ -153,9 +162,6 @@ task :markdown => [MARKDOWN_DIR] do
 		end
 	end
 end
-
-
-##### Builds
 
 task MERGED_JS => [MAIN_JS_SOURCE, MERGED_DIR] do
 	explain "Merging Javascript" do
@@ -196,10 +202,16 @@ task MERGED_HTML => [MAIN_HTML_SOURCE, MERGED_JS, MERGED_DIR] do
 	end
 end
 
-task :javac => [JAVA_OUTPUT_DIR, MERGED_HTML] do
+task :javac => [MERGED_HTML] do
 	explain "Compiling Java" do
+		rm_rf JAVA_OUTPUT_DIR
+		mkdir JAVA_OUTPUT_DIR
 		run "Java compile", "javac -cp #{LIB_DIR}/*.jar -d #{JAVA_OUTPUT_DIR} #{JAVA_SRC_DIR}/#{JAVA_PACKAGE_DIR}/*.java"
-		cp MERGED_HTML, "#{JAVA_OUTPUT_DIR}/#{JAVA_PACKAGE_DIR}"
+		mkdir JAVA_OUTPUT_RESOURCE_DIR
+		cp MERGED_HTML, JAVA_OUTPUT_RESOURCE_DIR
+		FileList.new("#{JAVA_SRC_RESOURCE_DIR}/*").each do |src_file|
+			cp src_file, JAVA_OUTPUT_RESOURCE_DIR
+		end
 	end
 end
 
@@ -211,25 +223,41 @@ task JAR_FILE => [:javac, JAR_DIR] do
 	end
 end
 
-task TEST_OUTPUT => [RESULTS_DIR, :cli] do
+task TEST_OUTPUT => [RESULTS_DIR, JAR_FILE] do
 	explain "Creating Rabu output file" do
 		run "Rabu", "#{CLI_COMMAND_LINE} < #{TEST_CONFIG} > #{TEST_OUTPUT}"
 	end
 end
 
-task PROJECTION_HTML => [PROJECTION_DIR, :cli] do
+task PROJECTION_HTML => [PROJECTION_DIR, JAR_FILE] do
 	explain "Updating release projection" do
 		run "Rabu", "#{CLI_COMMAND_LINE} < #{PROJECTION_CONFIG} > #{PROJECTION_HTML}"
 	end
 end
 
+task :release_staging => [:markdown, JAR_FILE, PROJECTION_CONFIG] do
+	explain "Staging release" do
+		rm_rf RELEASE_STAGING_DIR
+		mkdir RELEASE_STAGING_DIR
+		cp JAR_FILE, RELEASE_STAGING_DIR
+		cp PROJECTION_CONFIG, RELEASE_STAGING_DIR
+		cp README_HTML, RELEASE_STAGING_DIR
+	end
+end
+
+task RELEASE_ZIP_FILE => [:release_staging] do
+	explain "Zipping release" do
+		rm_f RELEASE_ZIP_FILE
+		run "Zip", "zip -rj #{RELEASE_ZIP_FILE} #{RELEASE_STAGING_DIR}/*"
+	end
+end
+
 desc "Create tested release package"
-task :release => [:check_all, JAR_FILE] do
-	explain "Building release" do
+task :release => [RELEASE_ZIP_FILE] do
+	explain "Copying release" do
 		rm_rf RELEASE_DIR
 		mkdir RELEASE_DIR
-		cp JAR_FILE, RELEASE_DIR
-		cp PROJECTION_CONFIG, RELEASE_DIR
+		cp RELEASE_ZIP_FILE, RELEASE_DIR
 	end
 end
 

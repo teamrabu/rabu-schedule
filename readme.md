@@ -6,18 +6,23 @@ Rabu Schedule creates a visual aid for collaborative product scheduling. For mor
 This early release of Rabu Schedule is for people interested in getting their hands dirty. It has many limitations (details below) and very little documentation.
 
 
+Downloading Rabu Schedule
+-------------------------
+The latest release of Rabu [may be downloaded here](http://www.teamrabu.com/rabu.zip). Unzip the release file into a directory of your choice.
+
+Rabu's source code is [available on GitHub](https://github.com/teamrabu/rabu-schedule).
+
+
 Running Rabu Schedule
 ---------------------
 
-Switch to the `released` directory and run Rabu Schedule from the command line, as follows:
+Run Rabu Schedule from the command line, as follows. You must have [Java](http://www.java.com/) installed.
 
 	java -jar rabu.jar < estimates.rabu > projection.html
 
-To view the results, open `projection.html` in Firefox. (**Important:** Firefox 3.6 is the only browser we've tested thoroughly. Firefox 4, Safari, Chrome, and IE 9 appear to work. Rabu Schedule *does not* work in Internet Explorer 7 or 8--yet.)
+To view the results, open `projection.html` in Firefox. (**Important:** Firefox 3.6 is the only browser we've tested thoroughly. Firefox 4, Safari, Chrome, and IE 9 appear to work. Internet Explorer 7 or 8 do not work.)
 
-Rabu Schedule takes a JSON file containing a development team's estimates on STDIN and outputs an HTML file on STDOUT. Your JSON file must be encoded in UTF-8 (or plain ASCII). There is no documentation of the input file at this time, but you can work from `estimates.rabu` as an example. For another example, see `/src/html/_html_test.rabu`.
-
-Note: You must have [Java installed](http://www.java.com/) to run Rabu.
+Rabu takes a JSON file containing a development team's estimates on STDIN and outputs an HTML file on STDOUT. Your JSON file must be encoded in UTF-8 (or plain ASCII). There is no documentation of the input file at this time, but you can work from `estimates.rabu` as an example. For another example, see `/src/html/_html_test.rabu`.
 
 
 Limitations
@@ -42,10 +47,10 @@ Two apparent limitations are intentional:
 - *Single-file output.* Rabu Schedule's HTML output is self-contained within a single file so you can easily open, email, or host the result.
 
 
-Finding your way around the repository
---------------------------------------
+The source code repository
+--------------------------
 
-The files in this repository are arranged in the following structure:
+Rabu's source code is [available on GitHub](https://github.com/teamrabu/rabu-schedule). The files in the respository are arranged in the following structure:
 
 - `released/`: Production release files
 - `src/`: Production source code
@@ -62,7 +67,7 @@ Building Rabu Schedule
 
 *Note:* Although Rabu Schedule runs on Windows, the build doesn't work on Windows yet. (The "RedCarpet" gem won't install.)
 
-To build Rabu Schedule, you need the following tools installed:
+To build Rabu Schedule from source, you need the following tools installed:
 
 * Ruby
 * RubyGems (typically comes with Ruby)

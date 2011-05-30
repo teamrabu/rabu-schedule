@@ -5,13 +5,14 @@ Rabu Schedule Release Checklist
 2. `rake release shutdown`
 3. Commit
 4. Remove '.dev' from README
-5. Commit with 'Release X.Y.Z' as commit message
-6. `git tag "release-X.Y.Z"
-7. `git push`
-8. `git push --tags`
-9. Increment version number in README and add '.dev'
-10. Commit with message 'Started X.Y.Z' (use new version number)
-11. Announce to mailing list
+5. Update version number in Java code's "usage.txt"
+6. Commit with 'Release X.Y.Z' as commit message
+7. `git tag "release-X.Y.Z"
+8. `git push`
+9. `git push --tags`
+10. Increment version number in README and add '.dev'
+11. Commit with message 'Started X.Y.Z' (use new version number)
+12. Announce to mailing list
 
 Mailing list announcement template
 ---
