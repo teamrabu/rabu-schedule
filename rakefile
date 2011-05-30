@@ -224,10 +224,11 @@ task PROJECTION_HTML => [PROJECTION_DIR, :cli] do
 end
 
 desc "Create tested release package"
-task :release => [:check_all, :cli, RELEASE_DIR] do
+task :release => [:check_all, JAR_FILE] do
 	explain "Building release" do
-		raise "Not updated"
-		cp MERGED_RUBY, RELEASE_DIR
+		rm_rf RELEASE_DIR
+		mkdir RELEASE_DIR
+		cp JAR_FILE, RELEASE_DIR
 		cp PROJECTION_CONFIG, RELEASE_DIR
 	end
 end
