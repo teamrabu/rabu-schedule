@@ -251,8 +251,8 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 		else {
 		    metrics = new rabu.schedule.BurnupChartMetrics({
-	            paperWidth: paper.width, 
-				paperHeight: paper.height,
+	            paperWidth: element.width(), 
+				paperHeight: element.height(),
 	            xLabelHeight: self.xLabel.getBBox().height,
 				yLabelHeight: self.yLabel.getBBox().height,
 	            xTickLabelHeight: self.xTickLabel.getBBox().height,

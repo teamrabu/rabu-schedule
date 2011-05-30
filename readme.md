@@ -18,7 +18,7 @@ Run Rabu Schedule from the command line, as follows. You must have [Java](http:/
 
 	java -jar rabu.jar < estimates.rabu > projection.html
 
-To view the results, open `projection.html` in Firefox. (**Important:** Firefox 3.6 is the only browser we've tested thoroughly. Firefox 4, Safari, Chrome, and IE 9 appear to work. Internet Explorer 7 or 8 do not work.)
+To view the results, open `projection.html` in your web browser.
 
 Rabu takes a JSON file containing a development team's estimates on STDIN and outputs an HTML file on STDOUT. Your JSON file must be encoded in UTF-8 (or plain ASCII). There is no documentation of the input file at this time, but you can work from `estimates.rabu` as an example. For another example, see `/src/html/_html_test.rabu`.
 
@@ -34,7 +34,7 @@ This early version of Rabu Schedule has many limitations. Here are a few:
 
 - *No run-time error handling.* When the Javascript in the HTML file encounters an error (such as a bad JSON file), it silently fails.
 
-- *Only tested on Firefox 3.6.* Rabu Schedule works in Firefox and will probably work in Safari and Chrome. Internet Explorer is a crap shoot, as usual.
+- *Limited cross-browser testing.* Rabu Schedule appears to work in Firefox, Safari, Chrome, and Internet Explorer 7+. However, it has only been thoroughly tested in Firefox 3.6.
 
 Two apparent limitations are intentional:
 
