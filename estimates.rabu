@@ -1,6 +1,6 @@
 {
 	"name": "Rabu Schedule 0.3",
-	"updated": "29 May 2011",
+	"updated": "30 May 2011",
 	"iterations": [
         {
             "started": "29 May 2011",
@@ -8,15 +8,15 @@
             "velocity": 5,
             "riskMultipliers": [1, 2, 4],
             "included": [
-                ["Improve teamrabu.com", 0.1],
+                ["Improve teamrabu.com", 0],
                 ["Rewrite CLI in Java", 1.5],
                 ["Package CLI as JAR", 1]
             ],
             "excluded": [
-                ["Usage data", "?"],
-                ["Cross-browser testing & support", "?"],
+                ["Usage statistics", "?"],
                 ["Smaller page size", "?"],
-                ["Robustness / error handling", 13], 
+                ["Error handling", 13], 
+                ["Robust cross-browser testing & support", "?"],
                 ["Mobile browser support", "?"],
                 ["Documentation", "?"]
             ]
