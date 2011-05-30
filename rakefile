@@ -90,13 +90,16 @@ end
 
 desc "Check everything"
 task :default => [:check_all]
-task :check_all => [:ruby, :javascript, :html]
+task :check_all => [:ruby, :javascript, :html, :java]
 
 desc "Check Javascript"
 task :javascript => [:js_test, :js_lint]
 
 desc "Check HTML"
 task :html => [:html_test]
+
+desc "Check Java"
+task :java => [:java_test]
 
 # desc "Javascript unit tests"
 task :js_test => [:startup] do
@@ -120,6 +123,11 @@ task :html_test => [TEST_OUTPUT] do
     explain "Running HTML unit tests" do
         test_html(TEST_OUTPUT)
     end
+end
+
+# desc "Java unit tests"
+task :java_test => [:javac] do
+	run "JUnit", "java -cp #{LIB_DIR}/junit-4.9b2.jar:#{JAVA_OUTPUT_DIR} org.junit.runner.JUnitCore com.teamrabu.schedule.cli._GeneratorTest com.teamrabu.schedule.cli._SimpleFileTest"
 end
 
 desc "Check Ruby"
@@ -213,7 +221,7 @@ task MERGED_RUBY => [MAIN_RUBY_SOURCE, MERGED_HTML, MERGED_DIR] do
 	end
 end
 
-task :java => [JAVA_OUTPUT_DIR, MERGED_HTML] do
+task :javac => [JAVA_OUTPUT_DIR, MERGED_HTML] do
 	explain "Compiling Java" do
 		run "Java compile", "javac -cp #{LIB_DIR}/*.jar -d #{JAVA_OUTPUT_DIR} #{JAVA_SRC_DIR}/*.java"
 		cp MERGED_HTML, "#{JAVA_OUTPUT_DIR}/#{JAVA_PACKAGE_DIR}"
