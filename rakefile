@@ -253,8 +253,8 @@ task RELEASE_ZIP_FILE => [:release_staging] do
 end
 
 desc "Create tested release package"
-task :release => [RELEASE_ZIP_FILE] do
-	explain "Copying release" do
+task :release => [:check_all, RELEASE_ZIP_FILE] do
+	explain "Creating official release" do
 		rm_rf RELEASE_DIR
 		mkdir RELEASE_DIR
 		cp RELEASE_ZIP_FILE, RELEASE_DIR
