@@ -12,7 +12,8 @@ Rabu Schedule Release Checklist
 9. `git push --tags`
 10. Increment version number in README and add '.dev'
 11. Commit with message 'Started X.Y.Z' (use new version number)
-12. Announce to mailing list
+12. Copy release file to website
+13. Announce to mailing list
 
 Mailing list announcement template
 ---
