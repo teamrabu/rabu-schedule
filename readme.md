@@ -48,7 +48,7 @@ Source Code
 
 *Note:* The Rabu build has only been tested on Mac OS 10.6. In particular, although Rabu will run on Windows, the build doesn't work on Windows.
 
-Rabu's source code is [available on GitHub](https://github.com/teamrabu/rabu-schedule). The files in the respository are arranged in the following structure:
+Rabu's source code is [available on GitHub](https://github.com/teamrabu/rabu-schedule). The files in the repository are arranged in the following structure:
 
 - `released/`: Production release files
 - `src/`: Production source code
