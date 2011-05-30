@@ -200,7 +200,7 @@ task :javac => [JAVA_OUTPUT_DIR, MERGED_HTML] do
 	end
 end
 
-	task TEST_OUTPUT => [RESULTS_DIR, :cli] do
+task TEST_OUTPUT => [RESULTS_DIR, :cli] do
 	explain "Creating Rabu output file" do
 		run "Rabu", "#{CLI_COMMAND_LINE} < #{TEST_CONFIG} > #{TEST_OUTPUT}"
 	end

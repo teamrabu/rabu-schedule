@@ -12,7 +12,8 @@ public class Main {
 		String template = SimpleFile.loadFromStream(templateStream, CHARSET);
 		String config = SimpleFile.loadFromStream(System.in, CHARSET);
 
-		System.out.print(new Generator(template, config).html());
+		String output = new Generator(template, config).html();
+		SimpleFile.writeToStream(System.out, output, CHARSET);
 	}
 }
 

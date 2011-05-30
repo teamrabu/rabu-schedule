@@ -23,12 +23,8 @@ public class SimpleFile {
 		}
 	}
 
-	public SimpleFile(String name) {
-		file = new File(name);
-	}
-
-	public void save(String text, String charset) throws IOException {
-		Writer output = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), charset));
+	public static void writeToStream(OutputStream outputStream, String text, String charset) throws UnsupportedEncodingException, IOException {
+		Writer output = new BufferedWriter(new OutputStreamWriter(outputStream, charset));
 		try {
 			output.write(text);
 		}
@@ -37,8 +33,16 @@ public class SimpleFile {
 		}
 	}
 
+	public SimpleFile(String name) {
+		file = new File(name);
+	}
+
 	public String load(String charset) throws IOException {
 		return loadFromStream(new FileInputStream(file), charset);
+	}
+
+	public void save(String text, String charset) throws IOException {
+		writeToStream(new FileOutputStream(file), text, charset);
 	}
 
 	public boolean exists() {
