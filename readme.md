@@ -1,7 +1,7 @@
 Rabu Schedule 0.3-dev
 =================
 
-Rabu Schedule creates a visual aid for collaborative product scheduling. For more information, see the [Team Rabu website](http://www.teamrabu.com).
+Rabu Schedule helps development teams discuss Agile software teams discuss their schedules with important stakeholders. For more information, see the [Team Rabu website](http://www.teamrabu.com).
 
 This early release of Rabu Schedule is for people interested in getting their hands dirty. It has many limitations (details below) and very little documentation.
 
@@ -9,8 +9,6 @@ This early release of Rabu Schedule is for people interested in getting their ha
 Downloading Rabu Schedule
 -------------------------
 The latest release of Rabu [may be downloaded here](http://www.teamrabu.com/rabu.zip). Unzip the release file into a directory of your choice.
-
-Rabu's source code is [available on GitHub](https://github.com/teamrabu/rabu-schedule).
 
 
 Running Rabu Schedule
@@ -36,8 +34,6 @@ This early version of Rabu Schedule has many limitations. Here are a few:
 
 - *No run-time error handling.* When the Javascript in the HTML file encounters an error (such as a bad JSON file), it silently fails.
 
-- *No command-line parameters.* The command-line interface is primitive, even for a CLI.
-
 - *Only tested on Firefox 3.6.* Rabu Schedule works in Firefox and will probably work in Safari and Chrome. Internet Explorer is a crap shoot, as usual.
 
 Two apparent limitations are intentional:
@@ -47,8 +43,10 @@ Two apparent limitations are intentional:
 - *Single-file output.* Rabu Schedule's HTML output is self-contained within a single file so you can easily open, email, or host the result.
 
 
-The source code repository
---------------------------
+Source Code
+-----------
+
+*Note:* The Rabu build has only been tested on Mac OS 10.6. In particular, although Rabu will run on Windows, the build doesn't work on Windows.
 
 Rabu's source code is [available on GitHub](https://github.com/teamrabu/rabu-schedule). The files in the respository are arranged in the following structure:
 
@@ -61,18 +59,12 @@ Rabu's source code is [available on GitHub](https://github.com/teamrabu/rabu-sch
 - `spikes/`: Non-production experiments
 - `copyrights/`: Legal stuff
 
-
-Building Rabu Schedule
-----------------------
-
-*Note:* Although Rabu Schedule runs on Windows, the build doesn't work on Windows yet. (The "RedCarpet" gem won't install.)
-
 To build Rabu Schedule from source, you need the following tools installed:
 
 * Ruby
 * RubyGems (typically comes with Ruby)
 * Rake (`sudo gem install rake`)
-* Java
+* Java JDK
 * Firefox
 
 The build depends on some other Ruby gems, but it automatically downloads and installs them into the `gems` directory. They're isolated from the rest of your Ruby installation.
@@ -88,18 +80,8 @@ Two scripts make building more convenient:
 
 Both tools pass their command-line parameters through to rake.
 
-The build has only been tested on Mac OS 10.6, so you may run into problems on other machines.
-
 
 Submitting Patches
 ------------------
 
 Patches are welcome. Before we can accept your code, we need a signed copyright assignment form. You can find the form in the `copyrights/` directory.
-
-It's probably best to avoid working on the command-line Ruby tool (found in `src/cli/`) because we're strongly considering switching to Java instead. (We're considering switching because of the possibility of sharing Javascript libraries using Rhino, the deployment convenience of .JAR files, and its large installed base.)
-
-
-Enjoy!
-------
-
-Rabu's limitations are your opportunity to contribute! Get your feet wet, poke around, and let us know what you think.
