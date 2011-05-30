@@ -20,7 +20,7 @@ Mailing list announcement template
 
 Subject: Rabu X.Y.Z released
 
-Rabu X.Y.Z has been released. You can download it from https://github.com/teamrabu/rabu-schedule .
+Rabu X.Y.Z has been released. You can download it from http://www.teamrabu.com/rabu.zip .
 
 Changes:
 [Paste in changelog]
