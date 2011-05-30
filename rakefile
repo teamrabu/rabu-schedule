@@ -33,9 +33,12 @@ MERGE_REGEX = /<%=\s*rabu_library\s*%>/
 
 JAVA_PACKAGE = "com.teamrabu.schedule.cli"
 JAVA_PACKAGE_DIR = "com/teamrabu/schedule/cli"
-JAVA_SRC_DIR = "#{SRC_DIR}/cli/src/#{JAVA_PACKAGE_DIR}"
+JAVA_SRC_DIR = "#{SRC_DIR}/cli/src"
 JAVA_OUTPUT_DIR = "#{OUTPUT_DIR}/java"
 CLI_COMMAND_LINE = "java -cp #{JAVA_OUTPUT_DIR} #{JAVA_PACKAGE}.Main"
+
+JAR_DIR = "#{OUTPUT_DIR}/jar"
+JAR_FILE = "#{JAR_DIR}/rabu.jar"
 
 TEST_CONFIG = "#{HTML_SRC_DIR}/_html_test.rabu"
 TEST_OUTPUT = "#{RESULTS_DIR}/projection.html"
@@ -68,6 +71,7 @@ isolate_gems
 directory PID_DIR
 directory MERGED_DIR
 directory JAVA_OUTPUT_DIR
+directory JAR_DIR
 directory RESULTS_DIR
 directory PROJECTION_DIR
 directory RELEASE_DIR
@@ -195,8 +199,15 @@ end
 task :cli => :javac
 task :javac => [JAVA_OUTPUT_DIR, MERGED_HTML] do
 	explain "Compiling Java" do
-		run "Java compile", "javac -cp #{LIB_DIR}/*.jar -d #{JAVA_OUTPUT_DIR} #{JAVA_SRC_DIR}/*.java"
+		run "Java compile", "javac -cp #{LIB_DIR}/*.jar -d #{JAVA_OUTPUT_DIR} #{JAVA_SRC_DIR}/#{JAVA_PACKAGE_DIR}/*.java"
 		cp MERGED_HTML, "#{JAVA_OUTPUT_DIR}/#{JAVA_PACKAGE_DIR}"
+	end
+end
+
+task JAR_FILE => [:javac, JAR_DIR] do
+	explain "Building JAR file" do
+		rm_f JAR_FILE
+		run "Java Jar", "jar cmf #{JAVA_SRC_DIR}/mainClass #{JAR_FILE} -C #{JAVA_OUTPUT_DIR} com"
 	end
 end
 
