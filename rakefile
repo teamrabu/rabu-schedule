@@ -35,10 +35,10 @@ JAVA_PACKAGE = "com.teamrabu.schedule.cli"
 JAVA_PACKAGE_DIR = "com/teamrabu/schedule/cli"
 JAVA_SRC_DIR = "#{SRC_DIR}/cli/src"
 JAVA_OUTPUT_DIR = "#{OUTPUT_DIR}/java"
-CLI_COMMAND_LINE = "java -cp #{JAVA_OUTPUT_DIR} #{JAVA_PACKAGE}.Main"
 
 JAR_DIR = "#{OUTPUT_DIR}/jar"
 JAR_FILE = "#{JAR_DIR}/rabu.jar"
+CLI_COMMAND_LINE = "java -jar #{JAR_FILE}"
 
 TEST_CONFIG = "#{HTML_SRC_DIR}/_html_test.rabu"
 TEST_OUTPUT = "#{RESULTS_DIR}/projection.html"
@@ -196,7 +196,6 @@ task MERGED_HTML => [MAIN_HTML_SOURCE, MERGED_JS, MERGED_DIR] do
 	end
 end
 
-task :cli => :javac
 task :javac => [JAVA_OUTPUT_DIR, MERGED_HTML] do
 	explain "Compiling Java" do
 		run "Java compile", "javac -cp #{LIB_DIR}/*.jar -d #{JAVA_OUTPUT_DIR} #{JAVA_SRC_DIR}/#{JAVA_PACKAGE_DIR}/*.java"
@@ -204,6 +203,7 @@ task :javac => [JAVA_OUTPUT_DIR, MERGED_HTML] do
 	end
 end
 
+task :cli => JAR_FILE
 task JAR_FILE => [:javac, JAR_DIR] do
 	explain "Building JAR file" do
 		rm_f JAR_FILE
