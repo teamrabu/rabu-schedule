@@ -1,6 +1,14 @@
 Rabu Schedule Change Log
 ========================
 
+Release 0.3 (30 May 2011)
+===
+* BREAKING CHANGE: Migrated command-line interface from Ruby to Java
+* ADDED: Command-line interface displays version and usage information
+* FIXED: "Invalid byte sequence" error no longer occurs in command-line interface
+* FIXED: Burn-up chart renders properly in Internet Explorer 7 & 8
+* CHANGED: Release is packaged as .zip file
+
 Release 0.2 (15 May 2011)
 ===
 * ADDED: Risk-adjusted burn-up chart
@@ -16,7 +24,6 @@ Minor changes in Release 0.2
 Release 0.2.1 (18 May 2011)
 ---
 * FIXED: Non-ASCII characters supported in configuration file, which must use the UTF-8 encoding
-* FIXED (unconfirmed): "Invalid byte sequence" error should not occur on Ruby 1.9
 
 Release 0.1 (17 Apr 2011)
 ===
