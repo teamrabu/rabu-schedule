@@ -1,7 +1,7 @@
 Rabu Schedule 0.3-dev
 =================
 
-Rabu Schedule helps development teams discuss Agile software teams discuss their schedules with important stakeholders. For more information, see the [Team Rabu website](http://www.teamrabu.com).
+Rabu Schedule helps Agile software teams discuss their schedules with important stakeholders. For more information, see the [Team Rabu website](http://www.teamrabu.com).
 
 This early release of Rabu Schedule is for people interested in getting their hands dirty. It has many limitations (details below) and very little documentation.
 
