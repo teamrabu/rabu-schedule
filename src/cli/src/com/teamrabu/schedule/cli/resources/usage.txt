@@ -1,2 +1,2 @@
-Rabu Schedule v0.3
+Rabu Schedule v0.3+dev
 usage: java -jar rabu.jar < estimates.rabu > projection.html

@@ -1,4 +1,4 @@
-Rabu Schedule 0.3
+Rabu Schedule 0.3+dev
 =================
 
 Rabu Schedule helps Agile software teams discuss their schedules with important stakeholders. For more information, see the [Team Rabu website](http://www.teamrabu.com).

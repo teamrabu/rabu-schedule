@@ -4,14 +4,14 @@ Rabu Schedule Release Checklist
 1. Update CHANGELOG (and README, if necessary)
 2. `rake release shutdown`
 3. Commit
-4. Remove '.dev' from README
+4. Update version number in README
 5. Update version number in Java code's "usage.txt"
 6. Commit with 'Release X.Y.Z' as commit message
-7. `git tag "release-X.Y.Z"
+7. `git tag "release-X.Y.Z"`
 8. `git push`
 9. `git push --tags`
-10. Increment version number in README and add '.dev'
-11. Commit with message 'Started X.Y.Z' (use new version number)
+10. Add '+dev' to version number in README and "usage.txt"
+11. Commit with message 'Started next version'
 12. Copy release file to website
 13. Announce to mailing list
 
