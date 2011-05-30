@@ -31,13 +31,11 @@ MAIN_JS_SOURCE = "#{JS_SRC_DIR}/main.js"
 MERGED_JS = "#{MERGED_DIR}/schedule.js"
 MERGE_REGEX = /<%=\s*rabu_library\s*%>/
 
+JAVA_PACKAGE = "com.teamrabu.schedule.cli"
 JAVA_PACKAGE_DIR = "com/teamrabu/schedule/cli"
 JAVA_SRC_DIR = "#{SRC_DIR}/cli/src/#{JAVA_PACKAGE_DIR}"
 JAVA_OUTPUT_DIR = "#{OUTPUT_DIR}/java"
-
-RUBY_SRC_DIR = "#{SRC_DIR}/cli-ruby"
-MERGED_RUBY = "#{MERGED_DIR}/rabu-sched.rb"
-MAIN_RUBY_SOURCE = "#{RUBY_SRC_DIR}/cli.rb"
+CLI_COMMAND_LINE = "java -cp #{JAVA_OUTPUT_DIR} #{JAVA_PACKAGE}.Main"
 
 TEST_CONFIG = "#{HTML_SRC_DIR}/_html_test.rabu"
 TEST_OUTPUT = "#{RESULTS_DIR}/projection.html"
@@ -90,7 +88,7 @@ end
 
 desc "Check everything"
 task :default => [:check_all]
-task :check_all => [:ruby, :javascript, :html, :java]
+task :check_all => [:javascript, :html, :java]
 
 desc "Check Javascript"
 task :javascript => [:js_test, :js_lint]
@@ -127,16 +125,7 @@ end
 
 # desc "Java unit tests"
 task :java_test => [:javac] do
-	run "JUnit", "java -cp #{LIB_DIR}/junit-4.9b2.jar:#{JAVA_OUTPUT_DIR} org.junit.runner.JUnitCore com.teamrabu.schedule.cli._GeneratorTest com.teamrabu.schedule.cli._SimpleFileTest"
-end
-
-desc "Check Ruby"
-task :ruby do
-	explain("Running Ruby unit tests"){}
-end
-Rake::TestTask.new(:ruby) do |test|
-	test.libs << RUBY_SRC_DIR
-	test.pattern = "#{RUBY_SRC_DIR}/_*test.rb"
+	run "JUnit", "java -cp #{LIB_DIR}/junit-4.9b2.jar:#{JAVA_OUTPUT_DIR} org.junit.runner.JUnitCore #{JAVA_PACKAGE}._GeneratorTest #{JAVA_PACKAGE}._SimpleFileTest"
 end
 
 
@@ -203,24 +192,7 @@ task MERGED_HTML => [MAIN_HTML_SOURCE, MERGED_JS, MERGED_DIR] do
 	end
 end
 
-task MERGED_RUBY => [MAIN_RUBY_SOURCE, MERGED_HTML, MERGED_DIR] do
-	explain "Merging Ruby script" do
-		rm_f MERGED_RUBY
-		puts "Concatenating #{MERGED_RUBY}"
-		File.open(MERGED_RUBY, "w") do |dest_file|
-			IO.readlines(MAIN_RUBY_SOURCE).each do |line|
-				if line =~ /^require \"(.+)\"/ then
-					append("#{RUBY_SRC_DIR}/#{$1}.rb", dest_file)
-				else
-					dest_file.write line
-				end
-			end
-			puts "  #{MAIN_RUBY_SOURCE}"
-			append(MERGED_HTML, dest_file)
-		end
-	end
-end
-
+task :cli => :javac
 task :javac => [JAVA_OUTPUT_DIR, MERGED_HTML] do
 	explain "Compiling Java" do
 		run "Java compile", "javac -cp #{LIB_DIR}/*.jar -d #{JAVA_OUTPUT_DIR} #{JAVA_SRC_DIR}/*.java"
@@ -228,21 +200,22 @@ task :javac => [JAVA_OUTPUT_DIR, MERGED_HTML] do
 	end
 end
 
-task TEST_OUTPUT => [MERGED_RUBY, RESULTS_DIR] do
+	task TEST_OUTPUT => [RESULTS_DIR, :cli] do
 	explain "Creating Rabu output file" do
-		run "Rabu", "ruby #{MERGED_RUBY} < #{TEST_CONFIG} > #{TEST_OUTPUT}"
+		run "Rabu", "#{CLI_COMMAND_LINE} < #{TEST_CONFIG} > #{TEST_OUTPUT}"
 	end
 end
 
-task PROJECTION_HTML => [MERGED_RUBY, PROJECTION_DIR] do
+task PROJECTION_HTML => [PROJECTION_DIR, :cli] do
 	explain "Updating release projection" do
-		run "Rabu", "ruby #{MERGED_RUBY} < #{PROJECTION_CONFIG} > #{PROJECTION_HTML}"
+		run "Rabu", "#{CLI_COMMAND_LINE} < #{PROJECTION_CONFIG} > #{PROJECTION_HTML}"
 	end
 end
 
 desc "Create tested release package"
-task :release => [:check_all, MERGED_RUBY, RELEASE_DIR] do
+task :release => [:check_all, :cli, RELEASE_DIR] do
 	explain "Building release" do
+		raise "Not updated"
 		cp MERGED_RUBY, RELEASE_DIR
 		cp PROJECTION_CONFIG, RELEASE_DIR
 	end
