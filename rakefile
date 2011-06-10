@@ -117,14 +117,12 @@ task :html => [:html_test]
 desc "Check Java"
 task :java => [:java_test]
 
-# desc "Javascript unit tests"
 task :js_test => [:startup] do
     explain "Running Javascript unit tests" do
         JsTestDriver::run_tests(JS_TEST_CONF)
     end
 end
 
-# desc "Javascript lint"
 task :js_lint do
 	explain "Running lint" do
 		# NOTE: Because I haven't figured out how to pass command-line arguments
@@ -133,7 +131,6 @@ task :js_lint do
 	end
 end
 
-# desc "HTML unit tests"
 task :html_test => [TEST_OUTPUT] do
     require "#{HTML_SRC_DIR}/_html_test"
     explain "Running HTML unit tests" do
@@ -141,7 +138,6 @@ task :html_test => [TEST_OUTPUT] do
     end
 end
 
-# desc "Java unit tests"
 task :java_test => [:javac] do
 	run "JUnit", "java -cp #{LIB_DIR}/junit-4.9b2.jar:#{JAVA_OUTPUT_DIR} org.junit.runner.JUnitCore #{JAVA_PACKAGE}._GeneratorTest #{JAVA_PACKAGE}._SimpleFileTest"
 end
@@ -204,7 +200,8 @@ end
 task MINIFIED_JS => [MERGED_JS, MINIFIED_JS_TEST_CONF, MINIFIED_DIR] do
 	explain "Minifying Javascript" do
 		rm_f MINIFIED_JS
-		run "Closure Compiler", "java -jar #{MINIFIER_JAR} --js #{MERGED_JS} --js_output_file #{MINIFIED_JS}"
+		# Using ADVANCED_OPTIMIZATIONS caused the tests to fail--last checked 10 June 2011 
+		run "Closure Compiler", "java -jar #{MINIFIER_JAR} --js #{MERGED_JS} --js_output_file #{MINIFIED_JS} --compilation_level SIMPLE_OPTIMIZATIONS --warning_level QUIET"
         JsTestDriver::run_tests(MINIFIED_JS_TEST_CONF)
 	end
 end
