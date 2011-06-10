@@ -10,7 +10,7 @@ BUILD_DIR = "build"
 OUTPUT_DIR = "generated"
 GEMS_DIR = "gems"
 BIN_DIR = "#{BUILD_DIR}/vendor"
-MERGED_DIR = "#{OUTPUT_DIR}/built"
+MERGED_DIR = "#{OUTPUT_DIR}/merged"
 RESULTS_DIR = "#{OUTPUT_DIR}/run_results" 
 
 RHINO_JAR = "#{BIN_DIR}/rhino.jar"
@@ -30,6 +30,10 @@ MERGED_HTML = "#{MERGED_DIR}/projection.html"
 MAIN_JS_SOURCE = "#{JS_SRC_DIR}/main.js"
 MERGED_JS = "#{MERGED_DIR}/schedule.js"
 MERGE_REGEX = /<%=\s*rabu_library\s*%>/
+
+MINIFIER_JAR = "#{BIN_DIR}/closure-compiler-1043/compiler.jar"
+MINIFIED_DIR = "#{OUTPUT_DIR}/minified"
+MINIFIED_JS = "#{MINIFIED_DIR}/schedule.js"
 
 JAVA_PACKAGE = "com.teamrabu.schedule.cli"
 JAVA_PACKAGE_DIR = "com/teamrabu/schedule/cli"
@@ -75,6 +79,7 @@ isolate_gems
 
 directory PID_DIR
 directory MERGED_DIR
+directory MINIFIED_DIR
 directory JAVA_OUTPUT_DIR
 directory JAR_DIR
 directory RESULTS_DIR
@@ -182,7 +187,14 @@ task MERGED_JS => [MAIN_JS_SOURCE, MERGED_DIR] do
 	end
 end
 
-task MERGED_HTML => [MAIN_HTML_SOURCE, MERGED_JS, MERGED_DIR] do
+task MINIFIED_JS => [MERGED_JS, MINIFIED_DIR] do
+	explain "Minifying Javascript" do
+		rm_f MINIFIED_JS
+		run "Closure Compiler", "java -jar #{MINIFIER_JAR} --js #{MERGED_JS} --js_output_file #{MINIFIED_JS}"
+	end
+end
+
+task MERGED_HTML => [MAIN_HTML_SOURCE, MINIFIED_JS, MERGED_DIR] do
 	explain "Merging HTML" do
 		rm_f MERGED_HTML
 		puts "Concatenating #{MERGED_HTML}"
@@ -191,7 +203,7 @@ task MERGED_HTML => [MAIN_HTML_SOURCE, MERGED_JS, MERGED_DIR] do
 			puts "  #{MAIN_HTML_SOURCE}"
 			IO.readlines(MAIN_HTML_SOURCE).each do |line|
 				if MERGE_REGEX.match line then
-					append(MERGED_JS, dest_file)
+					append(MINIFIED_JS, dest_file)
 					merged_library = true
 				else
 					dest_file.write line

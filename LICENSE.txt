@@ -19,3 +19,4 @@ jQueryUI	http://jqueryui.com/
 Isolate	https://github.com/jbarnette/isolate
 Raphael	http://raphaeljs.com/
 ES5-shim    https://github.com/kriskowal/es5-shim
+Closure Compiler	http://code.google.com/closure/compiler/
