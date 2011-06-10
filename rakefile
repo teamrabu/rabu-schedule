@@ -23,17 +23,20 @@ JSTESTDRIVER_PID_FILE = "#{PID_DIR}/jstestdriver.pid"
 JSTESTDRIVER_SERVER_TIMEOUT_IN_SEC = 10
 JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC = 10
 
-HTML_SRC_DIR = "#{SRC_DIR}/html"
+JS_TEST_CONF = "#{BUILD_DIR}/JsTestDriver.conf"
 JS_SRC_DIR = "#{SRC_DIR}/javascript"
-MAIN_HTML_SOURCE = "#{HTML_SRC_DIR}/projection.html"
-MERGED_HTML = "#{MERGED_DIR}/projection.html"
 MAIN_JS_SOURCE = "#{JS_SRC_DIR}/main.js"
 MERGED_JS = "#{MERGED_DIR}/schedule.js"
+
+HTML_SRC_DIR = "#{SRC_DIR}/html"
+MAIN_HTML_SOURCE = "#{HTML_SRC_DIR}/projection.html"
+MERGED_HTML = "#{MERGED_DIR}/projection.html"
 MERGE_REGEX = /<%=\s*rabu_library\s*%>/
 
 MINIFIER_JAR = "#{BIN_DIR}/closure-compiler-1043/compiler.jar"
 MINIFIED_DIR = "#{OUTPUT_DIR}/minified"
 MINIFIED_JS = "#{MINIFIED_DIR}/schedule.js"
+MINIFIED_JS_TEST_CONF = "#{MINIFIED_DIR}/jstestdriver.conf"
 
 JAVA_PACKAGE = "com.teamrabu.schedule.cli"
 JAVA_PACKAGE_DIR = "com/teamrabu/schedule/cli"
@@ -117,7 +120,7 @@ task :java => [:java_test]
 # desc "Javascript unit tests"
 task :js_test => [:startup] do
     explain "Running Javascript unit tests" do
-        JsTestDriver::run_tests
+        JsTestDriver::run_tests(JS_TEST_CONF)
     end
 end
 
@@ -187,10 +190,22 @@ task MERGED_JS => [MAIN_JS_SOURCE, MERGED_DIR] do
 	end
 end
 
-task MINIFIED_JS => [MERGED_JS, MINIFIED_DIR] do
+task MINIFIED_JS_TEST_CONF => [MINIFIED_DIR] do
+	puts "Creating #{MINIFIED_JS_TEST_CONF}"
+	File.open(MINIFIED_JS_TEST_CONF, "w") do |file|
+		file.write("server: http://localhost:#{JSTESTDRIVER_PORT}\n")
+		file.write("\n")
+		file.write("load:\n")
+		file.write(" - #{MINIFIED_JS}\n")
+		file.write(" - #{JS_SRC_DIR}/_*_test.js")
+	end
+end
+
+task MINIFIED_JS => [MERGED_JS, MINIFIED_JS_TEST_CONF, MINIFIED_DIR] do
 	explain "Minifying Javascript" do
 		rm_f MINIFIED_JS
 		run "Closure Compiler", "java -jar #{MINIFIER_JAR} --js #{MERGED_JS} --js_output_file #{MINIFIED_JS}"
+        JsTestDriver::run_tests(MINIFIED_JS_TEST_CONF)
 	end
 end
 
@@ -328,11 +343,11 @@ class JsTestDriver
 	
     COMMAND = "java -jar #{JSTESTDRIVER_JAR}"
 
-    def self.run_tests
-		result = attempt_tests
+    def self.run_tests(conf)
+		result = attempt_tests(conf)
 		if (result =~ /No browsers available/) then
 			capture_browser
-			result = attempt_tests
+			result = attempt_tests(conf)
 		end
 		raise "Javascript unit tests failed" if $? != 0
 	end
@@ -371,8 +386,8 @@ class JsTestDriver
 
 private
 
-    def self.attempt_tests
-        command = "#{COMMAND} --config #{BUILD_DIR}/JsTestDriver.conf --basePath . --tests all 2>&1"
+    def self.attempt_tests(conf)
+        command = "#{COMMAND} --config #{conf} --basePath . --tests all 2>&1"
         result = ""
         puts command
         IO.popen(command) do |pipe|
