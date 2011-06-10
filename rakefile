@@ -106,7 +106,7 @@ end
 
 desc "Check everything"
 task :default => [:check_all]
-task :check_all => [:javascript, :html, :java]
+task :check_all => [:javascript, :html, :java, :minifier_test]
 
 desc "Check Javascript"
 task :javascript => [:js_test, :js_lint]
@@ -128,6 +128,12 @@ task :js_lint do
 		# NOTE: Because I haven't figured out how to pass command-line arguments
 		# to Rhino scripts, jslintrunner must be configured by editing source file.
 		run "Lint", "java -jar #{RHINO_JAR} #{JSLINTRUNNER_JS}"
+	end
+end
+
+task :minifier_test => [MINIFIED_JS, MINIFIED_JS_TEST_CONF, :startup] do
+	explain "Testing minification" do
+        JsTestDriver::run_tests(MINIFIED_JS_TEST_CONF)
 	end
 end
 
@@ -202,7 +208,6 @@ task MINIFIED_JS => [MERGED_JS, MINIFIED_JS_TEST_CONF, MINIFIED_DIR] do
 		rm_f MINIFIED_JS
 		# Using ADVANCED_OPTIMIZATIONS caused the tests to fail--last checked 10 June 2011 
 		run "Closure Compiler", "java -jar #{MINIFIER_JAR} --js #{MERGED_JS} --js_output_file #{MINIFIED_JS} --compilation_level SIMPLE_OPTIMIZATIONS --warning_level QUIET"
-        JsTestDriver::run_tests(MINIFIED_JS_TEST_CONF)
 	end
 end
 
