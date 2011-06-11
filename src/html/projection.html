@@ -87,7 +87,7 @@ You should have received a copy of the GNU Affero General Public License along w
 		}
 		
 		.updated {
-			color: gray;
+			color: #7e7e7e;
 			font-size: 75%;
 		}
 		
@@ -123,6 +123,9 @@ You should have received a copy of the GNU Affero General Public License along w
 			margin-bottom: 4ex;
 		}
 		
+		.body p {
+		}
+		
 		.body h3 {
 			font-size: 100%;
 			font-weight: 400;
@@ -139,11 +142,13 @@ You should have received a copy of the GNU Affero General Public License along w
 			margin-top: 1ex;
 			margin-bottom: 1ex;
 		}
-		
-		.body p {
+						
+		.body .explanation {
+			font-size: 75%;
+			color: #7e7e7e;
 		}
-		
-		
+
+
 		/* Date Projections */
 		
 		.body .date {
@@ -153,10 +158,6 @@ You should have received a copy of the GNU Affero General Public License along w
 		.body .qualifier {
 			font-style: italic;
 			font-weight: 200;
-		}
-		
-		.body .footnote {
-			font-size: 75%;
 		}
 		
 		
@@ -177,7 +178,7 @@ You should have received a copy of the GNU Affero General Public License along w
 		}
 		
 		.body .rabu-features .rabu-excluded {
-			color: darkgray;
+			color: #7e7e7e;
 		}
 		
 		.body .rabu-divider {
@@ -241,22 +242,24 @@ You should have received a copy of the GNU Affero General Public License along w
 
     <div class="body">
 	    <h3>What are we working on?</h3>
-	    <ol class="rabu-features"></ol>
+	    <p class="explanation">Features above the &ldquo;in/out&rdquo; line are planned for <span class="rabu-name"></span>. Features below the line are excluded, but could appear in a future release.</p>
 	    <div class="rabu-divider">
 		    <div class="in">in</div>
 		    <div class="out">out</div>
 	    </div>
+	    <ol class="rabu-features"></ol>
 
 	    <h3>When will it be done?</h3>
+		<p class="explanation">These dates are calculated by combining our progress so far with an assessment of schedule risks. The final date has been rounded up to the iteration boundary.</p>
 	    <ol class="projection">
 		    <li>Before <span class="date rabu-tenPercentDate"></span>: <span class="qualifier">No</span></li>
 		    <li><span class="date rabu-tenPercentDate"></span> &ndash; <span class="date rabu-fiftyPercentDate"></span>: <span class="qualifier">Unlikely</span></li>
-		    <li><span class="date rabu-fiftyPercentDate"></span> &ndash; <span class="date rabu-ninetyPercentDate"></span>*: <span class="qualifier">Probable</span></li>
-		    <li>By <span class="date rabu-ninetyPercentDate"></span>*: <span class="qualifier">Yes</span></li>
+		    <li><span class="date rabu-fiftyPercentDate"></span> &ndash; <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Probable</span></li>
+		    <li>By <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Yes</span></li>
 	    </ol>
-		<p class="footnote">*This date has been rounded up to the iteration boundary.</p>
 		
-		<h3>How are we progressing?</h3>
+		<h3>What is the basis for this projection?</h3>
+	    <p class="explanation">This chart illustrates our projection calculations. The bars on the left, if any, show our progress so far, and the triangles on the right show our projection into the future. The dashed lines highlight 10%, 50%, and 90% probabilities. Hover over the chart for a key.</p>
 		<div class="rabu-burnup">
 			<div class="rabu-xLabel">Iterations</div>
 			<div class="rabu-yLabel">Effort</div>
