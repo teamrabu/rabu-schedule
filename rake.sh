@@ -11,7 +11,7 @@ def green(text)
 end
 
 def main
-	system "rake #{$*}"
+	system "rake #{$*.join(' ')}"
 	
 	if $?==0 then
 	    puts green("                                      ")

@@ -203,11 +203,20 @@ task MINIFIED_JS_TEST_CONF => [MINIFIED_DIR] do
 	end
 end
 
+	puts ENV['no_minify']
+puts "HI" if ENV['no_minify']
+
 task MINIFIED_JS => [MERGED_JS, MINIFIED_JS_TEST_CONF, MINIFIED_DIR] do
-	explain "Minifying Javascript" do
-		rm_f MINIFIED_JS
-		# Using ADVANCED_OPTIMIZATIONS caused the tests to fail--last checked 10 June 2011 
-		run "Closure Compiler", "java -jar #{MINIFIER_JAR} --js #{MERGED_JS} --js_output_file #{MINIFIED_JS} --compilation_level SIMPLE_OPTIMIZATIONS --warning_level QUIET"
+	if ENV['no_minify'] then
+		explain "Skipping minification" do
+			cp MERGED_JS, MINIFIED_JS
+		end
+	else
+		explain "Minifying Javascript" do
+			rm_f MINIFIED_JS
+			# Using ADVANCED_OPTIMIZATIONS caused the tests to fail--last checked 10 June 2011 
+			run "Closure Compiler", "java -jar #{MINIFIER_JAR} --js #{MERGED_JS} --js_output_file #{MINIFIED_JS} --compilation_level SIMPLE_OPTIMIZATIONS --warning_level QUIET"
+		end
 	end
 end
 

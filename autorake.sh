@@ -37,7 +37,7 @@ loop do
     end
 
     if changed
-		system "./rake.sh #{$*}"
+		system "./rake.sh #{$*.join(' ')}"
     end
 
     sleep 1
