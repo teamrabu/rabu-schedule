@@ -1,6 +1,6 @@
 {
-	"name": "Rabu Schedule 0.4",
-	"updated": "2 Jun 2011",
+	"name": "Rabu Schedule 0.5",
+	"updated": "13 Jun 2011",
 	"iterations": [
         {
             "started": "12 Jun 2011",
@@ -8,9 +8,28 @@
             "velocity": 5,
             "riskMultipliers": [1, 2, 4],
             "included": [
-                ["Reduce page size", 1],
-                ["Clarify chart slightly", 0.5],
-                ["Drag-and-drop features", 8.5]
+                ["Smaller page size", 0],
+                ["Improved page clarity", 0],
+                ["Website improvements", 0.5],
+                ["Rabu 0.4 release", 0.5],
+                ["Feature drag-and-drop", 8.5]
+            ],
+            "excluded": [
+                ["Configuration validation and error handling", 13], 
+                ["Robust cross-browser testing & support", "?"],
+                ["Mobile browser support", "?"],
+                ["Documentation", "?"]
+            ]
+        },
+        {
+            "started": "5 Jun 2011",
+            "length": 7,
+            "velocity": 1.5,
+            "riskMultipliers": [1, 2, 4],
+            "included": [
+                ["Smaller page size", 1],
+                ["Easier to understand page", 0.5],
+                ["Feature drag-and-drop", 8.5]
             ],
             "excluded": [
                 ["Configuration validation and error handling", 13], 
