@@ -1,6 +1,11 @@
 Rabu Schedule Change Log
 ========================
 
+Release 0.4 (14 June 2011)
+===
+* ADDED: Minification of Javascript.
+* ADDED: Explanatory text in projection page.
+
 Release 0.3 (30 May 2011)
 ===
 * BREAKING CHANGE: Migrated command-line interface from Ruby to Java

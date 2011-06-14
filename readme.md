@@ -3,8 +3,6 @@ Rabu Schedule 0.3+dev
 
 Rabu Schedule helps Agile software teams discuss their schedules with important stakeholders. For more information, see the [Team Rabu website](http://www.teamrabu.com).
 
-This early release of Rabu Schedule is for people interested in getting their hands dirty. It has many limitations (details below) and very little documentation.
-
 
 Downloading Rabu Schedule
 -------------------------
@@ -26,7 +24,7 @@ Rabu takes a JSON file containing a development team's estimates on STDIN and ou
 Limitations
 -----------
 
-This early version of Rabu Schedule has many limitations. Here are a few:
+This early version of Rabu Schedule has some limitations:
 
 - *Subject to change.* Everything about Rabu Schedule is subject to change. In particular, the input file format is likely to change.
 
@@ -46,7 +44,7 @@ Two apparent limitations are intentional:
 Source Code
 -----------
 
-*Note:* The Rabu build has only been tested on Mac OS 10.6. In particular, although Rabu will run on Windows, the build doesn't work on Windows.
+*Note:* The Rabu build has only been tested on Mac OS 10.6. In particular, although Rabu runs on Windows, the build doesn't work on Windows.
 
 Rabu's source code is [available on GitHub](https://github.com/teamrabu/rabu-schedule). The files in the repository are arranged in the following structure:
 
@@ -67,9 +65,9 @@ To build Rabu Schedule from source, you need the following tools installed:
 * Java JDK
 * Firefox
 
-The build depends on some other Ruby gems, but it automatically downloads and installs them into the `gems` directory. They're isolated from the rest of your Ruby installation.
+The build automatically downloads and installs its Ruby dependencies them into the `gems` directory. They're isolated from the rest of your Ruby installation.
 
-To build a release version of Rabu Schedule, use `rake release` from the command line. The results will be placed in the `released/` directory. Use `rake` on its own for ordinary development. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets.
+To build a release version of Rabu Schedule, use `rake release` from the command line. The results will be placed in the `released/` directory. Use `rake` on its own for ordinary development. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets. The `no_minify=true` switch will disable minification, which is helpful for speeding up the build.
 
 **Important:** After you're done building, be sure to run `rake shutdown` to stop the JsTestDriver server. If you use `./autorake.sh` (described below), breaking out of the script should automatically kill the server.
 
