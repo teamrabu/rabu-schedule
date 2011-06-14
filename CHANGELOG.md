@@ -6,7 +6,7 @@ Release 0.4 (14 June 2011)
 * ADDED: Minification of Javascript.
 * ADDED: Explanatory text in projection page.
 
-Rlease 0.4.1 (14 June 2011)
+Release 0.4.1 (14 June 2011)
 ===
 * FIXED (cosmetic): Corrected version number in rabu.jar.
 

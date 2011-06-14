@@ -132,6 +132,7 @@ task :js_lint do
 end
 
 task :minifier_test => [MINIFIED_JS, MINIFIED_JS_TEST_CONF, :startup] do
+	next if !minify?
 	explain "Testing minification" do
         JsTestDriver::run_tests(MINIFIED_JS_TEST_CONF)
 	end
@@ -203,11 +204,8 @@ task MINIFIED_JS_TEST_CONF => [MINIFIED_DIR] do
 	end
 end
 
-	puts ENV['no_minify']
-puts "HI" if ENV['no_minify']
-
 task MINIFIED_JS => [MERGED_JS, MINIFIED_JS_TEST_CONF, MINIFIED_DIR] do
-	if ENV['no_minify'] then
+	if (!minify?) then
 		explain "Skipping minification" do
 			cp MERGED_JS, MINIFIED_JS
 		end
@@ -341,6 +339,10 @@ end
 
 def bright(text)
     return "\033[1m#{text}\033[0m";
+end
+
+def minify?()
+	!ENV['no_minify']
 end
 
 def run(name, command)
