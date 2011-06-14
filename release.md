@@ -2,10 +2,10 @@ Rabu Schedule Release Checklist
 ===============================
 
 1. Update CHANGELOG (and README, if necessary)
-3. Commit
-2. `rake release shutdown`
-4. Update version number in README
-5. Update version number in Java code's "usage.txt"
+2. Commit
+3. Update version number in README
+4. Update version number in Java code's "usage.txt"
+5. `rake release shutdown`
 6. Commit with 'Release X.Y.Z' as commit message
 7. `git tag "release-X.Y.Z"`
 8. `git push`
