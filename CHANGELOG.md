@@ -6,6 +6,10 @@ Release 0.4 (14 June 2011)
 * ADDED: Minification of Javascript.
 * ADDED: Explanatory text in projection page.
 
+Rlease 0.4.1 (14 June 2011)
+===
+* FIXED (cosmetic): Corrected version number in rabu.jar.
+
 Release 0.3 (30 May 2011)
 ===
 * BREAKING CHANGE: Migrated command-line interface from Ruby to Java

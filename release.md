@@ -18,7 +18,7 @@ Rabu Schedule Release Checklist
 Mailing list announcement template
 ---
 
-Subject: Rabu X.Y.Z released
+Subject: Rabu X.Y.Z changelog
 
 Rabu X.Y.Z has been released. You can download it from http://www.teamrabu.com/rabu.zip .
 
