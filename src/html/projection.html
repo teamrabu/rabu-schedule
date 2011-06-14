@@ -55,13 +55,30 @@ You should have received a copy of the GNU Affero General Public License along w
 			border-left: solid 1px; border-right: solid 1px;
 			padding: 0em 2em 0em 3.25em;
 			margin-left: auto; margin-right: auto;
-			width: 525px;
 
 			-moz-box-shadow: 0px 0px 15px 5px black;
 			-webkit-box-shadow: 0px 0px 15px 5px black;
 			box-shadow: 0px 0px 15px 5px black;
 		}
+				
 		
+		/* "Liquid" Columns */
+		
+		#left-column {
+			float: left;
+/*			width: 525px; */
+			width: 300px;
+		}
+		
+		#right-column {
+			float: left;
+			width: 300px;
+		}
+		
+		.footer {
+			clear: both;
+		}
+
 		
 		/* Header */
 
@@ -238,30 +255,35 @@ You should have received a copy of the GNU Affero General Public License along w
 	</div>
 
     <div class="body">
-	    <h3>What are we working on?</h3>
-	    <p class="explanation">Features above the &ldquo;in/out&rdquo; line are planned for <span class="rabu-name"></span>. Features below the line are excluded, but could appear in a future release.</p>
-	    <div class="rabu-divider">
-		    <div class="in">in</div>
-		    <div class="out">out</div>
-	    </div>
-	    <ol class="rabu-features"></ol>
-
-	    <h3>When will it be done?</h3>
-		<p class="explanation">These dates are calculated by combining our progress so far with an assessment of schedule risks. The final date has been rounded up to the iteration boundary.</p>
-	    <ol class="projection">
-		    <li>Before <span class="date rabu-tenPercentDate"></span>: <span class="qualifier">No</span></li>
-		    <li><span class="date rabu-tenPercentDate"></span> &ndash; <span class="date rabu-fiftyPercentDate"></span>: <span class="qualifier">Unlikely</span></li>
-		    <li><span class="date rabu-fiftyPercentDate"></span> &ndash; <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Probable</span></li>
-		    <li>By <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Yes</span></li>
-	    </ol>
+    
+    	<div id="left-column">
+		    <h3>What are we working on?</h3>
+		    <p class="explanation">Features above the &ldquo;in/out&rdquo; line are planned for <span class="rabu-name"></span>. Features below the line are excluded, but could appear in a future release.</p>
+		    <div class="rabu-divider">
+			    <div class="in">in</div>
+			    <div class="out">out</div>
+		    </div>
+		    <ol class="rabu-features"></ol>
+		</div>
 		
-		<h3>What is the basis for this projection?</h3>
-	    <p class="explanation">This chart illustrates our projection calculations. The bars on the left show our progress so far, if any, and the triangles on the right show our projection into the future. The dashed lines highlight 10%, 50%, and 90% probabilities. Hover over the chart for a key.</p>
-		<div class="rabu-burnup">
-			<div class="rabu-xLabel">Iterations</div>
-			<div class="rabu-yLabel">Effort</div>
-			<div class="rabu-xTickLabel tickLabel">label</div>
-            <div class="rabu-yTickLabel tickLabel">label</div>
+		<div id="right-column">
+		    <h3>When will it be done?</h3>
+			<p class="explanation">These dates are calculated by combining our progress so far with an assessment of schedule risks. The final date has been rounded up to the iteration boundary.</p>
+		    <ol class="projection">
+			    <li>Before <span class="date rabu-tenPercentDate"></span>: <span class="qualifier">No</span></li>
+			    <li><span class="date rabu-tenPercentDate"></span> &ndash; <span class="date rabu-fiftyPercentDate"></span>: <span class="qualifier">Unlikely</span></li>
+			    <li><span class="date rabu-fiftyPercentDate"></span> &ndash; <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Probable</span></li>
+			    <li>By <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Yes</span></li>
+		    </ol>
+			
+			<h3>What is the basis for this projection?</h3>
+		    <p class="explanation">This chart illustrates our projection calculations. The bars on the left show our progress so far, if any, and the triangles on the right show our projection into the future. The dashed lines highlight 10%, 50%, and 90% probabilities. Hover over the chart for a key.</p>
+			<div class="rabu-burnup">
+				<div class="rabu-xLabel">Iterations</div>
+				<div class="rabu-yLabel">Effort</div>
+				<div class="rabu-xTickLabel tickLabel">label</div>
+	            <div class="rabu-yTickLabel tickLabel">label</div>
+			</div>
 		</div>
 	</div>
 
