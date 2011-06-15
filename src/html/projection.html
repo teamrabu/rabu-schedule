@@ -50,11 +50,12 @@ You should have received a copy of the GNU Affero General Public License along w
 			font-family: helvetica neue, helvetica, arial, sans-serif;
 			font-size: 14pt;
 			font-weight: 200;
+			max-width: 56em;
 
 			background-color: white;
 			border-left: solid 1px; border-right: solid 1px;
-			padding: 0em 2em 0em 3.25em;
 			margin-left: auto; margin-right: auto;
+			padding-left: 3.25em;
 
 			-moz-box-shadow: 0px 0px 15px 5px black;
 			-webkit-box-shadow: 0px 0px 15px 5px black;
@@ -62,17 +63,19 @@ You should have received a copy of the GNU Affero General Public License along w
 		}
 				
 		
-		/* "Liquid" Columns */
+		/* Dynamic Columns */
 		
 		#left-column {
 			float: left;
 /*			width: 525px; */
-			width: 300px;
+			width: 25em;
+			padding-right: 3.5em;
 		}
 		
 		#right-column {
 			float: left;
-			width: 300px;
+			width: 25em;
+			padding-right: 2em;
 		}
 		
 		.footer {
@@ -112,14 +115,14 @@ You should have received a copy of the GNU Affero General Public License along w
 		/* Footer */
 
 		.footer {
-			border-top: solid 1px lightgray;
-			font-size: 50%;
 			color: gray;
 			width: 33%;
 			padding-bottom: 1em;
+			border-top: solid 1px lightgray;
 		}
 		
 		.footer p {
+			font-size: 50%;
 			margin: 0;
 			padding-top: 0.25em;
 		}
@@ -131,23 +134,26 @@ You should have received a copy of the GNU Affero General Public License along w
 		}
 
 
-		/* Body */
+		/* Main */
 
-		.body {
+		.main {
 			margin-bottom: 4ex;
 		}
 		
-		.body p {
+		
+		/* Sections */
+		
+		.section p {
 		}
 		
-		.body h3 {
+		.section h3 {
 			font-size: 100%;
 			font-weight: 400;
 			color: #cc0000;
 			margin-top: 3ex;
 		}
 		
-		.body ol {
+		.section ol {
 			list-style-position: outside;
 			list-style-type: none;
 			/*list-style-image: url('data:image/gif;base64,R0lGODlhCQANAJEAAAAAAP///9MZGf///yH5BAEAAAMALAAAAAAJAA0AAAIQnI+Cqzva2JOQWheT27yjAgA7');*/
@@ -157,7 +163,7 @@ You should have received a copy of the GNU Affero General Public License along w
 			margin-bottom: 1ex;
 		}
 						
-		.body .explanation {
+		.section .explanation {
 			font-size: 75%;
 			color: #7e7e7e;
 		}
@@ -165,11 +171,11 @@ You should have received a copy of the GNU Affero General Public License along w
 
 		/* Date Projections */
 		
-		.body .date {
+		.main .date {
 			font-weight: normal;
 		}
 		
-		.body .qualifier {
+		.main .qualifier {
 			font-style: italic;
 			font-weight: 200;
 		}
@@ -177,7 +183,7 @@ You should have received a copy of the GNU Affero General Public License along w
 		
 		/* Feature List */
 		
-		.body .rabu-features .rabu-done {
+		.main .rabu-features .rabu-done {
 			margin-left: -1em;
 			padding-left: 1em;
 			list-style-image: url('data:image/gif;base64,R0lGODlhDgAOALMAAOf34kPCFk/GJVvKM2bNQnLRUIrZbqHhi6zkmcTsttDwxZbdfNz00/P78P///wAAACH5BAEAAA4ALAAAAAAOAA4AAAQ50MlJZavYpXKzNESXNUToOaTpkQJwOkWgVMDRLcGBEQGh9RmAIIAYMjyHgHJxagwFosxiMHsBopgIADs=');
@@ -185,31 +191,32 @@ You should have received a copy of the GNU Affero General Public License along w
 			color: #007000;
 		}
 		
-		.body .rabu-features .rabu-done:after {
+		.main .rabu-features .rabu-done:after {
 			content: " (done)";
 			font-style: italic;
 			font-weight: 200;
 		}
 		
-		.body .rabu-features .rabu-excluded {
+		.main .rabu-features .rabu-excluded {
 			color: #7e7e7e;
 		}
 		
-		.body .rabu-divider {
+		.main .rabu-divider {
 			position: absolute;
 			font-size: 75%;
 			font-variant: small-caps;
 			font-style: italic;
-			width: 599px;
+			width: 38em;
 			margin-left: -3.5em;
-			margin-top: -1.75ex; margin-bottom: -1.75ex;
+			margin-top: -1.75ex;
+			margin-bottom: -1.75ex;
 		}
 		
-		.body .rabu-divider .in {
+		.main .rabu-divider .in {
 			border-bottom: dashed 1px;
 		}
 		
-		.body .rabu-divider .out {
+		.main .rabu-divider .out {
 			margin-top: -0.25ex;
 		}
 		
@@ -254,38 +261,46 @@ You should have received a copy of the GNU Affero General Public License along w
 		<p class="updated">Updated <span class="rabu-updated"></span></p>
 	</div>
 
-    <div class="body">
+    <div class="main">
     
     	<div id="left-column">
-		    <h3>What are we working on?</h3>
-		    <p class="explanation">Features above the &ldquo;in/out&rdquo; line are planned for <span class="rabu-name"></span>. Features below the line are excluded, but could appear in a future release.</p>
-		    <div class="rabu-divider">
-			    <div class="in">in</div>
-			    <div class="out">out</div>
+    		<div class="section">   	
+			    <h3>What are we working on?</h3>
+			    <p class="explanation">Features above the &ldquo;in/out&rdquo; line are planned for <span class="rabu-name"></span>. Features below the line are excluded, but could appear in a future release.</p>
+			    <div class="rabu-divider">
+				    <div class="in">in</div>
+				    <div class="out">out</div>
+			    </div>
+			    <ol class="rabu-features"></ol>
 		    </div>
-		    <ol class="rabu-features"></ol>
-		</div>
+		</div>  <!-- end left-column -->
 		
 		<div id="right-column">
-		    <h3>When will it be done?</h3>
-			<p class="explanation">These dates are calculated by combining our progress so far with an assessment of schedule risks. The final date has been rounded up to the iteration boundary.</p>
-		    <ol class="projection">
-			    <li>Before <span class="date rabu-tenPercentDate"></span>: <span class="qualifier">No</span></li>
-			    <li><span class="date rabu-tenPercentDate"></span> &ndash; <span class="date rabu-fiftyPercentDate"></span>: <span class="qualifier">Unlikely</span></li>
-			    <li><span class="date rabu-fiftyPercentDate"></span> &ndash; <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Probable</span></li>
-			    <li>By <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Yes</span></li>
-		    </ol>
-			
-			<h3>What is the basis for this projection?</h3>
-		    <p class="explanation">This chart illustrates our projection calculations. The bars on the left show our progress so far, if any, and the triangles on the right show our projection into the future. The dashed lines highlight 10%, 50%, and 90% probabilities. Hover over the chart for a key.</p>
-			<div class="rabu-burnup">
-				<div class="rabu-xLabel">Iterations</div>
-				<div class="rabu-yLabel">Effort</div>
-				<div class="rabu-xTickLabel tickLabel">label</div>
-	            <div class="rabu-yTickLabel tickLabel">label</div>
+		
+			<div class="section">
+			    <h3>When will it be done?</h3>
+				<p class="explanation">These dates are calculated by combining our progress so far with an assessment of schedule risks. The final date has been rounded up to the iteration boundary.</p>
+			    <ol class="projection">
+				    <li>Before <span class="date rabu-tenPercentDate"></span>: <span class="qualifier">No</span></li>
+				    <li><span class="date rabu-tenPercentDate"></span> &ndash; <span class="date rabu-fiftyPercentDate"></span>: <span class="qualifier">Unlikely</span></li>
+				    <li><span class="date rabu-fiftyPercentDate"></span> &ndash; <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Probable</span></li>
+				    <li>By <span class="date rabu-ninetyPercentDate"></span>: <span class="qualifier">Yes</span></li>
+			    </ol>
 			</div>
-		</div>
-	</div>
+			
+			<div class="section">			
+				<h3>What is the basis for this projection?</h3>
+			    <p class="explanation">This chart illustrates our projection calculations. The bars on the left show our progress so far, if any, and the triangles on the right show our projection into the future. The dashed lines highlight 10%, 50%, and 90% probabilities. Hover over the chart for a key.</p>
+				<div class="rabu-burnup">
+					<div class="rabu-xLabel">Iterations</div>
+					<div class="rabu-yLabel">Effort</div>
+					<div class="rabu-xTickLabel tickLabel">label</div>
+		            <div class="rabu-yTickLabel tickLabel">label</div>
+				</div>
+			</div>
+			
+		</div>	<!-- end right-column -->
+	</div>  <!-- end main -->
 
 	<div class="footer">
 		<p><span class="rabuLogo"><a href="http://www.teamrabu.com"><img src="http://www.teamrabu.com/images/powered-by-logo.png" alt="Powered by Rabu" /></a></span></p>
