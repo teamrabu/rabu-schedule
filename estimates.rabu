@@ -12,7 +12,8 @@
                 ["Improved page clarity", 0],
                 ["Website improvements", 0.5],
                 ["Rabu 0.4 release", 0.5],
-                ["Feature drag-and-drop", 8.5]
+                ["Landscape layout", 0.5],
+                ["Feature drag-and-drop", 8]
             ],
             "excluded": [
                 ["Configuration validation and error handling", 13], 
