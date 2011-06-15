@@ -18,21 +18,6 @@
     		"excluded": [
     			["An excluded feature", 3],
     			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
-    			["Another excluded feature", 15],
     			["This excluded feature is done (how did that happen?)", 0]
     		]
     	},
