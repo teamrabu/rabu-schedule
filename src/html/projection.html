@@ -64,6 +64,10 @@ You should have received a copy of the GNU Affero General Public License along w
 		
 		/* Dynamic Columns */
 		
+		#container {
+			min-width: 25em;  /* this prevents reflow at small sizes, which messes up in/out divider */
+		}
+		
 		#left-column {
 			float: left;
 /*			width: 525px; */
@@ -162,7 +166,6 @@ You should have received a copy of the GNU Affero General Public License along w
 			text-indent: -1em;
 			padding-left: 1em;
 			margin-top: 1ex;
-			margin-bottom: 1ex;
 		}
 						
 		.section .explanation {
