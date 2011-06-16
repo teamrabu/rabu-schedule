@@ -77,7 +77,6 @@
 		populate();
 
 		assertEquals("assumption: li height", 20, li.first().outerHeight(true));
-		assertEquals("assumption: ul height", 20 * 4, ul.outerHeight(true));
 		assertEquals("assumption: ul top", 0, ul.offset().top);
 		assertEquals("assumption: first li top", 0, li.first().offset().top);
 		assertEquals("assumption: divider height", 50, divider.outerHeight(true));
@@ -141,16 +140,24 @@
 		assertEquals("divider position", 34, divider.offset().top);
 	};
 
+	Test.prototype.test_populate_resizesListToAccomodateDivider = function() {
+		assertEquals("height of list should accomodate divider", 130, ul.outerHeight(true));
+		ul.css("padding-bottom", "20px");
+		ul.css("margin-bottom", "16px");
+		populate();
+		assertEquals("divider should accomodate existing padding and margins", 166, ul.outerHeight(true));
+	};
+
 	Test.prototype.test_populate_makesFeaturesDraggable = function() {
 		function assertDraggable(name, element) {
 			function option(key) { return element.draggable("option", key); }
 			assertTrue(name + " should be draggable", element.hasClass("ui-draggable"));
-//			assertEquals(name + " constrained vertically", "y", option("axis"));
-//			assertEquals(name + " top", 0, option("containment")[1]);
-//			assertEquals(name + " bottom", 80, option("containment")[3]);
-//			assertEquals(name + " scroll speed", 10, option("scrollSpeed"));
-//			assertEquals(name + " cursor should be centered on divider", 8, option("cursorAt").top);
+			assertEquals(name + " constrained vertically", "y", option("axis"));
+			assertEquals(name + " top", 0, option("containment")[1]);
+			assertEquals(name + " bottom", 80, option("containment")[3]);
+			assertEquals(name + " scroll speed", 10, option("scrollSpeed"));
+			assertEquals(name + " cursor should be centered on divider", 8, option("cursorAt").top);
 		}
-		assertDraggable("li 0", $(li[0]));
+		assertDraggable("li elements", $(li));
 	};
 }());

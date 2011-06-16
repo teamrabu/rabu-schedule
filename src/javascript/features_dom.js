@@ -66,8 +66,19 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		divider.css("top", position);
 	}
 
+	function resizeListToAccomodateDivider() {
+		var padding = parseInt(list.css("padding-bottom"), 10);
+		padding += divider.outerHeight(true);
+		list.css("padding-bottom", padding);
+	}
+
 	function makeDraggable() {
 		li.draggable({
+			axis: 'y',
+			containment: [0, list.offset().top, 0, list.offset().top + list.height()],
+			scrollSpeed: 10,
+			cursorAt: { top: (divider.outerHeight() / 2) }//,
+//			drag: drag
 		});
 	}
 
@@ -79,6 +90,7 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		saveInitialPositions();
 		createGapForDividerBefore(included.length);
 		positionDivider();
+		resizeListToAccomodateDivider();
 		makeDraggable();
 	};
 };
