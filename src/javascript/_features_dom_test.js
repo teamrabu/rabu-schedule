@@ -37,6 +37,23 @@
 		assertEquals(message, expectedPositions, actualPositions);
 	}
 
+	function dragElementTo(element, position) {
+		var cursorOffset = 8;
+
+		var downEvent = new jQuery.Event();
+		downEvent.pageX = 0;
+		downEvent.pageY = 0;
+		downEvent.which = 1;
+		downEvent.type = "mousedown";
+		element.trigger(downEvent);
+
+		var moveEvent = new jQuery.Event();
+		moveEvent.pageX = 0;
+		moveEvent.pageY = position + cursorOffset;
+		moveEvent.type = "mousemove";
+		element.trigger(moveEvent);
+	}
+	
 	function dragDividerTo(position, cursorOffset) {
 		cursorOffset = cursorOffset || 8;
 
@@ -149,15 +166,37 @@
 	};
 
 	Test.prototype.test_populate_makesFeaturesDraggable = function() {
-		function assertDraggable(name, element) {
-			function option(key) { return element.draggable("option", key); }
-			assertTrue(name + " should be draggable", element.hasClass("ui-draggable"));
-			assertEquals(name + " constrained vertically", "y", option("axis"));
-			assertEquals(name + " top", 0, option("containment")[1]);
-			assertEquals(name + " bottom", 80, option("containment")[3]);
-			assertEquals(name + " scroll speed", 10, option("scrollSpeed"));
-			assertEquals(name + " cursor should be centered on divider", 8, option("cursorAt").top);
+		function option(key) { return $(li).draggable("option", key); }
+		assertTrue("should be draggable", $(li).hasClass("ui-draggable"));
+		assertEquals("constrained vertically", "y", option("axis"));
+		assertEquals("top", 0, option("containment")[1]);
+		assertEquals("bottom", 80, option("containment")[3]);
+		assertEquals("scroll speed", 10, option("scrollSpeed"));
+		assertEquals("cursor should be centered on divider", 8, option("cursorAt").top);
+	};
+
+	Test.prototype.test_dragging_repositionsFeatureBeingDragged = function() {
+		dragElementTo($(li[0]), 50);
+		assertEquals("element position", 50, $(li[0]).offset().top);
+	};
+
+	Test.prototype.test_dragging_firstElement = function() {
+		function check(message, position, expectedResult) {
+			dragElementTo($(li[0]), position);
+			assertLiPositions(message, expectedResult);
 		}
-		assertDraggable("li elements", $(li));
+
+		check("should not move before crossing halfway point", 10, [10, 20, 40, 110]);
+		check("should move li 1", 11, [11, 0, 40, 110]);
+		check("should be idempotent", 12, [12, 0, 40, 110]);
+		check("should move li 2", 31, [31, 0, 20, 110]);
+	};
+
+	Test.prototype.test_dragging_repositionsDivider = function() {
+		// TODO
+	};
+
+	Test.prototype.test_dragging_respectsVariableHeightListItems = function() {
+		// TODO
 	};
 }());

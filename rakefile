@@ -146,7 +146,9 @@ task :html_test => [TEST_OUTPUT] do
 end
 
 task :java_test => [:javac] do
-	run "JUnit", "java -cp #{LIB_DIR}/junit-4.9b2.jar:#{JAVA_OUTPUT_DIR} org.junit.runner.JUnitCore #{JAVA_PACKAGE}._GeneratorTest #{JAVA_PACKAGE}._SimpleFileTest"
+	explain "Running CLI unit tests" do
+		run "JUnit", "java -cp #{LIB_DIR}/junit-4.9b2.jar:#{JAVA_OUTPUT_DIR} org.junit.runner.JUnitCore #{JAVA_PACKAGE}._GeneratorTest #{JAVA_PACKAGE}._SimpleFileTest"
+	end
 end
 
 

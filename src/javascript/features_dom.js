@@ -2,11 +2,13 @@
 
 rabu.schedule.FeaturesDom = function(element, estimates) {
 	var list;
-	var li;
+	var liJQuery;
+	var originalOrder;
+	var adjustedOrder;
 	var divider;
 	var included;
 	var excluded;
-	var initialPositions;
+	var dividerHeight;
 
 	function toHtml(features, cssClass) {
 		return features.reduce(function(sum, feature) {
@@ -23,18 +25,17 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 
 	function initializeElementVars() {
 		list = $(".rabu-features");
-		li = $("li", list);
+		liJQuery = $("li", list);
+		originalOrder = [];
+		adjustedOrder = [];
+		liJQuery.each(function(index, element) {
+			originalOrder[index] = $(element);
+			adjustedOrder[index] = $(element);
+		});
 		divider = $(".rabu-divider");
 		included = $(".rabu-included", list);
 		excluded = $(".rabu-excluded", list);
-	}
-
-	function saveInitialPositions() {
-		initialPositions = [];
-		li.each(function(index, element) {
-			element = $(element);
-			initialPositions[index] = element.offset().top;
-		});
+		dividerHeight = divider.outerHeight(true);
 	}
 
 	function setPosition(element, position) {
@@ -44,12 +45,12 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		});
 	}
 
-	function createGapForDividerBefore(targetIndex) {
-		var dividerHeight = divider.outerHeight(true);
-		li.each(function(index, element) {
-			var newPosition = initialPositions[index];
-			if (index >= targetIndex) { newPosition += dividerHeight; }
-			setPosition($(element), newPosition);
+	function positionElements() {
+		var position = list.offset().top;
+		adjustedOrder.forEach(function(element, index) {
+			if (index === included.length) { position += dividerHeight; }
+			setPosition(element, position);
+			position += element.outerHeight(true);
 		});
 	}
 
@@ -60,7 +61,7 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 			position = lastIncluded.offset().top + lastIncluded.outerHeight(true);
 		}
 		else {
-			position = excluded.first().offset().top - divider.outerHeight(true);
+			position = excluded.first().offset().top - dividerHeight;
 		}
 		divider.css("position", "absolute");
 		divider.css("top", position);
@@ -68,17 +69,46 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 
 	function resizeListToAccomodateDivider() {
 		var padding = parseInt(list.css("padding-bottom"), 10);
-		padding += divider.outerHeight(true);
+		padding += dividerHeight;
 		list.css("padding-bottom", padding);
 	}
 
+	function swapFeatures(a, b) {
+		var temp = originalOrder[a];
+		originalOrder[a] = originalOrder[b];
+		originalOrder[b] = temp;
+	}
+
+	function moveTo(dragged, position) {
+		originalOrder.forEach(function(element, index) {
+			var originalIndex = index;
+			if (index < position) {
+				adjustedOrder[index] = originalOrder[index + 1];
+			}
+			else if (index === position) {
+				adjustedOrder[position] = originalOrder[dragged];
+			}
+			else {
+				adjustedOrder[index] = originalOrder[index];
+			}
+		});
+	}
+
+	function onDrag(event, ui) {
+		var height = $(event.target).outerHeight(true);
+		var offset = ui.offset.top - list.offset().top;
+		var multiples = Math.floor((offset + (height / 2) - 1) / height);
+		moveTo(0, multiples);
+		positionElements();
+	}
+
 	function makeDraggable() {
-		li.draggable({
+		liJQuery.draggable({
 			axis: 'y',
-			containment: [0, list.offset().top, 0, list.offset().top + list.height()],
+			containment: [0, list.position().top, 0, list.position().top + list.height()],
 			scrollSpeed: 10,
-			cursorAt: { top: (divider.outerHeight() / 2) }//,
-//			drag: drag
+			cursorAt: { top: (divider.outerHeight() / 2) },
+			drag: onDrag
 		});
 	}
 
@@ -87,8 +117,7 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		initializeElementVars();
 		if (divider.length === 0) { return; }
 
-		saveInitialPositions();
-		createGapForDividerBefore(included.length);
+		positionElements();
 		positionDivider();
 		resizeListToAccomodateDivider();
 		makeDraggable();
