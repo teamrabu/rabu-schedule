@@ -66,6 +66,11 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		divider.css("top", position);
 	}
 
+	function makeDraggable() {
+		li.draggable({
+		});
+	}
+
 	this.populate = function() {
 		populateFeatureList();
 		initializeElementVars();
@@ -74,5 +79,6 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		saveInitialPositions();
 		createGapForDividerBefore(included.length);
 		positionDivider();
+		makeDraggable();
 	};
 };

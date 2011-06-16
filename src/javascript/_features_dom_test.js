@@ -140,4 +140,17 @@
 		assertLiPositions("li positions", [50, 70]);
 		assertEquals("divider position", 34, divider.offset().top);
 	};
+
+	Test.prototype.test_populate_makesFeaturesDraggable = function() {
+		function assertDraggable(name, element) {
+			function option(key) { return element.draggable("option", key); }
+			assertTrue(name + " should be draggable", element.hasClass("ui-draggable"));
+//			assertEquals(name + " constrained vertically", "y", option("axis"));
+//			assertEquals(name + " top", 0, option("containment")[1]);
+//			assertEquals(name + " bottom", 80, option("containment")[3]);
+//			assertEquals(name + " scroll speed", 10, option("scrollSpeed"));
+//			assertEquals(name + " cursor should be centered on divider", 8, option("cursorAt").top);
+		}
+		assertDraggable("li 0", $(li[0]));
+	};
 }());
