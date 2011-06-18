@@ -136,9 +136,11 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	}
 
 	function makeDraggable() {
+		var listTop = adjustedOrder[0].offset().top;
+		var listBottom = adjustedOrder[adjustedOrder.length - 1].offset().top;
 		liJQuery.draggable({
 			axis: 'y',
-			containment: [0, list.position().top, 0, list.position().top + list.height()],
+			containment: [0, listTop, 0, listBottom],
 			scrollSpeed: 10,
 			cursorAt: { top: (divider.outerHeight() / 2) },
 			drag: onDrag

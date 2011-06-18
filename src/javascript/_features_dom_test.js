@@ -116,13 +116,20 @@
 		assertTrue("li #3 excluded", $(li[3]).hasClass("rabu-excluded"));
 	};
 
-	Test.prototype.test_populate_positionsDivider = function() {
+	Test.prototype.test_populate_positionsItemsAndDivider = function() {
 		config.excluded[1] = ["excluded 2", 30];
 		populate();
 
 		assertLiPositions("excluded features should be positioned below divider", [0, 20, 40, 110, 130]);
 		assertEquals("divider should use absolute positioning", "absolute", divider.css("position"));
 		assertEquals("divider should be centered in gap", 94, divider.offset().top);
+	};
+
+	Test.prototype.test_populate_positioningAccomodatesMargins = function() {
+		ul.css("margin-top", "15px");
+		populate();
+		assertLiPositions("features should be positioned below margins", [15, 35, 55, 125]);
+		assertEquals("divider should be centered in gap", 109, divider.offset().top);
 	};
 
 	Test.prototype.test_populate_positionsDividerAtBottomOfListWhenNoExcludedFeatures = function() {
@@ -150,19 +157,23 @@
 		assertEquals("divider should accomodate existing padding and margins", 166, ul.outerHeight(true));
 	};
 
+	function option(key) { return $(li).draggable("option", key); }
+
 	Test.prototype.test_populate_makesFeaturesDraggable = function() {
-		function option(key) { return $(li).draggable("option", key); }
 		assertTrue("should be draggable", $(li).hasClass("ui-draggable"));
 		assertEquals("constrained vertically", "y", option("axis"));
 		assertEquals("top", 0, option("containment")[1]);
-		assertEquals("bottom", 80, option("containment")[3]);
+		assertEquals("bottom", 110, option("containment")[3]);
 		assertEquals("scroll speed", 10, option("scrollSpeed"));
 		assertEquals("cursor should be centered on divider", 8, option("cursorAt").top);
 	};
 
-	Test.prototype.test_dragging_repositionsFeatureBeingDragged = function() {
-//		dragElementTo($(li[0]), 50);
-//		assertEquals("element position", 50, $(li[0]).offset().top);
+	Test.prototype.test_populate_constrainsDraggableAreaToTopAndBottomOfList = function() {
+		ul.css("margin-top", "5px");
+		ul.css("margin-bottom", "10px");
+		populate();
+		assertEquals("top", 5, option("containment")[1]);
+		assertEquals("bottom", 115, option("containment")[3]);
 	};
 
 	function assertDrag(message, element, dragTo, expectedResult) {
@@ -191,8 +202,8 @@
 	Test.prototype.test_draggingUp_toLastElement = function() {
 		config.excluded = undefined;
 		populate();
-		assertDrag("up to last element", li[0], 41, [41, 0, 20]);
-		assertDrag("up past legal bounds", li[0], 100, [60, 0, 20]);
+		assertDrag("up to last element", li[0], 41, [40, 0, 20]);
+		assertDrag("up past legal bounds", li[0], 100, [40, 0, 20]);
 		assertDrag("down past legal bounds", li[2], -100, [20, 40, 0]);
 	};
 
@@ -201,6 +212,14 @@
 	};
 
 	Test.prototype.test_dragging_repositionsDivider = function() {
+		// TODO
+	};
+
+	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {
+		// TODO
+	};
+
+	Test.prototype.test_dragging_worksWithMultipleSequentialDragsAndDrops = function() {
 		// TODO
 	};
 }());
