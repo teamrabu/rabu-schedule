@@ -101,12 +101,25 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 					adjustedOrder[index] = originalOrder[originalPosition];
 				}
 				else {
-					throw "Unreachable code. index [" + index + "]; originalPosition: [" + originalPosition + "]; newPosition: [" + newPosition + "]";
+					throw "Unreachable code when moving up. index [" + index + "]; originalPosition: [" + originalPosition + "]; newPosition: [" + newPosition + "]";
 				}
 			});
 		}
 		function moveDown() {
-
+			originalOrder.forEach(function(xx, index) {
+				if (index > originalPosition || index < newPosition) {
+					adjustedOrder[index] = originalOrder[index];
+				}
+				else if (index > newPosition) {
+					adjustedOrder[index] = originalOrder[index - 1];
+				}
+				else if (index === newPosition) {
+					adjustedOrder[index] = originalOrder[originalPosition];
+				}
+				else {
+					throw "Unreachable code when moving down. index [" + index + "]; originalPosition: [" + originalPosition + "]; newPosition: [" + newPosition + "]";
+				}
+			});
 		}
 
 		if (newPosition < originalPosition) { moveDown(); }

@@ -170,25 +170,22 @@
 		assertLiPositions(message, expectedResult);
 	}
 
-	Test.prototype.test_dragging = function() {
+	Test.prototype.test_dragging_basics = function() {
 		assertDrag("should not move before crossing halfway point", li[0], 10, [10, 20, 40, 110]);
 		assertDrag("should move after crossing halfway point", li[0], 11, [11, 0, 40, 110]);
 		assertDrag("should be idempotent", li[0], 12, [12, 0, 40, 110]);
 	};
 
-	Test.prototype.test_draggingUp_li0 = function() {
+	Test.prototype.test_dragging_up = function() {
 		assertDrag("li 0 -> li 0", li[0], 1, [1, 20, 40, 110]);
 		assertDrag("li 0 -> li 1", li[0], 21, [21, 0, 40, 110]);
 		assertDrag("li 0 -> li 2", li[0], 41, [41, 0, 20, 110]);
 	};
 
-	Test.prototype.test_draggingUp_li1 = function() {
-		assertDrag("li 1 -> li 1", li[1], 21, [0, 21, 40, 110]);
-		assertDrag("li 1 -> li 2", li[1], 41, [0, 41, 20, 110]);
-	};
-
-	Test.prototype.test_draggingUp_li2 = function() {
+	Test.prototype.test_dragging_down = function() {
 		assertDrag("li 2 -> li 2", li[2], 41, [0, 20, 41, 110]);
+		assertDrag("li 2 -> li 1", li[2], 21, [0, 40, 21, 110]);
+		assertDrag("li 2 -> li 0", li[2], 1, [20, 40, 1, 110]);
 	};
 
 	Test.prototype.test_draggingUp_toLastElement = function() {
@@ -196,22 +193,14 @@
 		populate();
 		assertDrag("up to last element", li[0], 41, [41, 0, 20]);
 		assertDrag("up past legal bounds", li[0], 100, [60, 0, 20]);
-	};
-
-//	Test.prototype.test_draggingDown_li0 = function() {
-//		assertDrag("li 0 -> li 0", li[0], 1, [1, 20, 40, 110]);
-//	};
-//
-//	Test.prototype.test_draggingDown_li1 = function() {
-//		assertDrag("li 1 -> li 1", li[1], 21, [0, 21, 40, 110]);
-//		assertDrag("li 1 -> li 0", li[1], 1, [20, 1, 40, 110]);
-//	};
-
-	Test.prototype.test_dragging_repositionsDivider = function() {
-		// TODO
+		assertDrag("down past legal bounds", li[2], -100, [20, 40, 0]);
 	};
 
 	Test.prototype.test_dragging_respectsVariableHeightListItems = function() {
+		// TODO
+	};
+
+	Test.prototype.test_dragging_repositionsDivider = function() {
 		// TODO
 	};
 }());
