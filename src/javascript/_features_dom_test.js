@@ -37,40 +37,25 @@
 		assertEquals(message, expectedPositions, actualPositions);
 	}
 
-	function dragElementTo(element, position) {
+	function dragElementTo(jQueryElement, position) {
 		var cursorOffset = 8;
 
 		var downEvent = new jQuery.Event();
 		downEvent.pageX = 0;
-		downEvent.pageY = 0;
+		downEvent.pageY = jQueryElement.offset().top + cursorOffset;
 		downEvent.which = 1;
 		downEvent.type = "mousedown";
-		element.trigger(downEvent);
+		jQueryElement.trigger(downEvent);
 
 		var moveEvent = new jQuery.Event();
 		moveEvent.pageX = 0;
 		moveEvent.pageY = position + cursorOffset;
 		moveEvent.type = "mousemove";
-		element.trigger(moveEvent);
+		jQueryElement.trigger(moveEvent);
+
+//		jQueryElement.mouseup();
 	}
 	
-	function dragDividerTo(position, cursorOffset) {
-		cursorOffset = cursorOffset || 8;
-
-		var downEvent = new jQuery.Event();
-		downEvent.pageX = 0;
-		downEvent.pageY = 0;
-		downEvent.which = 1;
-		downEvent.type = "mousedown";
-		divider.trigger(downEvent);
-
-		var moveEvent = new jQuery.Event();
-		moveEvent.pageX = 0;
-		moveEvent.pageY = position + cursorOffset;
-		moveEvent.type = "mousemove";
-		divider.trigger(moveEvent);
-	}
-
 	Test.prototype.setUp = function() {
 		/*:DOC +=   <style type='text/css'>
 						li { height: 20px }
@@ -176,21 +161,51 @@
 	};
 
 	Test.prototype.test_dragging_repositionsFeatureBeingDragged = function() {
-		dragElementTo($(li[0]), 50);
-		assertEquals("element position", 50, $(li[0]).offset().top);
+//		dragElementTo($(li[0]), 50);
+//		assertEquals("element position", 50, $(li[0]).offset().top);
 	};
 
-	Test.prototype.test_dragging_firstElement = function() {
-		function check(message, position, expectedResult) {
-			dragElementTo($(li[0]), position);
-			assertLiPositions(message, expectedResult);
-		}
+	function assertDrag(message, element, dragTo, expectedResult) {
+		dragElementTo($(element), dragTo);
+		assertLiPositions(message, expectedResult);
+	}
 
-		check("should not move before crossing halfway point", 10, [10, 20, 40, 110]);
-		check("should move li 1", 11, [11, 0, 40, 110]);
-		check("should be idempotent", 12, [12, 0, 40, 110]);
-		check("should move li 2", 31, [31, 0, 20, 110]);
+	Test.prototype.test_dragging = function() {
+		assertDrag("should not move before crossing halfway point", li[0], 10, [10, 20, 40, 110]);
+		assertDrag("should move after crossing halfway point", li[0], 11, [11, 0, 40, 110]);
+		assertDrag("should be idempotent", li[0], 12, [12, 0, 40, 110]);
 	};
+
+	Test.prototype.test_draggingUp_li0 = function() {
+		assertDrag("li 0 -> li 0", li[0], 1, [1, 20, 40, 110]);
+		assertDrag("li 0 -> li 1", li[0], 21, [21, 0, 40, 110]);
+		assertDrag("li 0 -> li 2", li[0], 41, [41, 0, 20, 110]);
+	};
+
+	Test.prototype.test_draggingUp_li1 = function() {
+		assertDrag("li 1 -> li 1", li[1], 21, [0, 21, 40, 110]);
+		assertDrag("li 1 -> li 2", li[1], 41, [0, 41, 20, 110]);
+	};
+
+	Test.prototype.test_draggingUp_li2 = function() {
+		assertDrag("li 2 -> li 2", li[2], 41, [0, 20, 41, 110]);
+	};
+
+	Test.prototype.test_draggingUp_toLastElement = function() {
+		config.excluded = undefined;
+		populate();
+		assertDrag("up to last element", li[0], 41, [41, 0, 20]);
+		assertDrag("up past legal bounds", li[0], 100, [60, 0, 20]);
+	};
+
+//	Test.prototype.test_draggingDown_li0 = function() {
+//		assertDrag("li 0 -> li 0", li[0], 1, [1, 20, 40, 110]);
+//	};
+//
+//	Test.prototype.test_draggingDown_li1 = function() {
+//		assertDrag("li 1 -> li 1", li[1], 21, [0, 21, 40, 110]);
+//		assertDrag("li 1 -> li 0", li[1], 1, [20, 1, 40, 110]);
+//	};
 
 	Test.prototype.test_dragging_repositionsDivider = function() {
 		// TODO

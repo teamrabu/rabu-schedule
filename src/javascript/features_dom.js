@@ -79,26 +79,46 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		originalOrder[b] = temp;
 	}
 
-	function moveTo(dragged, position) {
-		originalOrder.forEach(function(element, index) {
-			var originalIndex = index;
-			if (index < position) {
-				adjustedOrder[index] = originalOrder[index + 1];
-			}
-			else if (index === position) {
-				adjustedOrder[position] = originalOrder[dragged];
-			}
-			else {
-				adjustedOrder[index] = originalOrder[index];
-			}
-		});
+	function findOriginalIndex(domElement) {
+		var i;
+		for (i = 0; i < originalOrder.length; i++) {
+			if (originalOrder[i][0] === domElement) { return i; }
+		}
+		throw "Couldn't find element";
+	}
+
+	function moveTo(originalPosition, newPosition) {
+		function moveUp() {
+			newPosition = Math.min(newPosition, originalOrder.length - 1);
+			originalOrder.forEach(function(xx, index) {
+				if (index < originalPosition || index > newPosition) {
+					adjustedOrder[index] = originalOrder[index];
+				}
+				else if (index < newPosition) {
+					adjustedOrder[index] = originalOrder[index + 1];
+				}
+				else if (index === newPosition) {
+					adjustedOrder[index] = originalOrder[originalPosition];
+				}
+				else {
+					throw "Unreachable code. index [" + index + "]; originalPosition: [" + originalPosition + "]; newPosition: [" + newPosition + "]";
+				}
+			});
+		}
+		function moveDown() {
+
+		}
+
+		if (newPosition < originalPosition) { moveDown(); }
+		else { moveUp(); }
 	}
 
 	function onDrag(event, ui) {
 		var height = $(event.target).outerHeight(true);
 		var offset = ui.offset.top - list.offset().top;
-		var multiples = Math.floor((offset + (height / 2) - 1) / height);
-		moveTo(0, multiples);
+		var newIndex = Math.floor((offset + (height / 2) - 1) / height);
+		var originalIndex = findOriginalIndex(event.target);
+		moveTo(originalIndex, newIndex);
 		positionElements();
 	}
 
