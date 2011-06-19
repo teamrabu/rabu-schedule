@@ -180,22 +180,30 @@
 		assertLiPositions(message, expectedResult);
 	}
 
-	Test.prototype.test_dragging_fundamentals = function() {
-		assertDrag("should not move before crossing halfway point", li[0], 10, [10, 20, 40, 110]);
-		assertDrag("should move after crossing halfway point", li[0], 11, [11, 0, 40, 110]);
+	Test.prototype.test_dragging_idempotency = function() {
 		assertDrag("should be idempotent", li[0], 12, [12, 0, 40, 110]);
 	};
 
 	Test.prototype.test_dragging_up = function() {
-		assertDrag("li 0 -> li 0", li[0], 1, [1, 20, 40, 110]);
-		assertDrag("li 0 -> li 1", li[0], 21, [21, 0, 40, 110]);
-		assertDrag("li 0 -> li 2", li[0], 41, [41, 0, 20, 110]);
+		config.included.push(["included D", 10]);
+		populate();
+		assertDrag("li 0 -> li 0 (top)", li[0], 10, [10, 20, 40, 60, 130]);
+		assertDrag("li 0 -> li 1 (bottom)", li[0], 11, [11, 0, 40, 60, 130]);
+		assertDrag("li 0 -> li 1 (top)", li[0], 30, [30, 0, 40, 60, 130]);
+		assertDrag("li 0 -> li 2 (bottom)", li[0], 31, [31, 0, 20, 60, 130]);
+		assertDrag("li 0 -> li 2 (top)", li[0], 50, [50, 0, 20, 60, 130]);
+		assertDrag("li 0 -> li 3 (bottom)", li[0], 51, [51, 0, 20, 40, 130]);
 	};
 
 	Test.prototype.test_dragging_down = function() {
-		assertDrag("li 2 -> li 2", li[2], 41, [0, 20, 41, 110]);
-		assertDrag("li 2 -> li 1", li[2], 21, [0, 40, 21, 110]);
-		assertDrag("li 2 -> li 0", li[2], 1, [20, 40, 1, 110]);
+		config.included.push(["included D", 10]);
+		populate();
+		assertDrag("li 3 -> li 3 (bottom)", li[3], 51, [0, 20, 40, 51, 130]);
+		assertDrag("li 3 -> li 2 (top)", li[3], 50, [0, 20, 60, 50, 130]);
+		assertDrag("li 3 -> li 2 (bottom)", li[3], 31, [0, 20, 60, 31, 130]);
+		assertDrag("li 3 -> li 1 (top)", li[3], 30, [0, 40, 60, 30, 130]);
+		assertDrag("li 3 -> li 1 (bottom)", li[3], 11, [0, 40, 60, 11, 130]);
+		assertDrag("li 3 -> li 0 (top)", li[3], 10, [20, 40, 60, 10, 130]);
 	};
 
 	Test.prototype.test_draggingUp_toLastElement = function() {
@@ -206,26 +214,37 @@
 		assertDrag("down past legal bounds", li[2], -100, [20, 40, 0]);
 	};
 
-	Test.prototype.test_dragging_singleLineItemPastMultiLineItem = function() {
+	Test.prototype.test_dragging_singleLineItemPastMixedHeightItems = function() {
 		/*:DOC +=   <style type='text/css'>
 						.rabu-done { height: 32px }
 					</style>  */
 		config.included = [
 			["single A", 1],
 			["double B", 0],
+			["single C", 1],
+			["single D", 1]
+		];
+		config.excluded = undefined;
+		populate();
+		assertLiPositions("starting values", [0, 20, 52, 72]);
+		assertDrag("li 0 -> li 1 (multiline, before halfway point)", li[0], 16, [16, 20, 52, 72]);
+		assertDrag("li 0 -> li 1 (multiline, after halfway point)", li[0], 17, [17, 0, 52, 72]);
+		assertDrag("li 0 -> li 2 (multiline, before halfway point)", li[0], 42, [42, 0, 52, 72]);
+		assertDrag("li 0 -> li 2 (multiline, after halfway point)", li[0], 43, [43, 0, 32, 72]);
+	};
+
+	Test.prototype.test_dragging_multiLineItemPastMixedHeightItems = function() {
+		/*:DOC +=   <style type='text/css'>
+						.rabu-done { height: 32px }
+					</style>  */
+		config.included = [
+			["double A", 0],
+			["single B", 1],
 			["single C", 1]
 		];
 		config.excluded = undefined;
 		populate();
-		assertLiPositions("starting values", [0, 20, 52]);
-		assertDrag("li 0 -> li 1 (multiline, before halfway point)", li[0], 16, [16, 20, 52]);
-		assertDrag("li 0 -> li 1 (multiline, after halfway point)", li[0], 17, [17, 0, 52]);
-		assertDrag("li 0 -> li 2 (multiline, before halfway point)", li[0], 42, [42, 0, 52]);
-		assertDrag("li 0 -> li 2 (multiline, after halfway point)", li[0], 43, [43, 0, 32]);
-	};
-
-	Test.prototype.test_dragging_multiLineItemPastSingleLineItem = function() {
-		// TODO
+		assertLiPositions("starting values", [0, 32, 52]);
 	};
 
 	Test.prototype.test_dragging_repositionsDivider = function() {
