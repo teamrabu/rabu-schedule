@@ -387,7 +387,7 @@ class JsTestDriver
             file.write(pid)
         end
         wait_for_start
-        capture_browser
+#        capture_browser
     end
 
     def self.terminate

@@ -227,12 +227,12 @@
 		config.excluded = undefined;
 		populate();
 		assertLiPositions("starting values", [0, 20, 52, 72]);
-		assertDrag("li 0 -> li 1 (multiline, before halfway point)", li[0], 16, [16, 20, 52, 72]);
-		assertDrag("li 0 -> li 1 (multiline, after halfway point)", li[0], 17, [17, 0, 52, 72]);
-		assertDrag("li 0 -> li 2 (multiline, before halfway point)", li[0], 42, [42, 0, 52, 72]);
-		assertDrag("li 0 -> li 2 (multiline, after halfway point)", li[0], 43, [43, 0, 32, 72]);
-		assertDrag("li 0 -> li 3 (multiline, before halfway point)", li[0], 62, [62, 0, 32, 72]);
-		assertDrag("li 0 -> li 3 (multiline, after halfway point)", li[0], 63, [63, 0, 32, 52]);
+		assertDrag("li 0 -> li 1 (singleline+, before halfway point)", li[0], 16, [16, 20, 52, 72]);
+		assertDrag("li 0 -> li 1 (singleline+, after halfway point)", li[0], 17, [17, 0, 52, 72]);
+		assertDrag("li 0 -> li 2 (singleline+, before halfway point)", li[0], 42, [42, 0, 52, 72]);
+		assertDrag("li 0 -> li 2 (singleline+, after halfway point)", li[0], 43, [43, 0, 32, 72]);
+		assertDrag("li 0 -> li 3 (singleline+, before halfway point)", li[0], 62, [62, 0, 32, 72]);
+		assertDrag("li 0 -> li 3 (singleline+, after halfway point)", li[0], 63, [63, 0, 32, 52]);
 	};
 
 	Test.prototype.test_dragging_multiLineItemPastMixedHeightItems = function() {
@@ -240,13 +240,18 @@
 						.rabu-done { height: 32px }
 					</style>  */
 		config.included = [
-			["double A", 0],
+			["single A", 1],
 			["single B", 1],
-			["single C", 1]
+			["single C", 1],
+			["double D", 0],
+			["double E", 0]
 		];
 		config.excluded = undefined;
 		populate();
-		assertLiPositions("starting values", [0, 32, 52]);
+		assertLiPositions("starting values", [0, 20, 40, 60, 92]);
+//		assertDrag("li 0 -> li 1 (multiline+, before halfway point)", li[0], 16, [16, 32, 64, 84, 104]);
+//		assertDrag("li 0 -> li 1 (multiline+, after halfway point)", li[0], 17, [17, 0, 64, 84, 104]);
+//		assertDrag("li 0 -> li 2 (multiline+, before halfway point)", li[0], 48, [48, 0, 64, 84, 104]);
 	};
 
 	Test.prototype.test_dragging_repositionsDivider = function() {
