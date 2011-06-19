@@ -79,14 +79,6 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		originalOrder[b] = temp;
 	}
 
-	function findOriginalIndex(domElement) {
-		var i;
-		for (i = 0; i < originalOrder.length; i++) {
-			if (originalOrder[i][0] === domElement) { return i; }
-		}
-		throw "Couldn't find element";
-	}
-
 	function moveTo(originalPosition, newPosition) {
 		function moveUp() {
 			newPosition = Math.min(newPosition, originalOrder.length - 1);
@@ -126,12 +118,36 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		else { moveUp(); }
 	}
 
-	function onDrag(event, ui) {
-		var height = $(event.target).outerHeight(true);
-		var offset = ui.offset.top - list.offset().top;
-		var newIndex = Math.floor((offset + (height / 2) - 1) / height);
-		var originalIndex = findOriginalIndex(event.target);
-		moveTo(originalIndex, newIndex);
+	function findOriginalIndex(domElement) {
+		var i;
+		for (i = 0; i < originalOrder.length; i++) {
+			if (originalOrder[i][0] === domElement) { return i; }
+		}
+		throw "Couldn't find element";
+	}
+
+	function findNewIndex(domElement, pageOffset) {
+		var height = $(domElement).outerHeight(true);
+		var listOffset = pageOffset - list.offset().top;
+		var newIndex = Math.floor((listOffset + (height / 2) - 1) / height);
+		return newIndex;
+
+//		var positions = originalOrder.map(function(element) {
+//			return element.offset().top;
+//		});
+//		positions.sort();
+//		var i;
+//		console.log(pageOffset);
+//		console.log(positions);
+//		console.log("----");
+//		for (i = positions.length - 1; i >= 0; i--) {
+//			if (pageOffset >= positions[i]) { return i; }
+//		}
+//		return 0;
+	}
+
+	function handleDrag(event, ui) {
+		moveTo(findOriginalIndex(event.target), findNewIndex(event.target, ui.offset.top));
 		positionElements();
 	}
 
@@ -143,7 +159,7 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 			containment: [0, listTop, 0, listBottom],
 			scrollSpeed: 10,
 			cursorAt: { top: (divider.outerHeight() / 2) },
-			drag: onDrag
+			drag: handleDrag
 		});
 	}
 

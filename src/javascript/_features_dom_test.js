@@ -181,10 +181,28 @@
 		assertLiPositions(message, expectedResult);
 	}
 
-	Test.prototype.test_dragging_basics = function() {
+	Test.prototype.test_dragging_fundamentals = function() {
 		assertDrag("should not move before crossing halfway point", li[0], 10, [10, 20, 40, 110]);
 		assertDrag("should move after crossing halfway point", li[0], 11, [11, 0, 40, 110]);
 		assertDrag("should be idempotent", li[0], 12, [12, 0, 40, 110]);
+	};
+
+	Test.prototype.test_dragging_whenMultilineItems = function() {
+		/*:DOC +=   <style type='text/css'>
+						.rabu-done { height: 32px }
+					</style>  */
+		config.included = [
+			["single A", 1],
+			["double B", 0],
+			["single C", 1]
+		];
+		config.excluded = undefined;
+		populate();
+		assertLiPositions("starting values", [0, 20, 52]);
+		assertDrag("li 0 -> li 1 (multiline, before halfway point)", li[0], 10, [10, 20, 52]);
+		assertDrag("li 0 -> li 1 (multiline, after halfway point)", li[0], 11, [11, 0, 52]);
+//		assertDrag("li 0 -> li 2 (multiline, before halfway point)", li[0], 36, [36, 0, 52]);
+//		assertDrag("li 0 -> li 2 (multiline, after halfway point)", li[0], 37, [37, 0, 32]);
 	};
 
 	Test.prototype.test_dragging_up = function() {
