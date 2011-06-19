@@ -249,6 +249,8 @@
 		config.excluded = undefined;
 		populate();
 		assertLiPositions("starting values", [0, 20, 40, 60, 92]);
+		assertDrag("li 4 -> li 3 (multiline+, before halfway point)", li[4], 77, [0, 20, 40, 60, 77]);
+		assertDrag("li 4 -> li 3 (multiline+, after halfway point)", li[4], 76, [0, 20, 40, 92, 76]);
 //		assertDrag("li 0 -> li 1 (multiline+, before halfway point)", li[0], 16, [16, 32, 64, 84, 104]);
 //		assertDrag("li 0 -> li 1 (multiline+, after halfway point)", li[0], 17, [17, 0, 64, 84, 104]);
 //		assertDrag("li 0 -> li 2 (multiline+, before halfway point)", li[0], 48, [48, 0, 64, 84, 104]);
