@@ -231,6 +231,8 @@
 		assertDrag("li 0 -> li 1 (multiline, after halfway point)", li[0], 17, [17, 0, 52, 72]);
 		assertDrag("li 0 -> li 2 (multiline, before halfway point)", li[0], 42, [42, 0, 52, 72]);
 		assertDrag("li 0 -> li 2 (multiline, after halfway point)", li[0], 43, [43, 0, 32, 72]);
+		assertDrag("li 0 -> li 3 (multiline, before halfway point)", li[0], 62, [62, 0, 32, 72]);
+		assertDrag("li 0 -> li 3 (multiline, after halfway point)", li[0], 63, [63, 0, 32, 52]);
 	};
 
 	Test.prototype.test_dragging_multiLineItemPastMixedHeightItems = function() {
