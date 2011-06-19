@@ -3,8 +3,9 @@
 rabu.schedule.FeaturesDom = function(element, estimates) {
 	var list;
 	var liJQuery;
-	var originalOrder;
-	var adjustedOrder;
+	var originalOrder = [];
+	var originalPositions = [];
+	var adjustedOrder = [];
 	var divider;
 	var included;
 	var excluded;
@@ -26,10 +27,9 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	function initializeElementVars() {
 		list = $(".rabu-features");
 		liJQuery = $("li", list);
-		originalOrder = [];
-		adjustedOrder = [];
 		liJQuery.each(function(index, element) {
 			originalOrder[index] = $(element);
+			originalPositions[index] = $(element).offset().top;
 			adjustedOrder[index] = $(element);
 		});
 		divider = $(".rabu-divider");
@@ -127,23 +127,19 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	}
 
 	function findNewIndex(domElement, pageOffset) {
-		var height = $(domElement).outerHeight(true);
+		var draggerHeight = $(domElement).outerHeight(true);
 		var listOffset = pageOffset - list.offset().top;
-		var newIndex = Math.floor((listOffset + (height / 2) - 1) / height);
-		return newIndex;
+//		var newIndex = Math.floor((listOffset + (draggerHeight / 2) - 1) / draggerHeight);
+//		return newIndex;
 
-//		var positions = originalOrder.map(function(element) {
-//			return element.offset().top;
-//		});
-//		positions.sort();
-//		var i;
-//		console.log(pageOffset);
-//		console.log(positions);
-//		console.log("----");
-//		for (i = positions.length - 1; i >= 0; i--) {
-//			if (pageOffset >= positions[i]) { return i; }
-//		}
-//		return 0;
+		var draggerCenter = (draggerHeight / 2) - 1;
+		var i;
+		for (i = originalPositions.length - 1; i >= 0; i--) {
+			var elementHeight = originalOrder[i].outerHeight(true);
+			var elementCenter = (elementHeight / 2) - 1;
+			if (pageOffset >= originalPositions[i] - (draggerCenter - ((elementHeight - draggerHeight) / 2))) { return i; }
+		}
+		return 0;
 	}
 
 	function handleDrag(event, ui) {
@@ -158,7 +154,6 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 			axis: 'y',
 			containment: [0, listTop, 0, listBottom],
 			scrollSpeed: 10,
-			cursorAt: { top: (divider.outerHeight() / 2) },
 			drag: handleDrag
 		});
 	}

@@ -38,7 +38,7 @@
 	}
 
 	function dragElementTo(jQueryElement, position) {
-		var cursorOffset = 8;
+		var cursorOffset = 0;
 
 		var downEvent = new jQuery.Event();
 		downEvent.pageX = 0;
@@ -165,7 +165,6 @@
 		assertEquals("top", 0, option("containment")[1]);
 		assertEquals("bottom", 110, option("containment")[3]);
 		assertEquals("scroll speed", 10, option("scrollSpeed"));
-		assertEquals("cursor should be centered on divider", 8, option("cursorAt").top);
 	};
 
 	Test.prototype.test_populate_constrainsDraggableAreaToTopAndBottomOfList = function() {
@@ -185,24 +184,6 @@
 		assertDrag("should not move before crossing halfway point", li[0], 10, [10, 20, 40, 110]);
 		assertDrag("should move after crossing halfway point", li[0], 11, [11, 0, 40, 110]);
 		assertDrag("should be idempotent", li[0], 12, [12, 0, 40, 110]);
-	};
-
-	Test.prototype.test_dragging_whenMultilineItems = function() {
-		/*:DOC +=   <style type='text/css'>
-						.rabu-done { height: 32px }
-					</style>  */
-		config.included = [
-			["single A", 1],
-			["double B", 0],
-			["single C", 1]
-		];
-		config.excluded = undefined;
-		populate();
-		assertLiPositions("starting values", [0, 20, 52]);
-		assertDrag("li 0 -> li 1 (multiline, before halfway point)", li[0], 10, [10, 20, 52]);
-		assertDrag("li 0 -> li 1 (multiline, after halfway point)", li[0], 11, [11, 0, 52]);
-//		assertDrag("li 0 -> li 2 (multiline, before halfway point)", li[0], 36, [36, 0, 52]);
-//		assertDrag("li 0 -> li 2 (multiline, after halfway point)", li[0], 37, [37, 0, 32]);
 	};
 
 	Test.prototype.test_dragging_up = function() {
@@ -225,7 +206,25 @@
 		assertDrag("down past legal bounds", li[2], -100, [20, 40, 0]);
 	};
 
-	Test.prototype.test_dragging_respectsVariableHeightListItems = function() {
+	Test.prototype.test_dragging_singleLineItemPastMultiLineItem = function() {
+		/*:DOC +=   <style type='text/css'>
+						.rabu-done { height: 32px }
+					</style>  */
+		config.included = [
+			["single A", 1],
+			["double B", 0],
+			["single C", 1]
+		];
+		config.excluded = undefined;
+		populate();
+		assertLiPositions("starting values", [0, 20, 52]);
+		assertDrag("li 0 -> li 1 (multiline, before halfway point)", li[0], 16, [16, 20, 52]);
+		assertDrag("li 0 -> li 1 (multiline, after halfway point)", li[0], 17, [17, 0, 52]);
+		assertDrag("li 0 -> li 2 (multiline, before halfway point)", li[0], 42, [42, 0, 52]);
+		assertDrag("li 0 -> li 2 (multiline, after halfway point)", li[0], 43, [43, 0, 32]);
+	};
+
+	Test.prototype.test_dragging_multiLineItemPastSingleLineItem = function() {
 		// TODO
 	};
 
