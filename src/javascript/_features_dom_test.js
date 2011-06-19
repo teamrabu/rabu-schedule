@@ -218,24 +218,29 @@
 		assertDrag("li 0 -> li 3 (after halfway point)", li[0], 62, [62, 0, 32, 52]);
 	};
 
-//	Test.prototype.test_dragging_multiLineItemPastMixedHeightItems = function() {
-//		/*:DOC +=   <style type='text/css'>
-//						.rabu-done { height: 32px }
-//					</style>  */
-//		config.included = [
-//			["single A", 1],
-//			["single B", 1],
-//			["single C", 1],
-//			["double D", 0],
-//			["double E", 0]
-//		];
-//		config.excluded = undefined;
-//		populate();
-//		assertLiPositions("starting values", [0, 20, 40, 60, 92]);
-//		assertDrag("li 4 -> li 3 (multiline+, before halfway point)", li[4], 77, [0, 20, 40, 60, 77]);
-//		assertDrag("li 4 -> li 3 (multiline+, after halfway point)", li[4], 76, [0, 20, 40, 92, 76]);
-////		assertDrag("li 4 -> li 2 (multiline+, before halfway point)", li[4], )
-//	};
+	Test.prototype.test_draggingUp_movesElementWhenTopIsAtCenterOfPreviousElement = function() {
+		/*:DOC +=   <style type='text/css'>
+						.rabu-done { height: 32px }
+					</style>  */
+		config.included = [
+			["single A", 1],
+			["single B", 1],
+			["single C", 1],
+			["double D", 0],
+			["double E", 0]
+		];
+		config.excluded = undefined;
+		populate();
+		assertLiPositions("starting values", [0, 20, 40, 60, 92]);
+		assertDrag("li 4 -> li 3 (before halfway point)", li[4], 77, [0, 20, 40, 60, 77]);
+		assertDrag("li 4 -> li 3 (after halfway point)", li[4], 76, [0, 20, 40, 92, 76]);
+		assertDrag("li 4 -> li 2 (before halfway point)", li[4], 51, [0, 20, 40, 92, 51]);
+		assertDrag("li 4 -> li 2 (after halfway point)", li[4], 50, [0, 20, 72, 92, 50]);
+		assertDrag("li 4 -> li 1 (before halfway point)", li[4], 31, [0, 20, 72, 92, 31]);
+		assertDrag("li 4 -> li 1 (after halfway point)", li[4], 30, [0, 52, 72, 92, 30]);
+		assertDrag("li 4 -> li 0 (before halfway point)", li[4], 11, [0, 52, 72, 92, 11]);
+		assertDrag("li 4 -> li 0 (after halfway point)", li[4], 10, [32, 52, 72, 92, 10]);
+	};
 //
 //	Test.prototype.test_dragging_repositionsDivider = function() {
 //		// TODO

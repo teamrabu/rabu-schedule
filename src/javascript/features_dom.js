@@ -134,23 +134,21 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 
 		var draggerTop = pageOffset;
 		var draggerCenter = (draggerHeight / 2) - 1;
-		var i, elementTop, elementHeight, elementCenter, adjustment;
+		var i, elementTop, elementHeight, elementCenter;
 		for (i = originalPositions.length - 1; i > 0; i--) {
 
 			if (draggingUp(i)) {
 				elementTop = originalPositions[i - 1];
 				elementHeight = originalOrder[i - 1].outerHeight(true);
-				elementCenter = (elementHeight / 2) - 1;
+				elementCenter = (elementHeight / 2);
 
-				adjustment = elementCenter;
-				if (draggerTop >= elementTop + adjustment) { return i; }
+				if (draggerTop > elementTop + elementCenter) { return i; }
 			}
 			else {
 				elementTop = originalPositions[i];
 				elementHeight = originalOrder[i].outerHeight(true);
 				elementCenter = (elementHeight / 2);
 
-				adjustment = elementCenter;
 				if (draggerTop + draggerHeight >= elementTop + elementCenter ) { return i; }
 			}
 		}
