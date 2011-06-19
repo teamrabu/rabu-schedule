@@ -218,7 +218,8 @@ task MINIFIED_JS => [MERGED_JS, MINIFIED_JS_TEST_CONF, MINIFIED_DIR] do
 	else
 		explain "Minifying Javascript" do
 			rm_f MINIFIED_JS
-			# Using ADVANCED_OPTIMIZATIONS caused the tests to fail--last checked 10 June 2011 
+			# Using ADVANCED_OPTIMIZATIONS caused the tests to fail--last checked 10 June 2011
+			# Consider replacing Closure Compiler with Uglify.js in future--it gets good reviews
 			run "Closure Compiler", "java -jar #{MINIFIER_JAR} --js #{MERGED_JS} --js_output_file #{MINIFIED_JS} --compilation_level SIMPLE_OPTIMIZATIONS --warning_level QUIET"
 		end
 	end
@@ -297,6 +298,7 @@ end
 desc "Create tested release package"
 task :release => [:check_all, RELEASE_ZIP_FILE] do
 	explain "Creating official release" do
+		raise "Must use 'minify=true' when creating release" unless minify?
 		rm_rf RELEASE_DIR
 		mkdir RELEASE_DIR
 		cp RELEASE_ZIP_FILE, RELEASE_DIR
@@ -348,7 +350,7 @@ def bright(text)
 end
 
 def minify?()
-	!ENV['no_minify']
+	ENV['minify']
 end
 
 def run(name, command)
