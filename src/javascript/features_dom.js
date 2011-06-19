@@ -79,7 +79,7 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		originalOrder[b] = temp;
 	}
 
-	function moveTo(originalPosition, newPosition) {
+	function moveElement(originalPosition, newPosition) {
 		function moveUp() {
 			newPosition = Math.min(newPosition, originalOrder.length - 1);
 			originalOrder.forEach(function(xx, index) {
@@ -127,50 +127,40 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	}
 
 	function findNewIndex(domElement, pageOffset, originalIndex) {
+		function draggingUp(i) { return originalIndex >= i; }
+
 		var draggerHeight = $(domElement).outerHeight(true);
 		var listOffset = pageOffset - list.offset().top;
-//		var newIndex = Math.floor((listOffset + (draggerHeight / 2) - 1) / draggerHeight);
-//		return newIndex;
 
-		var draggerTop = $(domElement).offset().top;
+		var draggerTop = pageOffset;
 		var draggerCenter = (draggerHeight / 2) - 1;
-		var i;
-//console.log("===" + draggerTop);
+		var i, elementTop, elementHeight, elementCenter, adjustment;
 		for (i = originalPositions.length - 1; i > 0; i--) {
 
-//
-			if (originalIndex >= i) {
-				var elementTop = originalPositions[i - 1];
-				var elementHeight = originalOrder[i - 1].outerHeight(true);
-				var elementCenter = (elementHeight / 2) - 1;
+			if (draggingUp(i)) {
+				elementTop = originalPositions[i - 1];
+				elementHeight = originalOrder[i - 1].outerHeight(true);
+				elementCenter = (elementHeight / 2) - 1;
 
-				var adjustment = elementCenter;
-//				if (originalIndex > i) {
-//					adjustment = draggerCenter;
-//				}
-//				if (draggerHeight >= elementHeight) { adjustment = elementCenter; }
-//				else { adjustment = draggerCenter; }
-//	console.log((i - 1) + ": " + elementTop + " + " + adjustment);
+				adjustment = elementCenter;
 				if (draggerTop >= elementTop + adjustment) { return i; }
 			}
 			else {
-				var elementTop = originalPositions[i];
-				var elementHeight = originalOrder[i].outerHeight(true);
-				var elementCenter = (elementHeight / 2) - 1;
+				elementTop = originalPositions[i];
+				elementHeight = originalOrder[i].outerHeight(true);
+				elementCenter = (elementHeight / 2);
 
-				var adjustment = elementCenter;
+				adjustment = elementCenter;
 				if (draggerTop + draggerHeight >= elementTop + elementCenter ) { return i; }
 			}
-//			var elementHeight = originalOrder[i].outerHeight(true);
-//			var elementCenter = (elementHeight / 2) - 1;
-//			if (pageOffset >= originalPositions[i] - (draggerCenter - ((elementHeight - draggerHeight) / 2))) { return i; }
 		}
 		return 0;
 	}
 
 	function handleDrag(event, ui) {
 		var originalPosition = findOriginalIndex(event.target);
-		moveTo(originalPosition, findNewIndex(event.target, ui.offset.top, originalPosition));
+		var newPosition = findNewIndex(event.target, ui.offset.top, originalPosition);
+		moveElement(originalPosition, newPosition);
 		positionElements();
 	}
 

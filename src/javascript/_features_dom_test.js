@@ -53,7 +53,12 @@
 		moveEvent.type = "mousemove";
 		jQueryElement.trigger(moveEvent);
 
-//		jQueryElement.mouseup();
+		var upEvent = new jQuery.Event();
+		upEvent.pageX = 0;
+		upEvent.pageY = position + cursorOffset;
+		upEvent.which = 1;
+		upEvent.type = "mouseup";
+		jQueryElement.trigger(upEvent);
 	}
 	
 	Test.prototype.setUp = function() {
@@ -103,7 +108,7 @@
 		assertFalse("li #2 done", $(li[2]).hasClass("rabu-done"));
 		assertFalse("li #3 done", $(li[3]).hasClass("rabu-done"));
 	};
-	
+
 	Test.prototype.test_populate_marksItemsIncludedAndExcluded = function() {
 		assertTrue("li #0 included", $(li[0]).hasClass("rabu-included"));
 		assertTrue("li #1 included", $(li[1]).hasClass("rabu-included"));
@@ -181,40 +186,18 @@
 	}
 
 	Test.prototype.test_dragging_idempotency = function() {
-		assertDrag("should be idempotent", li[0], 12, [12, 0, 40, 110]);
+		assertDrag("should be idempotent", li[0], 20, [20, 0, 40, 110]);
+		assertDrag("should be idempotent", li[0], 21, [21, 0, 40, 110]);
 	};
 
-	Test.prototype.test_dragging_up = function() {
-		config.included.push(["included D", 10]);
-		populate();
-		assertDrag("li 0 -> li 0 (top)", li[0], 10, [10, 20, 40, 60, 130]);
-		assertDrag("li 0 -> li 1 (bottom)", li[0], 11, [11, 0, 40, 60, 130]);
-		assertDrag("li 0 -> li 1 (top)", li[0], 30, [30, 0, 40, 60, 130]);
-		assertDrag("li 0 -> li 2 (bottom)", li[0], 31, [31, 0, 20, 60, 130]);
-		assertDrag("li 0 -> li 2 (top)", li[0], 50, [50, 0, 20, 60, 130]);
-		assertDrag("li 0 -> li 3 (bottom)", li[0], 51, [51, 0, 20, 40, 130]);
-	};
-
-	Test.prototype.test_dragging_down = function() {
-		config.included.push(["included D", 10]);
-		populate();
-		assertDrag("li 3 -> li 3 (bottom)", li[3], 51, [0, 20, 40, 51, 130]);
-		assertDrag("li 3 -> li 2 (top)", li[3], 50, [0, 20, 60, 50, 130]);
-		assertDrag("li 3 -> li 2 (bottom)", li[3], 31, [0, 20, 60, 31, 130]);
-		assertDrag("li 3 -> li 1 (top)", li[3], 30, [0, 40, 60, 30, 130]);
-		assertDrag("li 3 -> li 1 (bottom)", li[3], 11, [0, 40, 60, 11, 130]);
-		assertDrag("li 3 -> li 0 (top)", li[3], 10, [20, 40, 60, 10, 130]);
-	};
-
-	Test.prototype.test_draggingUp_toLastElement = function() {
+	Test.prototype.test_dragging_beyondLegalBounds = function() {
 		config.excluded = undefined;
 		populate();
-		assertDrag("up to last element", li[0], 41, [40, 0, 20]);
-		assertDrag("up past legal bounds", li[0], 100, [40, 0, 20]);
-		assertDrag("down past legal bounds", li[2], -100, [20, 40, 0]);
+		assertDrag("down past legal bounds", li[0], 100, [40, 0, 20]);
+		assertDrag("up past legal bounds", li[2], -100, [20, 40, 0]);
 	};
 
-	Test.prototype.test_dragging_singleLineItemPastMixedHeightItems = function() {
+	Test.prototype.test_draggingDown_movesElementWhenBottomIsAtCenterOfNextElement = function() {
 		/*:DOC +=   <style type='text/css'>
 						.rabu-done { height: 32px }
 					</style>  */
@@ -227,42 +210,42 @@
 		config.excluded = undefined;
 		populate();
 		assertLiPositions("starting values", [0, 20, 52, 72]);
-		assertDrag("li 0 -> li 1 (singleline+, before halfway point)", li[0], 16, [16, 20, 52, 72]);
-		assertDrag("li 0 -> li 1 (singleline+, after halfway point)", li[0], 17, [17, 0, 52, 72]);
-		assertDrag("li 0 -> li 2 (singleline+, before halfway point)", li[0], 42, [42, 0, 52, 72]);
-		assertDrag("li 0 -> li 2 (singleline+, after halfway point)", li[0], 43, [43, 0, 32, 72]);
-		assertDrag("li 0 -> li 3 (singleline+, before halfway point)", li[0], 62, [62, 0, 32, 72]);
-		assertDrag("li 0 -> li 3 (singleline+, after halfway point)", li[0], 63, [63, 0, 32, 52]);
+		assertDrag("li 0 -> li 1 (before halfway point)", li[0], 15, [15, 20, 52, 72]);
+		assertDrag("li 0 -> li 1 (after halfway point)", li[0], 16, [16, 0, 52, 72]);
+		assertDrag("li 0 -> li 2 (before halfway point)", li[0], 41, [41, 0, 52, 72]);
+		assertDrag("li 0 -> li 2 (after halfway point)", li[0], 42, [42, 0, 32, 72]);
+		assertDrag("li 0 -> li 3 (before halfway point)", li[0], 61, [61, 0, 32, 72]);
+		assertDrag("li 0 -> li 3 (after halfway point)", li[0], 62, [62, 0, 32, 52]);
 	};
 
-	Test.prototype.test_dragging_multiLineItemPastMixedHeightItems = function() {
-		/*:DOC +=   <style type='text/css'>
-						.rabu-done { height: 32px }
-					</style>  */
-		config.included = [
-			["single A", 1],
-			["single B", 1],
-			["single C", 1],
-			["double D", 0],
-			["double E", 0]
-		];
-		config.excluded = undefined;
-		populate();
-		assertLiPositions("starting values", [0, 20, 40, 60, 92]);
-		assertDrag("li 4 -> li 3 (multiline+, before halfway point)", li[4], 77, [0, 20, 40, 60, 77]);
-		assertDrag("li 4 -> li 3 (multiline+, after halfway point)", li[4], 76, [0, 20, 40, 92, 76]);
-		assertDrag("li 4 -> li 2 (multiline+, before halfway point)", li[4], )
-	};
-
-	Test.prototype.test_dragging_repositionsDivider = function() {
-		// TODO
-	};
-
-	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {
-		// TODO
-	};
-
-	Test.prototype.test_dragging_worksWithMultipleSequentialDragsAndDrops = function() {
-		// TODO
-	};
+//	Test.prototype.test_dragging_multiLineItemPastMixedHeightItems = function() {
+//		/*:DOC +=   <style type='text/css'>
+//						.rabu-done { height: 32px }
+//					</style>  */
+//		config.included = [
+//			["single A", 1],
+//			["single B", 1],
+//			["single C", 1],
+//			["double D", 0],
+//			["double E", 0]
+//		];
+//		config.excluded = undefined;
+//		populate();
+//		assertLiPositions("starting values", [0, 20, 40, 60, 92]);
+//		assertDrag("li 4 -> li 3 (multiline+, before halfway point)", li[4], 77, [0, 20, 40, 60, 77]);
+//		assertDrag("li 4 -> li 3 (multiline+, after halfway point)", li[4], 76, [0, 20, 40, 92, 76]);
+////		assertDrag("li 4 -> li 2 (multiline+, before halfway point)", li[4], )
+//	};
+//
+//	Test.prototype.test_dragging_repositionsDivider = function() {
+//		// TODO
+//	};
+//
+//	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {
+//		// TODO
+//	};
+//
+//	Test.prototype.test_dragging_worksWithMultipleSequentialDragsAndDrops = function() {
+//		// TODO
+//	};
 }());
