@@ -129,14 +129,11 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	function findNewIndex(domElement, pageOffset, originalIndex) {
 		function draggingUp(i) { return originalIndex >= i; }
 
-		var draggerHeight = $(domElement).outerHeight(true);
-		var listOffset = pageOffset - list.offset().top;
-
 		var draggerTop = pageOffset;
-		var draggerCenter = (draggerHeight / 2) - 1;
+		var draggerHeight = $(domElement).outerHeight(true);
 		var i, elementTop, elementHeight, elementCenter;
-		for (i = originalPositions.length - 1; i > 0; i--) {
 
+		for (i = originalPositions.length - 1; i > 0; i--) {
 			if (draggingUp(i)) {
 				elementTop = originalPositions[i - 1];
 				elementHeight = originalOrder[i - 1].outerHeight(true);
