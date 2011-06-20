@@ -241,20 +241,22 @@
 		assertDrag("li 4 -> li 0 (after halfway point)", li[4], 10, [32, 52, 72, 92, 10]);
 	};
 
-	// 34margin 16padding //TODO: deleteme
 	Test.prototype.test_draggingDown_movesDividerWhenBottomIsAtCenterOfContentNotMargin = function() {
 		assertDrag("li 2 -> divider (before halfway point)", li[2], 81, [0, 20, 81, 110]);
 		assertEquals("li 2 -> divider (divider position before move)", 94, divider.offset().top);
 		assertDrag("li 2 -> divider (after halfway point)", li[2], 82, [0, 20, 82, 110]);
 		assertEquals("li 2 -> divider (divider position after move)", 74, divider.offset().top);
-		// TODO: This is all wrong; needs to reposition divider itself. Do manual test to see why.
-//		assertDrag("li 2 -> li 3 (before halfway point)", li[2], 99, [0, 20, 99, 110]);
-//		assertDrag("li 2 -> li 3 (after halfway point)", li[2], 100, [0, 20, 100, 90]);
+		assertDrag("li 2 -> li 3 (before halfway point)", li[2], 99, [0, 20, 99, 110]);
+		assertDrag("li 2 -> li 3 (after halfway point)", li[2], 100, [0, 20, 100, 90]);
 	};
 
-	Test.prototype.test_draggingUpPastDivider_repositionsDivider = function() {
-//		assertDrag("li 3 -> li 2 (before halfway point)", li[3], 51, [0, 20, 40, 51]);
-//		assertDrag("li 3 -> li 2 (after halfway point)", li[3], 50, [0, 20, 110, 50]);
+	Test.prototype.test_draggingUp_movesDividerWhenTopIsAtCenterOfContentNotMargin = function() {
+		assertDrag("li 2 -> divider (before halfway point)" , li[3], 103, [0, 20, 40, 103]);
+		assertEquals("li 2 -> divider (divider position before move)", 94, divider.offset().top);
+		assertDrag("li 2 -> divider (after halfway point)", li[3], 102, [0, 20, 40, 102]);
+		assertEquals("li 2 -> divider (divider position after move)", 114, divider.offset().top);
+		assertDrag("li 3 -> li 2 (before halfway point)", li[3], 51, [0, 20, 40, 51]);
+		assertDrag("li 3 -> li 2 (after halfway point)", li[3], 50, [0, 20, 60, 50]);
 	};
 
 	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {
