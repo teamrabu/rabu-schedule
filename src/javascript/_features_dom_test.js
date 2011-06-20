@@ -168,7 +168,7 @@
 		assertTrue("should be draggable", $(li).hasClass("ui-draggable"));
 		assertEquals("constrained vertically", "y", option("axis"));
 		assertEquals("top", 0, option("containment")[1]);
-		assertEquals("bottom", 110, option("containment")[3]);
+		assertEquals("bottom", 130, option("containment")[3]);
 		assertEquals("scroll speed", 10, option("scrollSpeed"));
 	};
 
@@ -177,7 +177,7 @@
 		ul.css("margin-bottom", "10px");
 		populate();
 		assertEquals("top", 5, option("containment")[1]);
-		assertEquals("bottom", 115, option("containment")[3]);
+		assertEquals("bottom", 135, option("containment")[3]);
 	};
 
 	function assertDrag(message, element, dragTo, expectedResult) {
@@ -193,7 +193,7 @@
 	Test.prototype.test_dragging_beyondLegalBounds = function() {
 		config.excluded = undefined;
 		populate();
-		assertDrag("down past legal bounds", li[0], 100, [40, 0, 20]);
+		assertDrag("down past legal bounds", li[0], 100, [60, 0, 20]);
 		assertDrag("up past legal bounds", li[2], -100, [20, 40, 0]);
 	};
 
@@ -250,10 +250,6 @@
 	Test.prototype.test_draggingUp_pastDivider = function() {
 		assertDrag("li 3 -> li 2 (before halfway point)", li[3], 51, [0, 20, 40, 51]);
 		assertDrag("li 3 -> li 2 (after halfway point)", li[3], 50, [0, 20, 110, 50]);
-	};
-
-	Test.prototype.test_dragging_singleLineElementToBottomInPlaceOfDoubleLineElementDoesntOverlap = function() {
-		// TODO
 	};
 
 	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {
