@@ -3,13 +3,15 @@
 rabu.schedule.FeaturesDom = function(element, estimates) {
 	var list;
 	var liJQuery;
-	var orderBeforeDrag = [];
-	var positionsBeforeDrag = [];
-	var featuresInOrder = [];
 	var divider;
 	var included;
 	var excluded;
 	var dividerHeight;
+
+	var orderBeforeDrag = [];
+	var positionsBeforeDrag = [];
+	var featuresInOrder = [];
+	var indexAfterDivider;
 
 	function toHtml(features, cssClass) {
 		return features.reduce(function(sum, feature) {
@@ -27,14 +29,15 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	function initializeElementVars() {
 		list = $(".rabu-features");
 		liJQuery = $("li", list);
-		liJQuery.each(function(index, element) {
-			orderBeforeDrag[index] = $(element);
-			featuresInOrder[index] = $(element);
-		});
 		divider = $(".rabu-divider");
 		included = $(".rabu-included", list);
 		excluded = $(".rabu-excluded", list);
 		dividerHeight = divider.outerHeight(true);
+		liJQuery.each(function(index, element) {
+			orderBeforeDrag[index] = $(element);
+			featuresInOrder[index] = $(element);
+		});
+		indexAfterDivider = included.length;
 	}
 
 	function setPosition(element, position) {
@@ -44,10 +47,12 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		});
 	}
 
-	function positionElements() {
+	function positionFeatures() {
 		var position = list.offset().top;
 		featuresInOrder.forEach(function(element, index) {
-			if (index === included.length) { position += dividerHeight; }
+			if (index === indexAfterDivider) {
+				position += dividerHeight;
+			}
 			setPosition(element, position);
 			position += element.outerHeight(true);
 		});
@@ -66,6 +71,11 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		divider.css("top", position);
 	}
 
+	function positionElements() {
+		positionFeatures();
+		positionDivider();
+	}
+
 	function resizeListToAccomodateDivider() {
 		var padding = parseInt(list.css("padding-bottom"), 10);
 		padding += dividerHeight;
@@ -78,43 +88,44 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		orderBeforeDrag[b] = temp;
 	}
 
-	function moveElement(originalPosition, newPosition) {
-		function moveUp() {
+	function moveElement(prevPosition, newPosition) {
+		function moveDown() {
 			newPosition = Math.min(newPosition, orderBeforeDrag.length - 1);
 			orderBeforeDrag.forEach(function(xx, index) {
-				if (index < originalPosition || index > newPosition) {
+				if (index < prevPosition || index > newPosition) {
 					featuresInOrder[index] = orderBeforeDrag[index];
 				}
 				else if (index < newPosition) {
 					featuresInOrder[index] = orderBeforeDrag[index + 1];
 				}
 				else if (index === newPosition) {
-					featuresInOrder[index] = orderBeforeDrag[originalPosition];
+					featuresInOrder[index] = orderBeforeDrag[prevPosition];
 				}
 				else {
-					throw "Unreachable code when moving up. index [" + index + "]; originalPosition: [" + originalPosition + "]; newPosition: [" + newPosition + "]";
+					throw "Unreachable code when moving up. index [" + index + "]; prevPosition: [" + prevPosition + "]; newPosition: [" + newPosition + "]";
 				}
 			});
+			if (newPosition >= indexAfterDivider) { indexAfterDivider--; }
 		}
-		function moveDown() {
+		function moveUp() {
 			orderBeforeDrag.forEach(function(xx, index) {
-				if (index > originalPosition || index < newPosition) {
+				if (index > prevPosition || index < newPosition) {
 					featuresInOrder[index] = orderBeforeDrag[index];
 				}
 				else if (index > newPosition) {
 					featuresInOrder[index] = orderBeforeDrag[index - 1];
 				}
 				else if (index === newPosition) {
-					featuresInOrder[index] = orderBeforeDrag[originalPosition];
+					featuresInOrder[index] = orderBeforeDrag[prevPosition];
 				}
 				else {
-					throw "Unreachable code when moving down. index [" + index + "]; originalPosition: [" + originalPosition + "]; newPosition: [" + newPosition + "]";
+					throw "Unreachable code when moving down. index [" + index + "]; prevPosition: [" + prevPosition + "]; newPosition: [" + newPosition + "]";
 				}
 			});
 		}
 
-		if (newPosition < originalPosition) { moveDown(); }
-		else { moveUp(); }
+		if (newPosition < prevPosition) { moveUp(); }
+		else { moveDown(); }
 	}
 
 	function findOriginalIndex(domElement) {
@@ -183,7 +194,6 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		if (divider.length === 0) { return; }
 
 		positionElements();
-		positionDivider();
 		resizeListToAccomodateDivider();
 		makeDraggable();
 	};
