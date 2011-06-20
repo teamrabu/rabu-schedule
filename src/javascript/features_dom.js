@@ -53,7 +53,7 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		});
 	}
 
-	function positionFeatures() {
+	function positionElements() {
 		var position = list.offset().top;
 		featuresInOrder.forEach(function(element, index) {
 			// This is all quite overcomplicated and could probably be simplified by
@@ -64,25 +64,6 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 			position += parseInt(element.css("margin-bottom"), 10);
 			position += element.outerHeight(false);
 		});
-	}
-
-	// TODO: deleteme
-//	function positionDivider() {
-//		var position;
-//		if (excluded.length === 0) {
-//			var lastIncluded = included.last();
-//			position = lastIncluded.offset().top + lastIncluded.outerHeight(true);
-//		}
-//		else {
-//			position = excluded.first().offset().top - dividerHeight;
-//		}
-//		divider.css("position", "absolute");
-//		divider.css("top", position);
-//	}
-
-	function positionElements() {
-		positionFeatures();
-//		positionDivider();
 	}
 
 	function resizeListToAccomodateDivider() {
