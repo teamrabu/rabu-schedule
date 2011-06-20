@@ -14,11 +14,6 @@
     			["Another feature", 80],
     			["A third feature whose sole purpose in life is to cause word wrapping, so you can visually inspect the results", 120],
     			["This feature's checkmark might collide with the divider", 0]
-    		],
-    		"excluded": [
-    			["An excluded feature", 3],
-    			["Another excluded feature", 15],
-    			["This excluded feature is done (how did that happen?)", 0]
     		]
     	},
         

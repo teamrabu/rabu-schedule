@@ -11,7 +11,6 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	var orderBeforeDrag = [];
 	var positionsBeforeDrag = [];
 	var featuresInOrder = [];
-	var indexAfterDivider;
 
 	function toHtml(features, cssClass) {
 		return features.reduce(function(sum, feature) {
@@ -27,17 +26,24 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	}
 
 	function initializeElementVars() {
+		function copyArray(array) { return array.slice(); }
+
 		list = $(".rabu-features");
 		liJQuery = $("li", list);
 		divider = $(".rabu-divider");
 		included = $(".rabu-included", list);
 		excluded = $(".rabu-excluded", list);
 		dividerHeight = divider.outerHeight(true);
-		liJQuery.each(function(index, element) {
-			orderBeforeDrag[index] = $(element);
-			featuresInOrder[index] = $(element);
+		divider.css("position", "absolute");
+
+		included.each(function(index, element) {
+			featuresInOrder.push($(element));
 		});
-		indexAfterDivider = included.length;
+		featuresInOrder.push(divider);
+		excluded.each(function(index, element) {
+			featuresInOrder.push($(element));
+		});
+		orderBeforeDrag = copyArray(featuresInOrder);
 	}
 
 	function setPosition(element, position) {
@@ -50,30 +56,33 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	function positionFeatures() {
 		var position = list.offset().top;
 		featuresInOrder.forEach(function(element, index) {
-			if (index === indexAfterDivider) {
-				position += dividerHeight;
-			}
+			// This is all quite overcomplicated and could probably be simplified by
+			// making the in/out divider a <li> and letting the browser do positioning.
+			// For that matter, JQueryUI probably solves this problem directly. Live and learn.
+			position += parseInt(element.css("margin-top"), 10);
 			setPosition(element, position);
-			position += element.outerHeight(true);
+			position += parseInt(element.css("margin-bottom"), 10);
+			position += element.outerHeight(false);
 		});
 	}
 
-	function positionDivider() {
-		var position;
-		if (excluded.length === 0) {
-			var lastIncluded = included.last();
-			position = lastIncluded.offset().top + lastIncluded.outerHeight(true);
-		}
-		else {
-			position = excluded.first().offset().top - dividerHeight;
-		}
-		divider.css("position", "absolute");
-		divider.css("top", position);
-	}
+	// TODO: deleteme
+//	function positionDivider() {
+//		var position;
+//		if (excluded.length === 0) {
+//			var lastIncluded = included.last();
+//			position = lastIncluded.offset().top + lastIncluded.outerHeight(true);
+//		}
+//		else {
+//			position = excluded.first().offset().top - dividerHeight;
+//		}
+//		divider.css("position", "absolute");
+//		divider.css("top", position);
+//	}
 
 	function positionElements() {
 		positionFeatures();
-		positionDivider();
+//		positionDivider();
 	}
 
 	function resizeListToAccomodateDivider() {
@@ -82,11 +91,6 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		list.css("padding-bottom", padding);
 	}
 
-	function swapFeatures(a, b) {       // TODO: unused, deleteme
-		var temp = orderBeforeDrag[a];
-		orderBeforeDrag[a] = orderBeforeDrag[b];
-		orderBeforeDrag[b] = temp;
-	}
 
 	function moveElement(prevPosition, newPosition) {
 		function moveDown() {
@@ -105,7 +109,6 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 					throw "Unreachable code when moving up. index [" + index + "]; prevPosition: [" + prevPosition + "]; newPosition: [" + newPosition + "]";
 				}
 			});
-			if (newPosition >= indexAfterDivider) { indexAfterDivider--; }
 		}
 		function moveUp() {
 			orderBeforeDrag.forEach(function(xx, index) {
@@ -178,7 +181,7 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	function makeDraggable() {
 		var lastFeature = featuresInOrder[featuresInOrder.length - 1];
 		var listTop = featuresInOrder[0].offset().top;
-		var listBottom = lastFeature.offset().top + lastFeature.outerHeight(true);
+		var listBottom = lastFeature.offset().top;
 		liJQuery.draggable({
 			axis: 'y',
 			containment: [0, listTop, 0, listBottom],

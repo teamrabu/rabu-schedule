@@ -126,7 +126,6 @@
 		populate();
 
 		assertLiPositions("excluded features should be positioned below divider", [0, 20, 40, 110, 130]);
-		assertEquals("divider should use absolute positioning", "absolute", divider.css("position"));
 		assertEquals("divider should be centered in gap", 94, divider.offset().top);
 	};
 
@@ -168,7 +167,7 @@
 		assertTrue("should be draggable", $(li).hasClass("ui-draggable"));
 		assertEquals("constrained vertically", "y", option("axis"));
 		assertEquals("top", 0, option("containment")[1]);
-		assertEquals("bottom", 130, option("containment")[3]);
+		assertEquals("bottom", 110, option("containment")[3]);
 		assertEquals("scroll speed", 10, option("scrollSpeed"));
 	};
 
@@ -177,7 +176,7 @@
 		ul.css("margin-bottom", "10px");
 		populate();
 		assertEquals("top", 5, option("containment")[1]);
-		assertEquals("bottom", 135, option("containment")[3]);
+		assertEquals("bottom", 115, option("containment")[3]);
 	};
 
 	function assertDrag(message, element, dragTo, expectedResult) {
@@ -193,7 +192,7 @@
 	Test.prototype.test_dragging_beyondLegalBounds = function() {
 		config.excluded = undefined;
 		populate();
-		assertDrag("down past legal bounds", li[0], 100, [60, 0, 20]);
+		assertDrag("down past legal bounds", li[0], 100, [94, 0, 20]);
 		assertDrag("up past legal bounds", li[2], -100, [20, 40, 0]);
 	};
 
@@ -242,11 +241,15 @@
 		assertDrag("li 4 -> li 0 (after halfway point)", li[4], 10, [32, 52, 72, 92, 10]);
 	};
 
-	Test.prototype.test_draggingDownPastDivider_repositionsDivider = function() {
+	// 34margin 16padding //TODO: deleteme
+	Test.prototype.test_draggingDown_movesDividerWhenBottomIsAtCenterOfContentNotMargin = function() {
+		assertDrag("li 2 -> divider (before halfway point)", li[2], 81, [0, 20, 81, 110]);
+		assertEquals("li 2 -> divider (divider position before move)", 94, divider.offset().top);
+		assertDrag("li 2 -> divider (after halfway point)", li[2], 82, [0, 20, 82, 110]);
+//		assertEquals("li 2 -> divider (divider position after move)", 74, divider.offset().top);
 		// TODO: This is all wrong; needs to reposition divider itself. Do manual test to see why.
-		assertDrag("li 2 -> li 3 (before halfway point)", li[2], 99, [0, 20, 99, 110]);
-		assertDrag("li 2 -> li 3 (after halfway point)", li[2], 100, [0, 20, 100, 90]);
-		assertEquals("li 2 -> li 3 (divider)", 74, divider.offset().top);
+//		assertDrag("li 2 -> li 3 (before halfway point)", li[2], 99, [0, 20, 99, 110]);
+//		assertDrag("li 2 -> li 3 (after halfway point)", li[2], 100, [0, 20, 100, 90]);
 	};
 
 	Test.prototype.test_draggingUpPastDivider_repositionsDivider = function() {
