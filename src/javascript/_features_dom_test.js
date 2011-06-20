@@ -186,8 +186,8 @@
 	}
 
 	Test.prototype.test_dragging_idempotency = function() {
-		assertDrag("should be idempotent", li[0], 20, [20, 0, 40, 110]);
-		assertDrag("should be idempotent", li[0], 21, [21, 0, 40, 110]);
+		assertDrag("should be idempotent (1)", li[0], 20, [20, 0, 40, 110]);
+		assertDrag("should be idempotent (2)", li[0], 21, [21, 0, 40, 110]);
 	};
 
 	Test.prototype.test_dragging_beyondLegalBounds = function() {
@@ -241,16 +241,26 @@
 		assertDrag("li 4 -> li 0 (before halfway point)", li[4], 11, [0, 52, 72, 92, 11]);
 		assertDrag("li 4 -> li 0 (after halfway point)", li[4], 10, [32, 52, 72, 92, 10]);
 	};
-//
-//	Test.prototype.test_dragging_repositionsDivider = function() {
-//		// TODO
-//	};
-//
-//	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {
-//		// TODO
-//	};
-//
-//	Test.prototype.test_dragging_worksWithMultipleSequentialDragsAndDrops = function() {
-//		// TODO
-//	};
+
+	Test.prototype.test_draggingDown_pastDivider = function() {
+		assertDrag("li 2 -> li 3 (before halfway point)", li[2], 99, [0, 20, 99, 110]);
+		assertDrag("li 2 -> li 3 (after halfway point)", li[2], 100, [0, 20, 100, 40]);
+	};
+
+	Test.prototype.test_draggingUp_pastDivider = function() {
+		assertDrag("li 3 -> li 2 (before halfway point)", li[3], 51, [0, 20, 40, 51]);
+		assertDrag("li 3 -> li 2 (after halfway point)", li[3], 50, [0, 20, 110, 50]);
+	};
+
+	Test.prototype.test_dragging_singleLineElementToBottomInPlaceOfDoubleLineElementDoesntOverlap = function() {
+		// TODO
+	};
+
+	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {
+		// TODO
+	};
+
+	Test.prototype.test_dragging_worksWithMultipleSequentialDragsAndDrops = function() {
+		// TODO
+	};
 }());

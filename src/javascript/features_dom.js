@@ -3,9 +3,9 @@
 rabu.schedule.FeaturesDom = function(element, estimates) {
 	var list;
 	var liJQuery;
-	var originalOrder = [];
-	var originalPositions = [];
-	var adjustedOrder = [];
+	var orderBeforeDrag = [];
+	var positionsBeforeDrag = [];
+	var featuresInOrder = [];
 	var divider;
 	var included;
 	var excluded;
@@ -28,9 +28,8 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		list = $(".rabu-features");
 		liJQuery = $("li", list);
 		liJQuery.each(function(index, element) {
-			originalOrder[index] = $(element);
-			originalPositions[index] = $(element).offset().top;
-			adjustedOrder[index] = $(element);
+			orderBeforeDrag[index] = $(element);
+			featuresInOrder[index] = $(element);
 		});
 		divider = $(".rabu-divider");
 		included = $(".rabu-included", list);
@@ -47,7 +46,7 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 
 	function positionElements() {
 		var position = list.offset().top;
-		adjustedOrder.forEach(function(element, index) {
+		featuresInOrder.forEach(function(element, index) {
 			if (index === included.length) { position += dividerHeight; }
 			setPosition(element, position);
 			position += element.outerHeight(true);
@@ -73,24 +72,24 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		list.css("padding-bottom", padding);
 	}
 
-	function swapFeatures(a, b) {
-		var temp = originalOrder[a];
-		originalOrder[a] = originalOrder[b];
-		originalOrder[b] = temp;
+	function swapFeatures(a, b) {       // TODO: unused, deleteme
+		var temp = orderBeforeDrag[a];
+		orderBeforeDrag[a] = orderBeforeDrag[b];
+		orderBeforeDrag[b] = temp;
 	}
 
 	function moveElement(originalPosition, newPosition) {
 		function moveUp() {
-			newPosition = Math.min(newPosition, originalOrder.length - 1);
-			originalOrder.forEach(function(xx, index) {
+			newPosition = Math.min(newPosition, orderBeforeDrag.length - 1);
+			orderBeforeDrag.forEach(function(xx, index) {
 				if (index < originalPosition || index > newPosition) {
-					adjustedOrder[index] = originalOrder[index];
+					featuresInOrder[index] = orderBeforeDrag[index];
 				}
 				else if (index < newPosition) {
-					adjustedOrder[index] = originalOrder[index + 1];
+					featuresInOrder[index] = orderBeforeDrag[index + 1];
 				}
 				else if (index === newPosition) {
-					adjustedOrder[index] = originalOrder[originalPosition];
+					featuresInOrder[index] = orderBeforeDrag[originalPosition];
 				}
 				else {
 					throw "Unreachable code when moving up. index [" + index + "]; originalPosition: [" + originalPosition + "]; newPosition: [" + newPosition + "]";
@@ -98,15 +97,15 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 			});
 		}
 		function moveDown() {
-			originalOrder.forEach(function(xx, index) {
+			orderBeforeDrag.forEach(function(xx, index) {
 				if (index > originalPosition || index < newPosition) {
-					adjustedOrder[index] = originalOrder[index];
+					featuresInOrder[index] = orderBeforeDrag[index];
 				}
 				else if (index > newPosition) {
-					adjustedOrder[index] = originalOrder[index - 1];
+					featuresInOrder[index] = orderBeforeDrag[index - 1];
 				}
 				else if (index === newPosition) {
-					adjustedOrder[index] = originalOrder[originalPosition];
+					featuresInOrder[index] = orderBeforeDrag[originalPosition];
 				}
 				else {
 					throw "Unreachable code when moving down. index [" + index + "]; originalPosition: [" + originalPosition + "]; newPosition: [" + newPosition + "]";
@@ -120,8 +119,8 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 
 	function findOriginalIndex(domElement) {
 		var i;
-		for (i = 0; i < originalOrder.length; i++) {
-			if (originalOrder[i][0] === domElement) { return i; }
+		for (i = 0; i < orderBeforeDrag.length; i++) {
+			if (orderBeforeDrag[i][0] === domElement) { return i; }
 		}
 		throw "Couldn't find element";
 	}
@@ -133,17 +132,17 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		var draggerHeight = $(domElement).outerHeight(true);
 		var i, elementTop, elementHeight, elementCenter;
 
-		for (i = originalPositions.length - 1; i > 0; i--) {
+		for (i = positionsBeforeDrag.length - 1; i > 0; i--) {
 			if (draggingUp(i)) {
-				elementTop = originalPositions[i - 1];
-				elementHeight = originalOrder[i - 1].outerHeight(true);
+				elementTop = positionsBeforeDrag[i - 1];
+				elementHeight = orderBeforeDrag[i - 1].outerHeight(true);
 				elementCenter = (elementHeight / 2);
 
 				if (draggerTop > elementTop + elementCenter) { return i; }
 			}
 			else {
-				elementTop = originalPositions[i];
-				elementHeight = originalOrder[i].outerHeight(true);
+				elementTop = positionsBeforeDrag[i];
+				elementHeight = orderBeforeDrag[i].outerHeight(true);
 				elementCenter = (elementHeight / 2);
 
 				if (draggerTop + draggerHeight >= elementTop + elementCenter ) { return i; }
@@ -159,13 +158,20 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		positionElements();
 	}
 
+	function handleDragStart(event, ui) {
+		featuresInOrder.forEach(function(element, index) {
+			positionsBeforeDrag[index] = $(element).offset().top;
+		});
+	}
+
 	function makeDraggable() {
-		var listTop = adjustedOrder[0].offset().top;
-		var listBottom = adjustedOrder[adjustedOrder.length - 1].offset().top;
+		var listTop = featuresInOrder[0].offset().top;
+		var listBottom = featuresInOrder[featuresInOrder.length - 1].offset().top;
 		liJQuery.draggable({
 			axis: 'y',
 			containment: [0, listTop, 0, listBottom],
 			scrollSpeed: 10,
+			start: handleDragStart,
 			drag: handleDrag
 		});
 	}
