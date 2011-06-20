@@ -156,7 +156,7 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 			}
 			else {
 				elementTop = positionsBeforeDrag[i];
-				elementHeight = orderBeforeDrag[i].outerHeight(true);
+				elementHeight = orderBeforeDrag[i].outerHeight(false);
 				elementCenter = (elementHeight / 2);
 
 				if (draggerTop + draggerHeight >= elementTop + elementCenter ) { return i; }
