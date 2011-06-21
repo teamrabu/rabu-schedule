@@ -8,6 +8,7 @@
 	var ul;
 	var li;
 	var divider;
+	var mouseDownElement;
 
 	function populate() {
 		featuresDom = new rabu.schedule.FeaturesDom($(".rabu-features"), estimates);
@@ -38,29 +39,31 @@
 	}
 
 	function dragElementTo(jQueryElement, position) {
-		var cursorOffset = 0;
-
 		var downEvent = new jQuery.Event();
 		downEvent.pageX = 0;
-		downEvent.pageY = jQueryElement.offset().top + cursorOffset;
+		downEvent.pageY = jQueryElement.offset().top;
 		downEvent.which = 1;
 		downEvent.type = "mousedown";
 		jQueryElement.trigger(downEvent);
 
 		var moveEvent = new jQuery.Event();
 		moveEvent.pageX = 0;
-		moveEvent.pageY = position + cursorOffset;
+		moveEvent.pageY = position;
 		moveEvent.type = "mousemove";
 		jQueryElement.trigger(moveEvent);
 
+		mouseDownElement = jQueryElement;
+	}
+
+	function mouseUp(jQueryElement, position) {
 		var upEvent = new jQuery.Event();
 		upEvent.pageX = 0;
-		upEvent.pageY = position + cursorOffset;
+		upEvent.pageY = position;
 		upEvent.which = 1;
 		upEvent.type = "mouseup";
 		jQueryElement.trigger(upEvent);
 	}
-	
+
 	Test.prototype.setUp = function() {
 		/*:DOC +=   <style type='text/css'>
 						li { height: 20px }
@@ -87,6 +90,13 @@
 		assertEquals("assumption: ul top", 0, ul.offset().top);
 		assertEquals("assumption: first li top", 0, li.first().offset().top);
 		assertEquals("assumption: divider height", 50, divider.outerHeight(true));
+	};
+
+	Test.prototype.tearDown = function() {
+		if (mouseDownElement) {
+			mouseUp(mouseDownElement);
+			mouseDownElement = undefined;
+		}
 	};
 
 	Test.prototype.test_populate_createsFeatureList = function() {
