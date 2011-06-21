@@ -160,7 +160,7 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	}
 
 	function handleDragStop(event, ui) {
-//		positionElements();
+		positionElements();
 	}
 
 	function makeDraggable() {

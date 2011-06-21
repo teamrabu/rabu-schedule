@@ -68,14 +68,24 @@
 		jQueryElement.trigger(upEvent);
 	}
 
-	function drag(jQueryElement, moveToY) {
-		mouseDown(jQueryElement);
+	function drag(element, moveToY) {
+		var jQueryElement = $(element);
+		if (!mouseDownElement) { mouseDown(jQueryElement); }
 		mouseMove(jQueryElement, moveToY);
 	}
 
-	function dragAndDrop(jQueryElement, moveToY) {
-		drag(jQueryElement, moveToY);
-		mouseUp(jQueryElement);
+	function drop(element) {
+		mouseUp($(element));
+	}
+
+	function dragAndDrop(element, moveToY) {
+		drag(element, moveToY);
+		drop(element);
+	}
+
+	function assertDrag(message, element, newPosition, expectedResult) {
+		drag(element, newPosition);
+		assertLiPositions(message, expectedResult);
 	}
 
 	Test.prototype.setUp = function() {
@@ -200,11 +210,6 @@
 		assertEquals("bottom", 115, option("containment")[3]);
 	};
 
-	function assertDrag(message, element, newPosition, expectedResult) {
-		drag($(element), newPosition);
-		assertLiPositions(message, expectedResult);
-	}
-
 	Test.prototype.test_dragging_idempotency = function() {
 		assertDrag("should be idempotent (1)", li[0], 20, [20, 0, 40, 110]);
 		assertDrag("should be idempotent (2)", li[0], 21, [21, 0, 40, 110]);
@@ -214,6 +219,7 @@
 		config.excluded = undefined;
 		populate();
 		assertDrag("down past legal bounds", li[0], 100, [94, 0, 20]);
+		drop(li[0]);
 		assertDrag("up past legal bounds", li[2], -100, [20, 40, 0]);
 	};
 
@@ -282,7 +288,7 @@
 
 	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {
 		dragAndDrop($(li[0]), 15);
-//		assertLiPositions("should snap into place", [20, 0, 40, 110]);
+		assertLiPositions("should snap into place", [20, 0, 40, 110]);
 	};
 
 	Test.prototype.test_dragging_worksWithMultipleSequentialDragsAndDrops = function() {
