@@ -159,6 +159,10 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		});
 	}
 
+	function handleDragStop(event, ui) {
+//		positionElements();
+	}
+
 	function makeDraggable() {
 		var lastFeature = featuresInOrder[featuresInOrder.length - 1];
 		var listTop = featuresInOrder[0].offset().top;
@@ -168,7 +172,8 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 			containment: [0, listTop, 0, listBottom],
 			scrollSpeed: 10,
 			start: handleDragStart,
-			drag: handleDrag
+			drag: handleDrag,
+			stop: handleDragStop
 		});
 	}
 

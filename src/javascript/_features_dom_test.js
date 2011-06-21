@@ -38,30 +38,44 @@
 		assertEquals(message, expectedPositions, actualPositions);
 	}
 
-	function dragElementTo(jQueryElement, position) {
+	function mouseDown(jQueryElement) {
+		mouseDownElement = jQueryElement;
+
 		var downEvent = new jQuery.Event();
 		downEvent.pageX = 0;
 		downEvent.pageY = jQueryElement.offset().top;
 		downEvent.which = 1;
 		downEvent.type = "mousedown";
 		jQueryElement.trigger(downEvent);
-
-		var moveEvent = new jQuery.Event();
-		moveEvent.pageX = 0;
-		moveEvent.pageY = position;
-		moveEvent.type = "mousemove";
-		jQueryElement.trigger(moveEvent);
-
-		mouseDownElement = jQueryElement;
 	}
 
-	function mouseUp(jQueryElement, position) {
+	function mouseMove(jQueryElement, moveToY) {
+		var moveEvent = new jQuery.Event();
+		moveEvent.pageX = 0;
+		moveEvent.pageY = moveToY;
+		moveEvent.type = "mousemove";
+		jQueryElement.trigger(moveEvent);
+	}
+
+	function mouseUp(jQueryElement) {
+		mouseDownElement = undefined;
+
 		var upEvent = new jQuery.Event();
 		upEvent.pageX = 0;
-		upEvent.pageY = position;
+		upEvent.pageY = 0;
 		upEvent.which = 1;
 		upEvent.type = "mouseup";
 		jQueryElement.trigger(upEvent);
+	}
+
+	function drag(jQueryElement, moveToY) {
+		mouseDown(jQueryElement);
+		mouseMove(jQueryElement, moveToY);
+	}
+
+	function dragAndDrop(jQueryElement, moveToY) {
+		drag(jQueryElement, moveToY);
+		mouseUp(jQueryElement);
 	}
 
 	Test.prototype.setUp = function() {
@@ -93,10 +107,7 @@
 	};
 
 	Test.prototype.tearDown = function() {
-		if (mouseDownElement) {
-			mouseUp(mouseDownElement);
-			mouseDownElement = undefined;
-		}
+		if (mouseDownElement) { mouseUp(mouseDownElement); }
 	};
 
 	Test.prototype.test_populate_createsFeatureList = function() {
@@ -189,8 +200,8 @@
 		assertEquals("bottom", 115, option("containment")[3]);
 	};
 
-	function assertDrag(message, element, dragTo, expectedResult) {
-		dragElementTo($(element), dragTo);
+	function assertDrag(message, element, newPosition, expectedResult) {
+		drag($(element), newPosition);
 		assertLiPositions(message, expectedResult);
 	}
 
@@ -270,7 +281,8 @@
 	};
 
 	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {
-		// TODO
+		dragAndDrop($(li[0]), 15);
+//		assertLiPositions("should snap into place", [20, 0, 40, 110]);
 	};
 
 	Test.prototype.test_dragging_worksWithMultipleSequentialDragsAndDrops = function() {
