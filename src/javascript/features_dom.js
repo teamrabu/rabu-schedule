@@ -26,8 +26,6 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	}
 
 	function initializeElementVars() {
-		function copyArray(array) { return array.slice(); }
-
 		list = $(".rabu-features");
 		liJQuery = $("li", list);
 		divider = $(".rabu-divider");
@@ -43,7 +41,6 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		excluded.each(function(index, element) {
 			featuresInOrder.push($(element));
 		});
-		orderBeforeDrag = copyArray(featuresInOrder);
 	}
 
 	function setPosition(element, position) {
@@ -154,6 +151,9 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	}
 
 	function handleDragStart(event, ui) {
+		function copyArray(array) { return array.slice(); }
+
+		orderBeforeDrag = copyArray(featuresInOrder);
 		featuresInOrder.forEach(function(element, index) {
 			positionsBeforeDrag[index] = $(element).offset().top;
 		});

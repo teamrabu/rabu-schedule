@@ -215,14 +215,6 @@
 		assertDrag("should be idempotent (2)", li[0], 21, [21, 0, 40, 110]);
 	};
 
-	Test.prototype.test_dragging_beyondLegalBounds = function() {
-		config.excluded = undefined;
-		populate();
-		assertDrag("down past legal bounds", li[0], 100, [94, 0, 20]);
-		drop(li[0]);
-		assertDrag("up past legal bounds", li[2], -100, [20, 40, 0]);
-	};
-
 	Test.prototype.test_draggingDown_movesElementWhenBottomIsAtCenterOfNextElement = function() {
 		/*:DOC +=   <style type='text/css'>
 						.rabu-done { height: 32px }
@@ -286,12 +278,29 @@
 		assertDrag("li 3 -> li 2 (after halfway point)", li[3], 50, [0, 20, 60, 50]);
 	};
 
+	Test.prototype.test_draggingDown_beyondLegalBounds = function() {
+		config.excluded = undefined;
+		populate();
+		assertDrag("down past legal bounds", li[0], 100, [94, 0, 20]);
+	};
+
+	Test.prototype.test_draggingUp_beyondLegalBounds = function() {
+		config.excluded = undefined;
+		populate();
+		assertDrag("up past legal bounds", li[2], -100, [20, 40, 0]);
+	};
+
 	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {
-		dragAndDrop($(li[0]), 15);
+		dragAndDrop(li[0], 15);
 		assertLiPositions("should snap into place", [20, 0, 40, 110]);
 	};
 
-	Test.prototype.test_dragging_worksWithMultipleSequentialDragsAndDrops = function() {
-		// TODO
+	Test.prototype.test_dropping_permanentlyChangesItemPosition = function() {
+		dragAndDrop(li[0], 20);
+		assertLiPositions("first item moved", [20, 0, 40, 110]);
+		dragAndDrop(li[2], 110);
+		assertLiPositions("third item moved", [20, 0, 110, 90]);
+		dragAndDrop(li[0], 90);
+		assertLiPositions("first item moved again", [90, 0, 110, 70]);
 	};
 }());
