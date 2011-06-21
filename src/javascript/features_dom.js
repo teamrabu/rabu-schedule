@@ -1,6 +1,13 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
 rabu.schedule.FeaturesDom = function(element, estimates) {
+// The drag-and-drop code is all quite overcomplicated and could probably be simplified by
+// making the in/out divider a <li> and letting the browser do positioning.
+// For that matter, JQueryUI has a 'sortable' tool that probably eliminates the need
+// for all of the drag-and-drop code. (Live and learn.) Alternatively,
+// http://threedubmedia.com/code/event/drag is a very lightweight, clean-looking approach
+// that would work well with the existing code.
+
 	var list;
 	var liJQuery;
 	var divider;
@@ -53,9 +60,6 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 	function positionElements() {
 		var position = list.offset().top;
 		featuresInOrder.forEach(function(element, index) {
-			// This is all quite overcomplicated and could probably be simplified by
-			// making the in/out divider a <li> and letting the browser do positioning.
-			// For that matter, JQueryUI probably solves this problem directly. Live and learn.
 			position += parseInt(element.css("margin-top"), 10);
 			setPosition(element, position);
 			position += parseInt(element.css("margin-bottom"), 10);
@@ -170,7 +174,8 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 		liJQuery.draggable({
 			axis: 'y',
 			containment: [0, listTop, 0, listBottom],
-			scrollSpeed: 10,
+			scroll: false,      // disabled due to bug that prevents containment from being respected when autoscrolling. Last checked in jQueryUI 1.8.13
+//			scrollSpeed: 10,
 			start: handleDragStart,
 			drag: handleDrag,
 			stop: handleDragStop
