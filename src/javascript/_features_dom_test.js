@@ -198,7 +198,7 @@
 		assertTrue("should be draggable", $(li).hasClass("ui-draggable"));
 		assertEquals("constrained vertically", "y", option("axis"));
 		assertEquals("top", 0, option("containment")[1]);
-		assertEquals("bottom", 110, option("containment")[3]);
+		assertEquals("bottom", 130, option("containment")[3]);
 		assertEquals("scroll speed", 10, option("scrollSpeed"));
 	};
 
@@ -207,7 +207,7 @@
 		ul.css("margin-bottom", "10px");
 		populate();
 		assertEquals("top", 5, option("containment")[1]);
-		assertEquals("bottom", 115, option("containment")[3]);
+		assertEquals("bottom", 185, option("containment")[3]);
 	};
 
 	Test.prototype.test_dragging_idempotency = function() {
@@ -281,7 +281,7 @@
 	Test.prototype.test_draggingDown_beyondLegalBounds = function() {
 		config.excluded = undefined;
 		populate();
-		assertDrag("down past legal bounds", li[0], 100, [94, 0, 20]);
+		assertDrag("down past legal bounds", li[0], 300, [160, 0, 20]);
 	};
 
 	Test.prototype.test_draggingUp_beyondLegalBounds = function() {
