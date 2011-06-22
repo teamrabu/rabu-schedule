@@ -22,7 +22,7 @@ To view the results, open `projection.html` in your web browser.
 The Input File Format
 ---------------------
 
-Rabu takes a JSON file containing a development team's estimates on STDIN and outputs an HTML file on STDOUT. The input file must be encoded in UTF-8 and the output file will also be encoded in UTF-8. (If you aren't familiar with file encodings, just use plain ASCII, which is a subset of UTF-8.)
+Rabu takes a JSON file containing a development team's estimates on STDIN and outputs an HTML file containing projections to STDOUT. The input file must be encoded in UTF-8 and the output file will also be encoded in UTF-8. (If you aren't familiar with file encodings, just use plain ASCII, which is a subset of UTF-8.)
 
 There's no error-checking on the input file format at this time, so if Rabu Schedule doesn't seem to work, look for errors in your input file. In particular, look for missing or excess commas, as that's a common error when you cut-and-paste lines in JSON.
 
@@ -38,9 +38,12 @@ The name of your project.
 The date that you last updated the information in this file.
 
 		"iterations": [
-			{
 			
-A list of all of the iterations to date for this release. Each iteration gets an object of its own. Put your current iteration *first*.
+A list of all of the iterations to date for this release. Put your current iteration *first*.
+
+			{
+				
+Each iteration gets an object of its own. 
 
 				"started": "19 Jun 2011",
 			
