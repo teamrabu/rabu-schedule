@@ -18,8 +18,101 @@ Run Rabu Schedule from the command line, as follows. You must have [Java](http:/
 
 To view the results, open `projection.html` in your web browser.
 
-Rabu takes a JSON file containing a development team's estimates on STDIN and outputs an HTML file on STDOUT. Your JSON file must be encoded in UTF-8 (or plain ASCII). There is no documentation of the input file at this time, but you can work from `estimates.rabu` as an example. For another example, see `/src/html/_html_test.rabu`.
 
+The Input File Format
+---------------------
+
+Rabu takes a JSON file containing a development team's estimates on STDIN and outputs an HTML file on STDOUT. The input file must be encoded in UTF-8 and the output file will also be encoded in UTF-8. (If you aren't familiar with file encodings, just use plain ASCII, which is a subset of UTF-8.)
+
+There's no error-checking on the input file format at this time, so if Rabu Schedule doesn't seem to work, look for errors in your input file. In particular, look for missing or excess commas, as that's a common error when you cut-and-paste lines in JSON.
+
+The input file uses the following elements. See the `estimates.rabu` file included with the distribution for an example.
+
+	{
+		"name": "Hello World",
+		
+The name of your project.
+		
+		"updated": "22 Jun 2011",
+		
+The date that you last updated the information in this file.
+
+		"iterations": [
+			{
+			
+A list of all of the iterations to date for this release. Each iteration gets an object of its own. Put your current iteration *first*.
+
+				"started": "19 Jun 2011",
+			
+The date that the iteration started.
+
+				"length": 7,
+			
+The length of the iteration in calendar days. (In this example, the iteration is one week long.) Note that the value is a number, not a string.
+
+				"velocity": 12,
+			
+The velocity of the iteration. For your current iteration, use your *estimated* velocity. For completed iterations, use your actual *measured* velocity.
+
+				"riskMultipliers": [1, 2, 4],
+
+Risk multipliers describe how much schedule risk you have, which determines how much spread there is in your schedule projections. They're described in detail [here](http://jamesshore.com/Blog/Rabu/How-Rabus-Schedule-Projections-Work.html). The easiest approach is to use the following rule of thumb:
+
+*Rigorous projects:* If your team achieves the same velocity every iteration, gets everything "done done," and you fix all your bugs each iteration, then you probably don't have much schedule risk. Use [1, 1.4, 1.8] for your risk multipliers.
+
+*Risky projects:* If you don't meet the "rigorous project" criteria, you're more likely to have a lot of schedule risk. Use [1, 2, 4] for your risk multipliers.
+
+			    "included": [
+
+This is a list of all the features that will be included in your schedule projection--typically, the features you intend to ship in your next release.
+
+Rather than listing out every story in your backlog, combine groups of stories into "features" that your stakeholders are interested in. You should only have about five features; if you have too many, you're likely to overwhelm your stakeholders with more detail than they care about, which will make discussing tradeoffs difficult.
+
+					["Feature A", 0],
+					["Feature B", 10],
+					["Feature C", 8],
+					(etc)
+				
+Each feature has a name (such as "Feature A" in the example above) and an estimate of the work *remaining*. This estimate is the sum of all the remaining stories for the feature. An estimate of zero means the feature is done.
+
+Note that the story estimates are numbers, not strings. Some examples of the input file format have used a question mark ("?") in place of the estimate, but a question mark is not a legal value.
+
+				],
+				"excluded": [
+					["Feature D", 2],
+					["Feature E", 16],
+					(etc)
+				]
+			
+You may also list features that are *not* included in your schedule projection in the "excluded" section. Use this to list features that your stakeholders are interested in, but that you have decided not to ship at this time. This helps define the boundaries of your work and creates the opportunity for trade-off discussions with your stakeholders.
+
+The "excluded" section is optional.
+
+			},
+		
+That's everything you need to describe an iteration.
+
+			{
+				"started", "12 Jun 2011",
+				"length", 7,
+				(etc)
+			},
+			{
+				"started", "5 Jun 2011",
+				"length", 7,
+				(etc)
+			},
+			(etc)
+
+After the current iteration, you may list each previous iteration from most recent to least recent. These historical iterations are optional. If present, they'll show up in the Rabu burn-up chart. We recommend erasing the history at the beginning of each release cycle so that the burn-up chart shows your progress towards your current release.
+
+		]
+	}
+
+That brings us to the end of the file.
+
+The Rabu input file is easiest to maintain if you update it once at the beginning of each iteration. Start by updating the velocity of the top-most iteration (the iteration you just completed) to your actual measured velocity, then copy-and-paste the entire iteration block to the top. This new iteration block is for the iteration you are starting. Update the "started" element accordingly and update the feature estimates to account for the stories you've completed as well as any other changes to the backlog. With practice, this should only take a few minutes.
+	
 
 Limitations
 -----------
@@ -32,7 +125,7 @@ This early version of Rabu Schedule has some limitations:
 
 - *No run-time error handling.* When the Javascript in the HTML file encounters an error (such as a bad JSON file), it silently fails.
 
-- *Limited cross-browser testing.* Rabu Schedule appears to work in Firefox, Safari, Chrome, and Internet Explorer 7+. However, it has only been thoroughly tested in Firefox 3.6.
+- *Limited cross-browser testing.* Rabu Schedule appears to work in Firefox, Safari, Chrome, and Internet Explorer 7+. However, it has only been thoroughly tested in Firefox.
 
 Two apparent limitations are intentional:
 

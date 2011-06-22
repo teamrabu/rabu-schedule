@@ -4,6 +4,7 @@ Rabu Schedule Change Log
 Release IN DEV
 ===
 * ADDED: Projection page uses two-column landscape layout when there's enough space, but falls back to portrait layout when there's not.
+* ADDED: Documentation of input file format may be found in the readme file.
 
 Release 0.4 (14 June 2011)
 ===

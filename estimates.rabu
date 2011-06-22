@@ -13,13 +13,13 @@
 		        ["Website improvements", 0],
 		        ["Rabu 0.4 release", 0],
 		        ["Landscape layout", 0],
+		        ["Documentation", 0.5],
 		        ["Feature drag-and-drop", 7.5]
 		    ],
 		    "excluded": [
 		        ["Configuration validation and error handling", 13],
 		        ["Robust cross-browser testing & support", "?"],
 		        ["Mobile browser support", "?"],
-		        ["Documentation", "?"]
 		    ]
 		},
         {
