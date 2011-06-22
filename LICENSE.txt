@@ -10,13 +10,16 @@ You should have received a copy of the GNU Affero General Public License along w
 
 This program incorporates the following work by others. Used with permission.
 
-JSLint	http://www.jslint.com/
-JsTestDriver	http://code.google.com/p/js-test-driver/
-Rhino	http://www.mozilla.org/rhino/
 Datejs	http://www.datejs.com/
 jQuery	http://jquery.com/
 jQueryUI	http://jqueryui.com/
-Isolate	https://github.com/jbarnette/isolate
 Raphael	http://raphaeljs.com/
 ES5-shim    https://github.com/kriskowal/es5-shim
+
+In addition, the following libraries are used to build Rabu Schedule.
+
+JSLint	http://www.jslint.com/
+JsTestDriver	http://code.google.com/p/js-test-driver/
+Rhino	http://www.mozilla.org/rhino/
+Isolate	https://github.com/jbarnette/isolate
 Closure Compiler	http://code.google.com/closure/compiler/

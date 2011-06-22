@@ -4,7 +4,8 @@ Rabu Schedule Change Log
 Release IN DEV
 ===
 * ADDED: Projection page uses two-column landscape layout when there's enough space, but falls back to portrait layout when there's not.
-* ADDED: Documentation of input file format may be found in the readme file.
+* ADDED: Documentation of the input file format in the readme file.
+* FIXED: License and changelog are now included in release package.
 
 Release 0.4 (14 June 2011)
 ===
@@ -29,9 +30,6 @@ Release 0.2 (15 May 2011)
 * BREAKING CHANGE: Changed configuration file format to support iteration history
 * CHANGED: Wording in HTML page
 * CHANGED: 90% projection rounds up to next iteration
-
-Minor changes in Release 0.2 
----
 * FIXED (cosmetic): HTML page background renders properly when window is smaller than page height
 * FIXED (cosmetic): HTML scroll bar no longer appears when window is larger than page height
 
