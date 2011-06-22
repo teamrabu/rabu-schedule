@@ -161,6 +161,129 @@ $(document).ready(function() {
 		log("a chained from a? " + a.chainedFrom(a));
 	})();
 
+	(function() {
+		log();
+		log("Real world scenario:");
+
+		var Root = {
+			init: function() {},
+			chain: function(init) {
+				var chained = Object.create(this);
+				chained.parent = this;
+				chained._recursiveThis = chained;
+				chained.init = init;
+				chained.init();
+				return chained;
+			},
+			create: function() {
+				var outerArgs = arguments;
+				return this.chain(function() {
+					this._callParent("init", outerArgs);
+				});
+			},
+			callParent: function(methodName) {
+				this._callParent(methodName, Array.prototype.slice.call(arguments, 1));
+			},
+			_callParent: function(methodName, args) {
+				var oldThis = this._recursiveThis;
+				this._recursiveThis = oldThis.parent;
+				this._recursiveThis[methodName].apply(this, args);
+				this._recursiveThis = oldThis;
+			},
+		};
+
+		var Person = Root.chain(function(name) {
+			this.name = name;
+		});
+		Person.greet = function() {
+			log("Hello, my name is " + this.name);
+		};
+		Person.setName = function(name) {
+			log(this.name + " changing name to " + name);
+			this.name = name;
+		};
+		var RudePerson = Person.chain(function(name) {
+			this.callParent("init", name);
+		});
+		RudePerson.greet = function() {
+			log("'Bugger off,' says " + this.name);
+		}
+
+//		var joe = Person.chain(function() { this.callParent("init", "Joe") });
+		var joe = Person.create("Joe");
+		var bob = RudePerson.chain(function() {
+			this.callParent("init", "Bob");
+			log("instantiated bob");
+		});
+
+		joe.greet();
+		bob.greet();
+		bob.setName("Jill");
+		joe.greet();
+		bob.greet();
+	})();
+
+	(function() {
+		log();
+		log("Classic but memory-intensive approach that supports 'new' keyword and private vars:");
+
+		var Person = function(name) {
+			this.greet = function() {
+				log("Hello, my name is " + name);
+			}
+			this.setName = function(newName) {
+				log(name + " changing name to " + newName);
+				name = newName;
+			}
+		};
+		var RudePerson = function(name) {
+			Person.call(this, name);
+			this.greet = function() {
+				log("'Bugger off,' says " + name);
+			}
+		}
+
+		var joe = new Person("Joe");
+		var bob = new RudePerson("Bob");
+		joe.greet();
+		bob.greet();
+		bob.setName("Jill");
+		joe.greet();
+		bob.greet();
+	})();
+
+	(function() {
+		log();
+		log("Classic prototype-based approach that supports 'new' keyword but not private vars:");
+
+		var Person = function(name) {
+			this._name = name;
+		};
+		Person.prototype.greet = function() {
+			log("Hello, my name is " + this._name);
+		};
+		Person.prototype.setName = function(newName) {
+			log(this._name + " changing name to " + newName);
+			this._name = newName;
+		};
+
+		var RudePerson = function(name) {
+			Person.call(this, name);
+		};
+		RudePerson.prototype = new Person();
+		RudePerson.prototype.greet = function() {
+			log("'Bugger off,' says " + this._name);
+		};
+
+		var joe = new Person("Joe");
+		var bob = new RudePerson("Bob");
+		joe.greet();
+		bob.greet();
+		bob.setName("Jill");
+		joe.greet();
+		bob.greet();
+	})();
+
 	log();
 	log("end");
 });
