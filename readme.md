@@ -67,7 +67,7 @@ To build Rabu Schedule from source, you need the following tools installed:
 
 The build automatically downloads and installs its Ruby dependencies them into the `gems` directory. They're isolated from the rest of your Ruby installation.
 
-To build a release version of Rabu Schedule, use `rake release` from the command line. The results will be placed in the `released/` directory. Use `rake` on its own for ordinary development. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets. The `no_minify=true` switch will disable minification, which is helpful for speeding up the build.
+To build a release version of Rabu Schedule, use `rake release minify=true` from the command line. The results will be placed in the `released/` directory. Use `rake` on its own for ordinary development. `rake -T` will show you the most commonly-used targets, and `rake -P` will show all targets. Minification is disabled by default, which speeds up the build; use the `minify=true` switch to enable it.
 
 **Important:** After you're done building, be sure to run `rake shutdown` to stop the JsTestDriver server. If you use `./autorake.sh` (described below), breaking out of the script should automatically kill the server.
 
