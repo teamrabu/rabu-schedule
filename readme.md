@@ -78,7 +78,7 @@ Rather than listing out every story in your backlog, combine groups of stories i
 				
 Each feature has a name (such as "Feature A" in the example above) and an estimate of the work *remaining*. This estimate is the sum of all the remaining stories for the feature. An estimate of zero means the feature is done.
 
-Note that the story estimates are numbers, not strings. Some examples of the input file format have used a question mark ("?") in place of the estimate, but a question mark is not a legal value.
+Note that the story estimates are numbers, not strings.
 
 				],
 				"excluded": [
