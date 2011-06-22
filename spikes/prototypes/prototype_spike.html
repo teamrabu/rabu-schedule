@@ -1,0 +1,148 @@
+<html>
+
+<head>
+	<script type="text/javascript" src="jquery-1.6.1.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+
+function log(message) {
+	var output = $(".output");
+	var li = $("<li></li>");
+	li.text(message);
+	output.append(li);
+}
+
+$(document).ready(function() {
+	log("start");
+
+	(function() {
+		log();
+		log("Prototype basics:");
+
+		var a = {
+			foo: function() { log("a.foo"); }
+		};
+
+		var b = function() { log("b (function)") };
+		b.bar = function() { log("b.bar"); };
+		b.toString = function() { return "b.toString"; };
+
+		var c = function() { log("c (function)") };
+		c.prototype.baz = function() { log("c.prototype.baz"); };
+
+		a.foo();
+		b1 = new b();
+		b.bar();
+		c1 = new c();
+		log("c1 instanceof c: " + (c1 instanceof c));
+		log("c1 instanceof b: " + (c1 instanceof b));
+		c.prototype = b;
+		c2 = new c();
+		c1.baz();
+		log("c1.__proto__: " + c1.__proto__);
+		c2.bar();
+		log("c2.__proto__: " + c2.__proto__);
+
+		log("c1 instanceof c: " + (c1 instanceof c));
+		log("c1 instanceof b: " + (c1 instanceof b));
+		log("c2 instanceof c: " + (c2 instanceof c));
+		log("c2 instanceof b: " + (c2 instanceof b));
+	})();
+
+	(function() {
+		log();
+		log("Object chaining using 'new' keyword:");
+
+		function chainFrom(object) {
+			var f = function() {};
+			f.prototype = object;
+			return new f();
+		}
+
+		var a = {
+			name: "a",
+			foo: function() { log(this.name + ".foo"); }
+		};
+		a.foo();
+
+		var b = chainFrom(a);
+		b.name = "b";
+		b.bar = function() { log("b.bar"); };
+		b.foo();
+		b.bar();
+	})();
+
+	(function() {
+		log();
+		log("Object chaining using Object.create():");
+
+		var a = {
+			foo: function() { log("chained foo"); }
+		};
+		var b = Object.create(a);
+		b.foo();
+	})();
+
+	(function() {
+		log();
+		log("Object chaining as a method:");
+
+		var root = {
+			chain: function() {
+				return Object.create(this)
+			}
+		};
+
+		var a = root.chain();
+		a.foo = function() { log("chained foo"); };
+
+		var b = a.chain();
+		b.foo();
+	})();
+
+	(function() {
+		log();
+		log("Object chaining with constructors and parent calls:");
+
+		var root = {
+			chain: function(init) {
+				var chained = Object.create(this);
+				chained.parent = this;
+				chained.init = init;
+				chained.init();
+				return chained;
+			},
+			init: function() {}
+		};
+		
+		var a = root.chain(function() { log("a.init"); });
+		a.foo = function() { log("a.foo"); };
+		a.foo();
+
+		var b = a.chain(function() { log("b.init"); });
+		b.bar = function() { log("b.bar"); };
+		b.foo();
+		b.bar();
+
+		var c = b.chain(function() { log("c.init"); this.parent.init(); });
+		c.bar = function() { log("c.bar"); this.parent.bar(); };
+		c.foo();
+		c.bar();
+	})();
+
+	log();
+	log("end");
+});
+
+
+
+
+	</script>
+
+	<p>Output here:</p>
+	<ol class="output">
+
+	</ol>
+</body>
+</html>
