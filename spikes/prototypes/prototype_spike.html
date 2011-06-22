@@ -113,22 +113,52 @@ $(document).ready(function() {
 				chained.init();
 				return chained;
 			},
-			init: function() {}
+			init: function() {},
+			chainedFrom: function(potentialParent) {
+				var test = this;
+				while(test) {
+					if (test === potentialParent) return true;
+					test = test.parent;
+				}
+				return false;
+			}
 		};
-		
-		var a = root.chain(function() { log("a.init"); });
-		a.foo = function() { log("a.foo"); };
-		a.foo();
 
+		log("A:");
+		var a = root.chain(function() { log("a.init"); });
+		a.name = "a";
+		a.foo = function() { log("a.foo"); };
+		a.printThis = function() { log("'this' is " + this.name) };
+		a.foo();
+		a.printThis();
+
+		log("B:");
 		var b = a.chain(function() { log("b.init"); });
+		b.name = "b";
 		b.bar = function() { log("b.bar"); };
 		b.foo();
 		b.bar();
+		b.printThis();
 
+		log("C:");
 		var c = b.chain(function() { log("c.init"); this.parent.init(); });
+		c.name = "c";
 		c.bar = function() { log("c.bar"); this.parent.bar(); };
 		c.foo();
 		c.bar();
+		c.printThis();
+
+		log("Chained from:");
+		log("c chained from {}? " + c.chainedFrom({}));
+		log("c chained from c? " + c.chainedFrom(c));
+		log("c chained from b? " + c.chainedFrom(b));
+		log("c chained from a? " + c.chainedFrom(a));
+		log("b chained from c? " + b.chainedFrom(c));
+		log("b chained from b? " + b.chainedFrom(b));
+		log("b chained from a? " + b.chainedFrom(a));
+		log("a chained from c? " + a.chainedFrom(c));
+		log("a chained from b? " + a.chainedFrom(b));
+		log("a chained from a? " + a.chainedFrom(a));
 	})();
 
 	log();
