@@ -181,7 +181,7 @@ rabu.schedule.Iteration = function(iteration, effortToDate) {
 		this._cumulativeEstimate = cumulativeEstimate;
 		this._effortToDate = effortToDate;
 	};
-//	rs.Feature.prototype = new rs.Base();
+	rs.Feature.prototype = new rs.Object();
 	var Feature = rs.Feature.prototype;
 
 	Feature.name = function() {
