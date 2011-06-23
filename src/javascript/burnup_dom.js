@@ -1,85 +1,108 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
+var rs = rabu.schedule;
+rs.Feature = function(feature, cumulativeEstimate, effortToDate) {
+	this._feature = feature;
+	this._cumulativeEstimate = cumulativeEstimate;
+	this._effortToDate = effortToDate;
+};
+rs.Feature.prototype = new rs.Object();
+var Feature = rs.Feature.prototype;
 
-rabu.schedule.BurnupDom = function(element, estimates, projections) {
-	var rs = rabu.schedule;
-    var raphael = Raphael;     // prevent JSLint error resulting from calling Raphael without 'new'
-    var self = this; 
-	var xLabelElement = $(".rabu-xLabel");
-	var yLabelElement = $(".rabu-yLabel");
-	var xTickLabelElement = $(".rabu-xTickLabel");
-	var yTickLabelElement = $(".rabu-yTickLabel");
-    var paper, metrics, xLabel, yLabel;
-    
-    function rgb(r, g, b) {
+(function() {
+	var raphael = Raphael;     // prevent JSLint error resulting from calling Raphael without 'new'
+
+	function moveTo(x, y) {
+		return " M" + x + "," + y;
+	}
+
+	function lineTo(x, y) {
+		return " L" + x + "," + y;
+	}
+
+	function rgb(r, g, b) {
         return "rgb(" + r + ", " + g + ", " + b + ")";
     }
 
-    this.VELOCITY_STROKE = rgb(0, 112, 0);
-	this.VELOCITY_FILL = rgb(60, 170, 60);
-	this.FEATURE_STROKE = rgb(112, 0, 0);
-	this.FEATURE_FILL = rgb(255, 125, 125);
+	var rs = rabu.schedule;
+	rs.BurnupDom = function(element, estimates, projections) {
+		this._element = element;
+		this._estimates = estimates;
+		this._projections = projections;
+		this._xLabelElement = $(".rabu-xLabel");
+		this._yLabelElement = $(".rabu-yLabel");
+		this._xTickLabelElement = $(".rabu-xTickLabel");
+		this._yTickLabelElement = $(".rabu-yTickLabel");
+//		var paper, metrics, xLabel, yLabel;
+		this.VELOCITY_STROKE = rgb(0, 112, 0);
+		this.VELOCITY_FILL = rgb(60, 170, 60);
+		this.FEATURE_STROKE = rgb(112, 0, 0);
+		this.FEATURE_FILL = rgb(255, 125, 125);
+		this.HISTORY_POLYGON_OUTLINE = 0.5;
+	};
+	rs.BurnupDom.prototype = new rs.Object();
+	var BurnupDom = rs.BurnupDom.prototype;
 
-	function hideInteriorElements() {
-		element.children().hide();
-	}
-	
-	function line(x1, y1, x2, y2) {
-		return paper.path("M" + x1 + "," + y1 + " L" + x2 + "," + y2);
-	}
-	
-	function copyOneTextElement(textElement, optionalText) {
+	BurnupDom._line = function(x1, y1, x2, y2) {
+		return this._paper.path("M" + x1 + "," + y1 + " L" + x2 + "," + y2);
+	};
+
+	BurnupDom._hideInteriorElements = function() {
+		this._element.children().hide();
+	};
+
+	BurnupDom._copyOneTextElement = function(textElement, optionalText) {
 		var text = optionalText || textElement.text();
-		var result = paper.text(0, 0, text);
+		var result = this._paper.text(0, 0, text);
 		result.attr({
             "font-family": textElement.css("font-family"),
             "font-size": textElement.css("font-size"),
             "font-weight": textElement.css("font-weight")
 		});
 		return result;
-	}
+	};
 
-    function copyTextElements() {
+    BurnupDom._copyTextElements = function() {
         var roundUpEffort = rs.BurnupChartMetrics.roundUpEffort;
 		
-		self.xLabel = copyOneTextElement(xLabelElement);
-		self.yLabel = copyOneTextElement(yLabelElement);
-		self.xTickLabel = copyOneTextElement(xTickLabelElement).hide();
-		self.yTickLabel = copyOneTextElement(yTickLabelElement, roundUpEffort(projections.maxEffort()).toString()).hide();
-	}
+		this.xLabel = this._copyOneTextElement(this._xLabelElement);
+		this.yLabel = this._copyOneTextElement(this._yLabelElement);
+		this.xTickLabel = this._copyOneTextElement(this._xTickLabelElement).hide();
+		this.yTickLabel = this._copyOneTextElement(this._yTickLabelElement, roundUpEffort(this._projections.maxEffort()).toString()).hide();
+	};
 
-    function axisLabels() {
-		self.xLabel.translate(metrics.xLabelCenter, metrics.xLabelVerticalCenter);
-		self.yLabel.translate(metrics.yLabelVerticalCenter, metrics.yLabelCenter);
-		self.yLabel.rotate(270, true);
-	}
+    BurnupDom._axisLabels = function() {
+		this.xLabel.translate(this._metrics.xLabelCenter, this._metrics.xLabelVerticalCenter);
+		this.yLabel.translate(this._metrics.yLabelVerticalCenter, this._metrics.yLabelCenter);
+		this.yLabel.rotate(270, true);
+	};
 	
-	function axisLines() {
-		self.xAxis = line(metrics.left - metrics.AXIS_OVERHANG, metrics.bottom, metrics.right, metrics.bottom);
-		self.yAxis = line(metrics.left, metrics.top, metrics.left, metrics.bottom + metrics.AXIS_OVERHANG);
-	}
+	BurnupDom._axisLines = function() {
+		this.xAxis = this._line(this._metrics.left - this._metrics.AXIS_OVERHANG, this._metrics.bottom, this._metrics.right, this._metrics.bottom);
+		this.yAxis = this._line(this._metrics.left, this._metrics.top, this._metrics.left, this._metrics.bottom + this._metrics.AXIS_OVERHANG);
+	};
 	
-	function xAxisTick(xPosition, length) {
-		return line(xPosition, metrics.bottom - (length / 2), xPosition, metrics.bottom + (length / 2));
-	}
+	BurnupDom._xAxisTick = function(xPosition, length) {
+		return this._line(xPosition, this._metrics.bottom - (length / 2), xPosition, this._metrics.bottom + (length / 2));
+	};
 	
-	function xAxisTickLabelText(tickNumber) {
-		var date = estimates.dateForIteration(tickNumber);
+	BurnupDom._xAxisTickLabelText = function(tickNumber) {
+		var date = this._estimates.dateForIteration(tickNumber);
         return date.toString('MMM d');
-	}
+	};
 	
-	function xAxisTickLabel(tickNumber, xPosition) {
-        var label = copyOneTextElement(xTickLabelElement, xAxisTickLabelText(tickNumber));
-        label.translate(xPosition, metrics.xTickLabelVerticalCenter);
+	BurnupDom._xAxisTickLabel = function(tickNumber, xPosition) {
+        var label = this._copyOneTextElement(this._xTickLabelElement, this._xAxisTickLabelText(tickNumber));
+        label.translate(xPosition, this._metrics.xTickLabelVerticalCenter);
 		return label; 
-	}
+	};
 	
-	function xAxisTicks() {
+	BurnupDom._xAxisTicks = function() {
 		var i;
 
         // figure out maximum tick label width
 		var maxWidth = 0;
-		for (i = 1; i < metrics.xTickCount; i++) {
-            var label = copyOneTextElement(xTickLabelElement, xAxisTickLabelText(i));
+		for (i = 1; i < this._metrics.xTickCount; i++) {
+            var label = this._copyOneTextElement(this._xTickLabelElement, this._xAxisTickLabelText(i));
 			var width = label.getBBox().width;
 			if (width > maxWidth) {
 				maxWidth = width;
@@ -87,124 +110,115 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 			label.remove();
 		}
 
-        self.xTicks = [];		
-        self.xTickLabels = [];
+        this.xTicks = [];
+        this.xTickLabels = [];
         var previousLabelRightEdge = 0;
-		for (i = 1; i < metrics.xTickCount; i++) {
-            var x = metrics.xTickPosition(i);
+		for (i = 1; i < this._metrics.xTickCount; i++) {
+            var x = this._metrics.xTickPosition(i);
 
-			if (metrics.shouldDrawXTickLabel(i, maxWidth, previousLabelRightEdge)) {
-                self.xTicks.push(xAxisTick(x, metrics.MAJOR_TICK_LENGTH));
-				self.xTickLabels.push(xAxisTickLabel(i, x));
+			if (this._metrics.shouldDrawXTickLabel(i, maxWidth, previousLabelRightEdge)) {
+                this.xTicks.push(this._xAxisTick(x, this._metrics.MAJOR_TICK_LENGTH));
+				this.xTickLabels.push(this._xAxisTickLabel(i, x));
 				previousLabelRightEdge = x + (maxWidth / 2);
 			}
 			else {
-				self.xTicks.push(xAxisTick(x, metrics.MINOR_TICK_LENGTH));
+				this.xTicks.push(this._xAxisTick(x, this._metrics.MINOR_TICK_LENGTH));
 			}
 		}
-	}
+	};
 	
-	function yAxisTicks() {
+	BurnupDom._yAxisTicks = function() {
 		var i;
 		
-		self.yTicks = [];
-		self.yTickLabels = [];
-		var previousLabelTopEdge = metrics.bottom;
-		for (i = 1; i < metrics.yTickCount(); i++) {
-			var x = metrics.left;
-			var y = metrics.yTickPosition(i);
-			var tickOffset = metrics.MINOR_TICK_LENGTH / 2;
-			if (metrics.shouldDrawYTickLabel(i, previousLabelTopEdge)) {
-				tickOffset = metrics.MAJOR_TICK_LENGTH / 2;
-				previousLabelTopEdge = y - (metrics.yTickLabelHeight / 2);
-				var label = copyOneTextElement(yTickLabelElement, metrics.yTickLabel(i));
+		this.yTicks = [];
+		this.yTickLabels = [];
+		var previousLabelTopEdge = this._metrics.bottom;
+		for (i = 1; i < this._metrics.yTickCount(); i++) {
+			var x = this._metrics.left;
+			var y = this._metrics.yTickPosition(i);
+			var tickOffset = this._metrics.MINOR_TICK_LENGTH / 2;
+			if (this._metrics.shouldDrawYTickLabel(i, previousLabelTopEdge)) {
+				tickOffset = this._metrics.MAJOR_TICK_LENGTH / 2;
+				previousLabelTopEdge = y - (this._metrics.yTickLabelHeight / 2);
+				var label = this._copyOneTextElement(this._yTickLabelElement, this._metrics.yTickLabel(i));
 				label.attr("text-anchor", "end");
-				label.translate(metrics.yTickLabelRightEdge, metrics.yTickPosition(i));
-				self.yTickLabels.push(label);
+				label.translate(this._metrics.yTickLabelRightEdge, this._metrics.yTickPosition(i));
+				this.yTickLabels.push(label);
 			}
-			self.yTicks.push(line(x - tickOffset, y, x + tickOffset, y));
+			this.yTicks.push(this._line(x - tickOffset, y, x + tickOffset, y));
 		}
-	}
+	};
 
-    function moveTo(x, y) {
-       return " M" + x + "," + y;
-    }
-    
-    function lineTo(x, y) {
-        return " L" + x + "," + y;
-    }
-    
-	var HISTORY_POLYGON_OUTLINE = 0.5;
-	
-	function historyPolygon(fromX, fromY, toX, toY, lineColor, fillColor, title) {
-		var bottom = metrics.bottom;
+	BurnupDom._historyPolygon = function(fromX, fromY, toX, toY, lineColor, fillColor, title) {
+		var bottom = this._metrics.bottom;
 		
-		var polygon = paper.path(moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z");
+		var polygon = this._paper.path(moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z");
 		polygon.attr("title", title);
 		polygon.attr("stroke", "white");
-		polygon.attr("stroke-width", HISTORY_POLYGON_OUTLINE);
+		polygon.attr("stroke-width", this.HISTORY_POLYGON_OUTLINE);
 		polygon.attr("fill", fillColor);
 		
-		var stroke = line(fromX, fromY, toX, toY);
+		var stroke = this._line(fromX, fromY, toX, toY);
 		stroke.attr("title", title); 
 		stroke.attr("stroke", lineColor);
 		stroke.attr("stroke-width", 3);
 		stroke.attr("stroke-linecap", "round");
 		
-		return paper.set(polygon, stroke);
-	}
+		return this._paper.set(polygon, stroke);
+	};
 	
-    function iteration(iterationNumber) {
-        var fromIteration = estimates.iteration(iterationNumber - 1);
-		var fromX = metrics.xForIteration(iterationNumber - 1);
-		var fromY = metrics.yForEffort(fromIteration.totalEffort());
+    BurnupDom._iteration = function(iterationNumber) {
+        var fromIteration = this._estimates.iteration(iterationNumber - 1);
+		var fromX = this._metrics.xForIteration(iterationNumber - 1);
+		var fromY = this._metrics.yForEffort(fromIteration.totalEffort());
 
-		var toIteration = estimates.iteration(iterationNumber);
-		var toX = metrics.xForIteration(iterationNumber);
-		var toY = metrics.yForEffort(toIteration.totalEffort());
+		var toIteration = this._estimates.iteration(iterationNumber);
+		var toX = this._metrics.xForIteration(iterationNumber);
+		var toY = this._metrics.yForEffort(toIteration.totalEffort());
 
-        return historyPolygon(fromX, fromY, toX, toY, self.FEATURE_STROKE, self.FEATURE_FILL, "Work remaining");
-	}
+        return this._historyPolygon(fromX, fromY, toX, toY, this.FEATURE_STROKE, this.FEATURE_FILL, "Work remaining");
+	};
 	
-	function velocity(iterationNumber) {
-		var fromX = metrics.xForIteration(iterationNumber - 1);
-		var toX = metrics.xForIteration(iterationNumber);
-		var fromY = metrics.yForEffort(estimates.iteration(iterationNumber - 1).effortToDate());
-		var toY = metrics.yForEffort(estimates.iteration(iterationNumber).effortToDate());
-		return historyPolygon(fromX, fromY, toX, toY, self.VELOCITY_STROKE, self.VELOCITY_FILL, "Work completed");
-	}
+	BurnupDom._velocity = function(iterationNumber) {
+		var fromX = this._metrics.xForIteration(iterationNumber - 1);
+		var toX = this._metrics.xForIteration(iterationNumber);
+		var fromY = this._metrics.yForEffort(this._estimates.iteration(iterationNumber - 1).effortToDate());
+		var toY = this._metrics.yForEffort(this._estimates.iteration(iterationNumber).effortToDate());
+		return this._historyPolygon(fromX, fromY, toX, toY, this.VELOCITY_STROKE, this.VELOCITY_FILL, "Work completed");
+	};
 
-    function history() {
-		self.iterations = paper.set();
-		self.velocity = paper.set();
+    BurnupDom._history = function() {
+		this.iterations = this._paper.set();
+		this.velocity = this._paper.set();
 		var i;
-		for (i = 1; i < estimates.iterationCount(); i++) {
-			self.iterations.push(iteration(i));
-			self.velocity.push(velocity(i));
+		for (i = 1; i < this._estimates.iterationCount(); i++) {
+			this.iterations.push(this._iteration(i));
+			this.velocity.push(this._velocity(i));
 		}
-		var width = metrics.xForIteration(estimates.iterationCount() - 1) - metrics.left - HISTORY_POLYGON_OUTLINE;
-		var clip = metrics.left + "," + metrics.top + "," + width + "," + metrics.height;
-        paper.set(self.iterations, self.velocity).attr("clip-rect", clip);
-	}
+		var width = this._metrics.xForIteration(this._estimates.iterationCount() - 1) - this._metrics.left - this.HISTORY_POLYGON_OUTLINE;
+		var clip = this._metrics.left + "," + this._metrics.top + "," + width + "," + this._metrics.height;
+        this._paper.set(this.iterations, this.velocity).attr("clip-rect", clip);
+	};
 	
-	function projection() {
-		var effortToDate = estimates.effortToDate();
+	BurnupDom._projection = function() {
+		var self = this;
+		var effortToDate = this._estimates.effortToDate();
 	    function calcProjection(projection){
             return {
-                x: metrics.xForIteration(estimates.iterationCount() - 1 + projection.iterationsRemaining()),
-                y: metrics.yForEffort(projection.totalEffort())
+                x: self._metrics.xForIteration(self._estimates.iterationCount() - 1 + projection.iterationsRemaining()),
+                y: self._metrics.yForEffort(projection.totalEffort())
             };
         }
 
-		var startX = metrics.xForIteration(estimates.iterationCount() - 1);
-		var effortY = metrics.yForEffort(estimates.currentIteration().totalEffort());
-		var velocityY = metrics.yForEffort(estimates.effortToDate());
-        var p10 = calcProjection(projections.tenPercentProjection());
-		var p50 = calcProjection(projections.fiftyPercentProjection());
-		var p90 = calcProjection(projections.ninetyPercentProjection());  
+		var startX = this._metrics.xForIteration(this._estimates.iterationCount() - 1);
+		var effortY = this._metrics.yForEffort(this._estimates.currentIteration().totalEffort());
+		var velocityY = this._metrics.yForEffort(this._estimates.effortToDate());
+        var p10 = calcProjection(this._projections.tenPercentProjection());
+		var p50 = calcProjection(this._projections.fiftyPercentProjection());
+		var p90 = calcProjection(this._projections.ninetyPercentProjection());
 
         function projectionLine(startY, title, color) {
-			return line(startX, startY, p50.x, p50.y)
+			return self._line(startX, startY, p50.x, p50.y)
 			    .attr("title", title)
 				.attr("stroke", color)
 				.attr("stroke-width", 3)
@@ -212,71 +226,71 @@ rabu.schedule.BurnupDom = function(element, estimates, projections) {
 		}
 		
 		function projectionCone(startY, title, color) {
-			return paper.path(moveTo(startX, startY) + lineTo(p10.x, p10.y) + lineTo(p50.x, p50.y) + lineTo(p90.x, p90.y) + "Z")
+			return self._paper.path(moveTo(startX, startY) + lineTo(p10.x, p10.y) + lineTo(p50.x, p50.y) + lineTo(p90.x, p90.y) + "Z")
 			    .attr("title", title)
 				.attr("stroke", "none")
 				.attr("fill", "0-" + color + "-#fff");
 		}
 							
 		function projectionTrace(startX, startY, endX, endY) {
-			return line(startX, startY, endX, endY)
+			return self._line(startX, startY, endX, endY)
 			    .attr("stroke", "black")
 				.attr("stroke-width", 0.5)
 				.attr("stroke-dasharray", "- ");
 		}
 								
-        self.projection = paper.set(
+        this.projection = this._paper.set(
 	        projectionLine(effortY, "Projection of work remaining", self.FEATURE_STROKE),
 			projectionLine(velocityY, "Projection of work completed", self.VELOCITY_STROKE),
 			projectionCone(effortY, "Projection of work remaining", self.FEATURE_STROKE),
 			projectionCone(velocityY, "Projection of work completed", self.VELOCITY_STROKE),
 			projectionTrace(startX, effortY, p10.x, p10.y),
-			projectionTrace(p10.x, p10.y, p10.x, metrics.bottom),
+			projectionTrace(p10.x, p10.y, p10.x, this._metrics.bottom),
 			projectionTrace(startX, effortY, p50.x, p50.y),
-			projectionTrace(p50.x, p50.y, p50.x, metrics.bottom),
+			projectionTrace(p50.x, p50.y, p50.x, this._metrics.bottom),
 			projectionTrace(startX, effortY, p90.x, p90.y),
-			projectionTrace(p90.x, p90.y, p90.x, metrics.bottom)
+			projectionTrace(p90.x, p90.y, p90.x, this._metrics.bottom)
 		);
-	}
+	};
 	
-	this.populate = function(optionalMetricsForTesting) {
-		hideInteriorElements();
-		if (paper) {
-			paper.remove();
+	BurnupDom.populate = function(optionalMetricsForTesting) {
+		this._hideInteriorElements();
+		if (this._paper) {
+			this._paper.remove();
 		}
-        paper = raphael(element[0], element.width(), element.height());
-		copyTextElements();
+        this._paper = raphael(this._element[0], this._element.width(), this._element.height());
+		this._copyTextElements();
 		if (optionalMetricsForTesting) {
-			metrics = optionalMetricsForTesting;
+			this._metrics = optionalMetricsForTesting;
 		}
 		else {
-		    metrics = new rabu.schedule.BurnupChartMetrics({
-	            paperWidth: element.width(), 
-				paperHeight: element.height(),
-	            xLabelHeight: self.xLabel.getBBox().height,
-				yLabelHeight: self.yLabel.getBBox().height,
-	            xTickLabelHeight: self.xTickLabel.getBBox().height,
-				yTickLabelWidth: self.yTickLabel.getBBox().width,
-				yTickLabelHeight: self.yTickLabel.getBBox().height,
-				startDate: estimates.firstIteration().startDate(),
-				iterationLength: estimates.firstIteration().length(),
-	            iterationCount: projections.totalIterations(),
-				maxEffort: projections.maxEffort()
+		    this._metrics = new rs.BurnupChartMetrics({
+	            paperWidth: this._element.width(),
+				paperHeight: this._element.height(),
+	            xLabelHeight: this.xLabel.getBBox().height,
+				yLabelHeight: this.yLabel.getBBox().height,
+	            xTickLabelHeight: this.xTickLabel.getBBox().height,
+				yTickLabelWidth: this.yTickLabel.getBBox().width,
+				yTickLabelHeight: this.yTickLabel.getBBox().height,
+				startDate: this._estimates.firstIteration().startDate(),
+				iterationLength: this._estimates.firstIteration().length(),
+	            iterationCount: this._projections.totalIterations(),
+				maxEffort: this._projections.maxEffort()
 			});
 		}
 
-        history();
-        projection();
-		axisLabels();
-		axisLines();
-		xAxisTicks();
-		yAxisTicks();
+        this._history();
+        this._projection();
+		this._axisLabels();
+		this._axisLines();
+		this._xAxisTicks();
+		this._yAxisTicks();
 	};
 	
-	this.paper = function() {
-		return paper;
+	BurnupDom.paper = function() {
+		return this._paper;
 	};
-};
+}());
 
 
 rabu.schedule.BurnupChartMetrics = function(data) {
