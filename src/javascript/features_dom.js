@@ -1,91 +1,94 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
-rabu.schedule.FeaturesDom = function(element, estimates) {
-// The drag-and-drop code is all quite overcomplicated and could probably be simplified by
-// making the in/out divider a <li> and letting the browser do positioning.
-// For that matter, JQueryUI has a 'sortable' tool that probably eliminates the need
-// for all of the drag-and-drop code. (Live and learn.) Alternatively,
-// http://threedubmedia.com/code/event/drag is a very lightweight, clean-looking approach
-// that would work well with the existing code.
+(function() {
+	// The drag-and-drop code is all quite overcomplicated and could probably be simplified by
+	// making the in/out divider a <li> and letting the browser do positioning.
+	// For that matter, JQueryUI has a 'sortable' tool that probably eliminates the need
+	// for all of the drag-and-drop code. (Live and learn.) Alternatively,
+	// http://threedubmedia.com/code/event/drag is a very lightweight, clean-looking approach
+	// that could work well with the existing code as an alternative to JQueryUI.
 
-	var list;
-	var liJQuery;
-	var divider;
-	var included;
-	var excluded;
-	var dividerHeight;
+	var rs = rabu.schedule;
+	rs.FeaturesDom = function(element, estimates) {
+		this._element = element;
+		this._estimates = estimates;
 
-	var orderBeforeDrag = [];
-	var positionsBeforeDrag = [];
-	var featuresInOrder = [];
+		this._orderBeforeDrag = [];
+		this._positionsBeforeDrag = [];
+		this._featuresInOrder = [];
+	};
+	rs.FeaturesDom.prototype = new rs.Object();
+	var FeaturesDom = rs.FeaturesDom.prototype;
 
-	function toHtml(features, cssClass) {
+	FeaturesDom._toHtml = function(features, cssClass) {
 		return features.reduce(function(sum, feature) {
 			var css = cssClass;
 			if (feature.isDone()) { css += " rabu-done"; }
 			return sum + "<li class='" + css + "'>" + feature.name() + "</li>";
 		}, "");
-	}
+	};
 
-	function populateFeatureList() {
-		element.html(toHtml(estimates.includedFeatures(), "rabu-included"));
-		element.append(toHtml(estimates.excludedFeatures(), "rabu-excluded"));
-	}
+	FeaturesDom._populateFeatureList = function() {
+		this._element.html(this._toHtml(this._estimates.includedFeatures(), "rabu-included"));
+		this._element.append(this._toHtml(this._estimates.excludedFeatures(), "rabu-excluded"));
+	};
 
-	function initializeElementVars() {
-		list = $(".rabu-features");
-		liJQuery = $("li", list);
-		divider = $(".rabu-divider");
-		included = $(".rabu-included", list);
-		excluded = $(".rabu-excluded", list);
-		dividerHeight = divider.outerHeight(true);
-		divider.css("position", "absolute");
+	FeaturesDom._initializeElementVars = function() {
+		var self = this;
+		this._list = $(".rabu-features");
+		this._liJQuery = $("li", this._list);
+		this._divider = $(".rabu-divider");
+		this._included = $(".rabu-included", this._list);
+		this._excluded = $(".rabu-excluded", this._list);
+		this._dividerHeight = this._divider.outerHeight(true);
+		this._divider.css("position", "absolute");
 
-		included.each(function(index, element) {
-			featuresInOrder.push($(element));
+		this._included.each(function(index, element) {
+			self._featuresInOrder.push($(element));
 		});
-		featuresInOrder.push(divider);
-		excluded.each(function(index, element) {
-			featuresInOrder.push($(element));
+		this._featuresInOrder.push(this._divider);
+		this._excluded.each(function(index, element) {
+			self._featuresInOrder.push($(element));
 		});
-	}
+	};
 
-	function setPosition(element, position) {
+	FeaturesDom._setPosition = function(element, position) {
 		element.offset({
 			top: position,
 			left: element.offset().left
 		});
-	}
+	};
 
-	function positionElements() {
-		var position = list.offset().top;
-		featuresInOrder.forEach(function(element, index) {
+	FeaturesDom._positionElements = function() {
+		var self = this;
+		var position = this._list.offset().top;
+		this._featuresInOrder.forEach(function(element, index) {
 			position += parseInt(element.css("margin-top"), 10);
-			setPosition(element, position);
+			self._setPosition(element, position);
 			position += parseInt(element.css("margin-bottom"), 10);
 			position += element.outerHeight(false);
 		});
-	}
+	};
 
-	function resizeListToAccomodateDivider() {
-		var padding = parseInt(list.css("padding-bottom"), 10);
-		padding += dividerHeight;
-		list.css("padding-bottom", padding);
-	}
+	FeaturesDom._resizeListToAccomodateDivider = function() {
+		var padding = parseInt(this._list.css("padding-bottom"), 10);
+		padding += this._dividerHeight;
+		this._list.css("padding-bottom", padding);
+	};
 
-
-	function moveElement(prevPosition, newPosition) {
+	FeaturesDom._moveElement = function(prevPosition, newPosition) {
+		var self = this;
 		function moveDown() {
-			newPosition = Math.min(newPosition, orderBeforeDrag.length - 1);
-			orderBeforeDrag.forEach(function(xx, index) {
+			newPosition = Math.min(newPosition, self._orderBeforeDrag.length - 1);
+			self._orderBeforeDrag.forEach(function(xx, index) {
 				if (index < prevPosition || index > newPosition) {
-					featuresInOrder[index] = orderBeforeDrag[index];
+					self._featuresInOrder[index] = self._orderBeforeDrag[index];
 				}
 				else if (index < newPosition) {
-					featuresInOrder[index] = orderBeforeDrag[index + 1];
+					self._featuresInOrder[index] = self._orderBeforeDrag[index + 1];
 				}
 				else if (index === newPosition) {
-					featuresInOrder[index] = orderBeforeDrag[prevPosition];
+					self._featuresInOrder[index] = self._orderBeforeDrag[prevPosition];
 				}
 				else {
 					throw "Unreachable code when moving up. index [" + index + "]; prevPosition: [" + prevPosition + "]; newPosition: [" + newPosition + "]";
@@ -93,15 +96,15 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 			});
 		}
 		function moveUp() {
-			orderBeforeDrag.forEach(function(xx, index) {
+			self._orderBeforeDrag.forEach(function(xx, index) {
 				if (index > prevPosition || index < newPosition) {
-					featuresInOrder[index] = orderBeforeDrag[index];
+					self._featuresInOrder[index] = self._orderBeforeDrag[index];
 				}
 				else if (index > newPosition) {
-					featuresInOrder[index] = orderBeforeDrag[index - 1];
+					self._featuresInOrder[index] = self._orderBeforeDrag[index - 1];
 				}
 				else if (index === newPosition) {
-					featuresInOrder[index] = orderBeforeDrag[prevPosition];
+					self._featuresInOrder[index] = self._orderBeforeDrag[prevPosition];
 				}
 				else {
 					throw "Unreachable code when moving down. index [" + index + "]; prevPosition: [" + prevPosition + "]; newPosition: [" + newPosition + "]";
@@ -111,67 +114,69 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 
 		if (newPosition < prevPosition) { moveUp(); }
 		else { moveDown(); }
-	}
+	};
 
-	function findOriginalIndex(domElement) {
+	FeaturesDom._findOriginalIndex = function(domElement) {
 		var i;
-		for (i = 0; i < orderBeforeDrag.length; i++) {
-			if (orderBeforeDrag[i][0] === domElement) { return i; }
+		for (i = 0; i < this._orderBeforeDrag.length; i++) {
+			if (this._orderBeforeDrag[i][0] === domElement) { return i; }
 		}
 		throw "Couldn't find element";
-	}
+	};
 
-	function findNewIndex(domElement, pageOffset, originalIndex) {
+	FeaturesDom._findNewIndex = function(domElement, pageOffset, originalIndex) {
 		function draggingUp(i) { return originalIndex >= i; }
 
 		var draggerTop = pageOffset;
 		var draggerHeight = $(domElement).outerHeight(true);
 		var i, elementTop, elementHeight, elementCenter;
 
-		for (i = positionsBeforeDrag.length - 1; i > 0; i--) {
+		for (i = this._positionsBeforeDrag.length - 1; i > 0; i--) {
 			if (draggingUp(i)) {
-				elementTop = positionsBeforeDrag[i - 1];
-				elementHeight = orderBeforeDrag[i - 1].outerHeight(false);
+				elementTop = this._positionsBeforeDrag[i - 1];
+				elementHeight = this._orderBeforeDrag[i - 1].outerHeight(false);
 				elementCenter = (elementHeight / 2);
 
 				if (draggerTop > elementTop + elementCenter) { return i; }
 			}
 			else {
-				elementTop = positionsBeforeDrag[i];
-				elementHeight = orderBeforeDrag[i].outerHeight(false);
+				elementTop = this._positionsBeforeDrag[i];
+				elementHeight = this._orderBeforeDrag[i].outerHeight(false);
 				elementCenter = (elementHeight / 2);
 
 				if (draggerTop + draggerHeight >= elementTop + elementCenter ) { return i; }
 			}
 		}
 		return 0;
-	}
+	};
 
-	function handleDrag(event, ui) {
-		var originalPosition = findOriginalIndex(event.target);
-		var newPosition = findNewIndex(event.target, ui.offset.top, originalPosition);
-		moveElement(originalPosition, newPosition);
-		positionElements();
-	}
+	FeaturesDom._makeDraggable = function() {
+		var self = this;
 
-	function handleDragStart(event, ui) {
-		function copyArray(array) { return array.slice(); }
+		function handleDrag(event, ui) {
+			var originalPosition = self._findOriginalIndex(event.target);
+			var newPosition = self._findNewIndex(event.target, ui.offset.top, originalPosition);
+			self._moveElement(originalPosition, newPosition);
+			self._positionElements();
+		}
 
-		orderBeforeDrag = copyArray(featuresInOrder);
-		featuresInOrder.forEach(function(element, index) {
-			positionsBeforeDrag[index] = $(element).offset().top;
-		});
-	}
+		function handleDragStart(event, ui) {
+			function copyArray(array) { return array.slice(); }
 
-	function handleDragStop(event, ui) {
-		positionElements();
-	}
+			self._orderBeforeDrag = copyArray(self._featuresInOrder);
+			self._featuresInOrder.forEach(function(element, index) {
+				self._positionsBeforeDrag[index] = $(element).offset().top;
+			});
+		}
 
-	function makeDraggable() {
-		var lastFeature = featuresInOrder[featuresInOrder.length - 1];
-		var listTop = list.offset().top;
-		var listBottom = list.offset().top + list.outerHeight(false);
-		liJQuery.draggable({
+		function handleDragStop(event, ui) {
+			self._positionElements();
+		}
+
+		var lastFeature = this._featuresInOrder[this._featuresInOrder.length - 1];
+		var listTop = this._list.offset().top;
+		var listBottom = this._list.offset().top + this._list.outerHeight(false);
+		this._liJQuery.draggable({
 			axis: 'y',
 			containment: [0, listTop, 0, listBottom],
 			scroll: false,      // disabled due to bug that prevents containment from being respected when autoscrolling. Last checked in jQueryUI 1.8.13
@@ -180,15 +185,15 @@ rabu.schedule.FeaturesDom = function(element, estimates) {
 			drag: handleDrag,
 			stop: handleDragStop
 		});
-	}
-
-	this.populate = function() {
-		populateFeatureList();
-		initializeElementVars();
-		if (divider.length === 0) { return; }
-
-		positionElements();
-		resizeListToAccomodateDivider();
-		makeDraggable();
 	};
-};
+
+	FeaturesDom.populate = function() {
+		this._populateFeatureList();
+		this._initializeElementVars();
+		if (this._divider.length === 0) { return; }
+
+		this._positionElements();
+		this._resizeListToAccomodateDivider();
+		this._makeDraggable();
+	};
+}());
