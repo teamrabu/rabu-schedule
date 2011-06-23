@@ -1,12 +1,4 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
-var rs = rabu.schedule;
-rs.Feature = function(feature, cumulativeEstimate, effortToDate) {
-	this._feature = feature;
-	this._cumulativeEstimate = cumulativeEstimate;
-	this._effortToDate = effortToDate;
-};
-rs.Feature.prototype = new rs.Object();
-var Feature = rs.Feature.prototype;
 
 (function() {
 	var raphael = Raphael;     // prevent JSLint error resulting from calling Raphael without 'new'
@@ -292,123 +284,126 @@ var Feature = rs.Feature.prototype;
 	};
 }());
 
-
-rabu.schedule.BurnupChartMetrics = function(data) {
+(function() {
 	var rs = rabu.schedule;
-    var self = this;
-	this.MAJOR_TICK_LENGTH = data.MAJOR_TICK_LENGTH || 8;
-	this.MINOR_TICK_LENGTH = data.MINOR_TICK_LENGTH || 4;
-	this.AXIS_OVERHANG = data.AXIS_OVERHANG || 10;
-	this.X_LABEL_PADDING_MULTIPLIER = data.X_LABEL_PADDING_MULTIPLIER || 1.25;
-	this.Y_LABEL_PADDING_MULTIPLIER = data.Y_LABEL_PADDING_MULTIPLIER || 1.25;
-	this.X_TICK_LABEL_PADDING = data.X_TICK_LABEL_PADDING || 10;
-	this.Y_TICK_SPACING = data.Y_TICK_SPACING || 10;
-	this.Y_TICK_LABEL_PADDING_MULTIPLIER = data.Y_TICK_LABEL_PADDING_MULTIPLIER || 1.1;
-	this.Y_TICK_LABEL_RIGHT_PADDING = data.Y_TICK_LABEL_RIGHT_PADDING || 3;
-    
-    this.left = data.yLabelHeight + this.AXIS_OVERHANG + (data.yTickLabelWidth * self.Y_LABEL_PADDING_MULTIPLIER);
-    this.right = data.paperWidth;
-    this.width = this.right - this.left;
-    
-    this.top = 0;
-    this.bottom = data.paperHeight - ((data.xLabelHeight * self.X_LABEL_PADDING_MULTIPLIER) + (this.MAJOR_TICK_LENGTH / 2) + data.xTickLabelHeight);
-    this.height = this.bottom - this.top;
-	
-	this.yTickLabelHeight = data.yTickLabelHeight;
-    
-    this.xLabelCenter = this.left + (this.width / 2);
-    this.yLabelCenter = this.top + (this.height / 2);
-    this.xLabelVerticalCenter = data.paperHeight - (data.xLabelHeight / 2);
-    this.yLabelVerticalCenter = data.yLabelHeight / 2;
-	
-	this.xTickLabelVerticalCenter = this.bottom + (this.MAJOR_TICK_LENGTH / 2) + (data.xTickLabelHeight / 2);
-	this.yTickLabelRightEdge = this.left - (this.MAJOR_TICK_LENGTH / 2) - this.Y_TICK_LABEL_RIGHT_PADDING;
-	
-	this.xTickCount = data.iterationCount + 1;
-	
-	this.xForIteration = function(iteration) {
-        var tickDistance = self.width / (this.xTickCount - 1 + 0.5);
-        return self.left + (iteration * tickDistance);
+
+	rs.BurnupChartMetrics = function(data) {
+		this._data = data;
+		this.MAJOR_TICK_LENGTH = data.MAJOR_TICK_LENGTH || 8;
+		this.MINOR_TICK_LENGTH = data.MINOR_TICK_LENGTH || 4;
+		this.AXIS_OVERHANG = data.AXIS_OVERHANG || 10;
+		this.X_LABEL_PADDING_MULTIPLIER = data.X_LABEL_PADDING_MULTIPLIER || 1.25;
+		this.Y_LABEL_PADDING_MULTIPLIER = data.Y_LABEL_PADDING_MULTIPLIER || 1.25;
+		this.X_TICK_LABEL_PADDING = data.X_TICK_LABEL_PADDING || 10;
+		this.Y_TICK_SPACING = data.Y_TICK_SPACING || 10;
+		this.Y_TICK_LABEL_PADDING_MULTIPLIER = data.Y_TICK_LABEL_PADDING_MULTIPLIER || 1.1;
+		this.Y_TICK_LABEL_RIGHT_PADDING = data.Y_TICK_LABEL_RIGHT_PADDING || 3;
+
+		this.left = data.yLabelHeight + this.AXIS_OVERHANG + (data.yTickLabelWidth * this.Y_LABEL_PADDING_MULTIPLIER);
+		this.right = data.paperWidth;
+		this.width = this.right - this.left;
+
+		this.top = 0;
+		this.bottom = data.paperHeight - ((data.xLabelHeight * this.X_LABEL_PADDING_MULTIPLIER) + (this.MAJOR_TICK_LENGTH / 2) + data.xTickLabelHeight);
+		this.height = this.bottom - this.top;
+
+		this.yTickLabelHeight = data.yTickLabelHeight;
+
+		this.xLabelCenter = this.left + (this.width / 2);
+		this.yLabelCenter = this.top + (this.height / 2);
+		this.xLabelVerticalCenter = data.paperHeight - (data.xLabelHeight / 2);
+		this.yLabelVerticalCenter = data.yLabelHeight / 2;
+
+		this.xTickLabelVerticalCenter = this.bottom + (this.MAJOR_TICK_LENGTH / 2) + (data.xTickLabelHeight / 2);
+		this.yTickLabelRightEdge = this.left - (this.MAJOR_TICK_LENGTH / 2) - this.Y_TICK_LABEL_RIGHT_PADDING;
+
+		this.xTickCount = data.iterationCount + 1;
+	};
+	rs.BurnupChartMetrics.prototype = new rs.Object();
+	var BurnupChartMetrics = rs.BurnupChartMetrics.prototype;
+
+	BurnupChartMetrics.xForIteration = function(iteration) {
+        var tickDistance = this.width / (this.xTickCount - 1 + 0.5);
+        return this.left + (iteration * tickDistance);
 	};
 	
-    function yTickScale() {
-        var pixels = self.height;
-        var effortPerPixel = data.maxEffort / pixels;
-        var effortPerTick = effortPerPixel * self.Y_TICK_SPACING;
+    BurnupChartMetrics._yTickScale = function() {
+        var pixels = this.height;
+        var effortPerPixel = this._data.maxEffort / pixels;
+        var effortPerTick = effortPerPixel * this.Y_TICK_SPACING;
         return rs.BurnupChartMetrics.roundUpEffort(effortPerTick);
-    }
+    };
 	
-	this.yForEffort = function(effort) {
-        var pixelsPerTick = self.height / (self.yTickCount() - 1 + 0.5);
-		var effortPerTick = yTickScale();
+	BurnupChartMetrics.yForEffort = function(effort) {
+        var pixelsPerTick = this.height / (this.yTickCount() - 1 + 0.5);
+		var effortPerTick = this._yTickScale();
 		var pixelsPerEffort = pixelsPerTick / effortPerTick;
 		var pixels = effort * pixelsPerEffort;
-        return self.bottom - pixels;
+        return this.bottom - pixels;
 	};
 	
-	this.xTickPosition = function(offset) {
-		return self.xForIteration(offset);
+	BurnupChartMetrics.xTickPosition = function(offset) {
+		return this.xForIteration(offset);
 	};
 	
-	this.shouldDrawXTickLabel = function(tickOffset, labelWidth, previousRightEdge) {
-		var labelLeft = self.xTickPosition(tickOffset) - (labelWidth / 2) - self.X_TICK_LABEL_PADDING;
-		var labelRight = self.xTickPosition(tickOffset) + (labelWidth / 2) + self.X_TICK_LABEL_PADDING;
+	BurnupChartMetrics.shouldDrawXTickLabel = function(tickOffset, labelWidth, previousRightEdge) {
+		var labelLeft = this.xTickPosition(tickOffset) - (labelWidth / 2) - this.X_TICK_LABEL_PADDING;
+		var labelRight = this.xTickPosition(tickOffset) + (labelWidth / 2) + this.X_TICK_LABEL_PADDING;
 		
 		var tickZero = (tickOffset === 0);
-		var overlapsLeftEdge = (labelLeft <= self.left);
-		var overlapsRightEdge = (labelRight >= self.right);
+		var overlapsLeftEdge = (labelLeft <= this.left);
+		var overlapsRightEdge = (labelRight >= this.right);
 		var overlapsPreviousLabel = (labelLeft <= previousRightEdge);
 		
 		return !tickZero && !overlapsLeftEdge && !overlapsRightEdge && !overlapsPreviousLabel;
 	};
 	
-	this.yTickCount = function() {
-		var count = 1 + data.maxEffort / yTickScale();
+	BurnupChartMetrics.yTickCount = function() {
+		var count = 1 + this._data.maxEffort / this._yTickScale();
 		return Math.ceil(count);
 	};
 	
-	this.yTickPosition = function(tickOffset) {
-		return self.yForEffort(tickOffset * yTickScale());
+	BurnupChartMetrics.yTickPosition = function(tickOffset) {
+		return this.yForEffort(tickOffset * this._yTickScale());
 	};
 	
-	this.yTickLabel = function(tickOffset) {
-		return (yTickScale() * tickOffset).toString();
+	BurnupChartMetrics.yTickLabel = function(tickOffset) {
+		return (this._yTickScale() * tickOffset).toString();
 	};
 	
-	this.shouldDrawYTickLabel = function(tickOffset, previousTopEdge) {
-		var padding = data.yTickLabelHeight * (self.Y_TICK_LABEL_PADDING_MULTIPLIER - 1);
-		var labelBottom = self.yTickPosition(tickOffset) + (data.yTickLabelHeight / 2) + padding;
-		var labelTop = self.yTickPosition(tickOffset) - (data.yTickLabelHeight / 2) - padding;
+	BurnupChartMetrics.shouldDrawYTickLabel = function(tickOffset, previousTopEdge) {
+		var padding = this._data.yTickLabelHeight * (this.Y_TICK_LABEL_PADDING_MULTIPLIER - 1);
+		var labelBottom = this.yTickPosition(tickOffset) + (this._data.yTickLabelHeight / 2) + padding;
+		var labelTop = this.yTickPosition(tickOffset) - (this._data.yTickLabelHeight / 2) - padding;
 		
 		var tickZero = (tickOffset === 0);
-		var overlapsBottomEdge = (labelBottom >= self.bottom);
-		var overlapsTopEdge = (labelTop <= self.top);
+		var overlapsBottomEdge = (labelBottom >= this.bottom);
+		var overlapsTopEdge = (labelTop <= this.top);
 		var overlapsPreviousLabel = (labelBottom >= previousTopEdge);
 		
 		return !tickZero && !overlapsBottomEdge && !overlapsTopEdge && !overlapsPreviousLabel;
 	};
-};
 
-       
-rabu.schedule.BurnupChartMetrics.roundUpEffort = function(effort) {
-    if (effort <= 0.25) {
-        return 0.25;
-    }
-    if (effort <= 0.5) {
-        return 0.5;
-    }
-    
-    var result = 1;
-    var adjusted = effort;
-    while (adjusted >= 10) {
-        result *= 10;
-        adjusted /= 10;
-    }
-    if (result < effort) {
-        result *= 5;
-    }
-    if (result < effort) {
-        result *= 2;
-    }
-    return result;
-};
+	rs.BurnupChartMetrics.roundUpEffort = function(effort) {
+		if (effort <= 0.25) {
+			return 0.25;
+		}
+		if (effort <= 0.5) {
+			return 0.5;
+		}
+
+		var result = 1;
+		var adjusted = effort;
+		while (adjusted >= 10) {
+			result *= 10;
+			adjusted /= 10;
+		}
+		if (result < effort) {
+			result *= 5;
+		}
+		if (result < effort) {
+			result *= 2;
+		}
+		return result;
+	};
+}());
