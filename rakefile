@@ -25,7 +25,7 @@ JSTESTDRIVER_BROWSER_TIMEOUT_IN_SEC = 10
 
 JS_TEST_CONF = "#{BUILD_DIR}/JsTestDriver.conf"
 JS_SRC_DIR = "#{SRC_DIR}/javascript"
-MAIN_JS_SOURCE = "#{JS_SRC_DIR}/main.js"
+MAIN_JS_SOURCE = "#{JS_SRC_DIR}/object.js"
 MERGED_JS = "#{MERGED_DIR}/schedule.js"
 
 HTML_SRC_DIR = "#{SRC_DIR}/html"
