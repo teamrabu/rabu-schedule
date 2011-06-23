@@ -163,11 +163,12 @@ $(document).ready(function() {
 
 	(function() {
 		log();
-		log("Chaining in 'real world' scenario:");
+		log("Chaining in 'real world' scenario -- callParent() doesn't work quite right:");
 
 		var Root = {
+			Root: true,
 			init: function() {},
-			chain: function(init) {
+			chainWithInit: function(init) {
 				var chained = Object.create(this);
 				chained.parent = this;
 				chained._recursiveThis = chained;
@@ -175,9 +176,9 @@ $(document).ready(function() {
 				chained.init();
 				return chained;
 			},
-			create: function() {
+			chain: function() {
 				var outerArgs = arguments;
-				return this.chain(function() {
+				return this.chainWithInit(function() {
 					this._callParent("init", outerArgs);
 				});
 			},
@@ -192,10 +193,11 @@ $(document).ready(function() {
 			},
 		};
 
-		var Person = Root.chain(function(name) {
+		/**/
+		var Person = Root.chainWithInit(function(name) {
 			this.name = name;
-			log("init (Person)");
 		});
+		Person.Person = true;
 		Person.greet = function() {
 			log("Hello, my name is " + this.name);
 		};
@@ -203,24 +205,24 @@ $(document).ready(function() {
 			log(this.name + " changing name to " + name);
 			this.name = name;
 		};
+		/**/
 
-		var RudePerson = Person.chain(function(name) {
+		/**/
+		var RudePerson = Person.chainWithInit(function(name) {
 			this.callParent("init", name);
-			log("init (RudePerson)");
 		});
+		RudePerson.RudePerson = true;
 		RudePerson.greet = function() {
+			this.callParent("greet");
 			log("'Bugger off,' says " + this.name);
 		}
+		/**/
 
-//		var joe = Person.chain(function() { this.callParent("init", "Joe") });
-		var joe = Person.create("Joe");
-		var bob = RudePerson.chain(function() {
-			this.callParent("init", "Bob");
-			log("init (bob)");
-		});
+		var joe = Person.chain("Joe");
+		var bob = RudePerson.chain("Bob");
 
 		joe.greet();
-		bob.greet();
+		bob.greet(); /* 'bugger off' printed twice as callParent ascends chain; once for bob and once for RudePerson */
 		bob.setName("Jill");
 		joe.greet();
 		bob.greet();
@@ -228,7 +230,50 @@ $(document).ready(function() {
 
 	(function() {
 		log();
-		log("Classic but memory-intensive approach that supports 'new' keyword and private vars:");
+		log("Native Javascript prototypal approach that supports 'new' keyword but not private vars:");
+
+		function Root() {
+			// common functions go here
+		}
+
+		/**/
+		function Person(name) {
+			this._name = name;
+		};
+		Person.prototype = new Root();
+		Person.prototype.greet = function() {
+			log("Hello, my name is " + this._name);
+		};
+		Person.prototype.setName = function(newName) {
+			log(this._name + " changing name to " + newName);
+			this._name = newName;
+		};
+		/**/
+
+		/**/
+		function RudePerson(name) {
+			Person.call(this, name);
+		};
+		RudePerson.prototype = new Person();
+		RudePerson.prototype.greet = function() {
+			Person.prototype.greet.call(this);
+			log("'Bugger off,' says " + this._name);
+		};
+		/**/
+
+		var joe = new Person("Joe");
+		var bob = new RudePerson("Bob");
+		joe.greet();
+		bob.greet();
+		bob.setName("Jill");
+		joe.greet();
+		bob.greet();
+		log("joe instanceof Root? " + (joe instanceof Root));
+	})();
+
+	(function() {
+		log();
+		log("Native Javascript alternative that doesn't use prototypes; memory-intensive but supports private vars:");
 
 		var Person = function(name) {
 			log("init (Person)");
@@ -247,40 +292,6 @@ $(document).ready(function() {
 				log("'Bugger off,' says " + name);
 			}
 		}
-
-		var joe = new Person("Joe");
-		var bob = new RudePerson("Bob");
-		joe.greet();
-		bob.greet();
-		bob.setName("Jill");
-		joe.greet();
-		bob.greet();
-	})();
-
-	(function() {
-		log();
-		log("Classic prototype-based approach that supports 'new' keyword but not private vars:");
-
-		function Person(name) {
-			this._name = name;
-			log("init (Person)");
-		};
-		Person.prototype.greet = function() {
-			log("Hello, my name is " + this._name);
-		};
-		Person.prototype.setName = function(newName) {
-			log(this._name + " changing name to " + newName);
-			this._name = newName;
-		};
-
-		function RudePerson(name) {
-			Person.call(this, name);
-			log("init (RudePerson)");
-		};
-		RudePerson.prototype = new Person();
-		RudePerson.prototype.greet = function() {
-			log("'Bugger off,' says " + this._name);
-		};
 
 		var joe = new Person("Joe");
 		var bob = new RudePerson("Bob");
