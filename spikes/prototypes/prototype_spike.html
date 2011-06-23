@@ -163,7 +163,7 @@ $(document).ready(function() {
 
 	(function() {
 		log();
-		log("Real world scenario:");
+		log("Chaining in 'real world' scenario:");
 
 		var Root = {
 			init: function() {},
@@ -194,6 +194,7 @@ $(document).ready(function() {
 
 		var Person = Root.chain(function(name) {
 			this.name = name;
+			log("init (Person)");
 		});
 		Person.greet = function() {
 			log("Hello, my name is " + this.name);
@@ -202,8 +203,10 @@ $(document).ready(function() {
 			log(this.name + " changing name to " + name);
 			this.name = name;
 		};
+
 		var RudePerson = Person.chain(function(name) {
 			this.callParent("init", name);
+			log("init (RudePerson)");
 		});
 		RudePerson.greet = function() {
 			log("'Bugger off,' says " + this.name);
@@ -213,7 +216,7 @@ $(document).ready(function() {
 		var joe = Person.create("Joe");
 		var bob = RudePerson.chain(function() {
 			this.callParent("init", "Bob");
-			log("instantiated bob");
+			log("init (bob)");
 		});
 
 		joe.greet();
@@ -228,6 +231,7 @@ $(document).ready(function() {
 		log("Classic but memory-intensive approach that supports 'new' keyword and private vars:");
 
 		var Person = function(name) {
+			log("init (Person)");
 			this.greet = function() {
 				log("Hello, my name is " + name);
 			}
@@ -238,6 +242,7 @@ $(document).ready(function() {
 		};
 		var RudePerson = function(name) {
 			Person.call(this, name);
+			log("init (RudePerson)");
 			this.greet = function() {
 				log("'Bugger off,' says " + name);
 			}
@@ -256,8 +261,9 @@ $(document).ready(function() {
 		log();
 		log("Classic prototype-based approach that supports 'new' keyword but not private vars:");
 
-		var Person = function(name) {
+		function Person(name) {
 			this._name = name;
+			log("init (Person)");
 		};
 		Person.prototype.greet = function() {
 			log("Hello, my name is " + this._name);
@@ -267,8 +273,9 @@ $(document).ready(function() {
 			this._name = newName;
 		};
 
-		var RudePerson = function(name) {
+		function RudePerson(name) {
 			Person.call(this, name);
+			log("init (RudePerson)");
 		};
 		RudePerson.prototype = new Person();
 		RudePerson.prototype.greet = function() {
@@ -282,6 +289,89 @@ $(document).ready(function() {
 		bob.setName("Jill");
 		joe.greet();
 		bob.greet();
+	})();
+
+	(function() {
+		log();
+		log("An attempt to mix classic prototype approach with private vars (doesn't work)");
+
+		var Person = function(name) {
+			var closedName = name;
+			Person.prototype.greet = function() {
+				log("Hello, my name is " + closedName);
+			}
+			Person.prototype.setName = function(newName) {
+				log(closedName + " changing name to " + newName);
+				closedName = newName;
+			}
+		};
+
+		var RudePerson = function(name) {
+			RudePerson.prototype = new Person(name);
+//			Person.call(this, name);
+			RudePerson.prototype.greet = function() {
+				log("'Bugger off,' says " + name);
+			};
+		};
+
+		var joe = new Person("Joe");
+		var bob = new RudePerson("Bob");
+		joe.greet();    // FAIL: says 'Bob', not 'Joe'
+//		bob.greet();    // COMPILE ERROR: "not a function"
+//		bob.setName("Jill");    // COMPILE ERROR: "not a function"
+		joe.greet();
+//		bob.greet();
+	})();
+
+	(function() {
+		log();
+		log("An attempt to mix chaining with 'new' and 'instanceof' (couldn't figure it out)");
+
+//		var Root = {
+//			init: function() {},
+//			chain: function(init) {
+//				var chained = Object.create(this);
+//				chained.parent = this;
+//				chained._recursiveThis = chained;
+//				chained.init = init;
+//				chained.init();
+//				return chained;
+//			},
+//			create: function() {
+//				var outerArgs = arguments;
+//				return this.chain(function() {
+//					this._callParent("init", outerArgs);
+//				});
+//			},
+//			callParent: function(methodName) {
+//				this._callParent(methodName, Array.prototype.slice.call(arguments, 1));
+//			},
+//			_callParent: function(methodName, args) {
+//				var oldThis = this._recursiveThis;
+//				this._recursiveThis = oldThis.parent;
+//				this._recursiveThis[methodName].apply(this, args);
+//				this._recursiveThis = oldThis;
+//			},
+//		};
+//		var Root = {
+//			chain: function() {
+//				var chained = Object.create(this);
+//				return chained;
+//			}
+//		}
+//
+//		function Person(name) {
+//			var self = Root.chain();
+//			self._name = name;
+//			Person.prototype = Person;
+//			return self;
+//		}
+//		Person.greet = function() {
+//			log("Hello, my name is " + this._name);
+//		}
+//
+//		var joe = new Person("Joe");
+//		joe.greet();
 	})();
 
 	log();
