@@ -1,11 +1,106 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
-rabu.schedule.Estimates = function(config) {
+(function() {
 	var rs = rabu.schedule;
-	var self = this;
+	rs.Estimates = function(config) {
+		this._config = config;
+	};
+	rs.Estimates.prototype = new rs.Object();
+	var Estimates = rs.Estimates.prototype;
 
-    function iterations() {
-		var iterationData = config.iterations;
+	Estimates.name = function() {
+		return this._config.name;
+	};
+
+	Estimates.updated = function() {
+		return new Date(this._config.updated);
+	};
+
+	Estimates.tenPercentMultiplier = function() {
+		return this.currentIteration().tenPercentMultiplier();
+	};
+
+	Estimates.fiftyPercentMultiplier = function() {
+        return this.currentIteration().fiftyPercentMultiplier();
+	};
+
+	Estimates.ninetyPercentMultiplier = function() {
+        return this.currentIteration().ninetyPercentMultiplier();
+	};
+
+	Estimates.currentIteration = function() {
+		var list = this._iterations();
+		return list[list.length - 1];
+	};
+
+	Estimates.firstIteration = function() {
+		return this._iterations()[0];
+	};
+
+	Estimates.iteration = function(offsetFromOldest) {
+		return this._iterations()[offsetFromOldest];
+	};
+
+    Estimates.iterationCount = function() {
+		return this._config.iterations.length;
+	};
+
+	Estimates.currentIterationStarted = function() {
+		return this.currentIteration().startDate();
+	};
+
+	Estimates.iterationLength = function() {
+		return this.currentIteration().length();
+	};
+
+	Estimates.velocity = function() {
+		return this.currentIteration().velocity();
+	};
+
+	Estimates.effortToDate = function() {
+		return this.currentIteration().effortToDate();
+	};
+
+	Estimates.peakEffortEstimate = function() {
+        return this._iterations().reduce(function(previousValue, iteration) {
+			var currentValue = iteration.totalEffort();
+			return currentValue > previousValue ? currentValue : previousValue;
+		}, 0);
+	};
+
+	Estimates.totalEstimate = function() {
+		return this.currentIteration().totalEstimate();
+	};
+
+	Estimates.includedFeatures = function() {
+		return this.currentIteration().includedFeatures();
+	};
+
+	Estimates.excludedFeatures = function() {
+		return this.currentIteration().excludedFeatures();
+	};
+
+	Estimates.dateForIteration = function(iterationNumber) {
+		var self = this;
+		function calcFutureDate(futureOffset){
+			var days = futureOffset * self.currentIteration().length();
+
+			var result = self.currentIteration().startDate();
+			result.setDate(result.getDate() + days);
+			return result;
+		}
+
+		var offsetFromCurrent = iterationNumber - (this.iterationCount() - 1);
+		if (offsetFromCurrent >= 0) {
+			return calcFutureDate(offsetFromCurrent);
+		}
+		else {
+			return this.iteration(iterationNumber).startDate();
+		}
+	};
+
+	Estimates._iterations = function() {
+		var iterationData = this._config.iterations;
 		if (!iterationData || iterationData.length === 0) {
 			iterationData = [{}];
 		}
@@ -13,101 +108,11 @@ rabu.schedule.Estimates = function(config) {
 		var i;
 		var effortToDate = 0;
 		var result = [];
-        for (i = iterationData.length - 1; i >= 0; i--) {
+	    for (i = iterationData.length - 1; i >= 0; i--) {
 			var iteration = new rs.Iteration(iterationData[i], effortToDate);
 			result.push(iteration);
 			effortToDate += iteration.velocity();
 		}
 		return result;
-    }
-
-	this.name = function() {
-		return config.name;
 	};
-
-	this.updated = function() {
-		return new Date(config.updated);
-	};
-
-	this.tenPercentMultiplier = function() {
-		return self.currentIteration().tenPercentMultiplier();
-	};
-
-	this.fiftyPercentMultiplier = function() {
-        return self.currentIteration().fiftyPercentMultiplier();
-	};
-
-	this.ninetyPercentMultiplier = function() {
-        return self.currentIteration().ninetyPercentMultiplier();
-	};
-
-	this.currentIteration = function() {
-		var list = iterations();
-		return list[list.length - 1];
-	};
-	
-	this.firstIteration = function() {
-		return iterations()[0];
-	};
-	
-	this.iteration = function(offsetFromOldest) {
-		return iterations()[offsetFromOldest];
-	};
-	
-    this.iterationCount = function() {
-		return config.iterations.length;
-	};
-
-	this.currentIterationStarted = function() {
-		return self.currentIteration().startDate();
-	};
-
-	this.iterationLength = function() {
-		return self.currentIteration().length();
-	};
-
-	this.velocity = function() {
-		return self.currentIteration().velocity();
-	};
-	
-	this.effortToDate = function() {
-		return self.currentIteration().effortToDate();
-	};
-	
-	this.peakEffortEstimate = function() {
-        return iterations().reduce(function(previousValue, iteration) {
-			var currentValue = iteration.totalEffort();
-			return currentValue > previousValue ? currentValue : previousValue;
-		}, 0);
-	};
-
-	this.totalEstimate = function() {
-		return self.currentIteration().totalEstimate();
-	};
-
-	this.includedFeatures = function() {
-		return self.currentIteration().includedFeatures();
-	};
-
-	this.excludedFeatures = function() {
-		return self.currentIteration().excludedFeatures();
-	};
-	
-	this.dateForIteration = function(iterationNumber) {
-		function calcFutureDate(futureOffset){
-			var days = futureOffset * self.currentIteration().length();
-			
-			var result = self.currentIteration().startDate();
-			result.setDate(result.getDate() + days);
-			return result;
-		}
-
-		var offsetFromCurrent = iterationNumber - (self.iterationCount() - 1);
-		if (offsetFromCurrent >= 0) {
-			return calcFutureDate(offsetFromCurrent);
-		}
-		else {
-			return self.iteration(iterationNumber).startDate();
-		}
-	};
-};
+}());
