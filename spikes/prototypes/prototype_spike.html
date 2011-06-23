@@ -273,22 +273,24 @@ $(document).ready(function() {
 
 	(function() {
 		log();
-		log("Native Javascript alternative that doesn't use prototypes; memory-intensive but supports private vars:");
+		log("Native Javascript alternative that doesn't use prototypes; memory-intensive but supports private vars (doesn't work):");
 
 		var Person = function(name) {
+			var scopedName = name;
 			log("init (Person)");
 			this.greet = function() {
-				log("Hello, my name is " + name);
+				log("Hello, my name is " + scopedName);
 			}
 			this.setName = function(newName) {
 				log(name + " changing name to " + newName);
-				name = newName;
+				scopedName = newName;
 			}
 		};
 		var RudePerson = function(name) {
 			Person.call(this, name);
 			log("init (RudePerson)");
 			this.greet = function() {
+				// ERROR: No way to call superclass
 				log("'Bugger off,' says " + name);
 			}
 		}
@@ -299,7 +301,7 @@ $(document).ready(function() {
 		bob.greet();
 		bob.setName("Jill");
 		joe.greet();
-		bob.greet();
+		bob.greet();            // ERROR: prints wrong name
 	})();
 
 	(function() {
