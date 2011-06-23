@@ -1,48 +1,62 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
-rabu.schedule.Iteration = function(iteration, effortToDate) {
-    var self = this;
+(function() {
+	var rs = rabu.schedule;
+	rs.Iteration = function(iteration, effortToDate) {
+		this._iteration = iteration;
+		this._effortToDate = effortToDate;
+	};
+	rs.Iteration.prototype = new rs.Object();
+	var Iteration = rs.Iteration.prototype;
 
-	this.startDate = function() {
-		return new Date(iteration.started);
+	Iteration.startDate = function() {
+		return new Date(this._iteration.started);
 	};
 
-	this.length = function() {
-		return iteration.length;
+	Iteration.length = function() {
+		return this._iteration.length;
 	};
 
-	this.velocity = function() {
-		return iteration.velocity;
+	Iteration.velocity = function() {
+		return this._iteration.velocity;
 	};
 
-	this.tenPercentMultiplier = function() {
-		return iteration.riskMultipliers[0];
+	Iteration.tenPercentMultiplier = function() {
+		return this._iteration.riskMultipliers[0];
 	};
 
-	this.fiftyPercentMultiplier = function() {
-		return iteration.riskMultipliers[1];
+	Iteration.fiftyPercentMultiplier = function() {
+		return this._iteration.riskMultipliers[1];
 	};
 
-	this.ninetyPercentMultiplier = function() {
-		return iteration.riskMultipliers[2];
+	Iteration.ninetyPercentMultiplier = function() {
+		return this._iteration.riskMultipliers[2];
 	};
 
-	this.effortToDate = function() {
-		return effortToDate;
+	Iteration.effortToDate = function() {
+		return this._effortToDate;
 	};
 
-	this.effortRemaining = function() {
+	Iteration.effortRemaining = function() {
 		var adder = function(sum, feature) {
 			return sum + feature.estimate();
 		};
-		return self.includedFeatures().reduce(adder, 0);
+		return this.includedFeatures().reduce(adder, 0);
 	};
 
-	this.totalEffort = function() {
-		return self.effortToDate() + self.effortRemaining();
+	Iteration.totalEffort = function() {
+		return this.effortToDate() + this.effortRemaining();
 	};
 
-	function featuresFromList(featureList, effort) {
+	Iteration.includedFeatures = function() {
+		return this._featuresFromList(this._iteration.included, this.effortToDate());
+	};
+
+	Iteration.excludedFeatures = function() {
+		return this._featuresFromList(this._iteration.excluded, this.totalEffort());
+	};
+
+	Iteration._featuresFromList = function(featureList, effort) {
 		if (!featureList) { return []; }
 		var cumulativeEstimate = 0;
 		return featureList.map(function(element) {
@@ -50,13 +64,5 @@ rabu.schedule.Iteration = function(iteration, effortToDate) {
 			cumulativeEstimate += result.estimate();
 			return result;
 		});
-	}
-
-	this.includedFeatures = function() {
-		return featuresFromList(iteration.included, self.effortToDate());
 	};
-
-	this.excludedFeatures = function() {
-		return featuresFromList(iteration.excluded, self.totalEffort());
-	};
-};
+}());
