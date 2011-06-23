@@ -14,7 +14,7 @@ var DIRS_TO_CHECK = ["src/javascript"];
 var OPTIONS = {
 	undef: true,        // Disallow undefined variables
 	newcap: true,       // Require Initial Caps for constructors
-	nomen: true,        // Disallow dangling _ in identifiers
+	nomen: false,       // Allow dangling _ in identifiers
 	regexp: true,       // Disallow . and [^...] in /RegExp/
 	bitwise: true,      // Disallow bitwise operators
 	"continue": true,   // Tolerate 'continue'

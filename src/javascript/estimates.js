@@ -174,31 +174,65 @@ rabu.schedule.Iteration = function(iteration, effortToDate) {
 	};
 };
 
+(function() {
+	var rs = rabu.schedule;
+	rs.Feature = function(feature, cumulativeEstimate, effortToDate) {
+		this._feature = feature;
+		this._cumulativeEstimate = cumulativeEstimate;
+		this._effortToDate = effortToDate;
+	};
+//	rs.Feature.prototype = new rs.Base();
+	var Feature = rs.Feature.prototype;
 
-rabu.schedule.Feature = function(feature, cumulativeEstimate, effortToDate) {
-    var self = this;
-
-	this.name = function() {
-		return feature[0];
+	Feature.name = function() {
+		return this._feature[0];
 	};
 
-	this.estimate = function() {
-		return feature[1];
-	};
-	
-	this.totalEffort = function() {
-		return cumulativeEstimate + self.estimate() + effortToDate;
+	Feature.estimate = function() {
+		return this._feature[1];
 	};
 
-	this.isDone = function() {
-		return self.estimate() === 0;
+	Feature.totalEffort = function() {
+		return this._cumulativeEstimate + this.estimate() + this._effortToDate;
 	};
 
-	this.equals = function(that) {
-		return (self.name() === that.name()) && (self.estimate() === that.estimate());
+	Feature.isDone = function() {
+		return this.estimate() === 0;
 	};
 
-	this.toString = function() {
-		return "['" + self.name() + "', " + self.estimate() + "]";
+	Feature.equals = function(that) {
+		return (this.name() === that.name()) && (this.estimate() === that.estimate());
 	};
-};
+
+	Feature.toString = function() {
+		return "['" + this.name() + "', " + this.estimate() + "]";
+	};
+}());
+
+//rabu.schedule.Feature = function(feature, cumulativeEstimate, effortToDate) {
+//    var self = this;
+//
+//	this.name = function() {
+//		return feature[0];
+//	};
+//
+//	this.estimate = function() {
+//		return feature[1];
+//	};
+//
+//	this.totalEffort = function() {
+//		return cumulativeEstimate + self.estimate() + effortToDate;
+//	};
+//
+//	this.isDone = function() {
+//		return self.estimate() === 0;
+//	};
+//
+//	this.equals = function(that) {
+//		return (self.name() === that.name()) && (self.estimate() === that.estimate());
+//	};
+//
+//	this.toString = function() {
+//		return "['" + self.name() + "', " + self.estimate() + "]";
+//	};
+//};
