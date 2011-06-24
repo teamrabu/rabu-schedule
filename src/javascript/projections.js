@@ -44,40 +44,46 @@
 	};
 }());
 
-rabu.schedule.Projection = function(iteration, riskMultiplier, effortToDate) {
-	var self = this;
-	self.SCOPE_CHANGE_PERCENTAGE = 0.8;
+(function() {
+	var rs = rabu.schedule;
+	rs.Projection = function(iteration, riskMultiplier, effortToDate) {
+		this.SCOPE_CHANGE_PERCENTAGE = 0.8;
+		this._iteration = iteration;
+		this._riskMultiplier = riskMultiplier;
+		this._effortToDate = effortToDate;
+	};
+	var Projection = rs.Projection.prototype = new rs.Object();
 	
-	function daysToDate(days) {
-		var date = iteration.startDate();
+	Projection._daysToDate = function(days) {
+		var date = this._iteration.startDate();
 		date.setDate(date.getDate() + days);
 		return date;
-	}
-	
-	this.iterationsRemaining = function() {
-		return iteration.effortRemaining() / iteration.velocity() * riskMultiplier; 
 	};
 	
-	this.daysRemaining = function() {
-		return Math.ceil(self.iterationsRemaining() * iteration.length()); 
+	Projection.iterationsRemaining = function() {
+		return this._iteration.effortRemaining() / this._iteration.velocity() * this._riskMultiplier;
 	};
 	
-	this.date = function() {
-		return daysToDate(self.daysRemaining());
+	Projection.daysRemaining = function() {
+		return Math.ceil(this.iterationsRemaining() * this._iteration.length());
 	};
 	
-	this.dateRoundedToIteration = function() {
-		var days = Math.ceil(self.iterationsRemaining()) * iteration.length();
-		return daysToDate(days);
+	Projection.date = function() {
+		return this._daysToDate(this.daysRemaining());
 	};
 	
-	this.totalEffort = function() {
-		var original = iteration.effortRemaining();
-		var increase = (original * riskMultiplier) - original;
-		return effortToDate + original + (increase * self.SCOPE_CHANGE_PERCENTAGE);		
+	Projection.dateRoundedToIteration = function() {
+		var days = Math.ceil(this.iterationsRemaining()) * this._iteration.length();
+		return this._daysToDate(days);
 	};
 	
-	this.velocity = function() {
-		return self.totalEffort() / self.iterationsRemaining();
+	Projection.totalEffort = function() {
+		var original = this._iteration.effortRemaining();
+		var increase = (original * this._riskMultiplier) - original;
+		return this._effortToDate + original + (increase * this.SCOPE_CHANGE_PERCENTAGE);
 	};
-};
+	
+	Projection.velocity = function() {
+		return this.totalEffort() / this.iterationsRemaining();
+	};
+}());
