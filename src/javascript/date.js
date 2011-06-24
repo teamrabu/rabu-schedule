@@ -7,6 +7,12 @@
 	};
 	var Class = rs.Date.prototype = new rs.Object();
 
+	Class.incrementDays = function(days) {
+		var newDate = new Date(this._date);
+		newDate.setDate(this._date.getDate() + days);
+		return new rs.Date(newDate);
+	};
+
 	Class._dateString = function() {
 		return this._date.getDate();
 	};

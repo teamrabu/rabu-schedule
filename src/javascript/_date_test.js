@@ -4,6 +4,14 @@
 	var rs = rabu.schedule;
 	var Test = (new TestCase("Date")).prototype;
 
+	Test.test_incrementDays = function() {
+		var date = new rs.Date("10 Jan 2010");
+		assertEquals("should increment", new rs.Date("15 Jan 2010"), date.incrementDays(5));
+		assertEquals("should be immutable", new rs.Date("15 Jan 2010"), date.incrementDays(5));
+		assertEquals("should work across months", new rs.Date("1 Feb 2010"), (new rs.Date("31 Jan 2010")).incrementDays(1));
+		assertEquals("should work across years", new rs.Date("1 Jan 2011"), (new rs.Date("31 Dec 2010")).incrementDays(1));
+	};
+
 	Test.test_parse = function() {
 		var date = new rs.Date("1 Jan 2010");
 		assertEquals("January 1st, 2010", date.toLongString());
