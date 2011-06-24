@@ -10,7 +10,6 @@ You should have received a copy of the GNU Affero General Public License along w
 
 This program incorporates the following work by others. Used with permission.
 
-Datejs	http://www.datejs.com/
 jQuery	http://jquery.com/
 jQueryUI	http://jqueryui.com/
 Raphael	http://raphaeljs.com/
