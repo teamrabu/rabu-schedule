@@ -57,15 +57,28 @@
 	FeaturesDom._positionElements = function() {
 		var self = this;
 		function setPosition(element, position) {
+			position += parseInt(element.css("margin-top"), 10);
 			element.offset({ top: position });
+			position += parseInt(element.css("margin-bottom"), 10);
+			position += element.outerHeight(false);
+			return position;
+		}
+		function assignClass(element, included) {
+			element.removeClass("rabu-included");
+			element.removeClass("rabu-excluded");
+			element.addClass(included ? "rabu-included" : "rabu-excluded");
 		}
 
 		var position = this._list.offset().top;
+		var included = true;
 		this._featuresInOrder.forEach(function(element, index) {
-			position += parseInt(element.css("margin-top"), 10);
-			setPosition(element, position);
-			position += parseInt(element.css("margin-bottom"), 10);
-			position += element.outerHeight(false);
+			position = setPosition(element, position);
+			if (element === self._divider) {
+				included = false;
+			}
+			else {
+				assignClass(element, included);
+			}
 		});
 	};
 

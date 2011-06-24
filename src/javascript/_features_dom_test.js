@@ -290,6 +290,14 @@
 		assertDrag("up past legal bounds", li[2], -100, [20, 40, 0]);
 	};
 
+	Test.prototype.test_dragging_changesIncludedExcludedStatus = function() {
+		assertTrue("assumption: li 0 is included at start", $(li[0]).hasClass("rabu-included"));
+		assertFalse("assumption: li 0 is not excluded at start", $(li[0]).hasClass("rabu-excluded"));
+		dragAndDrop(li[0], 110);
+		assertFalse("li 0 should not be included after dragging past divider", $(li[0]).hasClass("rabu-included"));
+		assertTrue("li 0 should be excluded after dragging past divider", $(li[0]).hasClass("rabu-excluded"));
+	};
+
 	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {
 		dragAndDrop(li[0], 15);
 		assertLiPositions("should snap into place", [20, 0, 40, 110]);
