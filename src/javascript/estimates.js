@@ -46,7 +46,7 @@
 	};
 
 	Estimates.currentIterationStarted = function() {
-		return this.currentIteration().startDate();
+		return this.currentIteration().startDate()._date;
 	};
 
 	Estimates.iterationLength = function() {
@@ -84,10 +84,7 @@
 		var self = this;
 		function calcFutureDate(futureOffset){
 			var days = futureOffset * self.currentIteration().length();
-
-			var result = self.currentIteration().startDate();
-			result = (new rs.Date(result)).incrementDays(days);
-			return result._date;
+			return self.currentIteration().startDate().incrementDays(days)._date;
 		}
 
 		var offsetFromCurrent = iterationNumber - (this.iterationCount() - 1);
@@ -95,7 +92,7 @@
 			return new rs.Date(calcFutureDate(offsetFromCurrent));
 		}
 		else {
-			return new rs.Date(this.iteration(iterationNumber).startDate());
+			return new rs.Date(this.iteration(iterationNumber).startDate()._date);
 		}
 	};
 

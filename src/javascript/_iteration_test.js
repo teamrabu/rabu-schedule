@@ -25,7 +25,7 @@
 	}
 
 	Test.prototype.test_startDate = function() {
-		assertEquals(new Date("1 Jan 2011"), iteration.startDate());
+		assertEquals(new rs.Date("1 Jan 2011"), iteration.startDate());
 	};
 
 	Test.prototype.test_length = function() {

@@ -263,7 +263,7 @@
 	            xTickLabelHeight: this.xTickLabel.getBBox().height,
 				yTickLabelWidth: this.yTickLabel.getBBox().width,
 				yTickLabelHeight: this.yTickLabel.getBBox().height,
-				startDate: this._estimates.firstIteration().startDate(),
+				startDate: this._estimates.firstIteration().startDate()._date,
 				iterationLength: this._estimates.firstIteration().length(),
 	            iterationCount: this._projections.totalIterations(),
 				maxEffort: this._projections.maxEffort()

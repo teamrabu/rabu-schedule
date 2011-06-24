@@ -10,7 +10,7 @@
 	var Iteration = rs.Iteration.prototype;
 
 	Iteration.startDate = function() {
-		return new Date(this._iteration.started);
+		return new rs.Date(this._iteration.started);
 	};
 
 	Iteration.length = function() {
