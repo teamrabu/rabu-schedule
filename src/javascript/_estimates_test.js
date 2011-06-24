@@ -1,6 +1,7 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
 (function() {
+	var rs = rabu.schedule;
 	var Test = new TestCase("Estimates");
 	var estimates;
 	var config;
@@ -23,7 +24,7 @@
 	};
 	
 	Test.prototype.test_updated = function() {
-		assertEquals(new Date("5 Jan 2011"), estimates.updated());
+		assertEquals(new rs.Date("5 Jan 2011"), estimates.updated());
 	};
 
 	Test.prototype.test_riskMultipliers_areBasedOnCurrentIteration = function() {

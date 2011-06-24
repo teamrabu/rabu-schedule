@@ -58,4 +58,8 @@
 
 		return month + " " + day;
 	};
+
+	Class.equals = function() {
+		return false;
+	};
 }());

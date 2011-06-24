@@ -13,7 +13,7 @@
 	};
 
 	Estimates.updated = function() {
-		return new Date(this._config.updated);
+		return new rs.Date(this._config.updated);
 	};
 
 	Estimates.tenPercentMultiplier = function() {
