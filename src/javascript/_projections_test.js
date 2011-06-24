@@ -1,6 +1,7 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
 (function() {
+	var rs = rabu.schedule;
 	var Test = new TestCase("Projections");
 	var projections;
 	var config;
@@ -23,9 +24,9 @@
 	Test.prototype.test_dateProjections = function() {
 		config.iterations[0].riskMultipliers = [0.25, 0.25, 0.75];
 		
-		assertEquals("10% should round to next day", new Date("6 Jan 2011"), projections.tenPercentDate());
-		assertEquals("50% should round to next day", new Date("6 Jan 2011"), projections.fiftyPercentDate());
-		assertEquals("90% should round to next iteration", new Date("21 Jan 2011"), projections.ninetyPercentDate());
+		assertEquals("10% should round to next day", new rs.Date("6 Jan 2011"), projections.tenPercentDate());
+		assertEquals("50% should round to next day", new rs.Date("6 Jan 2011"), projections.fiftyPercentDate());
+		assertEquals("90% should round to next iteration", new rs.Date("21 Jan 2011"), projections.ninetyPercentDate());
 	};
 
 	Test.prototype.test_totalIterations = function() {
@@ -100,15 +101,15 @@
 	
 	Test.prototype.test_date = function() {
 		projection = new rs.Projection(iteration, 0.1, 0);
-		assertEquals("date", new Date("8 Jan 2011"), projection.date());
+		assertEquals("date", new rs.Date("8 Jan 2011"), projection.date());
 	};
 	
 	Test.prototype.test_dateRoundedToIteration = function() {
 		projection = new rs.Projection(iteration, 0.11, 0);
-		assertEquals("should round up to beginning of iteration", new Date("15 Jan 2011"), projection.dateRoundedToIteration());
+		assertEquals("should round up to beginning of iteration", new rs.Date("15 Jan 2011"), projection.dateRoundedToIteration());
 		
 		projection = new rs.Projection(iteration, 0.1, 0);
-		assertEquals("should not add time when no fraction", new Date("8 Jan 2011"), projection.dateRoundedToIteration());
+		assertEquals("should not add time when no fraction", new rs.Date("8 Jan 2011"), projection.dateRoundedToIteration());
 	};
 	
 	Test.prototype.test_totalEffort_and_velocity = function() {

@@ -14,7 +14,7 @@
 	var Main = rs.Main.prototype = new rs.Object();
 
 	function dateToString(date) {
-		return new rs.Date(date).toLongStringNoYear();
+		return date.toLongStringNoYear();
 	}
 
 	Main.populateDom = function() {

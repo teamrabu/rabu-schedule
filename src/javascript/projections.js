@@ -55,9 +55,8 @@
 	var Projection = rs.Projection.prototype = new rs.Object();
 	
 	Projection._daysToDate = function(days) {
-		var date = this._iteration.startDate();
-		date.setDate(date.getDate() + days);
-		return date;
+		var date = new rs.Date(this._iteration.startDate());
+		return date.incrementDays(days);
 	};
 	
 	Projection.iterationsRemaining = function() {
