@@ -70,7 +70,7 @@ function getFiles(javaFile, javaList, filter) {
 	var i;
 	for (i = 0; i < files.length; i++) {
 		if (files[i].isDirectory()) {
-			getFiles(files[i], javaList);
+			getFiles(files[i], javaList, filter);
 		}
 		else {
 			var file = files[i].toString();

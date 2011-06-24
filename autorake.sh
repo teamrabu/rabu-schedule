@@ -17,7 +17,7 @@ loop do
     changed = false
     Find.find(File.dirname(__FILE__)) do |file|
         next if file == "."
-        next if file.start_with? "./.idea"
+        next if file.start_with? "/.idea"
         next if file.start_with? "./.git"
         next if file.start_with? "./generated"
         next if file.start_with? "./released"
