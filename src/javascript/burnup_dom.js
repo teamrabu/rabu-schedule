@@ -79,7 +79,7 @@
 	
 	BurnupDom._xAxisTickLabelText = function(tickNumber) {
 		var date = this._estimates.dateForIteration(tickNumber);
-        return date.toString('MMM d');
+        return new rs.Date(date).toShortStringNoYear();
 	};
 	
 	BurnupDom._xAxisTickLabel = function(tickNumber, xPosition) {
