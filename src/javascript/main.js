@@ -1,14 +1,5 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
-//var rs = rabu.schedule;
-//rs.Feature = function(feature, cumulativeEstimate, effortToDate) {
-//	this._feature = feature;
-//	this._cumulativeEstimate = cumulativeEstimate;
-//	this._effortToDate = effortToDate;
-//};
-//rs.Feature.prototype = new rs.Object();
-//var Feature = rs.Feature.prototype;
-
 (function() {
 	var rs = rabu.schedule;
 	rs.Main = function(config) {

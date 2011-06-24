@@ -1,45 +1,48 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
-rabu.schedule.Projections = function(estimates) {
+(function() {
 	var rs = rabu.schedule;
-	var self = this;
-	
-	this.tenPercentProjection = function() {
-		return new rs.Projection(estimates.currentIteration(), estimates.tenPercentMultiplier(), estimates.effortToDate()); 
+	rs.Projections = function(estimates) {
+		this._estimates = estimates;
+	};
+	var Projections = rs.Projections.prototype = new rs.Object();
+
+	Projections.tenPercentProjection = function() {
+		return new rs.Projection(this._estimates.currentIteration(), this._estimates.tenPercentMultiplier(), this._estimates.effortToDate());
 	};
 	
-	this.fiftyPercentProjection = function() {
-		return new rs.Projection(estimates.currentIteration(), estimates.fiftyPercentMultiplier(), estimates.effortToDate());
+	Projections.fiftyPercentProjection = function() {
+		return new rs.Projection(this._estimates.currentIteration(), this._estimates.fiftyPercentMultiplier(), this._estimates.effortToDate());
 	};
 	
-	this.ninetyPercentProjection = function() {
-		return new rs.Projection(estimates.currentIteration(), estimates.ninetyPercentMultiplier(), estimates.effortToDate());
+	Projections.ninetyPercentProjection = function() {
+		return new rs.Projection(this._estimates.currentIteration(), this._estimates.ninetyPercentMultiplier(), this._estimates.effortToDate());
 	};
 
-	this.tenPercentDate = function() {
-		return self.tenPercentProjection().date();
+	Projections.tenPercentDate = function() {
+		return this.tenPercentProjection().date();
 	};
 
-	this.fiftyPercentDate = function() {
-		return self.fiftyPercentProjection().date();
+	Projections.fiftyPercentDate = function() {
+		return this.fiftyPercentProjection().date();
 	};
 
-	this.ninetyPercentDate = function() {
-		return self.ninetyPercentProjection().dateRoundedToIteration();
+	Projections.ninetyPercentDate = function() {
+		return this.ninetyPercentProjection().dateRoundedToIteration();
 	};
 	
-	this.totalIterations = function() {
-		var projected = Math.ceil(self.ninetyPercentProjection().iterationsRemaining());
-		var historical = estimates.iterationCount() - 1;  // don't include current iteration
+	Projections.totalIterations = function() {
+		var projected = Math.ceil(this.ninetyPercentProjection().iterationsRemaining());
+		var historical = this._estimates.iterationCount() - 1;  // don't include current iteration
 		return projected + historical;
 	};
 	
-	this.maxEffort = function() {
-		var projectedMax = self.ninetyPercentProjection().totalEffort();
-		var historicalMax = estimates.peakEffortEstimate();
+	Projections.maxEffort = function() {
+		var projectedMax = this.ninetyPercentProjection().totalEffort();
+		var historicalMax = this._estimates.peakEffortEstimate();
 		return historicalMax > projectedMax ? historicalMax : projectedMax;
 	};
-};
+}());
 
 rabu.schedule.Projection = function(iteration, riskMultiplier, effortToDate) {
 	var self = this;
