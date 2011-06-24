@@ -45,10 +45,6 @@
 		return this._config.iterations.length;
 	};
 
-	Estimates.currentIterationStarted = function() {
-		return this.currentIteration().startDate()._date;
-	};
-
 	Estimates.iterationLength = function() {
 		return this.currentIteration().length();
 	};
