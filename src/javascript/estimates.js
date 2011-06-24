@@ -84,15 +84,15 @@
 		var self = this;
 		function calcFutureDate(futureOffset){
 			var days = futureOffset * self.currentIteration().length();
-			return self.currentIteration().startDate().incrementDays(days)._date;
+			return self.currentIteration().startDate().incrementDays(days);
 		}
 
 		var offsetFromCurrent = iterationNumber - (this.iterationCount() - 1);
 		if (offsetFromCurrent >= 0) {
-			return new rs.Date(calcFutureDate(offsetFromCurrent));
+			return calcFutureDate(offsetFromCurrent);
 		}
 		else {
-			return new rs.Date(this.iteration(iterationNumber).startDate()._date);
+			return this.iteration(iterationNumber).startDate();
 		}
 	};
 
