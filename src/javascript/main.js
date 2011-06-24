@@ -19,7 +19,7 @@
 
 	Main.populateDom = function() {
 		$(".rabu-name").text(this._estimates.name());
-		$(".rabu-updated").text(this._estimates.updated().toString("MMMM dS, yyyy"));
+		$(".rabu-updated").text(new rs.Date(this._estimates.updated()).toLongString());
 		$(".rabu-tenPercentDate").text(dateToString(this._projections.tenPercentDate()));
 		$(".rabu-fiftyPercentDate").text(dateToString(this._projections.fiftyPercentDate()));
 		$(".rabu-ninetyPercentDate").text(dateToString(this._projections.ninetyPercentDate()));

@@ -9,7 +9,7 @@
 		assertEquals("January 1st, 2010", date.toLongString());
 	};
 
-	Test.test_toLongString_usesCorrectOrdinals = function() {
+	Test.test_toLongString = function() {
 		assertEquals("1st", "January 1st, 2010", new rs.Date("1 Jan 2010").toLongString());
 		assertEquals("2nd", "February 2nd, 2010", new rs.Date("2 Feb 2010").toLongString());
 		assertEquals("3rd", "March 3rd, 2010", new rs.Date("3 Mar 2010").toLongString());
@@ -24,5 +24,13 @@
 		assertEquals("24th", "April 24th, 2010", new rs.Date("24 Apr 2010").toLongString());
 		assertEquals("31st", "January 1st, 2010", new rs.Date("1 Jan 2010").toLongString());
 		assertEquals("30th", "April 30th, 2010", new rs.Date("30 Apr 2010").toLongString());
+	};
+
+	Test.test_toLongStringNoYear = function() {
+		assertEquals("December 25th", new rs.Date("25 Dec 1996").toLongStringNoYear());
+	};
+
+	Test.test_toShortStringNoYear = function() {
+		assertEquals("Oct 12", new rs.Date("12 Oct 2011").toShortStringNoYear());
 	};
 }());
