@@ -55,7 +55,7 @@
 
     BurnupDom._copyTextElements = function() {
         var roundUpEffort = rs.BurnupChartMetrics.roundUpEffort;
-		
+
 		this.xLabel = this._copyOneTextElement(this._xLabelElement);
 		this.yLabel = this._copyOneTextElement(this._yLabelElement);
 		this.xTickLabel = this._copyOneTextElement(this._xTickLabelElement).hide();
@@ -78,7 +78,7 @@
 	};
 	
 	BurnupDom._xAxisTickLabelText = function(tickNumber) {
-		var date = this._estimates.dateForIteration(tickNumber);
+		var date = this._estimates.dateForIteration(tickNumber)._date;
         return new rs.Date(date).toShortStringNoYear();
 	};
 	

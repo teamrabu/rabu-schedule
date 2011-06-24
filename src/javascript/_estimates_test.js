@@ -93,10 +93,10 @@
             { started: "1 Jan 2011", length: 1 }
         ];
 		
-		assertEquals("current iteration", new Date("15 Jan 2011"), estimates.dateForIteration(3));
-		assertEquals("future iteration", new Date("29 Jan 2011"), estimates.dateForIteration(5));
-		assertEquals("historical iteration", new Date("6 Jan 2011"), estimates.dateForIteration(2));
-		assertEquals("first iteration", new Date("1 Jan 2011"), estimates.dateForIteration(0));
+		assertEquals("current iteration", new rs.Date("15 Jan 2011"), estimates.dateForIteration(3));
+		assertEquals("future iteration", new rs.Date("29 Jan 2011"), estimates.dateForIteration(5));
+		assertEquals("historical iteration", new rs.Date("6 Jan 2011"), estimates.dateForIteration(2));
+		assertEquals("first iteration", new rs.Date("1 Jan 2011"), estimates.dateForIteration(0));
 	};
 	
 	Test.prototype.test_peakEffortEstimate = function() {

@@ -86,16 +86,16 @@
 			var days = futureOffset * self.currentIteration().length();
 
 			var result = self.currentIteration().startDate();
-			result.setDate(result.getDate() + days);
-			return result;
+			result = (new rs.Date(result)).incrementDays(days);
+			return result._date;
 		}
 
 		var offsetFromCurrent = iterationNumber - (this.iterationCount() - 1);
 		if (offsetFromCurrent >= 0) {
-			return calcFutureDate(offsetFromCurrent);
+			return new rs.Date(calcFutureDate(offsetFromCurrent));
 		}
 		else {
-			return this.iteration(iterationNumber).startDate();
+			return new rs.Date(this.iteration(iterationNumber).startDate());
 		}
 	};
 
