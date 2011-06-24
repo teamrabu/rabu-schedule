@@ -6,7 +6,7 @@
 	// For that matter, JQueryUI has a 'sortable' tool that probably eliminates the need
 	// for all of the drag-and-drop code. (Live and learn.) Alternatively,
 	// http://threedubmedia.com/code/event/drag is a very lightweight, clean-looking approach
-	// that could work well with the existing code as an alternative to JQueryUI.
+	// to drag-and-drop that could work well as an alternative to using JQueryUI's events.
 
 	var rs = rabu.schedule;
 	rs.FeaturesDom = function(element, estimates) {
@@ -34,7 +34,13 @@
 	};
 
 	FeaturesDom._initializeElementVars = function() {
-		var self = this;
+		function pushAll(from, to) {
+			var i, len;
+			for (i = 0, len = from.length; i < len; i++) {
+				to.push($(from[i]));
+			}
+		}
+
 		this._list = $(".rabu-features");
 		this._liJQuery = $("li", this._list);
 		this._divider = $(".rabu-divider");
@@ -43,28 +49,21 @@
 		this._dividerHeight = this._divider.outerHeight(true);
 		this._divider.css("position", "absolute");
 
-		this._included.each(function(index, element) {
-			self._featuresInOrder.push($(element));
-		});
+		pushAll(this._included, this._featuresInOrder);
 		this._featuresInOrder.push(this._divider);
-		this._excluded.each(function(index, element) {
-			self._featuresInOrder.push($(element));
-		});
-	};
-
-	FeaturesDom._setPosition = function(element, position) {
-		element.offset({
-			top: position,
-			left: element.offset().left
-		});
+		pushAll(this._excluded, this._featuresInOrder);
 	};
 
 	FeaturesDom._positionElements = function() {
 		var self = this;
+		function setPosition(element, position) {
+			element.offset({ top: position });
+		}
+
 		var position = this._list.offset().top;
 		this._featuresInOrder.forEach(function(element, index) {
 			position += parseInt(element.css("margin-top"), 10);
-			self._setPosition(element, position);
+			setPosition(element, position);
 			position += parseInt(element.css("margin-bottom"), 10);
 			position += element.outerHeight(false);
 		});
