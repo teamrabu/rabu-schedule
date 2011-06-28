@@ -8,18 +8,18 @@
 		}
 		this._estimates = new rs.Estimates(config);
 		this._projections = new rs.Projections(this._estimates);
-		this._featuresDom = new rs.FeaturesDom($(".rabu-features"), this._estimates);
-		this._burnupDom = new rs.BurnupDom($(".rabu-burnup"), this._estimates, this._projections);
 	};
 	var Main = rs.Main.prototype = new rs.Object();
 
 	Main.populateDom = function() {
+        var datesDom = new rs.DatesDom(this._projections);
+		var featuresDom = new rs.FeaturesDom($(".rabu-features"), this._estimates);
+		var burnupDom = new rs.BurnupDom($(".rabu-burnup"), this._estimates, this._projections);
+    
 		$(".rabu-name").text(this._estimates.name());
 		$(".rabu-updated").text(this._estimates.updated().toLongString());
-		$(".rabu-tenPercentDate").text(this._projections.tenPercentDate().toLongStringNoYear());
-		$(".rabu-fiftyPercentDate").text(this._projections.fiftyPercentDate().toLongStringNoYear());
-		$(".rabu-ninetyPercentDate").text(this._projections.ninetyPercentDate().toLongStringNoYear());
-		this._featuresDom.populate();
-		this._burnupDom.populate();
+        datesDom.populate();
+		featuresDom.populate();
+		burnupDom.populate();
 	};
 }());
