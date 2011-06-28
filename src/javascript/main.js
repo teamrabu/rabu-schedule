@@ -13,16 +13,12 @@
 	};
 	var Main = rs.Main.prototype = new rs.Object();
 
-	function dateToString(date) {
-		return date.toLongStringNoYear();
-	}
-
 	Main.populateDom = function() {
 		$(".rabu-name").text(this._estimates.name());
 		$(".rabu-updated").text(this._estimates.updated().toLongString());
-		$(".rabu-tenPercentDate").text(dateToString(this._projections.tenPercentDate()));
-		$(".rabu-fiftyPercentDate").text(dateToString(this._projections.fiftyPercentDate()));
-		$(".rabu-ninetyPercentDate").text(dateToString(this._projections.ninetyPercentDate()));
+		$(".rabu-tenPercentDate").text(this._projections.tenPercentDate().toLongStringNoYear());
+		$(".rabu-fiftyPercentDate").text(this._projections.fiftyPercentDate().toLongStringNoYear());
+		$(".rabu-ninetyPercentDate").text(this._projections.ninetyPercentDate().toLongStringNoYear());
 		this._featuresDom.populate();
 		this._burnupDom.populate();
 	};
