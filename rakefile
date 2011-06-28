@@ -68,15 +68,15 @@ LICENSE_TXT = "LICENSE.txt"
 AGPL_TXT = "copyrights/AGPL.txt"
 
 
-##### Isolate
+##### Isolate Gems
 
 def isolate_gems
 	$:.unshift "#{BIN_DIR}/isolate-3.1.0.pre.3/lib"
 	require 'isolate'
 	Isolate.now! :system => false, :path => GEMS_DIR, :install => true do
 		gem "selenium-webdriver", "0.2.2"
-		gem "watir-webdriver", "0.2.2"
-		gem "redcarpet", "1.9.0"
+		gem "watir-webdriver", "0.2.5"
+		gem "redcarpet", "1.17.2"
 	end
 end
 isolate_gems
