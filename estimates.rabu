@@ -14,7 +14,8 @@
 		        ["Rabu 0.4 release", 0],
 		        ["Landscape layout", 0],
 		        ["Documentation", 0],
-		        ["Feature drag-and-drop", 5]
+		        ["Feature drag-and-drop", 4],
+		        ["Divider drag-and-drop", 1]
 		    ],
 		    "excluded": [
 		        ["Configuration validation and error handling", 13],
