@@ -105,6 +105,11 @@ task :clean => [:shutdown] do       # must shut down because the pid file is in 
     end
 end
 
+desc "Erase absolutely all generated files (including gems)"
+task :nuke => [:clean] do
+	rm_rf GEMS_DIR
+end
+
 
 ##### Tests
 
@@ -160,6 +165,9 @@ end
 
 desc "Update projection"
 task :projection => [PROJECTION_HTML]
+
+desc "Generate output file"
+task :output => [TEST_OUTPUT]
 
 
 ##### Builds
