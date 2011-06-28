@@ -201,9 +201,9 @@ task MERGED_JS => [MAIN_JS_SOURCE, MERGED_DIR] do
 				"#{LIB_DIR}/jqueryui-1.8.13/jquery.ui.draggable.js",
 				"#{LIB_DIR}/*.js",
 				MAIN_JS_SOURCE,
-				"#{JS_SRC_DIR}/*.js"
+				"#{JS_SRC_DIR}/**/*.js"
 			)
-			files.exclude "#{JS_SRC_DIR}/_*test.js"
+			files.exclude "#{JS_SRC_DIR}/**/_*test.js"
 			files.uniq.each do |src_file|
 				append(src_file, dest_file)
 			end
