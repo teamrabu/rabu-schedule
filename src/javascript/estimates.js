@@ -5,8 +5,7 @@
 	rs.Estimates = function(config) {
 		this._config = config;
 	};
-	rs.Estimates.prototype = new rs.Object();
-	var Estimates = rs.Estimates.prototype;
+	var Estimates = rs.Estimates.prototype = new rs.Object();
 
 	Estimates.name = function() {
 		return this._config.name;

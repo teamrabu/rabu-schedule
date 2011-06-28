@@ -17,8 +17,7 @@
 		this._positionsBeforeDrag = [];
 		this._featuresInOrder = [];
 	};
-	rs.FeaturesDom.prototype = new rs.Object();
-	var FeaturesDom = rs.FeaturesDom.prototype;
+	var FeaturesDom = rs.FeaturesDom.prototype = new rs.Object();
 
 	FeaturesDom._toHtml = function(features, cssClass) {
 		return features.reduce(function(sum, feature) {
