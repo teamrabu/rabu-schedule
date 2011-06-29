@@ -44,10 +44,6 @@
 		return this._config.iterations.length;
 	};
 
-	Estimates.iterationLength = function() {
-		return this.currentIteration().length();
-	};
-
 	Estimates.velocity = function() {
 		return this.currentIteration().velocity();
 	};

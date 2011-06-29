@@ -7,8 +7,7 @@
 		this._cumulativeEstimate = cumulativeEstimate;
 		this._effortToDate = effortToDate;
 	};
-	rs.Feature.prototype = new rs.Object();
-	var Feature = rs.Feature.prototype;
+	var Feature = rs.Feature.prototype = new rs.Object();
 
 	Feature.name = function() {
 		return this._feature[0];
