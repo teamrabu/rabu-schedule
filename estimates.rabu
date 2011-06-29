@@ -18,9 +18,10 @@
 		        ["Divider drag-and-drop", 1]
 		    ],
 		    "excluded": [
+		    	["Animated drag-and-drop transitions", 6.5],
 		        ["Configuration validation and error handling", 13],
-		        ["Robust cross-browser testing & support", "?"],
-		        ["Mobile browser support", "?"],
+		        ["Robust cross-browser testing & support", 4],
+		        ["Mobile browser support", 5],
 		    ]
 		},
 		{
