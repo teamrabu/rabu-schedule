@@ -13,7 +13,7 @@
 
 	Main.populateDom = function() {
         var datesDom = new rs.DatesDom(this._projections);
-		var featuresDom = new rs.FeaturesDom($(".rabu-features"), this._estimates);
+		var featuresDom = new rs.FeaturesDom($(".rabu-features"), this._estimates.currentIteration());
 		var burnupDom = new rs.BurnupDom($(".rabu-burnup"), this._estimates, this._projections);
     
 		$(".rabu-name").text(this._estimates.name());

@@ -3,7 +3,7 @@
 (function() {
 	var Test = new TestCase("FeaturesDom");
 	var config;
-	var estimates;
+	var iteration;
 	var featuresDom;
 	var ul;
 	var li;
@@ -11,7 +11,8 @@
 	var mouseDownElement;
 
 	function populate() {
-		featuresDom = new rabu.schedule.FeaturesDom($(".rabu-features"), estimates);
+		iteration = new rabu.schedule.Iteration(config);
+		featuresDom = new rabu.schedule.FeaturesDom($(".rabu-features"), iteration);
 		featuresDom.populate();
 		ul = $("ul");
 		li = $("li");
@@ -107,7 +108,6 @@
 				["excluded 1", 20]
 			]
 		};
-		estimates = new rabu.schedule.Estimates({iterations: [config]});
 		populate();
 
 		assertEquals("assumption: li height", 20, li.first().outerHeight(true));
@@ -128,8 +128,8 @@
 	};
 
 	Test.prototype.test_populate_isIdempotent = function() {
-		populate();
-		populate();
+		featuresDom.populate();
+		featuresDom.populate();
 		assertEquals("# of items", 4, li.length);
 	};
 

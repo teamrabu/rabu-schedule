@@ -9,9 +9,9 @@
 	// to drag-and-drop that could work well as an alternative to using JQueryUI's events.
 
 	var rs = rabu.schedule;
-	rs.FeaturesDom = function(element, estimates) {
+	rs.FeaturesDom = function(element, iteration) {
 		this._element = element;
-		this._iteration = estimates.currentIteration();
+		this._iteration = iteration;
 
 		this._orderBeforeDrag = [];
 		this._positionsBeforeDrag = [];
