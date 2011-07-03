@@ -86,6 +86,7 @@
 			included.splice(newIndex, 0, removed[0]);
 		}
 		else {
+			oldIndex -= included.length;
 			removed = excluded.splice(oldIndex, 1);
 			excluded.splice(newIndex, 0, removed[0]);
 		}
