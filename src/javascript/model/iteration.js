@@ -67,4 +67,19 @@
 	Iteration.excludedFeatures = function() {
 		return this._excludedFeatures;
 	};
+
+	Iteration.moveFeature = function(oldIndex, newIndex) {
+		var included = this._includedFeatures;
+
+		function assertIndexInBounds(name, index) {
+			if (index < 0 || index > included.length) {
+				throw (name + " [" + index + "] is out of bounds; array length is [" + included.length + "]");
+			}
+		}
+		assertIndexInBounds("oldIndex", oldIndex);
+		assertIndexInBounds("newIndex", newIndex);
+
+		var removed = included.splice(oldIndex, 1);
+		included.splice(newIndex, 0, removed[0]);
+	};
 }());
