@@ -24,25 +24,23 @@
 		this._yLabelElement = $(".rabu-yLabel");
 		this._xTickLabelElement = $(".rabu-xTickLabel");
 		this._yTickLabelElement = $(".rabu-yTickLabel");
-//		var paper, metrics, xLabel, yLabel;
 		this.VELOCITY_STROKE = rgb(0, 112, 0);
 		this.VELOCITY_FILL = rgb(60, 170, 60);
 		this.FEATURE_STROKE = rgb(112, 0, 0);
 		this.FEATURE_FILL = rgb(255, 125, 125);
 		this.HISTORY_POLYGON_OUTLINE = 0.5;
 	};
-	rs.BurnupDom.prototype = new rs.Object();
-	var BurnupDom = rs.BurnupDom.prototype;
+	var Prototype = rs.BurnupDom.prototype = new rs.Object();
 
-	BurnupDom._line = function(x1, y1, x2, y2) {
+	Prototype._line = function(x1, y1, x2, y2) {
 		return this._paper.path("M" + x1 + "," + y1 + " L" + x2 + "," + y2);
 	};
 
-	BurnupDom._hideInteriorElements = function() {
+	Prototype._hideInteriorElements = function() {
 		this._element.children().hide();
 	};
 
-	BurnupDom._copyOneTextElement = function(textElement, optionalText) {
+	Prototype._copyOneTextElement = function(textElement, optionalText) {
 		var text = optionalText || textElement.text();
 		var result = this._paper.text(0, 0, text);
 		result.attr({
@@ -53,7 +51,7 @@
 		return result;
 	};
 
-    BurnupDom._copyTextElements = function() {
+    Prototype._copyTextElements = function() {
         var roundUpEffort = rs.BurnupChartMetrics.roundUpEffort;
 
 		this.xLabel = this._copyOneTextElement(this._xLabelElement);
@@ -62,32 +60,32 @@
 		this.yTickLabel = this._copyOneTextElement(this._yTickLabelElement, roundUpEffort(this._projections.maxEffort()).toString()).hide();
 	};
 
-    BurnupDom._axisLabels = function() {
+    Prototype._axisLabels = function() {
 		this.xLabel.translate(this._metrics.xLabelCenter, this._metrics.xLabelVerticalCenter);
 		this.yLabel.translate(this._metrics.yLabelVerticalCenter, this._metrics.yLabelCenter);
 		this.yLabel.rotate(270, true);
 	};
 	
-	BurnupDom._axisLines = function() {
+	Prototype._axisLines = function() {
 		this.xAxis = this._line(this._metrics.left - this._metrics.AXIS_OVERHANG, this._metrics.bottom, this._metrics.right, this._metrics.bottom);
 		this.yAxis = this._line(this._metrics.left, this._metrics.top, this._metrics.left, this._metrics.bottom + this._metrics.AXIS_OVERHANG);
 	};
 	
-	BurnupDom._xAxisTick = function(xPosition, length) {
+	Prototype._xAxisTick = function(xPosition, length) {
 		return this._line(xPosition, this._metrics.bottom - (length / 2), xPosition, this._metrics.bottom + (length / 2));
 	};
 	
-	BurnupDom._xAxisTickLabelText = function(tickNumber) {
+	Prototype._xAxisTickLabelText = function(tickNumber) {
 		return this._estimates.dateForIteration(tickNumber).toShortStringNoYear();
 	};
 	
-	BurnupDom._xAxisTickLabel = function(tickNumber, xPosition) {
+	Prototype._xAxisTickLabel = function(tickNumber, xPosition) {
         var label = this._copyOneTextElement(this._xTickLabelElement, this._xAxisTickLabelText(tickNumber));
         label.translate(xPosition, this._metrics.xTickLabelVerticalCenter);
 		return label; 
 	};
 	
-	BurnupDom._xAxisTicks = function() {
+	Prototype._xAxisTicks = function() {
 		var i;
 
         // figure out maximum tick label width
@@ -118,7 +116,7 @@
 		}
 	};
 	
-	BurnupDom._yAxisTicks = function() {
+	Prototype._yAxisTicks = function() {
 		var i;
 		
 		this.yTicks = [];
@@ -140,7 +138,7 @@
 		}
 	};
 
-	BurnupDom._historyPolygon = function(fromX, fromY, toX, toY, lineColor, fillColor, title) {
+	Prototype._historyPolygon = function(fromX, fromY, toX, toY, lineColor, fillColor, title) {
 		var bottom = this._metrics.bottom;
 		
 		var polygon = this._paper.path(moveTo(fromX, fromY) + lineTo(toX, toY) + lineTo(toX, bottom) + lineTo(fromX, bottom) + "Z");
@@ -158,7 +156,7 @@
 		return this._paper.set(polygon, stroke);
 	};
 	
-    BurnupDom._iteration = function(iterationNumber) {
+    Prototype._iteration = function(iterationNumber) {
         var fromIteration = this._estimates.iteration(iterationNumber - 1);
 		var fromX = this._metrics.xForIteration(iterationNumber - 1);
 		var fromY = this._metrics.yForEffort(fromIteration.totalEffort());
@@ -170,7 +168,7 @@
         return this._historyPolygon(fromX, fromY, toX, toY, this.FEATURE_STROKE, this.FEATURE_FILL, "Work remaining");
 	};
 	
-	BurnupDom._velocity = function(iterationNumber) {
+	Prototype._velocity = function(iterationNumber) {
 		var fromX = this._metrics.xForIteration(iterationNumber - 1);
 		var toX = this._metrics.xForIteration(iterationNumber);
 		var fromY = this._metrics.yForEffort(this._estimates.iteration(iterationNumber - 1).effortToDate());
@@ -178,7 +176,7 @@
 		return this._historyPolygon(fromX, fromY, toX, toY, this.VELOCITY_STROKE, this.VELOCITY_FILL, "Work completed");
 	};
 
-    BurnupDom._history = function() {
+    Prototype._history = function() {
 		this.iterations = this._paper.set();
 		this.velocity = this._paper.set();
 		var i;
@@ -191,7 +189,7 @@
         this._paper.set(this.iterations, this.velocity).attr("clip-rect", clip);
 	};
 	
-	BurnupDom._projection = function() {
+	Prototype._projection = function() {
 		var self = this;
 		var effortToDate = this._estimates.effortToDate();
 	    function calcProjection(projection){
@@ -244,7 +242,7 @@
 		);
 	};
 	
-	BurnupDom.populate = function(optionalMetricsForTesting) {
+	Prototype.populate = function(optionalMetricsForTesting) {
 		this._hideInteriorElements();
 		if (this._paper) {
 			this._paper.remove();
@@ -277,7 +275,7 @@
 		this._yAxisTicks();
 	};
 	
-	BurnupDom.paper = function() {
+	Prototype.paper = function() {
 		return this._paper;
 	};
 }());
