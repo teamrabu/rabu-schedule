@@ -53,7 +53,7 @@
 		pushAll(this._excluded, this._featuresInOrder);
 	};
 
-	FeaturesDom._positionElements = function() {
+	FeaturesDom._layoutElements = function() {
 		var self = this;
 		function setPosition(element, position) {
 			position += parseInt(element.css("margin-top"), 10);
@@ -128,7 +128,7 @@
 		function moveElement(prevPosition, newPosition) {
 			if (newPosition < prevPosition) { moveUp(prevPosition, newPosition); }
 			else { moveDown(prevPosition, newPosition); }
-			self._positionElements();
+			self._layoutElements();
 		}
 
 		function findOriginalIndex(domElement) {
@@ -181,7 +181,7 @@
 		}
 
 		function handleDragStop(event, ui) {
-			self._positionElements();
+			self._layoutElements();
 		}
 
 		var lastFeature = this._featuresInOrder[this._featuresInOrder.length - 1];
@@ -203,7 +203,7 @@
 		this._initializeElementVars();
 		if (this._divider.length === 0) { return; }
 
-		this._positionElements();
+		this._layoutElements();
 		this._resizeListToAccomodateDivider();
 		this._makeDraggable();
 	};
