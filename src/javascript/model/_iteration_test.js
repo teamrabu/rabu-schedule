@@ -56,6 +56,7 @@
 			["excluded 1", 5],
 			["excluded 2", 10]
 		];
+		iteration = new rs.Iteration(config, 0);
 		var actual = iteration.excludedFeatures();
 		assertEquals("length", 2, actual.length);
 		assertFeatureEquals("excluded 0", new rs.Feature(["excluded 1", 5]), actual[0]);
@@ -64,6 +65,7 @@
 
 	Test.prototype.test_includedFeatures_whenUndefined = function() {
 		config.included = undefined;
+		iteration = new rs.Iteration(config, 0);
 		assertEquals(0, iteration.includedFeatures().length);
 	};
 
@@ -75,9 +77,11 @@
 		assertEquals(100, iteration.effortRemaining());
 
 		config.included = [["feature A", 10]];
+		iteration = new rs.Iteration(config, 0);
 		assertEquals("one feature", 10, iteration.effortRemaining());
 
 		config.included = [];
+		iteration = new rs.Iteration(config, 0);
 		assertEquals("no feature", 0, iteration.effortRemaining());
 	};
 

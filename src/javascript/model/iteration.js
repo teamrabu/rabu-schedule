@@ -3,8 +3,20 @@
 (function() {
 	var rs = rabu.schedule;
 	rs.Iteration = function(iteration, effortToDate) {
+		function featuresFor(featureList, effort) {
+			if (!featureList) { return []; }
+			var cumulativeEstimate = 0;
+			return featureList.map(function(element) {
+				var result = new rs.Feature(element, cumulativeEstimate, effort);
+				cumulativeEstimate += result.estimate();
+				return result;
+			});
+		}
+
 		this._iteration = iteration;
 		this._effortToDate = effortToDate;
+		this._includedFeatures = featuresFor(this._iteration.included, this.effortToDate());
+		this._excludedFeatures = featuresFor(this._iteration.excluded, this.totalEffort());
 	};
 	rs.Iteration.prototype = new rs.Object();
 	var Iteration = rs.Iteration.prototype;
@@ -49,20 +61,10 @@
 	};
 
 	Iteration.includedFeatures = function() {
-		return this._featuresFromList(this._iteration.included, this.effortToDate());
+		return this._includedFeatures;
 	};
 
 	Iteration.excludedFeatures = function() {
-		return this._featuresFromList(this._iteration.excluded, this.totalEffort());
-	};
-
-	Iteration._featuresFromList = function(featureList, effort) {
-		if (!featureList) { return []; }
-		var cumulativeEstimate = 0;
-		return featureList.map(function(element) {
-			var result = new rabu.schedule.Feature(element, cumulativeEstimate, effort);
-			cumulativeEstimate += result.estimate();
-			return result;
-		});
+		return this._excludedFeatures;
 	};
 }());
