@@ -192,8 +192,8 @@
 		assertFeatureListEquals("abc -> ac", [a, c], iteration.includedFeatures());
 		assertFeatureListEquals("de -> dbe", [d, b, e], iteration.excludedFeatures());
 
-		iteration.moveFeature(3, 0);
-		assertFeatureListEquals("ac" -> "dac", [d, a, c], iteration.includedFeatures());
-		assertFeatureListEquals("dbe" -> "be", [d, b, e], iteration.excludedFeatures());
+		iteration.moveFeature(2, 0);
+		assertFeatureListEquals("ac -> dac", [d, a, c], iteration.includedFeatures());
+		assertFeatureListEquals("dbe -> be", [b, e], iteration.excludedFeatures());
 	};
 }());
