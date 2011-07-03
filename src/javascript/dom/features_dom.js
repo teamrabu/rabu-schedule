@@ -11,7 +11,7 @@
 	var rs = rabu.schedule;
 	rs.FeaturesDom = function(element, estimates) {
 		this._element = element;
-		this._estimates = estimates;
+		this._iteration = estimates.currentIteration();
 
 		this._orderBeforeDrag = [];
 		this._positionsBeforeDrag = [];
@@ -28,8 +28,8 @@
 	};
 
 	FeaturesDom._populateFeatureList = function() {
-		this._element.html(this._toHtml(this._estimates.includedFeatures(), "rabu-included"));
-		this._element.append(this._toHtml(this._estimates.excludedFeatures(), "rabu-excluded"));
+		this._element.html(this._toHtml(this._iteration.includedFeatures(), "rabu-included"));
+		this._element.append(this._toHtml(this._iteration.excludedFeatures(), "rabu-excluded"));
 	};
 
 	FeaturesDom._initializeElementVars = function() {

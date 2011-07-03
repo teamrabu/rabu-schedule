@@ -18,57 +18,56 @@
 		this._includedFeatures = featuresFor(this._iteration.included, this.effortToDate());
 		this._excludedFeatures = featuresFor(this._iteration.excluded, this.totalEffort());
 	};
-	rs.Iteration.prototype = new rs.Object();
-	var Iteration = rs.Iteration.prototype;
+	var Prototype = rs.Iteration.prototype = new rs.Object();
 
-	Iteration.startDate = function() {
+	Prototype.startDate = function() {
 		return new rs.Date(this._iteration.started);
 	};
 
-	Iteration.length = function() {
+	Prototype.length = function() {
 		return this._iteration.length;
 	};
 
-	Iteration.velocity = function() {
+	Prototype.velocity = function() {
 		return this._iteration.velocity;
 	};
 
-	Iteration.tenPercentMultiplier = function() {
+	Prototype.tenPercentMultiplier = function() {
 		return this._iteration.riskMultipliers[0];
 	};
 
-	Iteration.fiftyPercentMultiplier = function() {
+	Prototype.fiftyPercentMultiplier = function() {
 		return this._iteration.riskMultipliers[1];
 	};
 
-	Iteration.ninetyPercentMultiplier = function() {
+	Prototype.ninetyPercentMultiplier = function() {
 		return this._iteration.riskMultipliers[2];
 	};
 
-	Iteration.effortToDate = function() {
+	Prototype.effortToDate = function() {
 		return this._effortToDate;
 	};
 
-	Iteration.effortRemaining = function() {
+	Prototype.effortRemaining = function() {
 		var adder = function(sum, feature) {
 			return sum + feature.estimate();
 		};
 		return this.includedFeatures().reduce(adder, 0);
 	};
 
-	Iteration.totalEffort = function() {
+	Prototype.totalEffort = function() {
 		return this.effortToDate() + this.effortRemaining();
 	};
 
-	Iteration.includedFeatures = function() {
+	Prototype.includedFeatures = function() {
 		return this._includedFeatures;
 	};
 
-	Iteration.excludedFeatures = function() {
+	Prototype.excludedFeatures = function() {
 		return this._excludedFeatures;
 	};
 
-	Iteration.moveFeature = function(sourceIndex, destIndex) {
+	Prototype.moveFeature = function(sourceIndex, destIndex) {
 		var included = this._includedFeatures;
 		var excluded = this._excludedFeatures;
 
