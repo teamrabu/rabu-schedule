@@ -212,17 +212,23 @@ task MERGED_JS => [MAIN_JS_SOURCE, MERGED_DIR] do
 end
 
 task MINIFIED_JS_TEST_CONF => [MINIFIED_DIR] do
-	puts "Creating #{MINIFIED_JS_TEST_CONF}"
-	File.open(MINIFIED_JS_TEST_CONF, "w") do |file|
-		file.write("server: http://localhost:#{JSTESTDRIVER_PORT}\n")
-		file.write("\n")
-		file.write("load:\n")
-		file.write(" - #{MINIFIED_JS}\n")
-		file.write(" - #{JS_SRC_DIR}/_*_test.js")
+	next unless minify?
+	explain "Configuring minification tests" do
+		puts "cat > #{MINIFIED_JS_TEST_CONF}"
+		File.open(MINIFIED_JS_TEST_CONF, "w") do |file|
+			file.write("server: http://localhost:#{JSTESTDRIVER_PORT}\n")
+			file.write("\n")
+			file.write("load:\n")
+			file.write(" - #{MINIFIED_JS}\n")
+			FileList.new("#{JS_SRC_DIR}/**/_*test.js").each do |filename|
+				file.write(" - #{filename}\n")
+			end
+		end
+		puts IO.readlines(MINIFIED_JS_TEST_CONF)
 	end
 end
 
-task MINIFIED_JS => [MERGED_JS, MINIFIED_JS_TEST_CONF, MINIFIED_DIR] do
+task MINIFIED_JS => [MERGED_JS, MINIFIED_DIR] do
 	if (!minify?) then
 		explain "Skipping minification" do
 			cp MERGED_JS, MINIFIED_JS
