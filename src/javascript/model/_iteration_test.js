@@ -137,4 +137,27 @@
 		assertFeatureEquals("b -> 1", b, features[1]);
 		assertFeatureEquals("a -> 2", a, features[2]);
 	};
+
+	Test.test_movingFeatures_excludedOnly = function() {
+		config.excluded = config.included;
+		config.included = undefined;
+		iteration = new rs.Iteration(config, 0);
+
+		var features = iteration.excludedFeatures();
+		var a = features[0];
+		var b = features[1];
+		var c = features[2];
+
+		iteration.moveFeature(2, 0);
+		features = iteration.excludedFeatures();
+		assertFeatureEquals("c -> 0", c, features[0]);
+		assertFeatureEquals("a -> 1", a, features[1]);
+		assertFeatureEquals("b -> 2", b, features[2]);
+
+		iteration.moveFeature(1, 2);
+		features = iteration.excludedFeatures();
+		assertFeatureEquals("c -> 0", c, features[0]);
+		assertFeatureEquals("b -> 1", b, features[1]);
+		assertFeatureEquals("a -> 2", a, features[2]);
+	};
 }());
