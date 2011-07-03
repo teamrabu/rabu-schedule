@@ -13,7 +13,7 @@ Release 0.4 (14 June 2011)
 * ADDED: Explanatory text in projection page.
 
 Release 0.4.1 (14 June 2011)
-===
+---
 * FIXED (cosmetic): Corrected version number in rabu.jar.
 
 Release 0.3 (30 May 2011)
