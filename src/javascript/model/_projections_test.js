@@ -6,6 +6,10 @@
 	var projections;
 	var config;
 
+	function populate() {
+		projections = new rs.Projections(new rabu.schedule.Estimates(config));
+	}
+
 	Test.prototype.setUp = function() {
 		config = {
 			iterations: [{
@@ -18,11 +22,12 @@
 				]
 			}]
 		};
-		projections = new rabu.schedule.Projections(new rabu.schedule.Estimates(config));
+		populate();
 	};
 
 	Test.prototype.test_dateProjections = function() {
 		config.iterations[0].riskMultipliers = [0.25, 0.25, 0.75];
+		populate();
 		
 		assertEquals("10% should round to next day", new rs.Date("6 Jan 2011"), projections.tenPercentDate());
 		assertEquals("50% should round to next day", new rs.Date("6 Jan 2011"), projections.fiftyPercentDate());
@@ -31,10 +36,12 @@
 
 	Test.prototype.test_totalIterations = function() {
 		config.iterations[0].riskMultipliers = [1, 2, 4.3];
+		populate();
 		assertEquals("should round up to whole number", 9, projections.totalIterations());
 				
 		config.iterations.push({});
 		config.iterations.push({});
+		populate();
 		assertEquals("should include historical iterations", 11, projections.totalIterations());
 	};
 	
@@ -49,6 +56,7 @@
 			velocity: 10,
 			included: [["peak", 1000]]
 		});
+		populate();
 		
 		assertEquals(1000, projections.maxEffort());
 	};
@@ -61,6 +69,7 @@
 			velocity: 10,
 			included: [["whatever", 3]]
 		});
+		populate();
 		assertEquals(effortWithNoHistory + 10, projections.maxEffort());
 	};
 }());

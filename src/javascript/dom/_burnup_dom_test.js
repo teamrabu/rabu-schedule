@@ -4,7 +4,16 @@
 	var Test = new TestCase("BurnupDom");
 	var rs = rabu.schedule;
 	var config, estimates, projections, burnup, paper, metricsConfig, metrics;
-	
+
+	function populate() {
+		metrics = new rs.BurnupChartMetrics(metricsConfig);
+		estimates = new rs.Estimates(config);
+		projections = new rs.Projections(estimates);
+		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates, projections);
+        burnup.populate(metrics);
+		paper = burnup.paper();
+	}
+
 	Test.prototype.setUp = function() {
 		/*:DOC += <div class="rabu-burnup" style="height:300px; width:200px">
 		              <div class="rabu-xLabel" style="font-size: 16px; font-family: serif; font-weight: 100;">X Label</div>
@@ -23,10 +32,6 @@
 				]
 			}]
 		};
-		estimates = new rs.Estimates(config);
-		projections = new rs.Projections(estimates);
-		burnup = new rs.BurnupDom($(".rabu-burnup"), estimates, projections);
-		burnup.populate();
         metricsConfig = {
             paperWidth: 500, paperHeight: 100,
             xLabelHeight: 20, yLabelHeight: 10,
@@ -36,9 +41,7 @@
             iterationCount: 3, maxEffort: 1,
             Y_TICK_SPACING: 3
         };
-		metrics = new rs.BurnupChartMetrics(metricsConfig);
-        burnup.populate(metrics);
-		paper = burnup.paper();
+		populate();
 	};
 	
 	function path(raphaelObject) {
@@ -137,8 +140,7 @@
 
 	Test.prototype.test_populate_drawsMinorXAxisTickMarks_whenNoLabel = function() {
         metricsConfig.iterationCount = 40;
-		metrics = new rs.BurnupChartMetrics(metricsConfig);
-        burnup.populate(metrics);
+		populate();
 		
 		assertEquals("assumption: x-axis tick 1 is minor", "Jan 11", burnup.xTickLabels[0].attrs.text);
 		assertEquals("X-axis minor tick height", metrics.MINOR_TICK_LENGTH, burnup.xTicks[0].getBBox().height);
@@ -170,8 +172,7 @@
 	
 	Test.prototype.test_populate_drawsMinorYAxisTickMarks = function() {
 		metricsConfig.yTickLabelHeight = 50;
-		metrics = new rs.BurnupChartMetrics(metricsConfig);
-		burnup.populate(metrics);
+		populate();
 		
 		var tick = burnup.yTicks[0].getBBox();
 		assertEquals("Y-axis minor tick width", metrics.MINOR_TICK_LENGTH, tick.width);
@@ -217,18 +218,17 @@
 			});
 		}
 		metricsConfig.maxEffort = 1000;
-		metrics = new rs.BurnupChartMetrics(metricsConfig);
 	}
 
 	Test.prototype.test_populate_drawsIterations = function() {
         // zero iterations are (or will be) illegal
 
 		setupIterationTest(1);
-        burnup.populate(metrics);
+		populate();
 		assertEquals("when one iteration", 0, burnup.iterations.length);
 		
 		setupIterationTest(3);
-        burnup.populate(metrics);
+		populate();
 		assertEquals("when three iterations", 2, burnup.iterations.length);
 	};
 	
@@ -279,18 +279,18 @@
 
 	Test.prototype.test_populate_drawsOnePolygonForAllFeatures = function() {
 		setupFeatureTest(3);
-        burnup.populate(metrics);
-		
+		populate();
+
 		assertHistoryPolygonEquals("feature polygon", 0, 600, 68, burnup.FEATURE_STROKE, burnup.FEATURE_FILL, "Work remaining", burnup.iterations[0]);
 	};
 	
     Test.prototype.test_populate_drawsVelocity = function() {
         setupIterationTest(1);
-        burnup.populate(metrics);
+	    populate();
         assertEquals("when one iteration", 0, burnup.velocity.length);
         
         setupIterationTest(3);
-        burnup.populate(metrics);
+	    populate();
         assertEquals("when three iterations", 2, burnup.velocity.length);
 		
         var lineColor = burnup.VELOCITY_STROKE;
@@ -302,7 +302,7 @@
 	
 	Test.prototype.test_populate_clipsHistory = function() {
 		setupIterationTest(3);
-		burnup.populate(metrics);
+		populate();
 		
 		var width = metrics.xForIteration(2) - metrics.xForIteration(0) - 0.5;
 		var clip = metrics.left + "," + metrics.top + "," + width + "," + metrics.height;
@@ -312,7 +312,7 @@
 
     Test.prototype.test_populate_drawsProjectionCones = function() {
         setupIterationTest(3);
-		burnup.populate(metrics);
+	    populate();
 
         var iterationX = metrics.xForIteration(estimates.iterationCount() - 1);
         var effortY = metrics.yForEffort(estimates.currentIteration().totalEffort());

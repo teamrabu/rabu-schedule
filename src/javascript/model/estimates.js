@@ -3,7 +3,25 @@
 (function() {
 	var rs = rabu.schedule;
 	rs.Estimates = function(config) {
+		function iterations() {
+			var iterationData = config.iterations;
+			if (!iterationData || iterationData.length === 0) {
+				iterationData = [{}];
+			}
+
+			var i;
+			var effortToDate = 0;
+			var result = [];
+			for (i = iterationData.length - 1; i >= 0; i--) {
+				var iteration = new rs.Iteration(iterationData[i], effortToDate);
+				result.push(iteration);
+				effortToDate += iteration.velocity();
+			}
+			return result;
+		}
+
 		this._config = config;
+		this._iterations = iterations();
 	};
 	var Estimates = rs.Estimates.prototype = new rs.Object();
 
@@ -28,20 +46,20 @@
 	};
 
 	Estimates.currentIteration = function() {
-		var list = this._iterations();
+		var list = this._iterations;
 		return list[list.length - 1];
 	};
 
 	Estimates.firstIteration = function() {
-		return this._iterations()[0];
+		return this._iterations[0];
 	};
 
 	Estimates.iteration = function(offsetFromOldest) {
-		return this._iterations()[offsetFromOldest];
+		return this._iterations[offsetFromOldest];
 	};
 
     Estimates.iterationCount = function() {
-		return this._config.iterations.length;
+		return this._iterations.length;
 	};
 
 	Estimates.velocity = function() {
@@ -53,7 +71,7 @@
 	};
 
 	Estimates.peakEffortEstimate = function() {
-        return this._iterations().reduce(function(previousValue, iteration) {
+        return this._iterations.reduce(function(previousValue, iteration) {
 			var currentValue = iteration.totalEffort();
 			return currentValue > previousValue ? currentValue : previousValue;
 		}, 0);
@@ -79,20 +97,4 @@
 		}
 	};
 
-	Estimates._iterations = function() {
-		var iterationData = this._config.iterations;
-		if (!iterationData || iterationData.length === 0) {
-			iterationData = [{}];
-		}
-		
-		var i;
-		var effortToDate = 0;
-		var result = [];
-	    for (i = iterationData.length - 1; i >= 0; i--) {
-			var iteration = new rs.Iteration(iterationData[i], effortToDate);
-			result.push(iteration);
-			effortToDate += iteration.velocity();
-		}
-		return result;
-	};
 }());
