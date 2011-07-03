@@ -63,14 +63,6 @@
 		return this.currentIteration().totalEstimate();
 	};
 
-	Estimates.includedFeatures = function() {
-		return this.currentIteration().includedFeatures();
-	};
-
-	Estimates.excludedFeatures = function() {
-		return this.currentIteration().excludedFeatures();
-	};
-
 	Estimates.dateForIteration = function(iterationNumber) {
 		var self = this;
 		function calcFutureDate(futureOffset){
