@@ -118,29 +118,30 @@
 		assertEquals("feature 0 total effort", 210, features[0].totalEffort());
 		assertEquals("feature 1 total effort", 230, features[1].totalEffort());
 	};
-	
-	Test.test_movingFeatures_includedOnly = function() {
+
+	function assertFeatureListEquals(message, expectedFeatures, actualFeatures) {
+		var i, fail = false;
+		assertEquals(message + " length", expectedFeatures.length, actualFeatures.length);
+
+		for (i = 0; i < expectedFeatures.length; i++) {
+			assertFeatureEquals(message + " #" + i, expectedFeatures[i], actualFeatures[i]);
+		}
+	}
+
+	Test.test_moveFeature_includedOnly = function() {
 		var features = iteration.includedFeatures();
 		var a = features[0];
 		var b = features[1];
 		var c = features[2];
-		
+
 		iteration.moveFeature(2, 0);
-		features = iteration.includedFeatures();
-		assertFeatureEquals("c -> 0", c, features[0]);
-		assertFeatureEquals("a -> 1", a, features[1]);
-		assertFeatureEquals("b -> 2", b, features[2]);
+		assertFeatureListEquals("abc -> cab", [c, a, b], iteration.includedFeatures());
 
 		iteration.moveFeature(1, 2);
-		features = iteration.includedFeatures();
-		assertFeatureEquals("c -> 0", c, features[0]);
-		assertFeatureEquals("b -> 1", b, features[1]);
-		assertFeatureEquals("a -> 2", a, features[2]);
+		assertFeatureListEquals("cab -> cba", [c, b, a], iteration.includedFeatures());
 	};
 
-//	function assertFeatureListEquals()
-
-	Test.test_movingFeatures_excludedOnly = function() {
+	Test.test_moveFeature_excludedOnly = function() {
 		config.excluded = config.included;
 		config.included = undefined;
 		iteration = new rs.Iteration(config, 0);
@@ -151,19 +152,13 @@
 		var c = features[2];
 
 		iteration.moveFeature(2, 0);
-		features = iteration.excludedFeatures();
-		assertFeatureEquals("c -> 0", c, features[0]);
-		assertFeatureEquals("a -> 1", a, features[1]);
-		assertFeatureEquals("b -> 2", b, features[2]);
-
+		assertFeatureListEquals("abc -> cab", [c, a, b], iteration.excludedFeatures());
+		
 		iteration.moveFeature(1, 2);
-		features = iteration.excludedFeatures();
-		assertFeatureEquals("c -> 0", c, features[0]);
-		assertFeatureEquals("b -> 1", b, features[1]);
-		assertFeatureEquals("a -> 2", a, features[2]);
+		assertFeatureListEquals("cab -> cba", [c, b, a], iteration.excludedFeatures());
 	};
 
-	Test.test_movingFeatures_excludedOnlyWhenIncludedFeaturesAlsoPresent = function() {
+	Test.test_moveFeature_excludedOnlyWhenIncludedFeaturesAlsoPresent = function() {
 		config.excluded = [
 			["excluded D", 5],
 			["excluded E", 10],
@@ -175,21 +170,30 @@
 		var e = features[1];
 		var f = features[2];
 
-		iteration.moveFeature(4, 5);
-		features = iteration.excludedFeatures();
-		assertFeatureEquals("d -> 3", d, features[0]);
-		assertFeatureEquals("f -> 4", f, features[1]);
-		assertFeatureEquals("e -> 5", e, features[2]);
+		iteration.moveFeature(3, 4);
+		assertFeatureListEquals("def -> edf", [e, d, f], iteration.excludedFeatures());
 	};
 
-//	Test.test_movingFeatures_betweenIncludedAndExcluded = function() {
-//		config.excluded = [
-//			["excluded D", 5],
-//			["excluded E", 10]
-//		];
-//		iteration = new rs.Iteration(config, 0);
-//
-//		iteration.moveFeature(0, 5);
-//		assertFeatureEquals("a -> 5", a, iteration.excludedFeatures()[1]);
-//	};
+	Test.test_moveFeature_betweenIncludedAndExcluded = function() {
+		config.excluded = [
+			["excluded D", 5],
+			["excluded E", 10]
+		];
+		iteration = new rs.Iteration(config, 0);
+		var included = iteration.includedFeatures();
+		var excluded = iteration.excludedFeatures();
+		var a = included[0];
+		var b = included[1];
+		var c = included[2];
+		var d = excluded[0];
+		var e = excluded[1];
+
+		iteration.moveFeature(1, 4);
+		assertFeatureListEquals("abc -> ac", [a, c], iteration.includedFeatures());
+		assertFeatureListEquals("de -> dbe", [d, b, e], iteration.excludedFeatures());
+
+		iteration.moveFeature(3, 0);
+		assertFeatureListEquals("ac" -> "dac", [d, a, c], iteration.includedFeatures());
+		assertFeatureListEquals("dbe" -> "be", [d, b, e], iteration.excludedFeatures());
+	};
 }());

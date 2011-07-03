@@ -68,27 +68,29 @@
 		return this._excludedFeatures;
 	};
 
-	Iteration.moveFeature = function(oldIndex, newIndex) {
+	Iteration.moveFeature = function(sourceIndex, destIndex) {
 		var included = this._includedFeatures;
 		var excluded = this._excludedFeatures;
-		var removed;
 
 		function assertIndexInBounds(name, index) {
 			if (index < 0 || index > (included.length + excluded.length - 1)) {
 				throw (name + " [" + index + "] is out of bounds; 'included' length is [" + included.length + "]; 'excluded' length is [" + excluded.length + "]");
 			}
 		}
-		assertIndexInBounds("oldIndex", oldIndex);
-		assertIndexInBounds("newIndex", newIndex);
+		assertIndexInBounds("sourceIndex", sourceIndex);
+		assertIndexInBounds("destIndex", destIndex);
 
-		if (oldIndex < included.length) {
-			removed = included.splice(oldIndex, 1);
-			included.splice(newIndex, 0, removed[0]);
+		var sourceList = included;
+		var destList = included;
+		if (sourceIndex >= included.length) {
+			sourceList = excluded;
+			sourceIndex -= included.length;
 		}
-		else {
-			oldIndex -= included.length;
-			removed = excluded.splice(oldIndex, 1);
-			excluded.splice(newIndex, 0, removed[0]);
+		if (destIndex >= included.length) {
+			destList = excluded;
+			destIndex -= included.length;
 		}
+		var removed = sourceList.splice(sourceIndex, 1);
+		destList.splice(destIndex, 0, removed[0]);
 	};
 }());
