@@ -87,9 +87,10 @@
 		this._list.css("padding-bottom", padding);
 	};
 
-	FeaturesDom._moveElement = function(prevPosition, newPosition) {
+	FeaturesDom._makeDraggable = function() {
 		var self = this;
-		function moveDown() {
+		
+		function moveDown(prevPosition, newPosition) {
 			newPosition = Math.min(newPosition, self._orderBeforeDrag.length - 1);
 			self._orderBeforeDrag.forEach(function(xx, index) {
 				if (index < prevPosition || index > newPosition) {
@@ -106,7 +107,8 @@
 				}
 			});
 		}
-		function moveUp() {
+
+		function moveUp(prevPosition, newPosition) {
 			self._orderBeforeDrag.forEach(function(xx, index) {
 				if (index > prevPosition || index < newPosition) {
 					self._featuresInOrder[index] = self._orderBeforeDrag[index];
@@ -123,52 +125,44 @@
 			});
 		}
 
-		if (newPosition < prevPosition) { moveUp(); }
-		else { moveDown(); }
-	};
-
-	FeaturesDom._findOriginalIndex = function(domElement) {
-		var i;
-		for (i = 0; i < this._orderBeforeDrag.length; i++) {
-			if (this._orderBeforeDrag[i][0] === domElement) { return i; }
-		}
-		throw "Couldn't find element";
-	};
-
-	FeaturesDom._findNewIndex = function(domElement, pageOffset, originalIndex) {
-		function draggingUp(i) { return originalIndex >= i; }
-
-		var draggerTop = pageOffset;
-		var draggerHeight = $(domElement).outerHeight(true);
-		var i, elementTop, elementHeight, elementCenter;
-
-		for (i = this._positionsBeforeDrag.length - 1; i > 0; i--) {
-			if (draggingUp(i)) {
-				elementTop = this._positionsBeforeDrag[i - 1];
-				elementHeight = this._orderBeforeDrag[i - 1].outerHeight(false);
-				elementCenter = (elementHeight / 2);
-
-				if (draggerTop > elementTop + elementCenter) { return i; }
-			}
-			else {
-				elementTop = this._positionsBeforeDrag[i];
-				elementHeight = this._orderBeforeDrag[i].outerHeight(false);
-				elementCenter = (elementHeight / 2);
-
-				if (draggerTop + draggerHeight >= elementTop + elementCenter ) { return i; }
-			}
-		}
-		return 0;
-	};
-
-	FeaturesDom._makeDraggable = function() {
-		var self = this;
-
-		function handleDrag(event, ui) {
-			var originalPosition = self._findOriginalIndex(event.target);
-			var newPosition = self._findNewIndex(event.target, ui.offset.top, originalPosition);
-			self._moveElement(originalPosition, newPosition);
+		function moveElement(prevPosition, newPosition) {
+			if (newPosition < prevPosition) { moveUp(prevPosition, newPosition); }
+			else { moveDown(prevPosition, newPosition); }
 			self._positionElements();
+		}
+
+		function findOriginalIndex(domElement) {
+			var i;
+			for (i = 0; i < self._orderBeforeDrag.length; i++) {
+				if (self._orderBeforeDrag[i][0] === domElement) { return i; }
+			}
+			throw "Couldn't find element";
+		}
+
+		function findNewIndex(domElement, pageOffset, originalIndex) {
+			function draggingUp(i) { return originalIndex >= i; }
+
+			var draggerTop = pageOffset;
+			var draggerHeight = $(domElement).outerHeight(true);
+			var i, elementTop, elementHeight, elementCenter;
+
+			for (i = self._positionsBeforeDrag.length - 1; i > 0; i--) {
+				if (draggingUp(i)) {
+					elementTop = self._positionsBeforeDrag[i - 1];
+					elementHeight = self._orderBeforeDrag[i - 1].outerHeight(false);
+					elementCenter = (elementHeight / 2);
+
+					if (draggerTop > elementTop + elementCenter) { return i; }
+				}
+				else {
+					elementTop = self._positionsBeforeDrag[i];
+					elementHeight = self._orderBeforeDrag[i].outerHeight(false);
+					elementCenter = (elementHeight / 2);
+
+					if (draggerTop + draggerHeight >= elementTop + elementCenter ) { return i; }
+				}
+			}
+			return 0;
 		}
 
 		function handleDragStart(event, ui) {
@@ -178,6 +172,12 @@
 			self._featuresInOrder.forEach(function(element, index) {
 				self._positionsBeforeDrag[index] = $(element).offset().top;
 			});
+		}
+
+		function handleDrag(event, ui) {
+			var originalPosition = findOriginalIndex(event.target);
+			var newPosition = findNewIndex(event.target, ui.offset.top, originalPosition);
+			moveElement(originalPosition, newPosition);
 		}
 
 		function handleDragStop(event, ui) {
