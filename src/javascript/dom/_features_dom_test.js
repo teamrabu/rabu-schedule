@@ -298,6 +298,17 @@
 		assertTrue("li 0 should be excluded after dragging past divider", $(li[0]).hasClass("rabu-excluded"));
 	};
 
+	Test.prototype.test_dragging_modifiesUnderlyingModel = function() {
+		assertEquals("# included before drag", 3, iteration.includedFeatures().length);
+		assertEquals("# excluded before drag", 1, iteration.excludedFeatures().length);
+
+		dragAndDrop(li[0], 110);
+
+		//TODO
+//		assertEquals("# included after drag", 2, iteration.includedFeatures().length);
+//		assertEquals("# excluded after drag", 2, iteration.excludedFeatures().length);
+	};
+
 	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {
 		dragAndDrop(li[0], 15);
 		assertLiPositions("should snap into place", [20, 0, 40, 110]);

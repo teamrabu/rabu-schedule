@@ -11,10 +11,8 @@
 	var LIST_CLASS = ".rabu-features";
 
 	var rs = rabu.schedule;
-	rs.FeaturesDom = function() {
-		this._orderBeforeDrag = [];
-		this._positionsBeforeDrag = [];
-		this._featuresInOrder = [];
+	rs.FeaturesDom = function(applicationModel) {
+		this._applicationModel = applicationModel;
 	};
 	var FeaturesDom = rs.FeaturesDom.prototype = new rs.Object();
 
@@ -47,6 +45,9 @@
 		this._dividerHeight = this._divider.outerHeight(true);
 		this._divider.css("position", "absolute");
 
+		this._orderBeforeDrag = [];
+		this._positionsBeforeDrag = [];
+		this._featuresInOrder = [];
 		pushAll(this._included, this._featuresInOrder);
 		this._featuresInOrder.push(this._divider);
 		pushAll(this._excluded, this._featuresInOrder);

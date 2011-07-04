@@ -4,9 +4,12 @@
 	var rs = rabu.schedule;
 	rs.ApplicationModel = function(estimates, datesDom, featuresDom, burnupDom) {
 		this._estimates = estimates;
-		this._datesDom = datesDom;
-		this._featuresDom = featuresDom;
-		this._burnupDom = burnupDom;
+		this._projections = new rs.Projections(this._estimates);
+
+		this._datesDom = datesDom || new rs.DatesDom(this._projections);
+		this._featuresDom = featuresDom || new rs.FeaturesDom(this);
+		this._burnupDom = burnupDom || new rs.BurnupDom($(".rabu-burnup"), this._estimates, this._projections);
+
 	};
 	var Prototype = rs.ApplicationModel.prototype = new rs.Object();
 
