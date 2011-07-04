@@ -3,6 +3,8 @@
 (function() {
 	var rs = rabu.schedule;
 	rs.ApplicationModel = function(estimates, datesDom, featuresDom, burnupDom) {
+		if (!estimates) { throw "Expected estimates"; }
+
 		this._estimates = estimates;
 		this._projections = new rs.Projections(this._estimates);
 

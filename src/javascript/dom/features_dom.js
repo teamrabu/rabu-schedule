@@ -12,6 +12,7 @@
 
 	var rs = rabu.schedule;
 	rs.FeaturesDom = function(applicationModel) {
+		if (!applicationModel) { throw "expected applicationModel"; }
 		this._applicationModel = applicationModel;
 	};
 	var FeaturesDom = rs.FeaturesDom.prototype = new rs.Object();
@@ -178,6 +179,7 @@
 			var originalPosition = findOriginalIndex(event.target);
 			var newPosition = findNewIndex(event.target, ui.offset.top, originalPosition);
 			moveElement(originalPosition, newPosition);
+			self._applicationModel.moveFeature(originalPosition, newPosition);
 		}
 
 		function handleDragStop(event, ui) {

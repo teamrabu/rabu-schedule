@@ -1,6 +1,7 @@
 // Copyright (C) 2011 Titanium I.T. LLC. All rights reserved. See LICENSE.txt for details.
 
 (function() {
+	var rs = rabu.schedule;
 	var Test = new TestCase("FeaturesDom");
 	var config;
 	var iteration;
@@ -11,8 +12,11 @@
 	var mouseDownElement;
 
 	function populate() {
-		iteration = new rabu.schedule.Iteration(config);
-		featuresDom = new rabu.schedule.FeaturesDom();
+		var estimates = new rs.Estimates({ iterations: [config]});
+		var applicationModel = new rs.ApplicationModel(estimates);
+
+		iteration = estimates.currentIteration();
+		featuresDom = new rs.FeaturesDom(applicationModel);
 		featuresDom.populate(iteration);
 		ul = $("ul");
 		li = $("li");
@@ -99,6 +103,8 @@
 		/*:DOC +=   <ul class="rabu-features"></ul> */
 		/*:DOC +=   <div class="rabu-divider"></div> */
 		config = {
+			
+			riskMultipliers: [1, 2, 4],
 			included: [
 				["completed", 0],
 				["feature A", 70],
@@ -304,9 +310,8 @@
 
 		dragAndDrop(li[0], 110);
 
-		//TODO
-//		assertEquals("# included after drag", 2, iteration.includedFeatures().length);
-//		assertEquals("# excluded after drag", 2, iteration.excludedFeatures().length);
+		assertEquals("# included after drag", 2, iteration.includedFeatures().length);
+		assertEquals("# excluded after drag", 2, iteration.excludedFeatures().length);
 	};
 
 	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {
