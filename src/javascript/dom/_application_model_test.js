@@ -6,19 +6,28 @@
 	var mockEstimates, mockDates, mockFeatures, mockBurnup;
 	var model;
 
-	function MockDom() {
-		this._populateCalled = false;
-	}
+	function MockDom() {}
 	MockDom.prototype = new rs.Object();
 	MockDom.prototype.populate = function() {
-		this._populateCalled = true;
+		this.populateCalledWith = Array.prototype.slice.call(arguments);
 	};
-	MockDom.prototype.assertPopulateCalled = function(message) {
-		assertTrue(message + ".populate() should have been called", this._populateCalled);
+
+	function MockIteration() {}
+	MockIteration.prototype = new rs.Object();
+	MockIteration.prototype.moveFeature = function() {
+		this.moveFeatureCalledWith = Array.prototype.slice.call(arguments);
+	};
+
+	function MockEstimates() {
+		this._currentIteration = new MockIteration();
+	}
+	MockEstimates.prototype = new rs.Object();
+	MockEstimates.prototype.currentIteration = function() {
+		return this._currentIteration;
 	};
 
 	Test.setUp = function() {
-		mockEstimates = {};
+		mockEstimates = new MockEstimates();
 		mockDates = new MockDom();
 		mockFeatures = new MockDom();
 		mockBurnup = new MockDom();
@@ -27,8 +36,14 @@
 
 	Test.test_initialize_populatesAllDoms = function() {
 		model.initialize();
-		mockDates.assertPopulateCalled("dates");
-		mockFeatures.assertPopulateCalled("features");
-		mockBurnup.assertPopulateCalled("burnup");
+		assertEquals("dates.populate()", [], mockDates.populateCalledWith);
+		assertEquals("features.populate()", [], mockFeatures.populateCalledWith);
+		assertEquals("burnup.populate()", [], mockBurnup.populateCalledWith);
+	};
+
+	Test.test_moveFeature_updatesIterationAndRepopulatesDates = function() {
+		model.moveFeature(1, 2);
+		assertEquals("moveFeature()", [1, 2], mockEstimates.currentIteration().moveFeatureCalledWith);
+		assertEquals("dates.populate()", [], mockDates.populateCalledWith);
 	};
 }());

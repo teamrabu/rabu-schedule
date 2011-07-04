@@ -15,4 +15,9 @@
 		this._featuresDom.populate();
 		this._burnupDom.populate();
 	};
+
+	Prototype.moveFeature = function(fromIndex, toIndex) {
+		this._estimates.currentIteration().moveFeature(fromIndex, toIndex);
+		this._datesDom.populate();
+	};
 }());
