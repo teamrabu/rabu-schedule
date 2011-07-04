@@ -162,7 +162,7 @@
 		assertFeatureListsEqual("to divider: acb| -> abc|", [a, b, c], []);
 
 		iteration.moveFeature(2, 3);
-		assertFeatureListsEqual("across divider (included): abc| -> ab|c", [a, b], [c]);
+		assertFeatureListsEqual("across divider: abc| -> ab|c", [a, b], [c]);
 	};
 
 	Test.test_moveFeature_excludedIndexesStartAfterDivider = function() {
@@ -186,7 +186,7 @@
 		assertFeatureListsEqual("up: |fde -> |dfe", [], [d, f, e]);
 
 		iteration.moveFeature(1, 0);
-		assertFeatureListsEqual("to divider (included): |dfe -> d|fe", [d], [f, e]);
+		assertFeatureListsEqual("to divider: |dfe -> d|fe", [d], [f, e]);
 	};
 
 	Test.test_moveFeature_dividerCanBeMovedToo = function() {
@@ -242,6 +242,6 @@
 		assertFeatureListsEqual("abc|def -> ac|dbef", [a, c], [d, b, e, f]);
 
 		iteration.moveFeature(3, 0);
-		assertFeatureListsEqual("ac|dbef -> dac|bef (included)", [d, a, c], [b, e, f]);
+		assertFeatureListsEqual("ac|dbef -> dac|bef", [d, a, c], [b, e, f]);
 	};
 }());
