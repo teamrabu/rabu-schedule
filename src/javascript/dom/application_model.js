@@ -12,7 +12,7 @@
 
 	Prototype.initialize = function() {
 		this._datesDom.populate();
-		this._featuresDom.populate();
+		this._featuresDom.populate(this._estimates.currentIteration());
 		this._burnupDom.populate();
 	};
 

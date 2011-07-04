@@ -37,7 +37,7 @@
 	Test.test_initialize_populatesAllDoms = function() {
 		model.initialize();
 		assertEquals("dates.populate()", [], mockDates.populateCalledWith);
-		assertEquals("features.populate()", [], mockFeatures.populateCalledWith);
+		assertEquals("features.populate()", [mockEstimates.currentIteration()], mockFeatures.populateCalledWith);
 		assertEquals("burnup.populate()", [], mockBurnup.populateCalledWith);
 	};
 

@@ -12,8 +12,8 @@
 
 	function populate() {
 		iteration = new rabu.schedule.Iteration(config);
-		featuresDom = new rabu.schedule.FeaturesDom($(".rabu-features"), iteration);
-		featuresDom.populate();
+		featuresDom = new rabu.schedule.FeaturesDom();
+		featuresDom.populate(iteration);
 		ul = $("ul");
 		li = $("li");
 		divider = $(".rabu-divider");
@@ -128,8 +128,8 @@
 	};
 
 	Test.prototype.test_populate_isIdempotent = function() {
-		featuresDom.populate();
-		featuresDom.populate();
+		featuresDom.populate(iteration);
+		featuresDom.populate(iteration);
 		assertEquals("# of items", 4, li.length);
 	};
 

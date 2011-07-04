@@ -12,7 +12,7 @@
 		this._applicationModel = new rs.ApplicationModel(
 			this._estimates,
 			new rs.DatesDom(this._projections),
-			new rs.FeaturesDom($(".rabu-features"), this._estimates.currentIteration()),
+			new rs.FeaturesDom(),
 			new rs.BurnupDom($(".rabu-burnup"), this._estimates, this._projections)
 		);
 	};

@@ -8,11 +8,10 @@
 	// http://threedubmedia.com/code/event/drag is a very lightweight, clean-looking approach
 	// to drag-and-drop that could work well as an alternative to using JQueryUI's events.
 
-	var rs = rabu.schedule;
-	rs.FeaturesDom = function(element, iteration) {
-		this._element = element;
-		this._iteration = iteration;
+	var LIST_CLASS = ".rabu-features";
 
+	var rs = rabu.schedule;
+	rs.FeaturesDom = function() {
 		this._orderBeforeDrag = [];
 		this._positionsBeforeDrag = [];
 		this._featuresInOrder = [];
@@ -27,9 +26,9 @@
 		}, "");
 	};
 
-	FeaturesDom._populateFeatureList = function() {
-		this._element.html(this._toHtml(this._iteration.includedFeatures(), "rabu-included"));
-		this._element.append(this._toHtml(this._iteration.excludedFeatures(), "rabu-excluded"));
+	FeaturesDom._populateFeatureList = function(iteration) {
+		$(LIST_CLASS).html(this._toHtml(iteration.includedFeatures(), "rabu-included"));
+		$(LIST_CLASS).append(this._toHtml(iteration.excludedFeatures(), "rabu-excluded"));
 	};
 
 	FeaturesDom._initializeElementVars = function() {
@@ -40,7 +39,7 @@
 			}
 		}
 
-		this._list = $(".rabu-features");
+		this._list = $(LIST_CLASS);
 		this._liJQuery = $("li", this._list);
 		this._divider = $(".rabu-divider");
 		this._included = $(".rabu-included", this._list);
@@ -198,8 +197,8 @@
 		});
 	};
 
-	FeaturesDom.populate = function() {
-		this._populateFeatureList();
+	FeaturesDom.populate = function(iteration) {
+		this._populateFeatureList(iteration);
 		this._initializeElementVars();
 		if (this._divider.length === 0) { return; }
 
