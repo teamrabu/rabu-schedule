@@ -67,29 +67,58 @@
 		return this._excludedFeatures;
 	};
 
-	Prototype.moveFeature = function(sourceIndex, destIndex) {
+	Prototype.moveFeature = function(fromIndex, toIndex) {
 		var included = this._includedFeatures;
 		var excluded = this._excludedFeatures;
 
 		function assertIndexInBounds(name, index) {
-			if (index < 0 || index > (included.length + excluded.length - 1)) {
+			if (index < 0 || index > (included.length + excluded.length)) {
 				throw (name + " [" + index + "] is out of bounds; 'included' length is [" + included.length + "]; 'excluded' length is [" + excluded.length + "]");
 			}
 		}
-		assertIndexInBounds("sourceIndex", sourceIndex);
-		assertIndexInBounds("destIndex", destIndex);
+		assertIndexInBounds("fromIndex", fromIndex);
+		assertIndexInBounds("toIndex", toIndex);
 
-		var sourceList = included;
-		var destList = included;
-		if (sourceIndex >= included.length) {
-			sourceList = excluded;
-			sourceIndex -= included.length;
+		var moving;
+		var divider = false;
+		if (fromIndex < included.length) {
+			// from: included features
+			moving = included.splice(fromIndex, 1);
 		}
-		if (destIndex >= included.length) {
-			destList = excluded;
-			destIndex -= included.length;
+		else if (fromIndex === included.length) {
+			// from: divider
+			divider = true;
+			if (toIndex > fromIndex) {
+				moving = excluded.splice(0, toIndex - fromIndex);
+			}
+			else {
+				moving = included.splice(toIndex - fromIndex);
+			}
 		}
-		var removed = sourceList.splice(sourceIndex, 1);
-		destList.splice(destIndex, 0, removed[0]);
+		else if (fromIndex > included.length) {
+			// from: excluded features
+			moving = excluded.splice(fromIndex - included.length - 1, 1);
+		}
+
+		if (divider) {
+			if (toIndex > fromIndex) {
+				included.push.apply(included, moving);
+			}
+			else {
+				excluded.unshift.apply(excluded, moving);
+			}
+		}
+		else if (toIndex < included.length) {
+			// to: included features
+			included.splice(toIndex, 0, moving[0]);
+		}
+		else if (toIndex === included.length) {
+			// to: before divider
+			included.splice(toIndex, 0, moving[0]);
+		}
+		else if (toIndex > included.length) {
+			// to: excluded features
+			excluded.splice(toIndex - included.length - 1, 0, moving[0]);
+		}
 	};
 }());

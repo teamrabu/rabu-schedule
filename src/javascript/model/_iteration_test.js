@@ -119,81 +119,129 @@
 		assertEquals("feature 1 total effort", 230, features[1].totalEffort());
 	};
 
-	function assertFeatureListEquals(message, expectedFeatures, actualFeatures) {
-		var i, fail = false;
-		assertEquals(message + " length", expectedFeatures.length, actualFeatures.length);
+	function assertFeatureListsEqual(message, expectedIncluded, expectedExcluded) {
+		function assertFeatureListEquals(message, expectedFeatures, actualFeatures) {
+			var i;
+			
+			function describe(features) {
+				var description = "";
+				for (i = 0; i < features.length; i++) {
+					description += "   " + (features[i] + "\n");
+				}
+				return description;
+			}
 
-		for (i = 0; i < expectedFeatures.length; i++) {
-			assertFeatureEquals(message + " #" + i, expectedFeatures[i], actualFeatures[i]);
+			var ok = (expectedFeatures.length === actualFeatures.length);
+
+			for (i = 0; ok && i < expectedFeatures.length; i++) {
+				ok = expectedFeatures[i].equals(actualFeatures[i]);
+			}
+
+			if (!ok) {
+				fail(message + " expected:\n" + describe(expectedFeatures) + " but was:\n" + describe(actualFeatures));
+			}
 		}
+
+		assertFeatureListEquals(message + " included", expectedIncluded, iteration.includedFeatures());
+		assertFeatureListEquals(message + " excluded", expectedExcluded, iteration.excludedFeatures());
 	}
 
-	Test.test_moveFeature_includedOnly = function() {
+	Test.test_moveFeature_includedIndexesAreZeroBased = function() {
 		var features = iteration.includedFeatures();
 		var a = features[0];
 		var b = features[1];
 		var c = features[2];
 
 		iteration.moveFeature(2, 0);
-		assertFeatureListEquals("abc -> cab", [c, a, b], iteration.includedFeatures());
+		assertFeatureListsEqual("down: abc| -> cab|", [c, a, b], []);
+
+		iteration.moveFeature(0, 1);
+		assertFeatureListsEqual("up: cab| -> acb|", [a, c, b], []);
 
 		iteration.moveFeature(1, 2);
-		assertFeatureListEquals("cab -> cba", [c, b, a], iteration.includedFeatures());
+		assertFeatureListsEqual("to divider: acb| -> abc|", [a, b, c], []);
+
+		iteration.moveFeature(2, 3);
+		assertFeatureListsEqual("across divider (included): abc| -> ab|c", [a, b], [c]);
 	};
 
-	Test.test_moveFeature_excludedOnly = function() {
-		config.excluded = config.included;
+	Test.test_moveFeature_excludedIndexesStartAfterDivider = function() {
 		config.included = undefined;
-		iteration = new rs.Iteration(config, 0);
-
-		var features = iteration.excludedFeatures();
-		var a = features[0];
-		var b = features[1];
-		var c = features[2];
-
-		iteration.moveFeature(2, 0);
-		assertFeatureListEquals("abc -> cab", [c, a, b], iteration.excludedFeatures());
-		
-		iteration.moveFeature(1, 2);
-		assertFeatureListEquals("cab -> cba", [c, b, a], iteration.excludedFeatures());
-	};
-
-	Test.test_moveFeature_excludedOnlyWhenIncludedFeaturesAlsoPresent = function() {
 		config.excluded = [
 			["excluded D", 5],
 			["excluded E", 10],
 			["excluded F", 15]
 		];
 		iteration = new rs.Iteration(config, 0);
+
 		var features = iteration.excludedFeatures();
 		var d = features[0];
 		var e = features[1];
 		var f = features[2];
 
-		iteration.moveFeature(3, 4);
-		assertFeatureListEquals("def -> edf", [e, d, f], iteration.excludedFeatures());
+		iteration.moveFeature(3, 1);
+		assertFeatureListsEqual("down: |def -> |fde", [], [f, d, e]);
+
+		iteration.moveFeature(1, 2);
+		assertFeatureListsEqual("up: |fde -> |dfe", [], [d, f, e]);
+
+		iteration.moveFeature(1, 0);
+		assertFeatureListsEqual("to divider (included): |dfe -> d|fe", [d], [f, e]);
+	};
+
+	Test.test_moveFeature_dividerCanBeMovedToo = function() {
+		config.excluded = [
+			["excluded D", 5],
+			["excluded E", 10],
+			["excluded F", 15]
+		];
+		iteration = new rs.Iteration(config, 0);
+
+		var features = iteration.includedFeatures();
+		var a = features[0];
+		var b = features[1];
+		var c = features[2];
+
+		features = iteration.excludedFeatures();
+		var d = features[0];
+		var e = features[1];
+		var f = features[2];
+
+		iteration.moveFeature(3, 5);
+		assertFeatureListsEqual("up: abc|def -> abcde|f", [a, b, c, d, e], [f]);
+
+		iteration.moveFeature(5, 4);
+		assertFeatureListsEqual("down: abcde|f -> abcd|ef", [a, b, c, d], [e, f]);
+
+		iteration.moveFeature(4, 0);
+		assertFeatureListsEqual("to bottom: abcd|ef -> |abcdef", [], [a, b, c, d, e, f]);
+
+		iteration.moveFeature(0, 6);
+		assertFeatureListsEqual("to top: abcdef|", [a, b, c, d, e, f], []);
 	};
 
 	Test.test_moveFeature_betweenIncludedAndExcluded = function() {
 		config.excluded = [
 			["excluded D", 5],
-			["excluded E", 10]
+			["excluded E", 10],
+			["excluded F", 15]
 		];
 		iteration = new rs.Iteration(config, 0);
-		var included = iteration.includedFeatures();
-		var excluded = iteration.excludedFeatures();
-		var a = included[0];
-		var b = included[1];
-		var c = included[2];
-		var d = excluded[0];
-		var e = excluded[1];
+
+		var features = iteration.includedFeatures();
+		var a = features[0];
+		var b = features[1];
+		var c = features[2];
+
+		features = iteration.excludedFeatures();
+		var d = features[0];
+		var e = features[1];
+		var f = features[2];//
 
 		iteration.moveFeature(1, 4);
-		assertFeatureListEquals("abc -> ac", [a, c], iteration.includedFeatures());
-		assertFeatureListEquals("de -> dbe", [d, b, e], iteration.excludedFeatures());
+		assertFeatureListsEqual("abc|def -> ac|dbef", [a, c], [d, b, e, f]);
 
-		iteration.moveFeature(2, 0);
-		assertFeatureListEquals("ac -> dac", [d, a, c], iteration.includedFeatures());
-		assertFeatureListEquals("dbe -> be", [b, e], iteration.excludedFeatures());
+		iteration.moveFeature(3, 0);
+		assertFeatureListsEqual("ac|dbef -> dac|bef (included)", [d, a, c], [b, e, f]);
 	};
 }());
