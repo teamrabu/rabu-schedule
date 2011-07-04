@@ -308,10 +308,12 @@
 		assertEquals("# included before drag", 3, iteration.includedFeatures().length);
 		assertEquals("# excluded before drag", 1, iteration.excludedFeatures().length);
 
-		dragAndDrop(li[0], 110);
-
+		drag(li[0], 110);
 		assertEquals("# included after drag", 2, iteration.includedFeatures().length);
 		assertEquals("# excluded after drag", 2, iteration.excludedFeatures().length);
+
+		drag(li[0], 111);
+		assertEquals("drag should be stable", 2, iteration.includedFeatures().length);
 	};
 
 	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {

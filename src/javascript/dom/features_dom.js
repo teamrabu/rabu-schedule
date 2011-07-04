@@ -132,10 +132,10 @@
 			self._layoutElements();
 		}
 
-		function findOriginalIndex(domElement) {
+		function findOriginalIndex(list, domElement) {
 			var i;
-			for (i = 0; i < self._orderBeforeDrag.length; i++) {
-				if (self._orderBeforeDrag[i][0] === domElement) { return i; }
+			for (i = 0; i < list.length; i++) {
+				if (list[i][0] === domElement) { return i; }
 			}
 			throw "Couldn't find element";
 		}
@@ -176,10 +176,11 @@
 		}
 
 		function handleDrag(event, ui) {
-			var originalPosition = findOriginalIndex(event.target);
-			var newPosition = findNewIndex(event.target, ui.offset.top, originalPosition);
-			moveElement(originalPosition, newPosition);
-			self._applicationModel.moveFeature(originalPosition, newPosition);
+			var positionBeforeDragStarted = findOriginalIndex(self._orderBeforeDrag, event.target);
+			var currentPosition = findOriginalIndex(self._featuresInOrder, event.target);
+			var newPosition = findNewIndex(event.target, ui.offset.top, positionBeforeDragStarted);
+			moveElement(positionBeforeDragStarted, newPosition);
+			self._applicationModel.moveFeature(currentPosition, newPosition);
 		}
 
 		function handleDragStop(event, ui) {
