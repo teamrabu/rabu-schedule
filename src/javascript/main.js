@@ -8,18 +8,20 @@
 		}
 		this._estimates = new rs.Estimates(config);
 		this._projections = new rs.Projections(this._estimates);
-	};
-	var Main = rs.Main.prototype = new rs.Object();
 
-	Main.populateDom = function() {
-        var datesDom = new rs.DatesDom(this._projections);
-		var featuresDom = new rs.FeaturesDom($(".rabu-features"), this._estimates.currentIteration());
-		var burnupDom = new rs.BurnupDom($(".rabu-burnup"), this._estimates, this._projections);
-    
+		this._applicationModel = new rs.ApplicationModel(
+			this._estimates,
+			new rs.DatesDom(this._projections),
+			new rs.FeaturesDom($(".rabu-features"), this._estimates.currentIteration()),
+			new rs.BurnupDom($(".rabu-burnup"), this._estimates, this._projections)
+		);
+	};
+	var Prototype = rs.Main.prototype = new rs.Object();
+
+	Prototype.populateDom = function() {
 		$(".rabu-name").text(this._estimates.name());
 		$(".rabu-updated").text(this._estimates.updated().toLongString());
-        datesDom.populate();
-		featuresDom.populate();
-		burnupDom.populate();
+
+		this._applicationModel.initialize();
 	};
 }());

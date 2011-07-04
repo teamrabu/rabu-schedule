@@ -42,15 +42,4 @@
 		r.populateDom();
 		assertEquals("January 5th, 2011", $(".rabu-updated").text());
 	};
-
-	Test.prototype.test_dom_projections = function() {
-		/*:DOC += <span class="rabu-tenPercentDate"></span> */
-		/*:DOC += <span class="rabu-fiftyPercentDate"></span> */
-		/*:DOC += <span class="rabu-ninetyPercentDate"></span> */
-
-		r.populateDom();
-		assertEquals("10%", "March 12th", $(".rabu-tenPercentDate").text());
-		assertEquals("50%", "May 21st", $(".rabu-fiftyPercentDate").text());
-		assertEquals("90%", "October 8th", $(".rabu-ninetyPercentDate").text());
-	};
 }());
