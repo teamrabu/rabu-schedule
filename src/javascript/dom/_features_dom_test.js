@@ -10,13 +10,19 @@
 	var li;
 	var divider;
 	var mouseDownElement;
+	var mockApplicationModel;
+
+	function MockApplicationModel() {}
+	MockApplicationModel.prototype = new rs.Object();
+	MockApplicationModel.prototype.moveFeature = function() {
+		this.moveFeatureCalledWith = Array.prototype.slice.call(arguments);
+	};
 
 	function populate() {
-		var estimates = new rs.Estimates({ iterations: [config]});
-		var applicationModel = new rs.ApplicationModel(estimates);
+		mockApplicationModel = new MockApplicationModel();
 
-		iteration = estimates.currentIteration();
-		featuresDom = new rs.FeaturesDom(applicationModel);
+		iteration = new rs.Iteration(config);
+		featuresDom = new rs.FeaturesDom(mockApplicationModel);
 		featuresDom.populate(iteration);
 		ul = $("ul");
 		li = $("li");
@@ -305,15 +311,11 @@
 	};
 
 	Test.prototype.test_dragging_modifiesUnderlyingModel = function() {
-		assertEquals("# included before drag", 3, iteration.includedFeatures().length);
-		assertEquals("# excluded before drag", 1, iteration.excludedFeatures().length);
-
 		drag(li[0], 110);
-		assertEquals("# included after drag", 2, iteration.includedFeatures().length);
-		assertEquals("# excluded after drag", 2, iteration.excludedFeatures().length);
+		assertEquals("should notify application model", [0, 4], mockApplicationModel.moveFeatureCalledWith);
 
 		drag(li[0], 111);
-		assertEquals("drag should be stable", 2, iteration.includedFeatures().length);
+		assertEquals("drag should be stable", [4, 4], mockApplicationModel.moveFeatureCalledWith);
 	};
 
 	Test.prototype.test_dropping_snapsItemsIntoPlace = function() {

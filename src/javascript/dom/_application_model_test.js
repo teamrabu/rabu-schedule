@@ -41,9 +41,10 @@
 		assertEquals("burnup.populate()", [], mockBurnup.populateCalledWith);
 	};
 
-	Test.test_moveFeature_updatesIterationAndRepopulatesDates = function() {
+	Test.test_moveFeature_updatesIterationAndRepopulatesDoms = function() {
 		model.moveFeature(1, 2);
 		assertEquals("moveFeature()", [1, 2], mockEstimates.currentIteration().moveFeatureCalledWith);
 		assertEquals("dates.populate()", [], mockDates.populateCalledWith);
+		assertEquals("burnup.populate()", [], mockBurnup.populateCalledWith);
 	};
 }());
