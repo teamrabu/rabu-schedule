@@ -77,6 +77,18 @@
 	   burnup.populate();
 	   assertEquals("should only be one drawing area", 1, $(".rabu-burnup svg").length);
 	};
+
+	Test.prototype.test_repopulate_performance = function() {
+		var EXPECTED = 50;
+
+		burnup.populate();
+		var start = Date.now();
+		burnup.populate();
+		var actual = Date.now() - start;
+
+		var message = "repopulate performance expected <" + EXPECTED + " ms, was " + actual + " ms";
+		assertTrue(message, actual < EXPECTED);
+	};
 	
 	Test.prototype.test_populate_hidesPrototypicalTickLabels = function() {
 		assertEquals("prototypical X-axis tick label should be hidden", "none", burnup.xTickLabel.node.style.display);
