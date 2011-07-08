@@ -22,8 +22,13 @@
 	};
 
 	Prototype.moveFeature = function(fromIndex, toIndex) {
+		var effortRemainingBeforeMove = this._estimates.currentIteration().effortRemaining();
 		this._estimates.currentIteration().moveFeature(fromIndex, toIndex);
-		this._datesDom.populate();
-		this._burnupDom.populate();
+		var effortRemainingAfterMove = this._estimates.currentIteration().effortRemaining();
+
+		if (effortRemainingBeforeMove !== effortRemainingAfterMove) {
+			this._datesDom.populate();
+			this._burnupDom.populate();
+		}
 	};
 }());
