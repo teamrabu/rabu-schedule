@@ -79,7 +79,7 @@
 	};
 
 	Test.prototype.test_repopulate_performance = function() {
-		var EXPECTED = 50;
+		var EXPECTED = 100;
 
 		burnup.populate();
 		var start = Date.now();

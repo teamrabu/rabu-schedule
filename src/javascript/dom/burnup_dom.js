@@ -244,12 +244,10 @@
 	
 	Prototype.populate = function(optionalMetricsForTesting) {
 		this._hideInteriorElements();
-		if (!this._paper) {
-			this._paper = raphael(this._element[0], this._element.width(), this._element.height());
+		if (this._paper) {
+			this._paper.remove();
 		}
-		else {
-			this._paper.clear();
-		}
+		this._paper = raphael(this._element[0], this._element.width(), this._element.height());
 		this._copyTextElements();
 		if (optionalMetricsForTesting) {
 			this._metrics = optionalMetricsForTesting;
