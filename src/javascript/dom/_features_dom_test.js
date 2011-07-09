@@ -339,7 +339,7 @@
 		assertDrag("divider -> bottom", divider, 500, [0, 20, 40, 60]);
 	};
 
-	Test.prototype.test_draggingDivider_permanentlyChangesItemPositions = function() {
+	Test.prototype.test_droppingDivider_permanentlyChangesItemPositions = function() {
 		dragAndDrop(divider, 60);
 		assertLiPositions("divider -> li 1", [0, 70, 90, 110]);
 		dragAndDrop(divider, 80);
@@ -347,6 +347,7 @@
 	};
 
 	Test.prototype.test_draggingDivider_modifiesUnderlyingModel = function() {
-		//TODO
+		drag(divider, 80);
+		assertEquals("should notify application model", [3, 2], mockApplicationModel.moveFeatureCalledWith);
 	};
 }());
