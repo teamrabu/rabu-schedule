@@ -172,7 +172,7 @@
 		assertEquals("divider should be centered in gap", 94, divider.offset().top);
 	};
 
-	Test.prototype.test_populate_positioningAccomodatesMargins = function() {
+	Test.prototype.test_populate_positioningAccommodatesMargins = function() {
 		ul.css("margin-top", "15px");
 		populate();
 		assertLiPositions("features should be positioned below margins", [15, 35, 55, 125]);
