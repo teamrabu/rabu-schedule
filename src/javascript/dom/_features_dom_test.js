@@ -331,4 +331,22 @@
 		dragAndDrop(li[0], 90);
 		assertLiPositions("first item moved again", [90, 0, 110, 70]);
 	};
+
+	Test.prototype.test_draggingDivider = function() {
+		assertLiPositions("starting values", [0, 20, 40, 110]);
+		assertDrag("divider -> li 2", divider, 80, [0, 20, 90, 110]);
+		assertDrag("divider -> top", divider, -100, [50, 70, 90, 110]);
+		assertDrag("divider -> bottom", divider, 500, [0, 20, 40, 60]);
+	};
+
+	Test.prototype.test_draggingDivider_permanentlyChangesItemPositions = function() {
+		dragAndDrop(divider, 60);
+		assertLiPositions("divider -> li 1", [0, 70, 90, 110]);
+		dragAndDrop(divider, 80);
+		assertLiPositions("divider -> li 2", [0, 20, 90, 110]);
+	};
+
+	Test.prototype.test_draggingDivider_modifiesUnderlyingModel = function() {
+		//TODO
+	};
 }());

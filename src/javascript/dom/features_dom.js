@@ -190,7 +190,8 @@
 		var lastFeature = this._featuresInOrder[this._featuresInOrder.length - 1];
 		var listTop = this._list.offset().top;
 		var listBottom = this._list.offset().top + this._list.outerHeight(false);
-		this._liJQuery.draggable({
+		var draggables = this._liJQuery.add(this._divider);
+		draggables.draggable({
 			axis: 'y',
 			containment: [0, listTop, 0, listBottom],
 			scroll: false,      // disabled due to bug that prevents containment from being respected when autoscrolling. Last checked in jQueryUI 1.8.13
