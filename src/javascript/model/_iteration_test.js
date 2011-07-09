@@ -152,6 +152,9 @@
 		var b = features[1];
 		var c = features[2];
 
+		iteration.moveFeature(2, 2);
+		assertFeatureListsEqual("in place: abc| -> abc|", [a, b, c], []);
+		
 		iteration.moveFeature(2, 0);
 		assertFeatureListsEqual("down: abc| -> cab|", [c, a, b], []);
 
@@ -178,6 +181,9 @@
 		var d = features[0];
 		var e = features[1];
 		var f = features[2];
+
+		iteration.moveFeature(2, 2);
+		assertFeatureListsEqual("in place: |def -> |def", [], [d, e, f]);
 
 		iteration.moveFeature(3, 1);
 		assertFeatureListsEqual("down: |def -> |fde", [], [f, d, e]);
@@ -206,6 +212,9 @@
 		var d = features[0];
 		var e = features[1];
 		var f = features[2];
+
+//		iteration.moveFeature(3, 3);
+//		assertFeatureListsEqual("in place: abc|def -> abc|def", [a, b, c], [d, e, f]);
 
 		iteration.moveFeature(3, 5);
 		assertFeatureListsEqual("up: abc|def -> abcde|f", [a, b, c, d, e], [f]);
