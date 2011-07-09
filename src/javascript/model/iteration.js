@@ -68,6 +68,8 @@
 	};
 
 	Prototype.moveFeature = function(fromIndex, toIndex) {
+		if (fromIndex === toIndex) { return; }
+
 		var included = this._includedFeatures;
 		var excluded = this._excludedFeatures;
 

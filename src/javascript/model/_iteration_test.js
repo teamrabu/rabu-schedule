@@ -213,8 +213,8 @@
 		var e = features[1];
 		var f = features[2];
 
-//		iteration.moveFeature(3, 3);
-//		assertFeatureListsEqual("in place: abc|def -> abc|def", [a, b, c], [d, e, f]);
+		iteration.moveFeature(3, 3);
+		assertFeatureListsEqual("in place: abc|def -> abc|def", [a, b, c], [d, e, f]);
 
 		iteration.moveFeature(3, 5);
 		assertFeatureListsEqual("up: abc|def -> abcde|f", [a, b, c, d, e], [f]);
