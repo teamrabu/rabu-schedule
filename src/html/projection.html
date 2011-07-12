@@ -163,8 +163,8 @@ You should have received a copy of the GNU Affero General Public License along w
 			list-style-position: outside;
 			list-style-type: none;
 			/*list-style-image: url('data:image/gif;base64,R0lGODlhCQANAJEAAAAAAP///9MZGf///yH5BAEAAAMALAAAAAAJAA0AAAIQnI+Cqzva2JOQWheT27yjAgA7');*/
-			text-indent: -1em;
-			padding-left: 1em;
+			text-indent: 0em;
+			padding-left: 0em;
 			margin-top: 1ex;
 		}
 						
@@ -189,8 +189,6 @@ You should have received a copy of the GNU Affero General Public License along w
 		/* Feature List */
 		
 		.rabu-features .rabu-done {
-			margin-left: -1em;
-			padding-left: 1em;
 			list-style-image: url('data:image/gif;base64,R0lGODlhDgAOALMAAOf34kPCFk/GJVvKM2bNQnLRUIrZbqHhi6zkmcTsttDwxZbdfNz00/P78P///wAAACH5BAEAAA4ALAAAAAAOAA4AAAQ50MlJZavYpXKzNESXNUToOaTpkQJwOkWgVMDRLcGBEQGh9RmAIIAYMjyHgHJxagwFosxiMHsBopgIADs=');
 			font-weight: normal;
 			color: #007000;
@@ -205,11 +203,9 @@ You should have received a copy of the GNU Affero General Public License along w
 		.rabu-features .rabu-excluded {
 			color: #7e7e7e;
 		}
-
-		.rabu-features li {
-			cursor: move;
-		}
 		
+		/* divider */
+
 		.rabu-divider {
 			position: absolute;
 			font-size: 75%;
@@ -227,6 +223,32 @@ You should have received a copy of the GNU Affero General Public License along w
 		
 		.rabu-divider .out {
 			margin-top: -0.25ex;
+		}
+		
+		/* dragging */
+		
+		.rabu-features li, .rabu-divider {
+			cursor: move;
+		}
+		
+		.rabu-features .ui-draggable:hover {
+			margin-left: -2px;
+			margin-top: -2px;
+			padding-right: 2px;
+			padding-bottom: 2px;
+			text-shadow: grey 2px 2px 2px;
+		}
+		
+		.rabu-divider:hover {
+		}
+		
+		.rabu-features .ui-draggable-dragging {
+			margin-left: -7px !important;
+			margin-top: -7px !important;
+			padding-right: 7px !important;
+			padding-bottom: 7px !important;
+			text-shadow: grey 7px 7px 3px !important;
+			z-index: 1;
 		}
 		
 		
@@ -275,12 +297,12 @@ You should have received a copy of the GNU Affero General Public License along w
     	<div id="left-column">
     		<div class="section">   	
 			    <h1>What are we working on?</h1>
-			    <p class="explanation">Features above the &ldquo;in/out&rdquo; line are planned for <span class="rabu-name"></span>. Features below the line are excluded, but could appear in a future release.</p>
+			    <p class="explanation">Features above the &ldquo;in/out&rdquo; line are planned for <span class="rabu-name"></span>. Features below the line are excluded, but could be included in a future release. Drag-and-drop features to try other scenarios.</p>
+			    <ol class="rabu-features"></ol>
 			    <div class="rabu-divider">
 				    <div class="in">in</div>
 				    <div class="out">out</div>
 			    </div>
-			    <ol class="rabu-features"></ol>
 		    </div>
 		</div>  <!-- end left-column -->
 		
