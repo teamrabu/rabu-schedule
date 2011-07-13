@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+		"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Spike: JQuery Position</title>
+
+	<script type="text/javascript" src="jquery-1.6.1.js"></script>
+
+	<style type="text/css">
+		#target {
+			margin-top: 6px;
+			border: solid red 0px;
+			padding-top: 0px;			
+		}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var info = $("#info");
+			var target = $("#target");
+			info.text("Offset: " + target.offset().top);
+		});
+	</script>
+
+	<div id="target">This is the thing being evaluated.</div>
+
+	<p>This spike demonstrates what JQuery's "top" corresponds to. (It ignores margin unless margin is negative.)</p>
+
+	<p>Information: [<span id="info"></span>]</p>
+	
+</body>
+</html>
