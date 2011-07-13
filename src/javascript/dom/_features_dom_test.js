@@ -104,7 +104,7 @@
 						li { height: 20px }
 						ul { margin: 0; }
 						body { margin: 0; }
-						.rabu-divider { margin-top: 34px; padding-top: 16px; }
+						.rabu-divider { height: 50px; }
 					</style>  */
 		/*:DOC +=   <ul class="rabu-features"></ul> */
 		/*:DOC +=   <div class="rabu-divider"></div> */
@@ -327,6 +327,20 @@
 		assertDrag("li 3 -> li 2 (after halfway point)", li[3], 50, [0, 20, 60, 50]);
 	};
 
+	//TODO: finish me
+//	Test.prototype.test_dragging_disregards
+	
+//	Test.prototype.test_dragging_movesElementAtCenterEvenWhenMarginIsNegative = function() {
+//		/*:DOC +=   <style type='text/css'>
+//			li { margin-top: -4px }
+//			.rabu-divider { margin-top: -5px; padding-top: 0px; height: 50px; }
+//		</style>  */
+//		populate();
+//		assertLiPositions("starting positions", [-4, 12, 28, 89]);
+//		assertDrag("li 1 -> li 2 (before halfway point)", li[1], 15, [-4, 15, 28, 89]);
+////		assertDrag("li 1 -> li 2 (after halfway point)", li[1], 20, [-4, 20, 12, 89]);
+//	};
+
 	Test.prototype.test_draggingDown_beyondLegalBounds = function() {
 		config.excluded = undefined;
 		populate();
@@ -371,20 +385,20 @@
 
 	Test.prototype.test_draggingDivider = function() {
 		assertLiPositions("starting values", [0, 20, 40, 110]);
-		assertDrag("divider -> li 2", divider, 80, [0, 20, 90, 110]);
+		assertDrag("divider -> li 2", divider, 40, [0, 20, 90, 110]);
 		assertDrag("divider -> top", divider, -100, [50, 70, 90, 110]);
 		assertDrag("divider -> bottom", divider, 500, [0, 20, 40, 60]);
 	};
 
 	Test.prototype.test_droppingDivider_permanentlyChangesItemPositions = function() {
-		dragAndDrop(divider, 45);
+		dragAndDrop(divider, 20);
 		assertLiPositions("divider -> li 1", [0, 70, 90, 110]);
-		dragAndDrop(divider, 83);
+		dragAndDrop(divider, 40);
 		assertLiPositions("divider -> li 2", [0, 20, 90, 110]);
 	};
 
 	Test.prototype.test_draggingDivider_modifiesUnderlyingModel = function() {
-		drag(divider, 80);
+		drag(divider, 40);
 		assertEquals("should notify application model", [3, 2], mockApplicationModel.moveFeatureCalledWith);
 	};
 }());

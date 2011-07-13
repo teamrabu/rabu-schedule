@@ -17,6 +17,10 @@
 	};
 	var FeaturesDom = rs.FeaturesDom.prototype = new rs.Object();
 
+	function cssToInt(element, css) {
+		return parseInt(element.css(css), 10);
+	}
+
 	FeaturesDom._toHtml = function(features, cssClass) {
 		return features.reduce(function(sum, feature) {
 			var css = cssClass;
@@ -56,19 +60,16 @@
 
 	FeaturesDom._layoutElements = function() {
 		var self = this;
-		function cssToInt(element, css) {
-			return parseInt(element.css(css), 10);
-		}
 
 		function setPosition(element, position) {
-			var topMargin = cssToInt(element, "margin-top");
-			if (topMargin < 0) {
-				position += topMargin;
+			var marginTop = cssToInt(element, "margin-top");
+			if (marginTop < 0) {
+				position += marginTop;
 			}
 			element.offset({ top: position });
 			position += element.outerHeight(true);
-			if (topMargin < 0) {
-				position -= topMargin;
+			if (marginTop < 0) {
+				position -= marginTop;
 			}
 			return position;
 		}
