@@ -8,9 +8,9 @@
 
 	<style type="text/css">
 		#target {
-			margin-top: 6px;
-			border: solid red 0px;
-			padding-top: 0px;			
+			margin-top: 20px;
+			border: solid red 1px;
+			padding-top: 3px;			
 		}
 	</style>
 </head>
@@ -19,7 +19,7 @@
 		$(document).ready(function() {
 			var info = $("#info");
 			var target = $("#target");
-			info.text("Offset: " + target.offset().top);
+			info.text("Offset: " + target.offset().top + "; Outer Height: " + target.outerHeight(false));
 		});
 	</script>
 
