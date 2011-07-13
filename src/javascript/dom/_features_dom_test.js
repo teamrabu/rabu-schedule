@@ -327,8 +327,26 @@
 		assertDrag("li 3 -> li 2 (after halfway point)", li[3], 50, [0, 20, 60, 50]);
 	};
 
-	//TODO: finish me
-//	Test.prototype.test_dragging_disregards
+	Test.prototype.test_dragging_disregardsMarginsBorderAndPaddingOfDraggedItemWhenDeterminingTopAndBottom = function() {
+		/*:DOC +=   <style type='text/css'>
+			.rabu-divider {
+				margin-top: 7px;
+				border-top: solid red 8px;
+				padding-top: 16px;
+				height: 32px;
+				padding-bottom: 64px;
+				border-bottom: solid blue 128px;
+				margin-bottom: 256px;
+			}
+		</style>  */
+		populate();
+		assertLiPositions("starting positions", [0, 20, 40, 571]);
+		assertDrag("move divider up -> li 2 (before halfway point)", divider, 20, [0, 20, 40, 571]);
+		assertDrag("move divider up -> li 2 (after halfway point)", divider, 19, [0, 20, 551, 571]);
+
+		assertDrag("move divider down -> li 3 (before halfway point)", divider, 517, [0, 20, 40, 571]);
+		assertDrag("move divider down -> li 3 (after halfway point)", divider, 518, [0, 20, 40, 60]);
+	};
 	
 //	Test.prototype.test_dragging_movesElementAtCenterEvenWhenMarginIsNegative = function() {
 //		/*:DOC +=   <style type='text/css'>
