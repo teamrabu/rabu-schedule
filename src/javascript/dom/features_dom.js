@@ -17,10 +17,6 @@
 	};
 	var FeaturesDom = rs.FeaturesDom.prototype = new rs.Object();
 
-	function cssToInt(element, css) {
-		return parseInt(element.css(css), 10);
-	}
-
 	FeaturesDom._toHtml = function(features, cssClass) {
 		return features.reduce(function(sum, feature) {
 			var css = cssClass;
@@ -60,17 +56,15 @@
 
 	FeaturesDom._layoutElements = function() {
 		var self = this;
+		function cssToInt(element, css) {
+			return parseInt(element.css(css), 10);
+		}
 
 		function setPosition(element, position) {
-			var marginTop = cssToInt(element, "margin-top");
-			if (marginTop < 0) {
-				position += marginTop;
-			}
+			position += cssToInt(element, "margin-top");
 			element.offset({ top: position });
-			position += element.outerHeight(true);
-			if (marginTop < 0) {
-				position -= marginTop;
-			}
+			position += cssToInt(element, "margin-bottom");
+			position += element.outerHeight(false);
 			return position;
 		}
 
@@ -83,7 +77,6 @@
 		var position = this._list.offset().top;
 		position += cssToInt(this._list, "border-top-width");
 		position += cssToInt(this._list, "padding-top");
-		position -= cssToInt(this._liJQuery, "margin-top");
 
 		var included = true;
 		this._featuresInOrder.forEach(function(element, index) {
@@ -157,32 +150,25 @@
 
 		function findNewIndex(domElement, pageOffset, originalIndex) {
 			function draggingUp(i) { return originalIndex >= i; }
-			function adjustPageOffsetForJQueryUIBug() {
-				return pageOffset + cssToInt($(domElement), "margin-top");
-			}
 
-			pageOffset = adjustPageOffsetForJQueryUIBug();
-			var jqElement = $(domElement);
-			var pixelsBeforeContent = cssToInt(jqElement, "margin-top") + cssToInt(jqElement, "border-top-width") + cssToInt(jqElement, "padding-top");
-
-			var draggerContentTop = pageOffset + pixelsBeforeContent;
-			var draggerContentBottom = draggerContentTop + jqElement.height();
+			var draggerTop = pageOffset;
+			var draggerHeight = $(domElement).outerHeight(true);
 			var i, elementTop, elementHeight, elementCenter;
 
 			for (i = self._positionsBeforeDrag.length - 1; i > 0; i--) {
 				if (draggingUp(i)) {
 					elementTop = self._positionsBeforeDrag[i - 1];
-					elementHeight = self._orderBeforeDrag[i - 1].outerHeight(true);
+					elementHeight = self._orderBeforeDrag[i - 1].outerHeight(false);
 					elementCenter = (elementHeight / 2);
 
-					if (draggerContentTop > elementTop + elementCenter) { return i; }
+					if (draggerTop > elementTop + elementCenter) { return i; }
 				}
 				else {
 					elementTop = self._positionsBeforeDrag[i];
-					elementHeight = self._orderBeforeDrag[i].outerHeight(true);
+					elementHeight = self._orderBeforeDrag[i].outerHeight(false);
 					elementCenter = (elementHeight / 2);
 
-					if (draggerContentBottom >= elementTop + elementCenter ) { return i; }
+					if (draggerTop + draggerHeight >= elementTop + elementCenter ) { return i; }
 				}
 			}
 			return 0;
