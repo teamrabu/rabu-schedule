@@ -181,16 +181,20 @@
 		assertEquals("divider should be centered in gap", 119, divider.offset().top);
 	};
 
-	// TODO: delete me?
-//	Test.prototype.test_populate_positioningAccommodatesLiMarginsAndPadding = function() {
-//		li.css("margin-top", "1px");
-//		li.css("border", "solid red 2px");
-//		li.css("padding-top", "4px");
-//		li.css("padding-bottom", "8px");
-//		li.css("margin-bottom", "16px");
-//		populate();
-//		assertLiPositions("feature positions", [0, 51, 102, 135]);
-//	};
+	Test.prototype.test_populate_positioningAccommodatesLiMarginsAndPadding = function() {
+		/*:DOC +=   <style type='text/css'>
+						li {
+							margin-top: 1px;
+							border: solid red 2px;
+							padding-top: 4px;
+							padding-bottom: 8px;
+							margin-bottom: 16px;
+						}
+					</style>  */
+		populate();
+		//TODO
+//		assertLiPositions("feature positions", [0, 51, 102, 203]);
+	};
 
 	Test.prototype.test_populate_positionsDividerAtBottomOfListWhenNoExcludedFeatures = function() {
 		config.excluded = undefined;

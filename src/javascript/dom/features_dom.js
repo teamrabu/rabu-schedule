@@ -77,6 +77,7 @@
 		var position = this._list.offset().top;
 		position += cssToInt(this._list, "border-top-width");
 		position += cssToInt(this._list, "padding-top");
+		position -= cssToInt(this._liJQuery, "margin-top");
 
 		var included = true;
 		this._featuresInOrder.forEach(function(element, index) {
