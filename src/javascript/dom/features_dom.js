@@ -56,13 +56,18 @@
 
 	FeaturesDom._layoutElements = function() {
 		var self = this;
+		function cssToInt(element, css) {
+			return parseInt(element.css(css), 10);
+		}
+
 		function setPosition(element, position) {
-			position += parseInt(element.css("margin-top"), 10);
+			position += cssToInt(element, "margin-top");
 			element.offset({ top: position });
-			position += parseInt(element.css("margin-bottom"), 10);
+			position += cssToInt(element, "margin-bottom");
 			position += element.outerHeight(false);
 			return position;
 		}
+
 		function assignClass(element, included) {
 			element.removeClass("rabu-included");
 			element.removeClass("rabu-excluded");
@@ -70,6 +75,9 @@
 		}
 
 		var position = this._list.offset().top;
+		position += cssToInt(this._list, "border-top-width");
+		position += cssToInt(this._list, "padding-top");
+
 		var included = true;
 		this._featuresInOrder.forEach(function(element, index) {
 			position = setPosition(element, position);
