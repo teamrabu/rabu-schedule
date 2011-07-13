@@ -61,10 +61,15 @@
 		}
 
 		function setPosition(element, position) {
-			position += cssToInt(element, "margin-top");
+			var topMargin = cssToInt(element, "margin-top");
+			if (topMargin < 0) {
+				position += topMargin;
+			}
 			element.offset({ top: position });
-			position += cssToInt(element, "margin-bottom");
-			position += element.outerHeight(false);
+			position += element.outerHeight(true);
+			if (topMargin < 0) {
+				position -= topMargin;
+			}
 			return position;
 		}
 
@@ -159,14 +164,14 @@
 			for (i = self._positionsBeforeDrag.length - 1; i > 0; i--) {
 				if (draggingUp(i)) {
 					elementTop = self._positionsBeforeDrag[i - 1];
-					elementHeight = self._orderBeforeDrag[i - 1].outerHeight(false);
+					elementHeight = self._orderBeforeDrag[i - 1].outerHeight(true);
 					elementCenter = (elementHeight / 2);
 
 					if (draggerTop > elementTop + elementCenter) { return i; }
 				}
 				else {
 					elementTop = self._positionsBeforeDrag[i];
-					elementHeight = self._orderBeforeDrag[i].outerHeight(false);
+					elementHeight = self._orderBeforeDrag[i].outerHeight(true);
 					elementCenter = (elementHeight / 2);
 
 					if (draggerTop + draggerHeight >= elementTop + elementCenter ) { return i; }

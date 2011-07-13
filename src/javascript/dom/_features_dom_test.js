@@ -169,7 +169,7 @@
 		populate();
 
 		assertLiPositions("excluded features should be positioned below divider", [0, 20, 40, 110, 130]);
-		assertEquals("divider should be centered in gap", 94, divider.offset().top);
+		assertEquals("divider should be centered in gap", 60, divider.offset().top);
 	};
 
 	Test.prototype.test_populate_positioningAccommodatesUlMarginsBorderAndPadding = function() {
@@ -178,22 +178,42 @@
 		ul.css("padding-top", "5px");
 		populate();
 		assertLiPositions("features should be positioned below margins and padding", [25, 45, 65, 135]);
-		assertEquals("divider should be centered in gap", 119, divider.offset().top);
+
+		ul.css("margin-top", "-3px");
+		ul.css("border", "0px");
+		ul.css("padding-top", "0px");
+		populate();
+		assertLiPositions("negative ul margin", [-3, 17, 37, 107]);
 	};
 
 	Test.prototype.test_populate_positioningAccommodatesLiMarginsAndPadding = function() {
 		/*:DOC +=   <style type='text/css'>
 						li {
 							margin-top: 1px;
-							border: solid red 2px;
+							border-top: solid red 2px;
 							padding-top: 4px;
-							padding-bottom: 8px;
-							margin-bottom: 16px;
+							height: 8px;
+							padding-bottom: 16px;
+							border-bottom: solid blue 32px;
+							margin-bottom: 64px;
 						}
 					</style>  */
 		populate();
-		//TODO
-//		assertLiPositions("feature positions", [0, 51, 102, 203]);
+		assertLiPositions("li margins and padding", [0, 127, 254, 431]);
+
+		/*:DOC +=   <style type='text/css'>
+						li {
+							margin-top: -4px;
+							border-top: solid red 0px;
+							padding-top: 0px;
+							height: 8px;
+							padding-bottom: 0px;
+							border-bottom: solid blue 0px;
+							margin-bottom: 0px;
+						}
+					</style>  */
+		populate();
+		assertLiPositions("negative li margins", [-4, 0, 4, 58]);
 	};
 
 	Test.prototype.test_populate_positionsDividerAtBottomOfListWhenNoExcludedFeatures = function() {
@@ -201,7 +221,7 @@
 		populate();
 
 		assertLiPositions("li positions", [0, 20, 40]);
-		assertEquals("divider position", 94, divider.offset().top);
+		assertEquals("divider position", 60, divider.offset().top);
 	};
 
 	Test.prototype.test_populate_positionsDividerAtTopOfListWhenNoIncludedFeatures = function() {
@@ -210,7 +230,7 @@
 		populate();
 
 		assertLiPositions("li positions", [50, 70]);
-		assertEquals("divider position", 34, divider.offset().top);
+		assertEquals("divider position", 0, divider.offset().top);
 	};
 
 	Test.prototype.test_populate_resizesListToAccomodateDivider = function() {
@@ -289,20 +309,20 @@
 		assertDrag("li 4 -> li 0 (after halfway point)", li[4], 10, [32, 52, 72, 92, 10]);
 	};
 
-	Test.prototype.test_draggingDown_movesDividerWhenBottomIsAtCenterOfContentNotMargin = function() {
-		assertDrag("li 2 -> divider (before halfway point)", li[2], 81, [0, 20, 81, 110]);
-		assertEquals("li 2 -> divider (divider position before move)", 94, divider.offset().top);
-		assertDrag("li 2 -> divider (after halfway point)", li[2], 82, [0, 20, 82, 110]);
-		assertEquals("li 2 -> divider (divider position after move)", 74, divider.offset().top);
+	Test.prototype.test_draggingDown_movesDividerWhenBottomIsAtCenterOfDivider = function() {
+		assertDrag("li 2 -> divider (before halfway point)", li[2], 64, [0, 20, 64, 110]);
+		assertEquals("li 2 -> divider (divider position before move)", 60, divider.offset().top);
+		assertDrag("li 2 -> divider (after halfway point)", li[2], 65, [0, 20, 65, 110]);
+		assertEquals("li 2 -> divider (divider position after move)", 40, divider.offset().top);
 		assertDrag("li 2 -> li 3 (before halfway point)", li[2], 99, [0, 20, 99, 110]);
 		assertDrag("li 2 -> li 3 (after halfway point)", li[2], 100, [0, 20, 100, 90]);
 	};
 
-	Test.prototype.test_draggingUp_movesDividerWhenTopIsAtCenterOfContentNotMargin = function() {
-		assertDrag("li 2 -> divider (before halfway point)" , li[3], 103, [0, 20, 40, 103]);
-		assertEquals("li 2 -> divider (divider position before move)", 94, divider.offset().top);
-		assertDrag("li 2 -> divider (after halfway point)", li[3], 102, [0, 20, 40, 102]);
-		assertEquals("li 2 -> divider (divider position after move)", 114, divider.offset().top);
+	Test.prototype.test_draggingUp_movesDividerWhenTopIsAtCenterOfDivider = function() {
+		assertDrag("li 2 -> divider (before halfway point)" , li[3], 86, [0, 20, 40, 86]);
+		assertEquals("li 2 -> divider (divider position before move)", 60, divider.offset().top);
+		assertDrag("li 2 -> divider (after halfway point)", li[3], 85, [0, 20, 40, 85]);
+		assertEquals("li 2 -> divider (divider position after move)", 80, divider.offset().top);
 		assertDrag("li 3 -> li 2 (before halfway point)", li[3], 51, [0, 20, 40, 51]);
 		assertDrag("li 3 -> li 2 (after halfway point)", li[3], 50, [0, 20, 60, 50]);
 	};
@@ -357,9 +377,9 @@
 	};
 
 	Test.prototype.test_droppingDivider_permanentlyChangesItemPositions = function() {
-		dragAndDrop(divider, 60);
+		dragAndDrop(divider, 45);
 		assertLiPositions("divider -> li 1", [0, 70, 90, 110]);
-		dragAndDrop(divider, 80);
+		dragAndDrop(divider, 83);
 		assertLiPositions("divider -> li 2", [0, 20, 90, 110]);
 	};
 
