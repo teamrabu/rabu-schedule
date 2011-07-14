@@ -410,13 +410,50 @@
 		populate();
 		assertLiPositions("starting li positions", [0, 20, 40, 571]);
 		assertEquals("starting divider position", 60, divider.offset().top);
-		populate();
 		drag(li[2], 86);
 		assertEquals("move li 2 down -> divider (before halfway point)", 60, divider.offset().top);
 		assertLiPositions("move down (li's, before halfway point)", [0, 20, 86, 571]);
 		drag(li[2], 87);
 		assertEquals("move li 2 down -> divider (after halfway point)", 40, divider.offset().top);
 		assertLiPositions("move down (li's, after halfway point)", [0, 20, 87, 571]);
+	};
+
+	Test.prototype.test_draggingUp_disregardsMarginsOfMovedItems_whenMarginsAreNegative = function() {
+		/*:DOC +=   <style type='text/css'>
+			.rabu-divider {
+				margin-top: -5px;
+				height: 40px;
+				margin-bottom: -7px;
+			}
+		</style>  */
+		populate();
+		assertLiPositions("starting positions", [0, 20, 40, 88]);
+		assertEquals("starting divider position", 55, divider.offset().top);
+		drag(li[3], 76);
+		assertEquals("move li 3 up -> divider (before halfway point)", 55, divider.offset().top);
+		assertLiPositions("move up (li's, before halfway point)", [0, 20, 40, 76]);
+		drag(li[3], 75);
+		assertEquals("move li 3 up -> divider (after halfway point)", 75, divider.offset().top);
+		assertLiPositions("move up (li's, after halfway point)", [0, 20, 40, 75]);
+	};
+
+	Test.prototype.test_draggingDown_disregardsMarginsOfMovedItems_whenMarginsAreNegative = function() {
+		/*:DOC +=   <style type='text/css'>
+			.rabu-divider {
+				margin-top: -5px;
+				height: 40px;
+				margin-bottom: -7px;
+			}
+		</style>  */
+		populate();
+		assertLiPositions("starting positions", [0, 20, 40, 88]);
+		assertEquals("starting divider position", 55, divider.offset().top);
+		drag(li[2], 54);
+		assertEquals("move li 2 down -> divider (before halfway point)", 55, divider.offset().top);
+		assertLiPositions("move down (li's, before halfway point)", [0, 20, 54, 88]);
+		drag(li[2], 55);
+		assertEquals("move li 2 down -> divider (after halfway point)", 35, divider.offset().top);
+		assertLiPositions("move down (li's, after halfway point)", [0, 20, 55, 88]);
 	};
 
 	Test.prototype.test_draggingDown_beyondLegalBounds = function() {

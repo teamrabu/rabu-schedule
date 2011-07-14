@@ -167,12 +167,14 @@
 
 			var draggerContentTop = pageOffset + pixelsBeforeContent;
 			var draggerContentBottom = draggerContentTop + jqElement.height();
-			var i, element, elementTop, elementHeight, elementCenter;
+			var i, element, elementTop, elementHeight, elementCenter, marginTop;
 
 			for (i = self._positionsBeforeDrag.length - 1; i > 0; i--) {
 				if (draggingUp(i)) {
 					element = self._orderBeforeDrag[i - 1];
 					elementTop = self._positionsBeforeDrag[i - 1] + topMarginBorderAndPadding(element);
+					marginTop = cssToInt(element, "margin-top");
+					if (marginTop < 0) { elementTop -= marginTop; }
 					elementHeight = element.height();
 					elementCenter = elementTop + (elementHeight / 2);
 
@@ -181,6 +183,8 @@
 				else {
 					element = self._orderBeforeDrag[i];
 					elementTop = self._positionsBeforeDrag[i] + topMarginBorderAndPadding(element);
+					marginTop = cssToInt(element, "margin-top");
+					if (marginTop < 0) { elementTop -= marginTop; }
 					elementHeight = element.height();
 					elementCenter = elementTop + (elementHeight / 2);
 
