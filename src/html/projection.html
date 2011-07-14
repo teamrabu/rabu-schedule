@@ -231,23 +231,28 @@ You should have received a copy of the GNU Affero General Public License along w
 			cursor: move;
 		}
 		
-		.rabu-features .ui-draggable:hover {
+		.rabu-features li.ui-draggable:hover {
 			margin-left: -1px;
 			margin-top: -1px;
 			padding-right: 1px;
 			padding-bottom: 1px;
 			text-shadow: grey 1px 1px 2px;
 		}
+
+		.rabu-divider:hover, .rabu-divider.ui-draggable-dragging {
+			text-shadow: grey 1px 1px 2px;
+		}		
 		
-		.rabu-divider:hover {
+		.rabu-divider:hover .in, .rabu-divider.ui-draggable-dragging .in {
+			border-bottom-style: solid;
 		}
 		
-		.rabu-features .ui-draggable-dragging {
-			margin-left: -5px !important;
-			margin-top: -5px !important;
-			padding-right: 5px !important;
-			padding-bottom: 5px !important;
-			text-shadow: grey 5px 5px 3px !important;
+		.rabu-features li.ui-draggable.ui-draggable-dragging {
+			margin-left: -5px;
+			margin-top: -5px;
+			padding-right: 5px;
+			padding-bottom: 5px;
+			text-shadow: grey 5px 5px 3px;
 			z-index: 1;
 		}
 		
