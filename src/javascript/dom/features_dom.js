@@ -25,7 +25,7 @@
 		}
 
 		var asInt = parseInt(value, 10);
-		if (isNaN(asInt)) { throw "Could not parse CSS property [" + css + "] on element [" + element + "]. Value was [" + value + "]"}
+		if (isNaN(asInt)) { throw "Could not parse CSS property [" + css + "] on element [" + element + "]. Value was [" + value + "]"; }
 		return asInt;
 	}
 

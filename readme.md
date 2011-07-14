@@ -1,7 +1,7 @@
 Rabu Schedule 0.4.1+dev
 =================
 
-Rabu Schedule helps Agile software teams discuss their schedules with important stakeholders. For more information, see the [Team Rabu website](http://www.teamrabu.com).
+Rabu Schedule helps Agile software teams improve their relationships with executives and customers. It creates interactive web pages for collaborating on schedule trade-offs. For more information, see the [Team Rabu website](http://www.teamrabu.com).
 
 
 Downloading Rabu Schedule
@@ -19,6 +19,26 @@ Run Rabu Schedule from the command line, as follows. You must have [Java](http:/
 To view the results, open `projection.html` in your web browser.
 
 Rabu Schedule works with the current versions of Firefox, Safari, and Chrome. Internet Explorer does not work at this time.
+
+
+Limitations
+-----------
+
+This version of Rabu Schedule has some limitations:
+
+- *No command-line error checking.* If you give the command-line tool a bad JSON file, it doesn't warn you.
+
+- *No run-time error handling.* When the Javascript in the HTML file encounters an error (such as a bad JSON file), it silently fails.
+
+- *Limited cross-browser support.* Rabu Schedule appears to work in Firefox, Safari, and Chrome. However, it has only been thoroughly tested in Firefox. Internet Explorer does not work completely.
+
+Two apparent limitations are intentional:
+
+- *Command-line interface.* Rabu Schedule is meant to integrate with a development team's workflow. In particular, it runs from the command line so it can be easily automated, and it uses a text-based configuration file to play nicely with version control.
+
+- *Single-file output.* Rabu Schedule's HTML output is self-contained within a single file so you can easily open, email, or host the result.
+
+Please [report other issues](https://github.com/teamrabu/rabu-schedule/issues) on GitHub.
 
 
 The Input File Format
@@ -118,26 +138,6 @@ That brings us to the end of the file.
 
 The Rabu input file is easiest to maintain if you update it once at the beginning of each iteration. Start by updating the velocity of the top-most iteration (the iteration you just completed) to your actual measured velocity, then copy-and-paste the entire iteration block to the top. This new iteration block is for the iteration you are starting. Update the "started" element accordingly and update the feature estimates to account for the stories you've completed as well as any other changes to the backlog. With practice, this should only take a few minutes.
 	
-
-Limitations
------------
-
-This early version of Rabu Schedule has some limitations:
-
-- *Subject to change.* Everything about Rabu Schedule is subject to change. In particular, the input file format is likely to change.
-
-- *No command-line error checking.* If you give the command-line tool a bad JSON file, it doesn't warn you.
-
-- *No run-time error handling.* When the Javascript in the HTML file encounters an error (such as a bad JSON file), it silently fails.
-
-- *Limited cross-browser testing.* Rabu Schedule appears to work in Firefox, Safari, Chrome, and Internet Explorer 7+. However, it has only been thoroughly tested in Firefox.
-
-Two apparent limitations are intentional:
-
-- *Command-line interface.* Rabu Schedule is meant to integrate with a development team's workflow. In particular, it runs from the command line so it can be easily automated, and it uses a text-based configuration file to play nicely with version control.
-
-- *Single-file output.* Rabu Schedule's HTML output is self-contained within a single file so you can easily open, email, or host the result.
-
 
 Source Code
 -----------

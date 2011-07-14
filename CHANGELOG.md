@@ -1,10 +1,11 @@
 Rabu Schedule Change Log
 ========================
 
-Release IN DEV
+Release 0.5 (14 July 2011)
 ===
+* ADDED: Feature ordering and "in/out" status may be changed by dragging and dropping features (or divider), and the schedule and burn-up chart will update accordingly.
 * ADDED: Projection page uses two-column landscape layout when there's enough space, but falls back to portrait layout when there's not.
-* ADDED: Documentation of the input file format in the readme file.
+* ADDED: Input file format documentation in the readme file.
 * FIXED: License and changelog are now included in release package.
 
 Release 0.4 (14 June 2011)
