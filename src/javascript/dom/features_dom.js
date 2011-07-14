@@ -157,11 +157,7 @@
 
 		function findNewIndex(domElement, pageOffset, originalIndex) {
 			function draggingUp(i) { return originalIndex >= i; }
-			function adjustPageOffsetForJQueryUIBug() {
-				return pageOffset + cssToInt($(domElement), "margin-top");
-			}
 
-			pageOffset = adjustPageOffsetForJQueryUIBug();
 			var jqElement = $(domElement);
 			var pixelsBeforeContent = cssToInt(jqElement, "margin-top") + cssToInt(jqElement, "border-top-width") + cssToInt(jqElement, "padding-top");
 

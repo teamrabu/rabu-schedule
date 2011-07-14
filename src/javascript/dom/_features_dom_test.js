@@ -80,9 +80,11 @@
 	}
 
 	function drag(element, moveToY) {
+		var adjustmentToMimicRealWorldBehavior = parseInt($(element).css("margin-top"), 10);
+
 		var jQueryElement = $(element);
 		if (!mouseDownElement) { mouseDown(jQueryElement); }
-		mouseMove(jQueryElement, moveToY);
+		mouseMove(jQueryElement, moveToY + adjustmentToMimicRealWorldBehavior);
 	}
 
 	function drop(element) {
