@@ -18,7 +18,15 @@
 	var FeaturesDom = rs.FeaturesDom.prototype = new rs.Object();
 
 	function cssToInt(element, css) {
-		return parseInt(element.css(css), 10);
+		var value = element.css(css);
+		if (value === "medium") {
+			// This is a special hack for IE 7 & 8. They return 'medium' if no width is set.
+			return 0;
+		}
+
+		var asInt = parseInt(value, 10);
+		if (isNaN(asInt)) { throw "Could not parse CSS property [" + css + "] on element [" + element + "]. Value was [" + value + "]"}
+		return asInt;
 	}
 
 	FeaturesDom._toHtml = function(features, cssClass) {
@@ -98,7 +106,7 @@
 	};
 
 	FeaturesDom._resizeListToAccomodateDivider = function() {
-		var padding = parseInt(this._list.css("padding-bottom"), 10);
+		var padding = cssToInt(this._list, "padding-bottom");
 		padding += this._dividerHeight;
 		this._list.css("padding-bottom", padding);
 	};

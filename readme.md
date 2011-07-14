@@ -18,7 +18,7 @@ Run Rabu Schedule from the command line, as follows. You must have [Java](http:/
 
 To view the results, open `projection.html` in your web browser.
 
-Rabu Schedule has been tested against the current versions of Firefox, Safari, and Chrome. Rabu also works with Internet Explorer 7 and 8, albeit with some minor performance stutters.
+Rabu Schedule works with the current versions of Firefox, Safari, and Chrome. Internet Explorer does not work at this time.
 
 
 The Input File Format
