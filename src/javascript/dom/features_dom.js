@@ -162,33 +162,24 @@
 				return cssToInt(element, "margin-top") + cssToInt(element, "border-top-width") + cssToInt(element, "padding-top");
 			}
 
-			var jqElement = $(domElement);
-			var pixelsBeforeContent = topMarginBorderAndPadding(jqElement);
+			function centerOf(index) {
+				var element = self._orderBeforeDrag[index];
+				var elementTop = self._positionsBeforeDrag[index] + topMarginBorderAndPadding(element);
+				var marginTop = cssToInt(element, "margin-top");
+				if (marginTop < 0) { elementTop -= marginTop; }
+				return elementTop + (element.height() / 2);
+			}
 
-			var draggerContentTop = pageOffset + pixelsBeforeContent;
-			var draggerContentBottom = draggerContentTop + jqElement.height();
-			var i, element, elementTop, elementHeight, elementCenter, marginTop;
+			var draggerContentTop = pageOffset + topMarginBorderAndPadding($(domElement));
+			var draggerContentBottom = draggerContentTop + $(domElement).height();
 
+			var i;
 			for (i = self._positionsBeforeDrag.length - 1; i > 0; i--) {
 				if (draggingUp(i)) {
-					element = self._orderBeforeDrag[i - 1];
-					elementTop = self._positionsBeforeDrag[i - 1] + topMarginBorderAndPadding(element);
-					marginTop = cssToInt(element, "margin-top");
-					if (marginTop < 0) { elementTop -= marginTop; }
-					elementHeight = element.height();
-					elementCenter = elementTop + (elementHeight / 2);
-
-					if (draggerContentTop > elementCenter) { return i; }
+					if (draggerContentTop > centerOf(i - 1)) { return i; }
 				}
 				else {
-					element = self._orderBeforeDrag[i];
-					elementTop = self._positionsBeforeDrag[i] + topMarginBorderAndPadding(element);
-					marginTop = cssToInt(element, "margin-top");
-					if (marginTop < 0) { elementTop -= marginTop; }
-					elementHeight = element.height();
-					elementCenter = elementTop + (elementHeight / 2);
-
-					if (draggerContentBottom >= elementCenter ) { return i; }
+					if (draggerContentBottom >= centerOf(i)) { return i; }
 				}
 			}
 			return 0;
