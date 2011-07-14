@@ -1,4 +1,4 @@
-Rabu Schedule 0.5
+Rabu Schedule 0.5+dev
 =================
 
 Rabu Schedule helps Agile software teams improve their relationships with executives and customers. It creates interactive web pages for collaborating on schedule trade-offs. For more information, see the [Team Rabu website](http://www.teamrabu.com).
