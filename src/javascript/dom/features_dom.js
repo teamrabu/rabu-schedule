@@ -147,14 +147,14 @@
 			}
 
 			var draggerContentTop = pageOffset + topMarginBorderAndPadding($(domElement));
+			var draggerContentBottom = draggerContentTop + $(domElement).height();
 			if (isDivider()) {
-				var draggerCenter = draggerContentTop + (self._divider.height() / 2);
-				return collidedElement(draggerCenter, draggerCenter);
+				var marginTop = cssToInt(self._divider, "margin-top");
+				var marginBottom = cssToInt(self._divider, "margin-bottom");
+				if (marginTop < 0) { draggerContentTop -= marginTop; }
+				if (marginBottom < 0) { draggerContentBottom += marginBottom; }
 			}
-		else {
-				var draggerContentBottom = draggerContentTop + $(domElement).height();
-				return collidedElement(draggerContentTop, draggerContentBottom);
-			}
+			return collidedElement(draggerContentTop, draggerContentBottom);
 		}
 
 		function moveElement(prevPosition, newPosition) {
