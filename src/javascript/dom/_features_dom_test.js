@@ -329,7 +329,11 @@
 		assertDrag("li 3 -> li 2 (after halfway point)", li[3], 50, [0, 20, 60, 50]);
 	};
 
-	Test.prototype.test_dragging_disregardsMarginsBorderAndPaddingOfDraggedItemWhenDeterminingTopAndBottom = function() {
+	Test.prototype.test_draggingDivider_movesElementWhenDividerIsAt_CENTER_OfElement = function() {
+		// TODO: finish me
+	};
+
+	Test.prototype.test_dragging_disregardsMarginsBorderAndPaddingOfDraggedItem = function() {
 		/*:DOC +=   <style type='text/css'>
 			.rabu-divider {
 				margin-top: 7px;
@@ -367,16 +371,53 @@
 		assertDrag("move divider down -> li 3 (after halfway point)", divider, 63, [0, 20, 40, 60]);
 	};
 
-//	Test.prototype.test_dragging_movesElementAtCenterEvenWhenMarginIsNegative = function() {
-//		/*:DOC +=   <style type='text/css'>
-//			li { margin-top: -4px }
-//			.rabu-divider { margin-top: -5px; padding-top: 0px; height: 50px; }
-//		</style>  */
-//		populate();
-//		assertLiPositions("starting positions", [-4, 12, 28, 89]);
-//		assertDrag("li 1 -> li 2 (before halfway point)", li[1], 15, [-4, 15, 28, 89]);
-////		assertDrag("li 1 -> li 2 (after halfway point)", li[1], 20, [-4, 20, 12, 89]);
-//	};
+	Test.prototype.test_draggingUp_disregardsMarginBorderAndPaddingOfMovedItems = function() {
+		/*:DOC +=   <style type='text/css'>
+			.rabu-divider {
+				margin-top: 7px;
+				border-top: solid red 8px;
+				padding-top: 16px;
+				height: 32px;
+				padding-bottom: 64px;
+				border-bottom: solid blue 128px;
+				margin-bottom: 256px;
+			}
+		</style>  */
+		populate();
+		assertLiPositions("starting li positions", [0, 20, 40, 571]);
+		assertEquals("starting divider position", 60, divider.offset().top);
+		drag(li[3], 108);
+		assertEquals("move li 3 up -> divider (before halfway point)", 60, divider.offset().top);
+		assertLiPositions("move up (li's, before halfway point)", [0, 20, 40, 108]);
+		drag(li[3], 107);
+		assertEquals("move li 3 up -> divider (after halfway point)", 80, divider.offset().top);
+		assertLiPositions("move up (li's, after halfway point)", [0, 20, 40, 107]);
+
+	};
+
+	Test.prototype.test_draggingDown_disregardsMarginBorderAndPaddingOfMovedItems = function() {
+		/*:DOC +=   <style type='text/css'>
+			.rabu-divider {
+				margin-top: 7px;
+				border-top: solid red 8px;
+				padding-top: 16px;
+				height: 32px;
+				padding-bottom: 64px;
+				border-bottom: solid blue 128px;
+				margin-bottom: 256px;
+			}
+		</style>  */
+		populate();
+		assertLiPositions("starting li positions", [0, 20, 40, 571]);
+		assertEquals("starting divider position", 60, divider.offset().top);
+		populate();
+		drag(li[2], 86);
+		assertEquals("move li 2 down -> divider (before halfway point)", 60, divider.offset().top);
+		assertLiPositions("move down (li's, before halfway point)", [0, 20, 86, 571]);
+		drag(li[2], 87);
+		assertEquals("move li 2 down -> divider (after halfway point)", 40, divider.offset().top);
+		assertLiPositions("move down (li's, after halfway point)", [0, 20, 87, 571]);
+	};
 
 	Test.prototype.test_draggingDown_beyondLegalBounds = function() {
 		config.excluded = undefined;

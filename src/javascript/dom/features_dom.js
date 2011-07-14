@@ -158,27 +158,33 @@
 		function findNewIndex(domElement, pageOffset, originalIndex) {
 			function draggingUp(i) { return originalIndex >= i; }
 
+			function topMarginBorderAndPadding(element) {
+				return cssToInt(element, "margin-top") + cssToInt(element, "border-top-width") + cssToInt(element, "padding-top");
+			}
+
 			var jqElement = $(domElement);
-			var pixelsBeforeContent = cssToInt(jqElement, "margin-top") + cssToInt(jqElement, "border-top-width") + cssToInt(jqElement, "padding-top");
+			var pixelsBeforeContent = topMarginBorderAndPadding(jqElement);
 
 			var draggerContentTop = pageOffset + pixelsBeforeContent;
 			var draggerContentBottom = draggerContentTop + jqElement.height();
-			var i, elementTop, elementHeight, elementCenter;
+			var i, element, elementTop, elementHeight, elementCenter;
 
 			for (i = self._positionsBeforeDrag.length - 1; i > 0; i--) {
 				if (draggingUp(i)) {
-					elementTop = self._positionsBeforeDrag[i - 1];
-					elementHeight = self._orderBeforeDrag[i - 1].outerHeight(true);
-					elementCenter = (elementHeight / 2);
+					element = self._orderBeforeDrag[i - 1];
+					elementTop = self._positionsBeforeDrag[i - 1] + topMarginBorderAndPadding(element);
+					elementHeight = element.height();
+					elementCenter = elementTop + (elementHeight / 2);
 
-					if (draggerContentTop > elementTop + elementCenter) { return i; }
+					if (draggerContentTop > elementCenter) { return i; }
 				}
 				else {
-					elementTop = self._positionsBeforeDrag[i];
-					elementHeight = self._orderBeforeDrag[i].outerHeight(true);
-					elementCenter = (elementHeight / 2);
+					element = self._orderBeforeDrag[i];
+					elementTop = self._positionsBeforeDrag[i] + topMarginBorderAndPadding(element);
+					elementHeight = element.height();
+					elementCenter = elementTop + (elementHeight / 2);
 
-					if (draggerContentBottom >= elementTop + elementCenter ) { return i; }
+					if (draggerContentBottom >= elementCenter ) { return i; }
 				}
 			}
 			return 0;
