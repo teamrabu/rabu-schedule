@@ -129,19 +129,32 @@
 				return elementTop + (element.height() / 2);
 			}
 
-			var draggerContentTop = pageOffset + topMarginBorderAndPadding($(domElement));
-			var draggerContentBottom = draggerContentTop + $(domElement).height();
-
-			var i;
-			for (i = self._positionsBeforeDrag.length - 1; i > 0; i--) {
-				if (draggingUp(i)) {
-					if (draggerContentTop > centerOf(i - 1)) { return i; }
+			function collidedElement(draggerTop, draggerBottom) {
+				var i;
+				for (i = self._positionsBeforeDrag.length - 1; i > 0; i--) {
+					if (draggingUp(i)) {
+						if (draggerTop > centerOf(i - 1)) { return i; }
+					}
+					else {
+						if (draggerBottom >= centerOf(i)) { return i; }
+					}
 				}
-				else {
-					if (draggerContentBottom >= centerOf(i)) { return i; }
-				}
+				return 0;
 			}
-			return 0;
+
+			function isDivider() {
+				return domElement === self._divider[0];
+			}
+
+			var draggerContentTop = pageOffset + topMarginBorderAndPadding($(domElement));
+			if (isDivider()) {
+				var draggerCenter = draggerContentTop + (self._divider.height() / 2);
+				return collidedElement(draggerCenter, draggerCenter);
+			}
+		else {
+				var draggerContentBottom = draggerContentTop + $(domElement).height();
+				return collidedElement(draggerContentTop, draggerContentBottom);
+			}
 		}
 
 		function moveElement(prevPosition, newPosition) {
@@ -157,7 +170,7 @@
 						self._featuresInOrder[index] = self._orderBeforeDrag[prevPosition];
 					}
 					else {
-						throw "Unreachable code when moving down. index [" + index + "]; prevPosition: [" + prevPosition + "]; newPosition: [" + newPosition + "]";
+						throw "Unreachable code when moving up. index [" + index + "]; prevPosition: [" + prevPosition + "]; newPosition: [" + newPosition + "]";
 					}
 				});
 			}
@@ -175,7 +188,7 @@
 						self._featuresInOrder[index] = self._orderBeforeDrag[prevPosition];
 					}
 					else {
-						throw "Unreachable code when moving up. index [" + index + "]; prevPosition: [" + prevPosition + "]; newPosition: [" + newPosition + "]";
+						throw "Unreachable code when moving down. index [" + index + "]; prevPosition: [" + prevPosition + "]; newPosition: [" + newPosition + "]";
 					}
 				});
 			}
