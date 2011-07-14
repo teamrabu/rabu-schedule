@@ -105,47 +105,6 @@
 
 	FeaturesDom._makeDraggable = function() {
 		var self = this;
-		
-		function moveDown(prevPosition, newPosition) {
-			newPosition = Math.min(newPosition, self._orderBeforeDrag.length - 1);
-			self._orderBeforeDrag.forEach(function(xx, index) {
-				if (index < prevPosition || index > newPosition) {
-					self._featuresInOrder[index] = self._orderBeforeDrag[index];
-				}
-				else if (index < newPosition) {
-					self._featuresInOrder[index] = self._orderBeforeDrag[index + 1];
-				}
-				else if (index === newPosition) {
-					self._featuresInOrder[index] = self._orderBeforeDrag[prevPosition];
-				}
-				else {
-					throw "Unreachable code when moving up. index [" + index + "]; prevPosition: [" + prevPosition + "]; newPosition: [" + newPosition + "]";
-				}
-			});
-		}
-
-		function moveUp(prevPosition, newPosition) {
-			self._orderBeforeDrag.forEach(function(xx, index) {
-				if (index > prevPosition || index < newPosition) {
-					self._featuresInOrder[index] = self._orderBeforeDrag[index];
-				}
-				else if (index > newPosition) {
-					self._featuresInOrder[index] = self._orderBeforeDrag[index - 1];
-				}
-				else if (index === newPosition) {
-					self._featuresInOrder[index] = self._orderBeforeDrag[prevPosition];
-				}
-				else {
-					throw "Unreachable code when moving down. index [" + index + "]; prevPosition: [" + prevPosition + "]; newPosition: [" + newPosition + "]";
-				}
-			});
-		}
-
-		function moveElement(prevPosition, newPosition) {
-			if (newPosition < prevPosition) { moveUp(prevPosition, newPosition); }
-			else { moveDown(prevPosition, newPosition); }
-			self._layoutElements();
-		}
 
 		function findOriginalIndex(list, domElement) {
 			var i;
@@ -155,7 +114,7 @@
 			throw "Couldn't find element";
 		}
 
-		function findNewIndex(domElement, pageOffset, originalIndex) {
+		function calculateNewIndex(domElement, pageOffset, originalIndex) {
 			function draggingUp(i) { return originalIndex >= i; }
 
 			function topMarginBorderAndPadding(element) {
@@ -185,6 +144,47 @@
 			return 0;
 		}
 
+		function moveElement(prevPosition, newPosition) {
+			function moveUp(prevPosition, newPosition) {
+				self._orderBeforeDrag.forEach(function(xx, index) {
+					if (index > prevPosition || index < newPosition) {
+						self._featuresInOrder[index] = self._orderBeforeDrag[index];
+					}
+					else if (index > newPosition) {
+						self._featuresInOrder[index] = self._orderBeforeDrag[index - 1];
+					}
+					else if (index === newPosition) {
+						self._featuresInOrder[index] = self._orderBeforeDrag[prevPosition];
+					}
+					else {
+						throw "Unreachable code when moving down. index [" + index + "]; prevPosition: [" + prevPosition + "]; newPosition: [" + newPosition + "]";
+					}
+				});
+			}
+
+			function moveDown(prevPosition, newPosition) {
+				newPosition = Math.min(newPosition, self._orderBeforeDrag.length - 1);
+				self._orderBeforeDrag.forEach(function(xx, index) {
+					if (index < prevPosition || index > newPosition) {
+						self._featuresInOrder[index] = self._orderBeforeDrag[index];
+					}
+					else if (index < newPosition) {
+						self._featuresInOrder[index] = self._orderBeforeDrag[index + 1];
+					}
+					else if (index === newPosition) {
+						self._featuresInOrder[index] = self._orderBeforeDrag[prevPosition];
+					}
+					else {
+						throw "Unreachable code when moving up. index [" + index + "]; prevPosition: [" + prevPosition + "]; newPosition: [" + newPosition + "]";
+					}
+				});
+			}
+
+			if (newPosition < prevPosition) { moveUp(prevPosition, newPosition); }
+			else { moveDown(prevPosition, newPosition); }
+			self._layoutElements();
+		}
+
 		function handleDragStart(event, ui) {
 			function copyArray(array) { return array.slice(); }
 
@@ -197,7 +197,7 @@
 		function handleDrag(event, ui) {
 			var positionBeforeDragStarted = findOriginalIndex(self._orderBeforeDrag, event.target);
 			var currentPosition = findOriginalIndex(self._featuresInOrder, event.target);
-			var newPosition = findNewIndex(event.target, ui.offset.top, positionBeforeDragStarted);
+			var newPosition = calculateNewIndex(event.target, ui.offset.top, positionBeforeDragStarted);
 			moveElement(positionBeforeDragStarted, newPosition);
 			self._applicationModel.moveFeature(currentPosition, newPosition);
 		}
