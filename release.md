@@ -7,14 +7,15 @@ Rabu Schedule Release Checklist
 4. Update version number in Java code's "usage.txt"
 5. `rake release shutdown minify=true`
 6. `java -jar rabu.jar < estimates.rabu > projection.html` in `generated/release` just to be sure. Double-check version number and output.
-6. Commit with 'Release X.Y.Z' as commit message
-7. `git tag "release-X.Y.Z"`
-8. `git push`
-9. `git push --tags`
-10. Add '+dev' to version number in README and "usage.txt"
-11. Commit with message 'Started next version'
-12. Copy release file to website
-13. Announce to mailing list
+7. Commit with 'Release X.Y.Z' as commit message
+8. `git tag "release-X.Y.Z"`
+9. `git push`
+10. `git push --tags`
+11. Add '+dev' to version number in README and "usage.txt"
+12. Commit with message 'Started next version'
+13. Copy release file to website
+14. Update example on website
+15. Announce to mailing list
 
 Mailing list announcement template
 ---
