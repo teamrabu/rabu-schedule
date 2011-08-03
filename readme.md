@@ -30,7 +30,7 @@ This version of Rabu Schedule has some limitations:
 
 - *No run-time error handling.* When the Javascript in the HTML file encounters an error (such as a bad JSON file), it silently fails.
 
-- *Limited cross-browser support.* Rabu Schedule appears to work in Firefox, Safari, and Chrome. However, it has only been thoroughly tested in Firefox. Internet Explorer does not work completely.
+- *Limited cross-browser support.* Rabu Schedule appears to work in Firefox, Safari, and Chrome. However, it has only been thoroughly tested in Firefox. Internet Explorer 7 & 8 do not work, and IE9 appears to work, but has cosmetic issues.
 
 Two apparent limitations are intentional:
 
