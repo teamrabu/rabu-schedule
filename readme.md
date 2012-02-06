@@ -1,12 +1,14 @@
-Rabu Schedule 0.5+dev
+Rabu Schedule 0.5 (cancelled)
 =================
+
+*Rabu Schedule is no longer under development as of February 2012.*
 
 Rabu Schedule helps Agile software teams improve their relationships with executives and customers. It creates interactive web pages for collaborating on schedule trade-offs. For more information, see the [Team Rabu website](http://www.teamrabu.com).
 
 
 Downloading Rabu Schedule
 -------------------------
-The latest release of Rabu [may be downloaded here](http://www.teamrabu.com/rabu.zip). Unzip the release file into a directory of your choice.
+The latest release of Rabu may be found in the `released` directory. Unzip the release file into a directory of your choice.
 
 
 Running Rabu Schedule
