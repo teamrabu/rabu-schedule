@@ -61,7 +61,7 @@ The date that you last updated the information in this file.
 
 		"iterations": [
 			
-A list of all of the iterations to date for this release. Put your current iteration *first*.
+A list of all the iterations to date for this release. Put your current iteration *first*.
 
 			{
 				
@@ -98,9 +98,7 @@ Rather than listing out every story in your backlog, combine groups of stories i
 					["Feature C", 8],
 					(etc)
 				
-Each feature has a name (such as "Feature A" in the example above) and an estimate of the work *remaining*. This estimate is the sum of all the remaining stories for the feature. An estimate of zero means the feature is done.
-
-Note that the story estimates are numbers, not strings.
+Each feature has a name (such as "Feature A" in the example above) and an estimate of the work *remaining*. This estimate is the sum of all the remaining stories for the feature. An estimate of zero means the feature is done. Note that the story estimates are numbers, not strings.
 
 				],
 				"excluded": [
