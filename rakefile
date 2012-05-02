@@ -316,7 +316,7 @@ task RELEASE_ZIP_FILE => [:release_staging] do
 	end
 end
 
-desc "Create tested release package"
+desc "Create tested release package (use 'minify=true')"
 task :release => [:check_all, RELEASE_ZIP_FILE] do
 	explain "Creating official release" do
 		raise "Must use 'minify=true' when creating release" unless minify?
